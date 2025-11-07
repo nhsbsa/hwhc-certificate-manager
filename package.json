@@ -21,6 +21,9 @@
   "author": "https://github.com/nhsuk/",
   "license": "MIT",
   "dependencies": {
+
+    "nhsapp-frontend": "^5.0.1",
+
     "@babel/core": "^7.28.4",
     "@babel/preset-env": "^7.28.3",
     "@inquirer/prompts": "^7.9.0",

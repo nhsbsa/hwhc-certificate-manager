@@ -2,6 +2,7 @@ module.exports = {
 
     debug: 'false',
 
-    role: 'callCentre'
+    role: 'callCentre',
+    accessKeys: 'on'
 
 }
