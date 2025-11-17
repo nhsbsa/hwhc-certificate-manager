@@ -3,3 +3,14 @@
 @import "nhsapp-frontend/dist/nhsapp";
 
 // Add your custom CSS/Sass styles below.
+
+.patient-table .nhsuk-body-s {
+    font-weight: 400;
+    margin: 0;
+}
+
+.grey-panel {
+    background-color: #d8dde0;
+    padding: 1.25rem 1.25rem 0 1.25rem;
+    border-radius: 4px;
+}

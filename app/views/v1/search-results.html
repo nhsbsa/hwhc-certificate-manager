@@ -2,6 +2,13 @@
 
 {% set pageName = 'Search results' %}
 
+{% block beforeContent %}
+ {{ backLink({
+    href: 'search',
+    text: 'Back'
+  }) }}
+{% endblock %}
+
 {% block content %}
 
   <div class="nhsuk-grid-row">
@@ -9,7 +16,42 @@
 
         <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
 
+       {{ table({
+            panel: false,
+            caption: 'Exemptions',
+            tableClasses: 'patient-table',
+            firstCellIsHeader: false,
+            responsive: true,
+            head: [
+              { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' },
+              { text: 'Postcode' },
+              { text: 'Exemption' },
+              { text: 'Status' },
+              { text: 'Reference' },
+              { text: 'End date' },
+              { text: 'Action' }
+            ],
+            rows: '' | getPatientData | getTableRows
+          }) }}
+
     </div>
 </div>
+
+  <div class="nhsuk-grid-row">
+    
+    <div class="nhsuk-grid-column-one-half">
+        {{ pagination( 'nhsuk-u-margin-0' | getPaginationLinks ) }}
+    </div>
+
+    <div class="nhsuk-grid-column-one-half">
+        {{ button({
+            text: 'Reset',
+            href: 'search',
+            classes: 'nhsuk-u-float-right nhsuk-button--secondary nhsuk-u-margin-0'
+        }) }}
+    </div>
+
+</div>
+
 
 {% endblock %}

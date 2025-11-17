@@ -1,4 +1,4 @@
-{% extends 'layout-fullscreen-normal-content.html' %}
+{% extends 'layout-fullscreen.html' %}
 
 {% set pageName = 'Search for a certificate' %}
 
@@ -8,14 +8,6 @@
     <div class="nhsuk-grid-column-full">
 
           <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
-
-          <style>
-            .grey-panel {
-              background-color: #d8dde0;
-              padding: 1.25rem;
-              border-radius: 4px;
-            }
-          </style>
 
           <div class="grey-panel">
 
@@ -82,13 +74,13 @@
                 </div>
 
                 <div class="nhsuk-grid-column-one-third">
-                  {{ input({
+                  <!-- {{ input({
                     label: {
                       text: 'Last name'
                     },
                     id: 'searchLastName',
                     name: 'searchLastName'
-                  }) }}
+                  }) }}-->
                 </div>
 
               </div>
@@ -99,14 +91,12 @@
                   
                   {{ button({
                     text: 'Search',
-                    href: 'search-results',
-                    classes: 'nhsuk-u-margin-bottom-0'
+                    href: 'search-results'
                   }) }}
-
 
                   {{ button({
                     text: 'Reset',
-                    classes: 'nhsuk-button--secondary nhsuk-u-float-right nhsuk-u-margin-bottom-0'
+                    classes: 'nhsuk-button--secondary nhsuk-u-float-right'
                   }) }}
 
                 </div>
