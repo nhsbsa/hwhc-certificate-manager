@@ -30,13 +30,38 @@ module.exports = function (env) {
   // GET FILTERED RESULTS FUNCTION
   // Applies the search criteria to the rows of patient data
   //
-  function _getFilteredResults( rows ){
+  function _getFilteredResults( rows, searchTerms ){
 
     console.log( '_getFilteredResults()' );
 
-    const searchFields = [];
+    const filteredRows = [];
 
-    const filteredRows = rows;
+    Object.keys( searchTerms ).forEach(function( key, i ){
+    
+      rows.forEach( function( row ){
+
+        const needle = searchTerms[key].trim().toLowerCase();
+        let haystack = row[key].toLowerCase();
+
+        switch( key ){
+
+          case 'postcode':
+            haystack = row.address[key].toLowerCase();
+            break;
+
+          case 'certificateReference':
+            haystack = row[key].toLowerCase().split(' ').join('');
+            break;
+
+        }
+
+         if( haystack.indexOf( needle ) > -1 ){
+            filteredRows.push( row );
+         }
+
+      });
+
+    });
 
     return filteredRows;
 
@@ -169,11 +194,36 @@ module.exports = function (env) {
   }
 
   //
+  // GET SEARCH TITLE FILTER
+  //
+  env.addFilter('getSearchTitle', function(){
+
+    const version = this.ctx.version;
+    const noOfFilteredRows = (Number.isInteger(parseInt(this.ctx.data[version].noOfFilteredRows))) ? parseInt(this.ctx.data[version].noOfFilteredRows) : 0;
+    
+    let caption = noOfFilteredRows + ' exemptions found';
+
+    switch( noOfFilteredRows ){
+      case 0:
+        caption = 'No exemptions found';
+        break;
+      case 1:
+        caption = '1 exemption found';
+        break;
+    }
+    
+    return caption;
+
+  });
+
+  //
   // GET TABLE HEAD ROWS FILTER
   //
   env.addFilter('getTableHeadRows', function ( content ) {
 
     const version = this.ctx.version;
+
+    const noOfFilteredRows = (Number.isInteger(parseInt(this.ctx.data[version].noOfFilteredRows))) ? parseInt(this.ctx.data[version].noOfFilteredRows) : 0;
 
     const sortBy = ( this.ctx.data[version].sortBy ) ? this.ctx.data[version].sortBy : 'lastName'; 
     const sortDirection = ( ['ascending','descending'].indexOf( this.ctx.data[version].sortDirection ) > -1 ) ? this.ctx.data[version].sortDirection : 'descending';
@@ -183,8 +233,8 @@ module.exports = function (env) {
 
     // lastName
     let lastNameLink = ( sortBy === 'lastName' ) ? baseLink + '&' + version + '[sortBy]=lastName&' + version + '[sortDirection]=' + opposite : baseLink + '&sortBy=name&sortDirection=ascending';
-    let lastNameObj = {
-        html: '<a href="'+lastNameLink+'">Name</a><span class="nhsuk-body-s">NHS number</span>',
+    let lastNameObj = ( noOfFilteredRows < 2 ) ? { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' } : {
+        html: '<a href="'+lastNameLink+'">Name</a><br /><span class="nhsuk-body-s">NHS number</span>',
         attributes: {
             'aria-sort': ( sortBy === 'lastName' ) ? sortDirection : 'none'
         } 
@@ -213,6 +263,27 @@ module.exports = function (env) {
       patientData = JSON.parse( patientData );
     }
 
+    // Filter variables
+    const searchTerms = {};
+    const summary = [];
+
+    if( this.ctx.data.searchCertificateReference ){
+      searchTerms.certificateReference = this.ctx.data.searchCertificateReference;
+      summary.push( '"'+searchTerms.certificateReference+'" in certificate reference' );
+    }
+    if( this.ctx.data.searchLastName ){
+      searchTerms.lastName = this.ctx.data.searchLastName;
+      summary.push( '"'+searchTerms.lastName+'" in last name' );
+    }
+    if( this.ctx.data.searchFirstName ){
+      searchTerms.firstName = this.ctx.data.searchFirstName;
+      summary.push( '"'+searchTerms.firstName+'" in last name' );
+    }
+    if( this.ctx.data.searchPostcode ){
+      searchTerms.postcode = this.ctx.data.searchPostcode;
+      summary.push( '"'+searchTerms.postcode+'" in postcode' );
+    }
+
     // Sorting variables
     const sortBy = ( this.ctx.data[this.ctx.version].sortBy ) ? this.ctx.data[this.ctx.version].sortBy : 'lastName'; 
     const sortDirection = ( ['ascending','descending'].indexOf( this.ctx.data[this.ctx.version].sortDirection ) > -1 ) ? this.ctx.data[this.ctx.version].sortDirection : 'descending';
@@ -222,7 +293,7 @@ module.exports = function (env) {
     const currentPage = (Number.isInteger(parseInt(this.ctx.data[this.ctx.version].currentPage))) ? parseInt(this.ctx.data[this.ctx.version].currentPage) : 0;
 
     // Process the patients
-    const filteredPatientData = _getFilteredResults( patientData );
+    const filteredPatientData = _getFilteredResults( patientData, searchTerms );
     const sortedPatientData = _getSortedResults( filteredPatientData, sortBy, sortDirection );
     const paginatedPatientData = _getPaginatedResults( sortedPatientData, rowsPerPage, currentPage);
 

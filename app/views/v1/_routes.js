@@ -7,4 +7,9 @@ router.post(/index/, function (req, res) {
     res.redirect( destination );
 });
 
+router.post(/search/, function (req, res) {
+    const destination = 'search-results';
+    res.redirect( destination );
+});
+
 module.exports = router;

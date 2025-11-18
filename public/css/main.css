@@ -20954,10 +20954,9 @@ b {
   margin: 0;
 }
 
-.grey-panel {
-  background-color: #d8dde0;
-  padding: 1.25rem 1.25rem 0 1.25rem;
-  border-radius: 4px;
+.nhsuk-card--grey {
+  /*background-color: #d8dde0;*/
+  background-color: #f0f4f5;
 }
 
 /* TABLE SORTER STYLES */

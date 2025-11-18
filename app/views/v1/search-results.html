@@ -1,6 +1,7 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'Search results' %}
+{% set filteredRows = '' | getPatientData | getTableRows %}
+{% set pageName = '' | getSearchTitle %}
 
 {% block beforeContent %}
  {{ backLink({
@@ -14,36 +15,48 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-        <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+      <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
 
-       {{ table({
-            panel: false,
-            caption: 'Exemptions',
-            tableClasses: 'patient-table',
-            firstCellIsHeader: false,
-            responsive: true,
-            head: '' | getTableHeadRows,
-            rows: '' | getPatientData | getTableRows
-          }) }}
+        <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
 
-    </div>
-</div>
+          {% if ( filteredRows.length > 0 ) %}
 
-  <div class="nhsuk-grid-row">
+          
+
+              {{ table({
+                panel: false,
+                caption: 'Exemptions',
+                captionClasses: 'nhsuk-u-visually-hidden',
+                firstCellIsHeader: false,
+                responsive: true,
+                tableClasses: 'patient-table',
+                head: '' | getTableHeadRows,
+                rows: filteredRows
+              }) }}
+
+              <div class="nhsuk-grid-row">
     
-    <div class="nhsuk-grid-column-one-half">
-        {{ pagination( 'nhsuk-u-margin-0' | getPaginationLinks ) }}
-    </div>
+                <div class="nhsuk-grid-column-one-half">
+                    {{ pagination( 'nhsuk-u-margin-0' | getPaginationLinks ) }}
+                </div>
 
-    <div class="nhsuk-grid-column-one-half">
-        {{ button({
-            text: 'Reset',
-            href: 'search',
-            classes: 'nhsuk-u-float-right nhsuk-button--secondary nhsuk-u-margin-0'
-        }) }}
-    </div>
+                <div class="nhsuk-grid-column-one-half">
+                    {{ button({
+                        text: 'Reset',
+                        href: 'search',
+                        classes: 'nhsuk-u-float-right nhsuk-button--secondary nhsuk-u-margin-0'
+                    }) }}
+                </div>
 
+              </div>
+
+          {% endif %}
+
+            </div>
+        </div>
+
+    </div>
 </div>
-
 
 {% endblock %}

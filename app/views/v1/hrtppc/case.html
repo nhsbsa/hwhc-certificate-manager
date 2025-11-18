@@ -2,6 +2,13 @@
 
 {% set pageName = 'HRT PPC Case' %}
 
+{% block beforeContent %}
+ {{ backLink({
+    href: '../search-results',
+    text: 'Back'
+  }) }}
+{% endblock %}
+
 {% block content %}
 
   <div class="nhsuk-grid-row">
@@ -214,6 +221,9 @@
 
     <div class="nhsuk-grid-column-one-third">
 
+      <div class="nhsuk-card nhsuk-card--grey">
+            <div class="nhsuk-card__content">
+
         <!-- Import from NHS App frontend -->
         {% from 'nhsapp/components/timeline/macro.njk' import nhsappTimeline %}
 
@@ -230,6 +240,9 @@
             }
           ]
         }) }}
+
+        </div>
+        </div>
 
     </div>
 </div>

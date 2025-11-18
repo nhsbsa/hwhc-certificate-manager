@@ -9,17 +9,29 @@
 
           <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
 
-          {{ table({
-            panel: false,
-            caption: 'Exemptions',
-            firstCellIsHeader: false,
-            responsive: true,
-            tableClasses: 'patient-table',
-            head: '' | getTableHeadRows,
-            rows: '' | getPatientData | getTableRows
-          }) }}
+          {% set filteredRows = '' | getPatientData | getTableRows %}
 
-          {{ pagination( '' | getPaginationLinks ) }}
+          {% if ( filteredRows.length > 0 ) %}
+
+            {{ table({
+              panel: false,
+              caption: 'Exemptions',
+              firstCellIsHeader: false,
+              responsive: true,
+              tableClasses: 'patient-table',
+              head: '' | getTableHeadRows,
+              rows: filteredRows
+            }) }}
+
+            {{ pagination( '' | getPaginationLinks ) }}
+
+          {% else %}
+
+            {{ insetText({
+              text: 'No exemptions found'
+            }) }}
+
+          {% endif %}
 
 
           <p id="certificateTypes" class="nhsuk-u-visually-hidden">{% for type in data[version].certificateTypes %}{% if loop.index0 !== 0 %},{% endif %}{{ type }}{% endfor %}</p>

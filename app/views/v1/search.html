@@ -7,12 +7,15 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-          <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+          
 
-          <div class="grey-panel">
+          <div class="nhsuk-card nhsuk-card--grey">
+            <div class="nhsuk-card__content">
+
+
+            <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
 
             <form action="search" method="post" novalidate>
-
 
               <div class="nhsuk-grid-row">
 
@@ -22,7 +25,8 @@
                       text: 'Certificate reference'
                     },
                     id: 'searchCertificateReference',
-                    name: 'searchCertificateReference'
+                    name: 'searchCertificateReference',
+                    value: data.searchCertificateReference
                   }) }}
                 </div>
 
@@ -32,7 +36,8 @@
                       text: 'First name'
                     },
                     id: 'searchFirstName',
-                    name: 'searchFirstName'
+                    name: 'searchFirstName',
+                    value: data.searchFirstName
                   }) }}
                 </div>
 
@@ -42,7 +47,8 @@
                       text: 'Last name'
                     },
                     id: 'searchLastName',
-                    name: 'searchLastName'
+                    name: 'searchLastName',
+                    value: data.searchLastName
                   }) }}
                 </div>
 
@@ -69,7 +75,8 @@
                       text: 'Postcode'
                     },
                     id: 'searchPostcode',
-                    name: 'searchPostcode'
+                    name: 'searchPostcode',
+                    value: data.searchPostcode
                   }) }}
                 </div>
 
@@ -90,12 +97,12 @@
                 <div class="nhsuk-grid-column-full">
                   
                   {{ button({
-                    text: 'Search',
-                    href: 'search-results'
+                    text: 'Search'
                   }) }}
 
                   {{ button({
                     text: 'Reset',
+                    href: 'search?searchFirstName=&searchLastName=',
                     classes: 'nhsuk-button--secondary nhsuk-u-float-right'
                   }) }}
 
@@ -106,6 +113,7 @@
 
             </form>
 
+          </div>
           </div>
 
       </div>
