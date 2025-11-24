@@ -1,0 +1,224 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'Edit personal details' %}
+
+{% block beforeContent %}
+ {{ backLink({
+    href: 'javascript:history.go(-1)',
+    text: 'Back'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    {{ summaryList({
+      heading: "Personal details",
+      headingLevel: "2",
+      headingClasses: "nhsuk-heading-s",
+        classes: "summary-list--single-line",
+        rows: [
+          {
+            key: { 
+              text: "First name (F)"
+            },
+            value: 
+            { 
+              html: input ({
+                id: "first-name",
+                name: "firstName",
+                value: "Jane"
+              })
+            }
+          },
+          {
+            key: { 
+              text: "Last name (L)"
+            },
+            value:
+            { 
+              html: input ({
+                id: "last-name",
+                name: "lastName",
+                value: "Smith"
+              })
+            }
+          },
+          {
+            key: { 
+              text: "Address line 1 (1)" 
+            },
+            value:
+            { 
+              html: input ({
+                id: "address-line-1",
+                name: "addressLineOne",
+                value: "101 Test Lane"
+              })
+            }
+          },
+          {
+            key: { 
+              text: "Address line 2 (2)" 
+            },
+            value:
+            { 
+              html: input ({
+                id: "address-line-2",
+                name: "addressLineTwo",
+                value: "Stella"
+              })
+            }
+          },
+          {
+            key: { 
+              text: "Town (T)" 
+            },
+            value:
+            { 
+              html: input ({
+                id: "town",
+                name: "town",
+                value: "Goldcrest"
+              })
+            }
+          },
+          {
+            key: { 
+              text: "Postcode (P)" 
+            },
+            value:
+            { 
+              html: input ({
+                id: "postcode",
+                name: "postcode",
+                value: "TR11 0TS"
+              })
+            }
+          },
+          {
+            key: { 
+              text: "Telephone number (N)" 
+            },
+            value:
+            { 
+              html: input ({
+                id: "phone-number",
+                name: "phone-number",
+                value: "07123456789"
+              })
+            }
+          },
+          {
+            key: { 
+              text: "Date of birth (D)" 
+            },
+            value: { 
+              html: dateInput({
+                id: "date-of-birth",
+                namePrefix: "dateOfBirth",
+                items: [
+                  {
+                    name: "day",
+                    classes: "nhsuk-input--width-2",
+                    value: "28"
+                  },
+                  {
+                    name: "month",
+                    classes: "nhsuk-input--width-2",
+                    value: "11"
+                  },
+                  {
+                    name: "year",
+                    classes: "nhsuk-input--width-4",
+                    value: "1970"
+                  }
+                ]
+              })
+            }
+          },
+          {
+            key: { 
+              text: "Email address (E)" 
+            },
+            value:
+            { 
+              html: input ({
+                id: "email",
+                name: "email",
+                value: "jane.smith@example.com"
+              })
+            }
+          },
+          {
+            key: { 
+              text: "NHS number (H)" 
+            },
+            value:
+            { 
+              html: input ({
+                id: "nhs-number",
+                name: "nhs-number",
+                value: "1234567890"
+              })
+            }
+          }
+        ]
+    }) }}
+
+    <div class="nhsuk-button-group">
+      {{ button
+        ({ 
+          text: 'Submit (I)',
+          href: "case"
+        })
+      }}
+      {{ button
+        ({ classes: "nhsuk-button--secondary", 
+          text: 'Cancel (M)',
+          href: "../search"
+        }) 
+      }}
+    </div>
+
+  </div>
+</div>
+
+<style>
+
+  .summary-list--single-line .nhsuk-summary-list__row {
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  /* --------------------------------------------------- */
+  /* STACKING BREAKPOINT 1 — small screens (≤425px)      */
+  /* --------------------------------------------------- */
+  @media (max-width: 425px) {
+
+    .summary-list--single-line .nhsuk-summary-list__row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .summary-list--single-line .nhsuk-summary-list__key {
+      margin: 0;
+    }
+
+  }
+
+</style>
+
+
+
+{% endblock %}

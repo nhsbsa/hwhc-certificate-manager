@@ -1,10 +1,10 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'HRT PPC Case' %}
+{% set pageName = 'Reissue certificate' %}
 
 {% block beforeContent %}
  {{ backLink({
-    href: '../search-results',
+    href: 'javascript:history.go(-1)',
     text: 'Back'
   }) }}
 {% endblock %}
@@ -19,7 +19,7 @@
 
   <div class="nhsuk-grid-row">
 
-    <div class="nhsuk-grid-column-one-third">
+    <div class="nhsuk-grid-column-two-thirds">
 
       {{ card({
         heading: "Certificate details",
@@ -94,16 +94,6 @@
               value: {
                 html: "25 November 2025"
               }
-            },
-            {
-              classes: "nhsuk-summary-list__row--no-border",
-              value: {
-                html: button({
-                classes: "nhsuk-button--secondary",
-                text: 'Edit certificate details (C)',
-                href: "edit-certificate"
-              })
-              }
             }
           ]
         })
@@ -114,7 +104,7 @@
     
 
 
-    <div class="nhsuk-grid-column-one-third">
+    <div class="nhsuk-grid-column-two-thirds">
       {{ card({
         heading: "Personal details",
         headingLevel: "2",
@@ -164,48 +154,10 @@
               value: {
                 html: "1234567890"
               }
-            },
-            {
-              classes: "nhsuk-summary-list__row--no-border",
-              value: {
-                html: button({
-                classes: "nhsuk-button--secondary",
-                text: 'Edit personal details (P)',
-                href: "edit-personal-details"
-                })
-              }
             }
           ]
         })
       }) }}
-    </div>
-
-
-    <div class="nhsuk-grid-column-one-third">
-
-      <div class="nhsuk-card nhsuk-card--grey">
-            <div class="nhsuk-card__content">
-
-        <!-- Import from NHS App frontend -->
-        {% from 'nhsapp/components/timeline/macro.njk' import nhsappTimeline %}
-
-        {{ nhsappTimeline({
-          items: [
-            {
-              headingText: 'Await approval',
-              text: 'The request will either be approved or rejected. If rejected please contact your Healthcare Professional.',
-              active: true
-            },
-            {
-              headingText: 'GP Approval Process',
-              text: 'Once approved, it can take 3 to 5 working days for a nominated pharmacy to prepare your prescription.'
-            }
-          ]
-        }) }}
-
-        </div>
-      </div>
-
     </div>
 
 </div>
@@ -213,15 +165,16 @@
 <div class="nhsuk-grid-row-buttons">
 
     {{ button({
-      text: 'Reissue certificate (K)',
-      href: "reissue"
+      text: 'Submit (I)',
+      href: "reissue-complete"
     }) }}
 
-    {{ button({
-      classes: "nhsuk-button--secondary",
-      text: 'Cancel (M)',
-      href: "../search"
-    }) }}
+    {{ button
+      ({ classes: "nhsuk-button--secondary", 
+        text: 'Cancel (M)',
+        href: "../search"
+      }) 
+    }}
 
 </div>
 
@@ -256,25 +209,6 @@
         word-break: break-word;
       }
 
-      /* Buttons row (default: left & right inline) */
-      .summary-list--single-line .nhsuk-summary-list__row--no-border {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: nowrap;
-        margin-top: 1rem;
-      }
-
-      .summary-list--single-line .nhsuk-summary-list__row--no-border 
-        .nhsuk-summary-list__key,
-      .summary-list--single-line .nhsuk-summary-list__row--no-border 
-        .nhsuk-summary-list__value {
-        flex: 0 0 auto;
-        margin: 0;
-      }
-
-      .nhsuk-grid-row-buttons .nhsuk-button--secondary {
-          margin-left: 1rem;
-      }
 
       /* --------------------------------------------------- */
       /* STACKING BREAKPOINT 1 — small screens (≤425px)      */
@@ -291,66 +225,43 @@
         .summary-list--single-line .nhsuk-summary-list__key {
           margin: 0;
         }
-
-        .summary-list--single-line .nhsuk-summary-list__row--no-border {
-          flex-direction: column;
-          align-items: stretch;
-          gap: 0.5rem;
-        }
       }
 
-
-      /* --------------------------------------------------- */
-      /* STACKING BREAKPOINT 2 — special case: 1024px only   */
-      /* --------------------------------------------------- */
-      @media (min-width: 1024px) and (max-width: 1024px) {
-
-        .summary-list--single-line .nhsuk-summary-list__row {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 0.25rem;
-          padding-bottom: 0.5rem;
-        }
-
-        .summary-list--single-line .nhsuk-summary-list__key {
-          margin: 0;
-        }
-
-        .summary-list--single-line .nhsuk-summary-list__row--no-border {
-          flex-direction: column;
-          align-items: stretch;
-          gap: 0.5rem;
-        }
-      }
       
       /* --------------------------------------------------- */
       /* Same height columns — Desktop only */
       /* --------------------------------------------------- */
       @media (min-width: 1024px) {
 
-        .nhsuk-grid-row {
-          display: flex ;
-          align-items: stretch;
+          .nhsuk-grid-row {
+            display: flex ;
+            align-items: stretch;
+          }
+
+          .nhsuk-grid-row > .nhsuk-grid-column-one-third {
+            display: flex;
+            flex-direction: column;
+          }
+
+          .nhsuk-grid-row .nhsuk-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+          }
+
+          .nhsuk-grid-row .nhsuk-card__content {
+            flex: 1 1 auto;
+          }
+
+          .nhsuk-grid-row-buttons {
+            margin-top: 2rem;
+
         }
 
-        .nhsuk-grid-row > .nhsuk-grid-column-one-third {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .nhsuk-grid-row .nhsuk-card {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-        }
-
-        .nhsuk-grid-row .nhsuk-card__content {
-          flex: 1 1 auto;
-        }
-
-        .nhsuk-grid-row-buttons .nhsuk-button--secondary {
+        .nhsuk-button--secondary {
           margin-left: 1rem;
         }
+
       }
 
 

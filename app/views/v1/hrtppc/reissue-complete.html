@@ -1,0 +1,80 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'Reissue certificate' %}
+
+{% block beforeContent %}
+
+{% endblock %}
+
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {{ panel({
+        titleText: "Reissue complete",
+        html: "We have sent the certificate to <strong>jane.smith@example.com</strong>."
+      }) }}
+
+      <h2 class="nhsuk-heading-m">HRT PPC details</h2>
+
+
+      {{ summaryList({
+        classes: "nhsuk-summary-list",
+        rows: [
+          {
+            key: {
+              text: "Name"
+            },
+            value: {
+              text: "Jane Smith"
+            }
+          },
+          {
+            key: {
+              text: "Certificate reference"
+            },
+            value: {
+              text: "HRT AF4A 488E"
+            }
+          },
+          {
+            key: {
+              text: "Certificate start"
+            },
+            value: {
+              text: "25 November 2025"
+            }
+          },
+          {
+            key: {
+              text: "Certificate expiry"
+            },
+            value: {
+              text: "24 November 2026"
+            }
+          }
+        ]
+      }) }}
+
+      {{ button({
+        text: 'View this certificate (V)',
+        href: "case"
+      }) }}
+  
+      {{ button({
+        classes: "nhsuk-button--secondary",
+        text: 'Search another certificate (S)',
+        href: "../search"
+      }) }}
+
+    </div>
+  </div>
+
+  <style>
+
+    .nhsuk-grid-row .nhsuk-button--secondary {
+      margin-left: 1rem;
+    }
+  </style>
+{% endblock %}
