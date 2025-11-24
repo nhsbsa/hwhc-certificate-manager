@@ -1,3 +1,5 @@
+const { first } = require('lodash');
+
 /**
  * @param {Environment} env
  */
@@ -394,7 +396,122 @@ module.exports = function (env) {
   });
 
   //
-  // GET PATIENT DATA FUNCTION
+  // GET CONFIDENCE TAG FUNCTION
+  //
+  env.addFilter('getConfidenceTag', function( num ){
+    
+    if( !Number.isInteger( num ) ){
+      num = 0;
+    }
+
+    let confidenceLevel = 'empty';
+    let tag = '<span class="confidence-level"><span class="nhsuk-tag nhsuk-tag--grey">Empty</span></span>';
+
+    if( num > 0 ) {
+      confidenceLevel = 'low';
+      tag =  '<span class="confidence-level confidence-level--'+confidenceLevel+'"><span class="nhsuk-tag nhsuk-tag--red">Low</span>'
+      tag += '<span class="nhsuk-tag nhsuk-tag--red confidence-score">'+num+'</span></span>';
+    }
+    
+    if( num > 30 ){
+      confidenceLevel = 'medium';
+      tag =  '<span class="confidence-level confidence-level--'+confidenceLevel+'"><span class="nhsuk-tag nhsuk-tag--yellow">Medium</span>'
+      tag += '<span class="nhsuk-tag nhsuk-tag--yellow confidence-score">'+num+'</span></span>';
+    }
+
+    if( num > 60 ){
+      confidenceLevel = 'high';
+      tag =  '<span class="confidence-level confidence-level--'+confidenceLevel+'"><span class="nhsuk-tag nhsuk-tag--green">High</span>'
+      tag += '<span class="nhsuk-tag nhsuk-tag--green confidence-score">'+num+'</span></span>';
+    }
+
+    return tag;
+
+  });
+
+  //
+  // PROCESS FULL NAME FILTER
+  //
+  env.addFilter('processFullName', function( firstName, lastName ){
+
+    let fullName = '';
+
+    console.log( 'PROCESSING: ' + firstName + ' ' + lastName );
+
+    firstName = firstName || '';
+    lastName = lastName || '';
+    
+    if( firstName && lastName ){
+      fullName = firstName + ' ' + lastName; 
+    } else if( firstName && !lastName ){
+      fullName = firstName;
+    } else if ( !firstName && lastName ) {
+      fullName = lastName;
+    }
+
+    return fullName;
+
+  });
+
+  //
+  // PROCESS ADDRESS FILTER
+  //
+  env.addFilter('processAddress', function( houseNumber, addressLine1, addressLine2, town, county, postcode ){
+
+    houseNumber = houseNumber || '';
+    addressLine1 = addressLine1 || '';
+    addressLine2 = addressLine2 || '';
+    town = town || '';
+    county = county || '';
+    postcode = postcode || '';
+
+    let firstLine = '';
+
+    if( houseNumber && addressLine1 ){
+      firstLine = houseNumber + ' ' + addressLine1;
+    } else if( !houseNumber && addressLine1 ){
+      firstLine = addressLine1;
+    } else if( houseNumber && !addressLine1 ){
+      firstLine = houseNumber;
+    }
+
+    let elements = [ firstLine ];
+
+    if( addressLine2 ){
+      elements.push( addressLine2 );
+    }
+
+    if( town ){
+      elements.push( town );
+    }
+
+    if( county ){
+      elements.push( county );
+    }
+
+    if( postcode ){
+      elements.push( postcode );
+    }
+
+    return elements.join( ', <br />' );
+
+
+
+
+
+  });
+
+  //
+  // PROCESS DATE FILTER
+  //
+  env.addFilter('processDate', function(){
+
+    return '12 September 1999';
+
+  });
+
+  //
+  // GET PATIENT DATA FILTER
   //
   env.addFilter('getPatientData', function (content) {
 

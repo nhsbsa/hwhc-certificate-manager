@@ -12,4 +12,9 @@ router.post(/search/, function (req, res) {
     res.redirect( destination );
 });
 
+router.post(/process-form/, function (req, res) {
+    const destination = 'confirm-form';
+    res.redirect( destination );
+});
+
 module.exports = router;

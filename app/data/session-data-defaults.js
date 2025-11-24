@@ -2,10 +2,8 @@ module.exports = {
 
     debug: 'false',
 
-    role: 'callCentre',
-    accessKeys: 'on',
-
     v1: {
+        accessKeys: 'on',
         rowsPerPage: 10,
         currentPage: 0,
         certificateTypes: ['matex','hrtppc'],

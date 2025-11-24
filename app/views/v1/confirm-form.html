@@ -1,0 +1,176 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'Image 2025 11 18 18 12 16N3000049' %}
+{% set bannerRole = 'backOffice' %}
+
+{% block beforeContent %}
+ {{ backLink({
+    href: 'process-image',
+    text: 'Back'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row to-keep">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }}
+        <span class="nhsuk-tag nhsuk-tag--green">MATEX</span>
+        <span class="nhsuk-tag nhsuk-tag--grey">Processing</span></h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row to-keep">
+    <div class="nhsuk-grid-column-full">
+
+      <div class="nhsuk-card nhsuk-card--grey">
+        <div class="nhsuk-card__content">
+
+          <div class="nhsuk-grid-row">
+            <div class="nhsuk-grid-column-one-half">
+
+              <h2 class="nhsuk-heading-m nhsuk-u-visually-hidden">Scanned form</h2>
+
+              <details class="expandable-image">
+                <div class="expandable-image__inner">
+                  <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
+                </div>
+                <summary class="expandable-image__button nhsuk-button">
+                  <span class="closed">Expand image</span>
+                  <span class="open">Shrink image</span></summary>
+              </details>
+
+            </div>
+
+            <div class="nhsuk-grid-column-one-half">
+
+              <h2 class="nhsuk-heading-l">Confirm patient details</h2>
+
+              <h3>Personal details</h3>
+
+              {% set firstName = data.imageFirstName or 'Sarah' %}
+              {% set lastName = data.imageLastName or 'Johnson' %}
+
+              {% set houseNumber = data.imageHouseNumber or '12' %}
+              {% set addressLine1 = data.imageAddressLine1 or 'Crown Passage' %}
+              {% set addressLine2 = data.imageAddressLine2 or '' %}
+              {% set town = data.imageTown or 'Birmingham' %}
+              {% set county = data.imageCounty or '' %}
+              {% set postcode = data.imagePostcode or 'B14 9QX' %}
+
+              {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: 'Name' },
+                      value: { text: firstName | processFullName( lastName ) },
+                      actions: {
+                        items: [
+                          { href: 'process-image#imageLastName', text: 'Change', visuallyHiddenText: 'name' }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Date of birth' },
+                      value: { text: data.dateOfBirth | processDate or '2 July 1995' },
+                      actions: {
+                         items: [
+                          { href: 'process-image#imageDateOfBirth', text: 'Change', visuallyHiddenText: 'date of birth' }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'NHS number' },
+                      value: { text: data.imageNHSNumber or '1234 456 678' },
+                      actions: {
+                         items: [
+                          { href: 'process-image#imageNHSNumber', text: 'Change', visuallyHiddenText: 'NHS number' }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Address' },
+                      value: { html: houseNumber | processAddress( addressLine1, addressLine2, town, county, postcode ) },
+                      actions: {
+                         items: [
+                          { href: 'process-image#imageHouseNumber', text: 'Change', visuallyHiddenText: 'Address' }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+                <h3>Contact details</h3>
+
+                {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: 'Phone number' },
+                      value: { text: data.imagePhoneNumber or '07911 123456' },
+                      actions: {
+                        items: [
+                          { href: 'process-image#imagePhoneNumber', text: 'Change', visuallyHiddenText: 'phone number' }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Email address' },
+                      value: { text: data.imageEmailAddress },
+                      actions: {
+                         items: [
+                          { href: 'process-image#imageEmailAddress', text: 'Change', visuallyHiddenText: 'email address' }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+
+                <h3>Baby details</h3>
+
+                {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: "Baby's date of birth" },
+                      value: { text: '10 August 2026' },
+                      actions: {
+                        items: [
+                          { href: 'process-image#imageBabyDateOfBirth', text: 'Change', visuallyHiddenText: "baby's date of birth" }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+
+
+                <div class="nhsuk-button-group">
+
+                  {{ button({
+                    text : 'Complete processing',
+                    href: 'processing-complete'
+                  }) }}
+
+                  {{ button({
+                    text : 'Request more information',
+                    href: 'request-more-information',
+                    classes: 'nhsuk-button--secondary'
+                  }) }}
+
+                </div>
+
+                
+                
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}

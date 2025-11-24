@@ -20949,6 +20949,10 @@ b {
   overflow: hidden;
   text-overflow: ellipsis;
 } 
+*[id] {
+  scroll-margin-top: 4rem;
+}
+
 .patient-table .nhsuk-body-s {
   font-weight: 400;
   margin: 0;
@@ -20963,6 +20967,94 @@ b {
   margin-top: 0;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+}
+
+/* EXPANDABLE IMAGE */
+.expandable-image::details-content {
+  content-visibility: visible;
+}
+
+.expandable-image {
+  width: 100%;
+  display: block;
+  overflow: auto;
+  position: relative;
+  background-color: #ffffff;
+  border: 1px solid #d8dde0;
+  padding-bottom: 100%;
+}
+
+.expandable-image[open] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  border: none;
+}
+
+.expandable-image .expandable-image__inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  overflow: auto;
+}
+
+.expandable-image .expandable-image__inner img {
+  display: block;
+  width: auto;
+  border: 2rem solid #ffffff;
+}
+
+.expandable-image[open] .expandable-image__inner {
+  bottom: auto;
+  height: 100vh;
+}
+
+.expandable-image .nhsuk-button {
+  z-index: 3;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: auto;
+  background-color: green;
+}
+
+.expandable-image .nhsuk-button:active {
+  top: calc(1rem + 4px);
+}
+
+.expandable-image[open] .nhsuk-button {
+  position: fixed;
+}
+
+.expandable-image .closed,
+.expandable-image[open] .open {
+  display: inline;
+}
+
+.expandable-image .open,
+.expandable-image[open] .closed {
+  display: none;
+}
+
+body:has(.expandable-image[open]) {
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+body:has(.expandable-image[open]) *:not(:has(.expandable-image[open])) {
+  display: none;
+}
+
+body:has(.expandable-image[open]) .expandable-image[open],
+body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
+  display: block;
 }
 
 /* TABLE SORTER STYLES */
