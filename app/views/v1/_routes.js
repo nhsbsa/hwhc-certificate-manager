@@ -17,4 +17,9 @@ router.post(/process-form/, function (req, res) {
     res.redirect( destination );
 });
 
+router.post(/request-more-information/, function( req, res){
+    const destination = 'confirmation-letter-sent';
+    res.redirect( destination );
+})
+
 module.exports = router;

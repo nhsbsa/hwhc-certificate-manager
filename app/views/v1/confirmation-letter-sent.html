@@ -1,0 +1,39 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Processing complete' %}
+{% set bannerRole = 'backOffice' %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+        {{ panel({
+            titleText: 'Letter sent',
+            html: 'Letter PE00 has been sent to the patient'
+        }) }}
+
+
+         <div class="nhsuk-button-group">
+
+                  {{ button({
+                    text : 'Next form',
+                    href: 'process-form'
+                  }) }}
+
+                  {{ button({
+                    text : 'Finish processing',
+                    href: 'start-processing',
+                    classes: 'nhsuk-button--secondary'
+                  }) }}
+
+                </div>
+
+
+
+
+    </div>
+  </div>
+
+
+{% endblock %}
