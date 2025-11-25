@@ -4,7 +4,7 @@
 
 {% block header %}
 
-  {% if bannerRole === 'backOffice' %}
+  {% if data.role === 'backOffice' %}
 
       {% set account = {
         items: [

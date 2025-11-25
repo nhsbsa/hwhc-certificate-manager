@@ -8,7 +8,6 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-          
 
           <div class="nhsuk-card">
             <div class="nhsuk-card__content">
@@ -21,10 +20,20 @@
               classes: 'nhsuk-inset-text--summary'
             }) }}
 
-           {{ button({
-            text: 'Start processing',
-            href: 'process-form'
-           }) }}
+            <div class="nhsuk-button-group">
+
+              {{ button({
+                text: 'Start processing',
+                href: 'process-form'
+              }) }}
+
+               {{ button({
+                text: 'Search',
+                href: 'search',
+                classes: 'nhsuk-button--secondary'
+              }) }}
+
+            </div>
 
           </div>
           </div>
