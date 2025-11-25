@@ -3,7 +3,10 @@ const express = require('express');
 const router = express.Router();
 
 router.post(/index/, function (req, res) {
-    const destination = 'search';
+    let destination = 'search';
+    if( req.session.data.role === 'backOffice' ){
+        destination = 'back-office-dashboard'
+    }
     res.redirect( destination );
 });
 

@@ -1,0 +1,35 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'MATEX processing' %}
+{% set bannerRole = 'backOffice' %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+          
+
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+
+
+            <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
+
+            {{ insetText({
+              text: '386 forms awaiting processing',
+              classes: 'nhsuk-inset-text--summary'
+            }) }}
+
+           {{ button({
+            text: 'Start processing',
+            href: 'process-form'
+           }) }}
+
+          </div>
+          </div>
+
+      </div>
+  </div>
+
+{% endblock %}

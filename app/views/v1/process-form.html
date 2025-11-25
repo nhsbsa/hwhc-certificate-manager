@@ -5,7 +5,7 @@
 
 {% block beforeContent %}
  {{ backLink({
-    href: 'process-form',
+    href: 'back-office-dashboard',
     text: 'Back'
   }) }}
 {% endblock %}
@@ -25,8 +25,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <div class="nhsuk-card nhsuk-card--grey">
-        <div class="nhsuk-card__content">
+     
 
           <div class="nhsuk-grid-row">
             <div class="nhsuk-grid-column-one-half">
@@ -35,7 +34,7 @@
 
               <details class="expandable-image">
                 <div class="expandable-image__inner">
-                  <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
+                  <img class="expandable-image__image" width="2323" height="1670" src="/images/FW8-MATEX-scan.png" alt=""/>
                 </div>
                 <summary class="expandable-image__button nhsuk-button">
                   <span class="closed">Expand image</span>
@@ -46,7 +45,10 @@
 
             <div class="nhsuk-grid-column-one-half">
 
-              <h2 class="nhsuk-heading-m nhsuk-u-visually-hidden">Details to correct</h2>
+               <div class="nhsuk-card nhsuk-card--grey">
+        <div class="nhsuk-card__content">
+
+              <h2 class="nhsuk-heading-m">Details to correct</h2>
 
               <form action="process-form" method="post" novalidate>
 
@@ -307,6 +309,12 @@
                 <style>
 
 
+
+                  img[width] {
+                    width: calc( attr(width)/2 );
+                  }
+
+
                   /* JUST AFTER LABEL */
 
                   .confidence-level {
@@ -359,12 +367,17 @@
 
                 </style>
 
+
+              </div>
+              </div>
+
+
+
             </div>
 
           </div>
 
-        </div>
-      </div>
+     
 
     </div>
   </div>

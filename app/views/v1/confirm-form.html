@@ -5,7 +5,7 @@
 
 {% block beforeContent %}
  {{ backLink({
-    href: 'process-image',
+    href: 'process-form',
     text: 'Back'
   }) }}
 {% endblock %}
@@ -25,9 +25,6 @@
   <div class="nhsuk-grid-row to-keep">
     <div class="nhsuk-grid-column-full">
 
-      <div class="nhsuk-card nhsuk-card--grey">
-        <div class="nhsuk-card__content">
-
           <div class="nhsuk-grid-row">
             <div class="nhsuk-grid-column-one-half">
 
@@ -45,6 +42,9 @@
             </div>
 
             <div class="nhsuk-grid-column-one-half">
+
+               <div class="nhsuk-card nhsuk-card--grey">
+        <div class="nhsuk-card__content">
 
               <h2 class="nhsuk-heading-l">Confirm patient details</h2>
 
@@ -67,7 +67,7 @@
                       value: { text: firstName | processFullName( lastName ) },
                       actions: {
                         items: [
-                          { href: 'process-image#imageLastName', text: 'Change', visuallyHiddenText: 'name' }
+                          { href: 'process-form#imageLastName', text: 'Change', visuallyHiddenText: 'name' }
                         ]
                       }
                     },
@@ -76,7 +76,7 @@
                       value: { text: data.dateOfBirth | processDate or '2 July 1995' },
                       actions: {
                          items: [
-                          { href: 'process-image#imageDateOfBirth', text: 'Change', visuallyHiddenText: 'date of birth' }
+                          { href: 'process-form#imageDateOfBirth', text: 'Change', visuallyHiddenText: 'date of birth' }
                         ]
                       }
                     },
@@ -85,7 +85,7 @@
                       value: { text: data.imageNHSNumber or '1234 456 678' },
                       actions: {
                          items: [
-                          { href: 'process-image#imageNHSNumber', text: 'Change', visuallyHiddenText: 'NHS number' }
+                          { href: 'process-form#imageNHSNumber', text: 'Change', visuallyHiddenText: 'NHS number' }
                         ]
                       }
                     },
@@ -94,7 +94,7 @@
                       value: { html: houseNumber | processAddress( addressLine1, addressLine2, town, county, postcode ) },
                       actions: {
                          items: [
-                          { href: 'process-image#imageHouseNumber', text: 'Change', visuallyHiddenText: 'Address' }
+                          { href: 'process-form#imageHouseNumber', text: 'Change', visuallyHiddenText: 'Address' }
                         ]
                       }
                     }
@@ -110,7 +110,7 @@
                       value: { text: data.imagePhoneNumber or '07911 123456' },
                       actions: {
                         items: [
-                          { href: 'process-image#imagePhoneNumber', text: 'Change', visuallyHiddenText: 'phone number' }
+                          { href: 'process-form#imagePhoneNumber', text: 'Change', visuallyHiddenText: 'phone number' }
                         ]
                       }
                     },
@@ -119,7 +119,7 @@
                       value: { text: data.imageEmailAddress },
                       actions: {
                          items: [
-                          { href: 'process-image#imageEmailAddress', text: 'Change', visuallyHiddenText: 'email address' }
+                          { href: 'process-form#imageEmailAddress', text: 'Change', visuallyHiddenText: 'email address' }
                         ]
                       }
                     }
@@ -136,7 +136,7 @@
                       value: { text: '10 August 2026' },
                       actions: {
                         items: [
-                          { href: 'process-image#imageBabyDateOfBirth', text: 'Change', visuallyHiddenText: "baby's date of birth" }
+                          { href: 'process-form#imageBabyDateOfBirth', text: 'Change', visuallyHiddenText: "baby's date of birth" }
                         ]
                       }
                     }
@@ -160,15 +160,13 @@
 
                 </div>
 
-                
+                </div>
+                </div>
                 
 
             </div>
 
           </div>
-
-        </div>
-      </div>
 
     </div>
   </div>
