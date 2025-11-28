@@ -81,13 +81,38 @@
                 </div>
 
                 <div class="nhsuk-grid-column-one-third">
-                  <!-- {{ input({
-                    label: {
-                      text: 'Last name'
-                    },
-                    id: 'searchLastName',
-                    name: 'searchLastName'
-                  }) }}-->
+
+                  {% if data.role === 'callCentre' %}
+
+                    {{ select({
+                      label: {
+                        text: 'Certificate type'
+                      },
+                      id: 'searchCertificateType',
+                      name: 'searchCertificateType',
+                      value: data.searchCertificateType,
+                      items: [
+                        {
+                          value: '',
+                          text: 'All certificate types'
+                        },
+                        {
+                          value: 'hrtppc',
+                          text: 'HRT PPC'
+                        },
+                        {
+                          value: 'matex',
+                          text: 'Maternity exemption'
+                        }
+                      ]
+                    }) }}
+
+                  {% else %}
+
+                    <input type="hidden" name="searchCertificateType" value="matex" />
+
+                  {% endif %}
+
                 </div>
 
               </div>

@@ -36,39 +36,50 @@ module.exports = function (env) {
 
     console.log( '_getFilteredResults()' );
 
-    const filteredRows = [];
+    let filteredRows = [];
 
-    Object.keys( searchTerms ).forEach(function( key, i ){
-    
-      rows.forEach( function( row ){
+    if( Object.keys( searchTerms ).length > 0 ){
 
-        const needle = searchTerms[key].trim().toLowerCase();
-        let haystack;
+      Object.keys( searchTerms ).forEach(function( key, i ){
 
-        switch( key ){
+        let fRows = ( i === 0 ) ? rows : filteredRows.slice();
+        filteredRows = [];        
+      
+        fRows.forEach( function( row ){
 
-          case 'postcode':
-            console.log( row );
-            haystack = row.address[key].toLowerCase();
-            break;
+          const needle = searchTerms[key].trim().toLowerCase();
+          let haystack;
 
-          case 'certificateReference':
-            haystack = row[key].toLowerCase().split(' ').join('');
-            break;
+          switch( key ){
 
-          default: 
-            haystack = row[key].toLowerCase();
-            break;
+            case 'postcode':
+              haystack = row.address[key].toLowerCase();
+              break;
 
-        }
+            case 'certificateReference':
+              haystack = row[key].toLowerCase().split(' ').join('');
+              break;
 
-         if( haystack.indexOf( needle ) > -1 ){
-            filteredRows.push( row );
-         }
+            default: 
+              haystack = row[key].toLowerCase();
+              break;
+
+          }
+
+          if( haystack.indexOf( needle ) > -1 ){
+              filteredRows.push( row );
+          }
+
+        });
 
       });
 
-    });
+    } else {
+
+      // Return everything if no search terms are provided...
+      filteredRows = rows;
+
+    }
 
     return filteredRows;
 
@@ -208,14 +219,14 @@ module.exports = function (env) {
     const version = this.ctx.version;
     const noOfFilteredRows = (Number.isInteger(parseInt(this.ctx.data[version].noOfFilteredRows))) ? parseInt(this.ctx.data[version].noOfFilteredRows) : 0;
     
-    let caption = noOfFilteredRows + ' exemptions found';
+    let caption = noOfFilteredRows + ' certificates found';
 
     switch( noOfFilteredRows ){
       case 0:
-        caption = 'No exemptions found';
+        caption = 'No certificates found';
         break;
       case 1:
-        caption = '1 exemption found';
+        caption = '1 certificate found';
         break;
     }
     
@@ -250,7 +261,7 @@ module.exports = function (env) {
     const rows = [
               lastNameObj,
               { text: 'Postcode' },
-              { text: 'Exemption' },
+              { text: 'Type' },
               { text: 'Status' },
               { text: 'Reference' },
               { text: 'End date' },
@@ -274,6 +285,13 @@ module.exports = function (env) {
     const searchTerms = {};
     const summary = [];
 
+    let start = 'Searched for all certificates';
+
+    if( this.ctx.data.searchCertificateType ){
+      searchTerms.certificateType = this.ctx.data.searchCertificateType;
+      start = 'Searched for all ' + _getCertificateTypeTextOrTag( this.ctx.data.searchCertificateType ) + ' certificates'
+    }
+
     if( this.ctx.data.searchCertificateReference ){
       searchTerms.certificateReference = this.ctx.data.searchCertificateReference;
       summary.push( '"'+searchTerms.certificateReference+'" in certificate reference' );
@@ -291,14 +309,17 @@ module.exports = function (env) {
       summary.push( '"'+searchTerms.postcode+'" in postcode' );
     }
 
-    if( summary.length === 1 ){
-      this.ctx.data.summaryText = 'All exemptions with ' + summary[0];
+    
+
+    if( summary.length === 0 ){
+      this.ctx.data.summaryText = start;
+    } else if( summary.length === 1 ){
+      this.ctx.data.summaryText = start + ' with ' + summary[0];
     } else {
       let last = summary.pop();
-      this.ctx.data.summaryText = 'All exemptions with ' + summary.join(', ') + ' and ' + last;
+      this.ctx.data.summaryText = start + ' with ' + summary.join(', ') + ' and ' + last;
     }
 
-    
 
     // Sorting variables
     const sortBy = ( this.ctx.data[this.ctx.version].sortBy ) ? this.ctx.data[this.ctx.version].sortBy : 'lastName'; 

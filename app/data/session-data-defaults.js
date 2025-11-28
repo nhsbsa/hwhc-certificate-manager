@@ -2,6 +2,8 @@ module.exports = {
 
     debug: 'false',
 
+    role: 'callCentre', // callCentre, backOffice
+
     v1: {
         accessKeys: 'on',
         rowsPerPage: 10,
