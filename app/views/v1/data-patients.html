@@ -262,7 +262,7 @@
                 const patients = [];
 
                 const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',');
-                const statuses = ['active','pending'];
+                const statuses = ['active','pending-a','pending-b','processing'];
 
                 names.forEach( function( name, i ){
 
@@ -270,10 +270,12 @@
 
                     obj.nhsNumber = _generateNHSNumber();
                     obj.certificateType = certificateTypes[Math.round(Math.random())*(certificateTypes.length-1)];
-                    obj.certificateReference = _generateCertificateReference( obj.certificateType );
+                    obj.status = ( obj.certificateType === 'hrtppc' ) ? 'active' : statuses[Math.round(Math.random()*(statuses.length-1))];
+                    obj.certificateReference = _generateCertificateReference( obj.certificateType, obj.status );
+
                     obj.startDate = _generateStartDate();
                     obj.endDate = _generateEndDate( obj.startDate );
-                    obj.status = ( obj.certificateType === 'hrtppc' ) ? 'active' : statuses[Math.round(Math.random()*(statuses.length-1))];
+                    
                     obj.address = ( addresses.length > i ) ? addresses[i] : addresses[Math.round(Math.random()*(addresses.length-1))];
 
                     patients.push(obj);
@@ -285,9 +287,30 @@
               };
 
               //
+              // GENERATE IMAGE REFERENCE FUNCTION
+              //
+              function _generateImageReference(){
+
+                const now = new Date();
+
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, "0");
+                const day = String(now.getDate()).padStart(2, "0");
+                const hours = String(now.getHours()).padStart(2, "0");
+                const minutes = String(now.getMinutes()).padStart(2, "0");
+                const seconds = String(now.getSeconds()).padStart(2, "0");
+
+                // Generate a 9-digit random number (like 3000049 in your example, but fixed to 9 digits)
+                const randomNum = String(Math.floor(Math.random() * 1_000_000_000)).padStart(9, "0");
+
+                return `${year} ${month} ${day} ${hours} ${minutes} ${seconds}N${randomNum}`;
+
+              }
+
+              //
               // GENERATE CERTIFICATE REFERENCE FUNCTION
               //
-              function _generateCertificateReference( certificateType ){
+              function _generateCertificateReference( certificateType, certificateStatus ){
 
                 let chars = [];
                 let loop = 0;
@@ -326,8 +349,15 @@
                     break;
 
                 }
+
+                let ref = chars.join('');
+
+                // Override for processing status
+                if( certificateType === 'matex' && certificateStatus === 'processing' ){
+                  ref = _generateImageReference();
+                }
               
-               return chars.join('');
+               return ref;
 
               };
 

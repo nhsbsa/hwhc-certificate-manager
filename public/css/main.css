@@ -20953,6 +20953,11 @@ b {
   scroll-margin-top: 4rem;
 }
 
+.patient-table .nhsuk-tag,
+.patient-table tbody td:nth-child(2) {
+  white-space: nowrap;
+}
+
 .patient-table .nhsuk-body-s {
   font-weight: 400;
   margin: 0;
@@ -20963,10 +20968,16 @@ b {
   background-color: #f0f4f5;
 }
 
+.nhsuk-tag--dark-grey {
+  color: #f0f4f5;
+  background-color: #354550;
+}
+
 .nhsuk-inset-text--summary {
   margin-top: 0;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+  max-width: none;
 }
 
 /* EXPANDABLE IMAGE */

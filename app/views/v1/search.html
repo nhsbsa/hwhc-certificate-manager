@@ -107,9 +107,12 @@
                       ]
                     }) }}
 
+                    <input type="hidden" name="searchStatus" value="" />
+
                   {% else %}
 
                     <input type="hidden" name="searchCertificateType" value="matex" />
+                    <input type="hidden" name="searchStatus" value="processing,pending-a,pending-b" />
 
                   {% endif %}
 

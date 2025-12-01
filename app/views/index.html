@@ -9,21 +9,28 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <h1>Help with Health Costs telesales</h1>
+      <h1>{{ serviceName }}</h1>
 
 
         {% set prototypeV1TabHTML %}
 
           <!-- PROTOTYPE TAB V1 -->
 
-          <p>An initial prototype for Help with Health Costs (HwHC) telesales. This first iteration will handle Maternity Exemption (MATEX) cases.</p>
+          <p>An initial prototype for Help with Health Costs (HwHC) telesales. This first iteration will handle Maternity exemption (MATEX) and HRT PPC cases.</p>
 
-          {{ button({
-            text: 'Launch v1 prototype',
-            href: '/v1/search'
-          }) }}
+          <div class="nhsuk-button-group">
 
-          <p class="nhsuk-body"><a href="/v1/">Configure v1 prototype</a></p>
+            {{ button({
+              text: 'Call centre agents',
+              href: '/v1/search?role=callCentre'
+            }) }}
+
+            {{ button({
+              text: 'Back office staff',
+              href: '/v1/back-office-dashboard?role=backOffice'
+            }) }}
+
+          </div>
 
         {% endset %}
 

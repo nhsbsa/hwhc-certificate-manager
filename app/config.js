@@ -2,7 +2,7 @@
 
 module.exports = {
   // Service name
-  serviceName: 'HwHC Telesales',
+  serviceName: 'Certificate manager',
 
   // Port to run nodemon on locally
   port: 2000,
