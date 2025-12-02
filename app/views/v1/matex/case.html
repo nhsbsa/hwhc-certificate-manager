@@ -20,14 +20,208 @@
   <div class="nhsuk-grid-row">
 
     <div class="nhsuk-grid-column-one-third">
-      <p>Column 01</p>
+
+      {{ card({
+        heading: "Certificate details",
+        headingLevel: "2",
+        headingClasses: "nhsuk-heading-s",
+        description: summaryList({
+          classes: "summary-list--single-line",
+          rows: [
+            {
+              key: {
+                text: "Reference"
+              },
+              value: {
+                text: "123 4567 8901"
+              }
+            },
+            {
+              key: {
+                text: "Type"
+              },
+              value: {
+                html: tag({
+                  text: "MATEX",
+                  classes: "nhsuk-tag--green"
+                })
+              }
+            },
+            {
+              key: {
+                text: "Status"
+              },
+              value: {
+                html: "ISSUED"
+              }
+            },
+            {
+              key: {
+                text: "Channel"
+              },
+              value: {
+                html: "Digital"
+              }
+            },
+            {
+              key: {
+                text: "Fulfilment"
+              },
+              value: {
+                html: "Email"
+              }
+            },
+            {
+              key: {
+                text: "Start date"
+              },
+              value: {
+                html: "25 November 2025"
+              }
+            },
+            {
+              key: {
+                text: "Expiry date"
+              },
+              value: {
+                html: "24 November 2026"
+              }
+            },
+            {
+              key: {
+                text: "Application date"
+              },
+              value: {
+                html: "25 November 2025"
+              }
+            },
+            {
+              key: {
+                text: "HCP identifier"
+              },
+              value: {
+                html: ""
+              }
+            }
+          ]
+        })
+      }) }}
+    
     </div>
 
-    <div class="nhsuk-grid-column-one-third">
-      <p>Column 02</p>
-    </div>
+    
+
 
     <div class="nhsuk-grid-column-one-third">
+      {{ card({
+        heading: "Personal details",
+        headingLevel: "2",
+        headingClasses: "nhsuk-heading-s",
+        description: summaryList({
+          classes: "summary-list--single-line",
+          rows: [
+            {
+              classes: "nhsuk-summary-list__row--wrap",
+              key: {
+                text: "Surname"
+              },
+              value: {
+                text: "Smith"
+              }
+            },
+            {
+              classes: "nhsuk-summary-list__row--wrap",
+              key: {
+                text: "Forename"
+              },
+              value: {
+                text: "Jane"
+              }
+            },
+            {
+              classes: "nhsuk-summary-list__row--wrap",
+              key: {
+                text: "Address Line 1"
+              },
+              value: {
+                html: ""
+              }
+            },
+            {
+              classes: "nhsuk-summary-list__row--wrap",
+              key: {
+                text: "Address Line 2"
+              },
+              value: {
+                html: ""
+              }
+            },
+            {
+              classes: "nhsuk-summary-list__row--wrap",
+              key: {
+                text: "Postcode"
+              },
+              value: {
+                html: "TR11 0TS"
+              }
+            },
+            {
+              key: {
+                text: "Telephone number"
+              },
+              value: {
+                html: ""
+              }
+            },
+            {
+              key: {
+                text: "Date of birth"
+              },
+              value: {
+                html: "24 July 1997"
+              }
+            },
+            {
+              key: {
+                text: "NHS number"
+              },
+              value: {
+                html: "1234567890"
+              }
+            },
+            {
+              classes: "nhsuk-summary-list__row--wrap",
+              key: {
+                text: "Email address"
+              },
+              value: {
+                html: "jane.smith@example.com"
+              }
+            },
+            {
+              key: {
+                text: "Due/Birth Date"
+              },
+              value: {
+                html: "9 August 2026"
+              }
+            }
+          ]
+        })
+        +
+        button({
+          text: "Edit personal details (P)",
+          classes: "nhsuk-button--secondary nhsuk-u-margin-top-5",
+          href: "edit-personal-details"
+        })
+      }) }}
+    </div>
+
+
+    <div class="nhsuk-grid-column-one-third">
+
+      <div class="nhsuk-card nhsuk-card--grey">
+            <div class="nhsuk-card__content">
 
         <!-- Import from NHS App frontend -->
         {% from 'nhsapp/components/timeline/macro.njk' import nhsappTimeline %}
@@ -46,7 +240,157 @@
           ]
         }) }}
 
+        </div>
+      </div>
+
     </div>
+
 </div>
+
+<div class="nhsuk-grid-row-buttons">
+
+    {{ button({
+      text: 'Reissue certificate (K)',
+      href: "reissue"
+    }) }}
+
+    {{ button({
+      classes: "nhsuk-button--secondary-solid",
+      text: 'Cancel (M)',
+      href: "../search"
+    }) }}
+
+</div>
+
+
+    <!-- Summary list card styling -->
+    <style>
+      /* --------------------------------------------------- */
+      /* Base (default) layout: applies to 426px–1023px & >1024px */
+      /* --------------------------------------------------- */
+
+      .summary-list--single-line {
+        margin-bottom: 0;
+      }
+
+      .summary-list--single-line .nhsuk-summary-list__row {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+      }
+
+      .summary-list--single-line .nhsuk-summary-list__key {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        margin-right: 5rem;
+      }
+
+      .summary-list--single-line .nhsuk-summary-list__value {
+        flex: 1 1 auto;
+        min-width: 0;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+
+      /* Buttons row (default: left & right inline) */
+      .summary-list--single-line .nhsuk-summary-list__row--no-border {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        margin-top: 1rem;
+      }
+
+      .summary-list--single-line .nhsuk-summary-list__row--no-border 
+        .nhsuk-summary-list__key,
+      .summary-list--single-line .nhsuk-summary-list__row--no-border 
+        .nhsuk-summary-list__value {
+        flex: 0 0 auto;
+        margin: 0;
+      }
+
+      .nhsuk-grid-row-buttons .nhsuk-button--secondary {
+          margin-left: 1rem;
+      }
+
+      /* --------------------------------------------------- */
+      /* STACKING BREAKPOINT 1 — small screens (≤425px)      */
+      /* --------------------------------------------------- */
+      @media (max-width: 425px) {
+
+        .summary-list--single-line .nhsuk-summary-list__row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.25rem;
+          padding-bottom: 0.5rem;
+        }
+
+        .summary-list--single-line .nhsuk-summary-list__key {
+          margin: 0;
+        }
+
+        .summary-list--single-line .nhsuk-summary-list__row--no-border {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.5rem;
+        }
+      }
+
+
+      /* --------------------------------------------------- */
+      /* STACKING BREAKPOINT 2 — special case: 1024px only   */
+      /* --------------------------------------------------- */
+      @media (min-width: 1024px) and (max-width: 1024px) {
+
+        .summary-list--single-line .nhsuk-summary-list__row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.25rem;
+          padding-bottom: 0.5rem;
+        }
+
+        .summary-list--single-line .nhsuk-summary-list__key {
+          margin: 0;
+        }
+
+        .summary-list--single-line .nhsuk-summary-list__row--no-border {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.5rem;
+        }
+      }
+      
+      /* --------------------------------------------------- */
+      /* Same height columns — Desktop only */
+      /* --------------------------------------------------- */
+      @media (min-width: 1024px) {
+
+        .nhsuk-grid-row {
+          display: flex ;
+          align-items: stretch;
+        }
+
+        .nhsuk-grid-row > .nhsuk-grid-column-one-third {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .nhsuk-grid-row .nhsuk-card {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        .nhsuk-grid-row .nhsuk-card__content {
+          flex: 1 1 auto;
+        }
+
+        .nhsuk-grid-row-buttons .nhsuk-button--secondary-solid {
+          margin-left: 1rem;
+        }
+      }
+
+
+    </style>
 
 {% endblock %}

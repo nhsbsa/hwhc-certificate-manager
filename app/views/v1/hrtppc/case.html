@@ -65,7 +65,7 @@
             },
             {
               key: {
-                text: "Fulfilment method"
+                text: "Fulfilment"
               },
               value: {
                 html: "Email"
@@ -94,18 +94,14 @@
               value: {
                 html: "25 November 2025"
               }
-            },
-            {
-              classes: "nhsuk-summary-list__row--no-border",
-              value: {
-                html: button({
-                classes: "nhsuk-button--secondary",
-                text: 'Edit certificate details (C)',
-                href: "edit-certificate"
-              })
-              }
             }
           ]
+        })
+        +
+        button({
+          text: "Edit certificate details (C)",
+          classes: "nhsuk-button--secondary nhsuk-u-margin-top-5",
+          href: "edit-certificate"
         })
       }) }}
     
@@ -164,18 +160,14 @@
               value: {
                 html: "1234567890"
               }
-            },
-            {
-              classes: "nhsuk-summary-list__row--no-border",
-              value: {
-                html: button({
-                classes: "nhsuk-button--secondary",
-                text: 'Edit personal details (P)',
-                href: "edit-personal-details"
-                })
-              }
             }
           ]
+        })
+        +
+        button({
+          text: "Edit personal details (P)",
+          classes: "nhsuk-button--secondary nhsuk-u-margin-top-5",
+          href: "edit-personal-details"
         })
       }) }}
     </div>
@@ -218,7 +210,7 @@
     }) }}
 
     {{ button({
-      classes: "nhsuk-button--secondary",
+      classes: "nhsuk-button--secondary-solid",
       text: 'Cancel (M)',
       href: "../search"
     }) }}
@@ -272,7 +264,7 @@
         margin: 0;
       }
 
-      .nhsuk-grid-row-buttons .nhsuk-button--secondary {
+      .nhsuk-grid-row-buttons .nhsuk-button--secondary-solid {
           margin-left: 1rem;
       }
 

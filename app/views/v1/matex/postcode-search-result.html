@@ -1,0 +1,127 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'Edit personal details' %}
+
+{% block beforeContent %}
+ {{ backLink({
+    href: 'javascript:history.go(-1)',
+    text: 'Back'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+    <div class="nhsuk-card nhsuk-card--grey">
+      <div class="nhsuk-card__content">
+
+        <h2 class="nhsuk-heading-s">Postcode search</h2>
+
+        {{ summaryList({
+          heading: "Personal details",
+          headingLevel: "2",
+          headingClasses: "nhsuk-heading-s",
+          classes: "nhsuk-summary-list--no-border postcode-summary",
+          rows: [
+            {
+              key: { text: "Postcode (Z)" },
+              value: {
+                html:
+                  '<div class="postcode-value">' +
+                    '<span class="postcode-text">NE15 8NY</span> ' +
+                    '<a class="nhsuk-link nhsuk-summary-list__action" href="postcode-search">Change<span class="nhsuk-u-visually-hidden"> postcode</span></a>' +
+
+                    '<div class="postcode-subrow">' +
+                      select({
+                        label: {
+                          text: "Select applicant's address"
+                        },
+                        classes: "nhsuk-input--width-20",
+                        items: [
+                          { 
+                            value: "select-address-1", 
+                            text: "NHS B S A Stella House, Goldcrest Way, NE15 8NY" 
+                          },
+                          { 
+                            value: "select-address-2", 
+                            text: "Health Education North East 4 The Waterfront, Goldcrest Way, NE15 8NY" 
+                          },
+                          { 
+                            value: "select-address-3", 
+                            text: "NHS Property Services Ltd 4 The Waterfront, Goldcrest Way, NE15 8NY" 
+                          },
+                          { 
+                            value: "select-address-4", 
+                            text: "North East Strategic Health Authority 4 The Waterfront, Goldcrest Way, NE15 8NY" 
+                          }
+                        ]
+                      }) +
+
+                      '<div class="postcode-buttons">' +
+                        button({ 
+                          text: "Select address (W)", 
+                          classes: "nhsuk-button",
+                          href: "edit-personal-details"
+                        }) +
+                        button({ 
+                          text: "Enter address manually (N)", 
+                          classes: "nhsuk-button--secondary-solid",
+                          href: "edit-personal-details"
+                        }) +
+                      '</div>' +
+                    '</div>' +
+                  '</div>'
+              }
+            }
+          ]
+
+        }) }}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<style>
+ /* Container inside the value cell */
+.postcode-subrow {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+}
+
+.postcode-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Stack buttons vertically on smaller screens */
+@media (max-width: 1024px) {
+  .postcode-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.25rem;
+  }
+
+}
+
+/* Small spacing between postcode text and "Change" link */
+.postcode-text + .nhsuk-summary-list__action {
+  margin-left: 1.5rem;
+}
+
+
+</style>
+
+{% endblock %}

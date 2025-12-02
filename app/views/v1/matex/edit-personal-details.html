@@ -30,7 +30,7 @@
               rows: [
                 {
                   key: { 
-                    text: "First name (F)"
+                    text: "Forename (S)"
                   },
                   value: 
                   { 
@@ -43,7 +43,7 @@
                 },
                 {
                   key: { 
-                    text: "Last name (L)"
+                    text: "Surname (A)"
                   },
                   value:
                   { 
@@ -63,7 +63,7 @@
                     html: input ({
                       id: "address-line-1",
                       name: "addressLineOne",
-                      value: "101 Test Lane"
+                      disabled: true
                     })
                   }
                 },
@@ -76,13 +76,13 @@
                     html: input ({
                       id: "address-line-2",
                       name: "addressLineTwo",
-                      value: "Stella"
+                      disabled: true
                     })
                   }
                 },
                 {
                   key: { 
-                    text: "Town (T)" 
+                    text: "Town (3)" 
                   },
                   value:
                   { 
@@ -90,15 +90,14 @@
                       id: "town",
                       name: "town",
                       classes: "nhsuk-u-width-two-thirds",
-                      value: "Goldcrest"
+                      disabled: true
                     })
                   }
                 },
                 {
                   key: { 
-                  text: "Postcode (P)" 
+                  text: "Postcode (Z)" 
                   },
-                  classes: "postcode-value",
                   value: 
                   {
                     html: '
@@ -117,22 +116,8 @@
                           href: "postcode-search"
                         }) + '
                       </div>
-                    </div>               
+                    </div>
                     '
-                  }
-                },
-                {
-                  key: { 
-                    text: "Telephone number (N)" 
-                  },
-                  value:
-                  { 
-                    html: input ({
-                      id: "phone-number",
-                      name: "phone-number",
-                      classes: "nhsuk-u-width-one-third",
-                      value: "07123456789"
-                    })
                   }
                 },
                 {
@@ -140,32 +125,30 @@
                     text: "Date of birth (D)" 
                   },
                   value: { 
-                    html: dateInput({
-                      id: "date-of-birth",
-                      namePrefix: "dateOfBirth",
-                      items: [
-                        {
-                          name: "day",
-                          classes: "nhsuk-input--width-2",
-                          value: "28"
-                        },
-                        {
-                          name: "month",
-                          classes: "nhsuk-input--width-2",
-                          value: "11"
-                        },
-                        {
-                          name: "year",
-                          classes: "nhsuk-input--width-4",
-                          value: "1970"
-                        }
-                      ]
+                    html: input({
+                      suffix: "(ddmmyy)",
+                      classes: "nhsuk-input--width-5",
+                      value: "241297"
                     })
                   }
                 },
                 {
                   key: { 
-                    text: "Email address (E)" 
+                    text: "Telephone number (C)" 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "phone-number",
+                      name: "phone-number",
+                      classes: "nhsuk-input--width-10",
+                      value: "07123456789"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Email address (G)" 
                   },
                   value:
                   { 
@@ -178,15 +161,39 @@
                 },
                 {
                   key: { 
-                    text: "NHS number (H)" 
+                    text: "Due/Birth Date (X)" 
+                  },
+                  value: { 
+                    html: input({
+                      suffix: "(ddmmyy)",
+                      classes: "nhsuk-input--width-5",
+                      value: "041125"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "NHS number (V)" 
                   },
                   value:
                   { 
                     html: input ({
                       id: "nhs-number",
                       name: "nhs-number",
-                      classes: "nhsuk-u-width-one-third",
+                      classes: "nhsuk-input--width-10",
                       value: "1234567890"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Notes (B)" 
+                  },
+                  value:
+                  { 
+                    html: textarea ({
+                      id: "notes",
+                      name: "notes"
                     })
                   }
                 }
@@ -207,10 +214,9 @@
             }) 
           }}
         </div>
-
+      </div>
       </div>
     </div>
-  </div>
 </div>
 
 <style>
@@ -247,11 +253,22 @@
     /* GRID COLUMN BREAKPOINT — 1024px only   */
     /* --------------------------------------------------- */
     @media (min-width: 1024px) and (max-width: 1024px) {
-      .nhsuk-grid-column-one-half {
-      width: 66.666%
+      .nhsuk-grid-column-two-thirds {
+      width: 100%
     }
   }
 
+    /* --------------------------------------------------- */
+    /* GRID COLUMN BREAKPOINT 2 — 768px only   */
+    /* --------------------------------------------------- */
+  @media (max-width: 768px) {
+
+    .postcode-inline {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+    }
+  }
 
 </style>
 

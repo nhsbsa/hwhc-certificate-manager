@@ -1,0 +1,103 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'Edit personal details' %}
+
+{% block beforeContent %}
+ {{ backLink({
+    href: 'javascript:history.go(-1)',
+    text: 'Back'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+    <div class="nhsuk-card nhsuk-card--grey">
+      <div class="nhsuk-card__content">
+
+        <h2 class="nhsuk-heading-s">Postcode search</h2>
+
+          {{ summaryList({
+            heading: "Personal details",
+            headingLevel: "2",
+            headingClasses: "nhsuk-heading-s",
+              classes: "nhsuk-summary-list--no-border",
+              rows: [
+                {
+                  key: { 
+                  text: "Postcode (Z)" 
+                  },
+                  value: 
+                  {
+                    html: '
+                    <div class="postcode-block">
+                      ' + input({
+                        id: "postcode",
+                        name: "postcode",
+                        classes: "nhsuk-input--width-10",
+                        value: "TR11 0TS"
+                      }) + '
+                    
+                      <div class="postcode-buttons">
+                    
+                        ' + button({
+                          text: "Get address (G)",
+                          classes: "nhsuk-button",
+                          href: "postcode-search-result"
+                        }) + '
+                    
+                        ' + button({
+                          text: "Enter address manually (N)",
+                          classes: "nhsuk-button--secondary-solid",
+                          href: "edit-personal-details"
+                        }) + '
+                    
+                      </div>
+                    </div>
+                    '
+                  }
+                }
+              ]
+          }) }}
+
+      </div>
+      </div>
+    </div>
+</div>
+
+<style>
+
+.postcode-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.postcode-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+
+
+@media (min-width: 1024px) and (max-width: 1024px) {
+  .nhsuk-grid-column-two-thirds{
+    width: 100%;
+  }
+}
+
+
+</style>
+
+
+
+{% endblock %}
