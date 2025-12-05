@@ -3,6 +3,8 @@
 {% set pageName = 'MATEX processing' %}
 {% set bannerRole = 'backOffice' %}
 
+{% set dashboardRows = '' | getPatientData | getDashboardTableRows( 7 ) %}
+
 {% block content %}
 
   <div class="nhsuk-grid-row">
@@ -20,10 +22,11 @@
               classes: 'nhsuk-inset-text--summary'
             }) }}
 
+
             <div class="nhsuk-button-group">
 
               {{ button({
-                text: 'Start processing applications',
+                text: 'Process an application',
                 href: 'process-application'
               }) }}
 
@@ -35,8 +38,30 @@
 
             </div>
 
+
+            {{ table({
+                panel: false,
+                caption: "Certificates you've processed this session",
+                firstCellIsHeader: false,
+                responsive: true,
+                tableClasses: 'patient-table',
+                head: [
+                        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' ),
+                        { text: 'Postcode' },
+                        { text: 'Status' },
+                        { text: 'Reference' },
+                        { text: 'Last note' },
+                        { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
+                      ],
+                rows: dashboardRows
+              }) }}
+
+
+            
+
           </div>
-          </div>
+        </div>
+
 
       </div>
   </div>

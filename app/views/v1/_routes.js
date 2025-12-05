@@ -5,7 +5,7 @@ const router = express.Router();
 router.post(/index/, function (req, res) {
     let destination = 'search';
     if( req.session.data.role === 'backOffice' ){
-        destination = 'back-office-dashboard'
+        destination = 'dashboard'
     }
     res.redirect( destination );
 });

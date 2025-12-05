@@ -313,6 +313,68 @@
               };
 
               //
+              // GENERATE LAST NOTE FUNCTION
+              //
+              function _generateLastNote( status, certificateType ){
+
+                let note = '';
+                
+                switch( status ){
+
+                    case 'processing':
+                      note = { title: 'Application scanned' };
+                      break;
+
+                    case 'reviewing':
+
+                      let options = ['Application returned to GP','Application returned to patient','Paper key-in requested','Unable to process'];
+                      let num = Math.round(Math.random()*(options.length-1));
+                      note = {
+                        title: options[num]
+                      };
+
+                      if( num === 0 ){
+                        // Application returned to GP
+                        let gpOptions = ['Missing GP signature.','Missing patient postcode.','Missing patient name.'];
+                        note.text = gpOptions[Math.round(Math.random()*(gpOptions.length-1))] + ' Letter PE07 sent.';
+                      } else if( num === 1 ){
+                        // Application returned to patient
+                        let patientOptions = ['Missing patient signature.','No GP stamp on form.'];
+                        note.text = patientOptions[Math.round(Math.random()*(patientOptions.length-1))] + ' Letter PE05 sent.';
+                      } else if( num === 3){
+                        // Unable to process
+                        let unableReasons = ['Half of the form was missing.','Not enough information and no GP signature on form.','Blank form.'];
+                        note.text = unableReasons[Math.round(Math.random()*(unableReasons.length-1))];
+                      }
+
+                      break;
+
+                    case 'accepted':
+                      note = { title: 'Application accepted and awaiting print' };
+                      break;
+
+                    case 'active':
+                      
+                      note = { title: 'Certificate issued' };
+                      if( certificateType === 'matex' ){
+                        let routes = ['Certificate issued online','Certificate issued via pharmacy','Certificate issued via telesales'];
+                        note = { title: routes[Math.round(Math.random()*(routes.length-1))] };
+                      }
+
+                      break;
+
+                    case 'expired':
+                      note = { title: 'Certificate expired' };
+                      break;
+
+                }
+
+                return note;
+
+
+              };
+
+              //
               // GENERATE PATIENT DATA FUNCTION
               //
               function _generatePatientData(){
@@ -335,6 +397,8 @@
                     obj.endDate = _generateEndDate( obj.startDate );
                     
                     obj.address = ( addresses.length > i ) ? addresses[i] : addresses[Math.round(Math.random()*(addresses.length-1))];
+                    obj.lastNote = _generateLastNote( obj.status );
+
 
                     patients.push(obj);
 

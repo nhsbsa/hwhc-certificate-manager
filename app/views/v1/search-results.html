@@ -53,12 +53,12 @@
 
               {{ table({
                 panel: false,
-                caption: 'Exemptions',
+                caption: 'Certificates and applications',
                 captionClasses: 'nhsuk-u-visually-hidden',
                 firstCellIsHeader: false,
                 responsive: true,
                 tableClasses: 'patient-table',
-                head: '' | getTableHeadRows,
+                head: true | getTableHeadRows,
                 rows: filteredRows
               }) }}
 
