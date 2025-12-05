@@ -178,19 +178,17 @@
       <div class="nhsuk-card nhsuk-card--grey">
             <div class="nhsuk-card__content">
 
+              <h2 class="nhsuk-u-visually-hidden">Certificate history</h2>
+
         <!-- Import from NHS App frontend -->
         {% from 'nhsapp/components/timeline/macro.njk' import nhsappTimeline %}
 
        {{ nhsappTimeline({
           items: [
             {
-              headingText: 'Application approved',
-              html: '<span class="nhsuk-body-s">23 November 2025, 12:32</span>',
+              headingText: 'Certificate issued via online',
+              html: '<span class="nhsuk-body-s">28 November 2025, 16:32</span>',
               active: true
-            },
-            {
-              headingText: 'Application scanned',
-              html: '<span class="nhsuk-body-s">23 November 2025, 08:30</span>'
             }
           ]
         }) }}
