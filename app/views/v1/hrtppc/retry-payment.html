@@ -52,7 +52,7 @@
                 text: "Status"
               },
               value: {
-                html: "Active"
+                html: "Pending"
               }
             },
             {
@@ -76,7 +76,7 @@
                 text: "Start date"
               },
               value: {
-                html: "25 November 2025"
+                html: ""
               }
             },
             {
@@ -84,7 +84,7 @@
                 text: "Expiry date"
               },
               value: {
-                html: "24 November 2026"
+                html: ""
               }
             },
             {
@@ -163,12 +163,7 @@
             }
           ]
         })
-        +
-        button({
-          text: "Edit personal details",
-          classes: "nhsuk-button--secondary nhsuk-u-margin-top-5",
-          href: "edit-personal-details"
-        })
+
       }) }}
     </div>
 
@@ -203,33 +198,15 @@
         <div class="scroll-container">
         {{ nhsappTimeline({
           items: [
-          {
-            headingText: 'Address line 1 updated',
-            html: '
-              <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-                <li>Address line 1: "14 Bridge St" TO "101 Test Lane"</li>
-              </ul>
-              <p class="nhsuk-body-s nhsuk-u-margin-top-1">22 December 2025 2:30pm</p>
-            ',
-            active: true
-          },
-          {
-            headingText: 'Application complete',
-            html: '
-              <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-                <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Active</li>
-              </ul>
-              <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:35am</p>
-            '
-          },
             {
               headingText: 'Card payment',
               html: '
                 <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-                  <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Success</li>
+                  <li style="color: #d5281b;">Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Failed</li>
                 </ul>
                 <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:32am</p>
-              '
+              ',
+              active: true
             },
             {
               headingText: 'Application submitted',
@@ -251,12 +228,9 @@
       {{ nhsappTimeline({
         items: [
           {
-            headingText: '22 December 2025 2:30pm',
             html: '
-              <p class="nhsuk-u-margin-bottom-1">Maria Li (Customer contact advisor)</p>
-              <p class="nhsuk-u-margin-bottom-1">"Applicant phoned to confirm address change."</p>
-            ',
-            active: true
+              <p class="nhsuk-u-margin-bottom-1">No notes available</p>
+            '
           }
         ]
       }) }}
@@ -268,50 +242,24 @@
       {{ nhsappTimeline({
         items: [
         {
-          headingText: 'Note added',
+          headingText: 'Card payment',
           html: '
-            <p class="nhsuk-u-margin-bottom-1">Maria Li (Customer contact advisor)</p>
-            <p class="nhsuk-u-margin-bottom-1">"Applicant phoned to confirm address change."</p>
-            <p class="nhsuk-body-s nhsuk-u-margin-top-1">22 December 2025 2:30pm</p>
+            <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
+              <li style="color: #d5281b;">Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Failed</li>
+            </ul>
+            <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:32am</p>
           ',
           active: true
         },
         {
-          headingText: 'Address line 1 updated',
+          headingText: 'Application submitted',
           html: '
-            <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-              <li>Address line 1: "14 Bridge St" TO "101 Test Lane"</li>
-            </ul>
-            <p class="nhsuk-body-s nhsuk-u-margin-top-1">22 December 2025 2:30pm</p>
-          '
-        },
-        {
-          headingText: 'Application complete',
-          html: '
-            <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-              <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Active</li>
-            </ul>
-            <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:35am</p>
-          '
-        },
-          {
-            headingText: 'Card payment',
-            html: '
-              <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-                <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Success</li>
-              </ul>
-              <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:32am</p>
+          <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
+            <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Pending</li>
+          </ul>
+            <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:30am</p>
             '
-          },
-          {
-            headingText: 'Application submitted',
-            html: '
-            <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-              <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Pending</li>
-            </ul>
-              <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:30am</p>
-              '
-          }
+        }
         ]
       }) }}
     </div>
@@ -353,8 +301,8 @@
 <div class="nhsuk-grid-row-buttons">
 
     {{ button({
-      text: 'Reissue certificate',
-      href: "reissue"
+      text: 'Retry payment',
+      href: "check-their-answers-retry-payment"
     }) }}
 
     {{ button({

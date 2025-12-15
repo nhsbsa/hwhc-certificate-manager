@@ -68,7 +68,23 @@
                 text: "Fulfilment" 
               },
               value: {
-                html: "Email"
+                classes: "fulfilment-value",
+                html: radios({
+                  idPrefix: "example-inline",
+                  name: "exampleInline",
+                  classes: "nhsuk-radios--inline summary-list-radios",
+                  items: [
+                    { 
+                      value: "email", 
+                      text: "Email",
+                      checked: true
+                    },
+                    { 
+                      value: "post", 
+                      text: "Post" 
+                    }
+                  ]
+                })
               }
             },
             {
@@ -125,71 +141,151 @@
         description: summaryList({
           classes: "summary-list--single-line",
           rows: [
-            {
-              key: {
-                text: "Last name"
-              },
-              value: {
-                text: "Smith "
-              }
+          {
+            key: { 
+              text: "Last name"
             },
-            {
-              key: {
-                text: "First name"
-              },
-              value: {
-                text: "Jane"
-              }
-            },
-            {
-              key: {
-                text: "Address"
-              },
-              value: {
-                html: "22 River Rd<br>Stella<br>Goldcrest Way<br>TR11 0TS"
-              }
-            },
-            {
-              key: {
-                text: "Telephone number"
-              },
-              value: {
-                html: ""
-              }
-            },
-            {
-              key: {
-                text: "Date of birth"
-              },
-              value: {
-                html: "24 July 1997"
-              }
-            },
-            {
-              key: {
-                text: "NHS number"
-              },
-              value: {
-                html: "123 456 7890"
-              }
-            },
-            {
-              key: {
-                text: "Email address"
-              },
-              value: {
-                html: "jane.smith@example.com"
-              }
-            },
-            {
-              key: {
-                text: "Child's due or birth date",
-                classes: "wrap-key"
-              },
-              value: {
-                html: "9 August 2026"
-              }
+            value:
+            { 
+              html: input ({
+                id: "last-name",
+                name: "lastName",
+                value: "Smith"
+              })
             }
+          },
+          {
+            key: { 
+              text: "First name"
+            },
+            value: 
+            { 
+              html: input ({
+                id: "first-name",
+                name: "firstName",
+                value: "Jane"
+              })
+            }
+          },
+            {
+                  key: { 
+                    text: "Address line 1" 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "address-line-1",
+                      name: "addressLineOne",
+                      value: "22 River Rd"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Address line 2" 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "address-line-2",
+                      name: "addressLineTwo",
+                      value: "Stella"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Town or city" 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "town",
+                      name: "town",
+                      classes: "nhsuk-u-width-two-thirds",
+                      value: "Goldcrest Way"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                  text: "Postcode" 
+                  },
+                  value: 
+                  {
+                    html: input({
+                          id: "postcode",
+                          name: "postcode",
+                          classes: "nhsuk-input--width-5",
+                          value: "TR11 0TS"
+                        })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Date of birth" 
+                  },
+                  value: { 
+                    html: input({
+                      suffix: "(ddmmyy)",
+                      classes: "nhsuk-input--width-5",
+                      value: "241297"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Telephone number" 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "phone-number",
+                      name: "phone-number",
+                      classes: "nhsuk-input--width-10",
+                      value: "07700 123 456"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Email address" 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "email",
+                      name: "email",
+                      value: "jane.smith@example.com"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Child's due or birth date" 
+                  },
+                  value: { 
+                    html: input({
+                      suffix: "(ddmmyy)",
+                      classes: "nhsuk-input--width-5",
+                      value: "041125"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "NHS number" 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "nhs-number",
+                      name: "nhs-number",
+                      classes: "nhsuk-input--width-10",
+                      value: "1234567890"
+                    })
+                  }
+                }
           ]
         })
 
@@ -296,6 +392,11 @@
 
           .nhsuk-button--secondary {
             margin-left: 1rem;
+          }
+
+          .summary-list-radios {
+            display: flex;
+            white-space: nowrap;
           }
 
         }
