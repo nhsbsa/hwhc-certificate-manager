@@ -388,13 +388,19 @@
 
                     const obj = name;
 
+                    obj.id = i;
                     obj.nhsNumber = _generateNHSNumber();
                     obj.certificateType = certificateTypes[Math.round(Math.random())*(certificateTypes.length-1)];
                     obj.status = ( obj.certificateType === 'hrtppc' ) ? 'active' : statuses[Math.round(Math.random()*(statuses.length-1))];
                     obj.certificateReference = _generateCertificateReference( obj.certificateType, obj.status );
 
-                    obj.startDate = _generateStartDate();
-                    obj.endDate = _generateEndDate( obj.startDate );
+                    if( obj.status === 'matex' ){
+                      obj.dueDate = _generateStartDate();
+                      obj.endDate = _generateEndDate( obj.startDate );
+                    } else {
+                      obj.startDate = _generateStartDate();
+                      obj.endDate = _generateEndDate( obj.startDate );
+                    }
                     
                     obj.address = ( addresses.length > i ) ? addresses[i] : addresses[Math.round(Math.random()*(addresses.length-1))];
                     obj.lastNote = _generateLastNote( obj.status );

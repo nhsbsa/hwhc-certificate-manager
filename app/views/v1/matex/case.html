@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'Certificate summary' %}
+{% set pageName = 'Certificate' %}
 
 {% block beforeContent %}
  {{ backLink({
@@ -11,9 +11,19 @@
 
 {% block content %}
 
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  {#{ patient | dump }#}
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '56 913 186 386' }} - {{ patient.lastName or 'Smith' }}, {{ patient.firstName or 'Jane' }} 
+        {{ ( patient.certificateType or 'matex' ) | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ ( patient.status or 'active' ) | getStatusTextOrTag( true ) | safe }}
+      </h1>
     </div>
   </div>
 
@@ -29,39 +39,20 @@
           classes: "summary-list--single-line",
           rows: [
             {
-              key: {
-                text: "Reference"
-              },
-              value: {
-                text: "123 4567 8901"
-              }
+              key: { text: 'Reference' },
+              value: { text: patient.certificateReference or '56 913 186 386' }
             },
             {
-              key: {
-                text: "Type"
-              },
-              value: {
-                html: tag({
-                  text: "MATEX",
-                  classes: "nhsuk-tag--green"
-                })
-              }
+              key: { text: 'Type' },
+              value: { html: ( patient.certificateType or 'matex' ) | getCertificateTypeTextOrTag( true ) }
             },
             {
-              key: {
-                text: "Status"
-              },
-              value: {
-                html: "Active"
-              }
+              key: { text: 'Status' },
+              value: { html: ( patient.status or 'active' ) | getStatusTextOrTag( true ) }
             },
             {
-              key: {
-                text: "Channel"
-              },
-              value: {
-                html: "Digital"
-              }
+              key: { text: 'Channel' },
+              value: { html: 'Digital' }
             },
             {
               key: {
@@ -94,15 +85,6 @@
               value: {
                 html: "25 November 2025"
               }
-            },
-            {
-              key: {
-                text: "Health care provider",
-                classes: "wrap-key"
-              },
-              value: {
-                html: ""
-              }
             }
           ]
         })
@@ -123,20 +105,12 @@
           classes: "summary-list--single-line",
           rows: [
             {
-              key: {
-                text: "Last name"
-              },
-              value: {
-                text: "Smith "
-              }
+              key: { text: 'Last name' },
+              value: { text: patient.lastName or 'Smith' }
             },
             {
-              key: {
-                text: "First name"
-              },
-              value: {
-                text: "Jane"
-              }
+              key: { text: 'First name' },
+              value: { text: patient.firstName or 'Jane' }
             },
             {
               key: {

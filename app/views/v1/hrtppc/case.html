@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'Certificate summary' %}
+{% set pageName = 'Certificate' %}
 
 {% block beforeContent %}
  {{ backLink({
@@ -11,9 +11,16 @@
 
 {% block content %}
 
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or 'HRT R33P ITIX' }} - {{ patient.lastName or 'Smith' }}, {{ patient.firstName or 'Jane' }} 
+        {{ ( patient.certificateType or 'hrtppc' ) | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ ( patient.status or 'active' ) | getStatusTextOrTag( true ) | safe }}
+      </h1>
     </div>
   </div>
 
@@ -29,39 +36,20 @@
           classes: "summary-list--single-line",
           rows: [
             {
-              key: {
-                text: "Reference"
-              },
-              value: {
-                text: "HRT AF4A 488E"
-              }
+              key: { text: 'Reference' },
+              value: { text: patient.certificateReference or 'HRT R33P ITIX' }
             },
             {
-              key: {
-                text: "Type"
-              },
-              value: {
-                html: tag({
-                  text: "HRT PPC",
-                  classes: "nhsuk-tag--blue"
-                })
-              }
+              key: { text: 'Type' },
+              value: { html: ( patient.certificateType or 'hrtppc' ) | getCertificateTypeTextOrTag( true ) }
             },
             {
-              key: {
-                text: "Status"
-              },
-              value: {
-                html: "Active"
-              }
+              key: { text: 'Status' },
+              value: { html: ( patient.status or 'active' ) | getStatusTextOrTag( true ) }
             },
             {
-              key: {
-                text: "Channel"
-              },
-              value: {
-                html: "Online"
-              }
+              key: { text: 'Channel' },
+              value: { html: 'Online' }
             },
             {
               key: {
@@ -119,16 +107,14 @@
           classes: "summary-list--single-line",
           rows: [
             {
-              classes: "nhsuk-summary-list__row",
-              key: {
-                text: "Name"
-              },
-              value: {
-                text: "Jane Smith"
-              }
+              key: { text: 'Last name' },
+              value: { text: patient.lastName or 'Smith' }
             },
             {
-              classes: "nhsuk-summary-list__row",
+              key: { text: 'First name' },
+              value: { text: patient.firstName or 'Jane' }
+            },
+            {
               key: {
                 text: "Address"
               },
