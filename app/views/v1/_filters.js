@@ -585,6 +585,8 @@ module.exports = function (env) {
       num = 0;
     }
 
+    const showLevels = [ 'low' ]; // Add the levels you wish to output here...
+
     let confidenceLevel = 'empty';
     let tag = '<span class="confidence-level"><span class="nhsuk-tag nhsuk-tag--grey">Empty</span></span>';
 
@@ -606,7 +608,7 @@ module.exports = function (env) {
       tag += '<span class="nhsuk-tag nhsuk-tag--green confidence-score">'+num+'</span></span>';
     }
 
-    return tag;
+    return ( showLevels.indexOf(confidenceLevel) > -1 ) ? tag : '';
 
   });
 

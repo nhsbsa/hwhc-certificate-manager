@@ -50,12 +50,75 @@
 
               <h2 class="nhsuk-heading-m">Confirm patient address</h2>
 
-              <form action="process-application--postcode" method="post" novalidate>
-              <!--
-              
-              Can't use until Shai-halud is sorted...
+              <form method="post" novalidate>
 
-              <form action="postcode-handler" method="get" novalidate>-->
+
+                {% call fieldset({
+                  legend: {
+                    html: 'Address',
+                    classes: 'nhsuk-u-visually-hidden'
+                  }
+                }) %}
+
+                    {{ input({
+                      label: {
+                        html: 'House number or name ' + 67 | getConfidenceTag
+                      },
+                      id: 'imageBuildingNumberOrName',
+                      name: 'imageBuildingNumberOrName',
+                      classes: 'nhsuk-input--width-10',
+                      value: data.imageBuildingNumberOrName or '12'
+                    }) }}
+
+                    {{ input({
+                      label: {
+                        html: 'Address line 1 ' + 87 | getConfidenceTag
+                      },
+                      id: 'imageAddressLine1',
+                      name: 'imageAddressLine1',
+                      value: data.imageAddressLine1 or 'Crown Passage'
+                    }) }}
+
+                    {{ input({
+                      label: {
+                        html: 'Address line 2 ' + 0 | getConfidenceTag + ' (optional)'
+                      },
+                      id: 'imageAddressLine2',
+                      name: 'imageAddressLine2',
+                      value: data.imageAddress2
+                    }) }}
+
+                    {{ input({
+                      label: {
+                        html: 'Town or city ' + 77 | getConfidenceTag
+                      },
+                      classes: 'nhsuk-input--width-20',
+                      id: 'imageTown',
+                      name: 'imageTown',
+                      value: data.imageTown or 'Birmingham'
+                    }) }}
+
+                    {{ input({
+                      label: {
+                        html: 'County ' + 0 | getConfidenceTag + ' (optional)'
+                      },
+                      classes: 'nhsuk-input--width-10',
+                      id: 'imageCounty',
+                      name: 'imageCounty',
+                      value: data.imageCounty
+                    }) }}
+
+                    {{ input({
+                      label: {
+                        html: 'Postcode ' + 89 | getConfidenceTag
+                      },
+                      classes: 'nhsuk-input--width-10',
+                      id: 'imagePostcode',
+                      name: 'imagePostcode',
+                      value: data.imagePostcode or 'B14 9QX'
+                    }) }}
+
+                  {% endcall %}
 
 
                {% call fieldset({
@@ -65,35 +128,13 @@
                     }
                 }) %}
 
-                    <!-- POSTCODE -->
-                    {{ input({
-                        label: {
-                            html: 'Postcode ' + 89 | getConfidenceTag
-                        },
-                        classes: 'nhsuk-input--width-10',
-                        attributes: { 'autocomplete' : 'off' },
-                        id: 'imagePostcode',
-                        name: 'imagePostcode',
-                        value: data.imagePostcode or 'B14 9QX'
-                    }) }}
-
-                    <!-- BUILDING NUMBER OR NAME -->
-                    {{ input({
-                        label: {
-                            html: 'House number or name ' + 67 | getConfidenceTag
-                        },
-                        classes: 'nhsuk-input nhsuk-input--width-20',
-                        hint: {
-                            text: 'For example, 15 or Prospect Cottage'
-                        },
-                        id: 'imageHouseNumberOrName',
-                        name: 'imageHouseNumberOrName',
-                        value: data.imageBuildingNumberOrName or '12'
-                    }) }}
+                   
 
 
                 {% endcall %}
 
+
+                    
 
 
                     <hr class="nhsuk-section-break nhsuk-section-break--m" />
@@ -105,16 +146,10 @@
                       text : 'Continue'
                     }) }}
 
-                    {{ button({
-                      text : 'Cannot process application',
-                      href: 'cannot-process-application',
-                      classes: 'nhsuk-button--secondary'
-                    }) }}
-
                   </div>
 
 
-                  <p class="nhsuk-body"><a href="process-application--manual-entry">Enter address manually</a></p>
+                  <p class="nhsuk-body"><a href="process-application--postcode">Search for address with a postcode</a></p>
 
                 </form>
 

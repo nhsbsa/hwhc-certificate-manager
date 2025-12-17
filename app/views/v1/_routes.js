@@ -4,10 +4,20 @@ const router = express.Router();
 const axios = require('axios');
 
 router.post(/index/, function (req, res) {
+
+  console.log('TOP RULE');
+    
     let destination = 'search';
-    if( req.session.data.role === 'backOffice' ){
-        destination = 'dashboard'
+
+    if( req.originalUrl.indexOf('process-application') > -1 ){
+      // process-application/index
+      destination = 'other';
+    } else {
+      if( req.session.data.role === 'backOffice' ){
+          destination = 'dashboard';
+      }
     }
+
     res.redirect( destination );
 });
 
@@ -16,17 +26,17 @@ router.post(/search/, function (req, res) {
     res.redirect( destination );
 });
 
-router.post(/process-application--single/, function (req, res) {
+router.post(/process-application\/experimental--single/, function (req, res) {
     const destination = 'review-application';
     res.redirect( destination );
 });
 
-router.post(/process-application--single/, function (req, res) {
+router.post(/process-application\/review-application/, function (req, res) {
     const destination = 'confirmation?confirmationStatus=applicationApproved';
     res.redirect( destination );
 });
 
-router.post(/cannot-process-application/, function( req, res){
+router.post(/process-application\/cannot-process-application/, function( req, res){
 
     const cannotProcessApplication = req.session.data.cannotProcessApplication || 'sendALetter';
 
@@ -48,37 +58,36 @@ router.post(/cannot-process-application/, function( req, res){
 
 });
 
-router.post(/process-application--postcode-results/, function (req, res) {
+router.post(/process-application\/postcode-results/, function (req, res) {
     const destination = 'review-application';
     res.redirect( destination );
 });
 
-router.post(/process-application--postcode/, function (req, res) {
-    const destination = 'process-application--postcode-results';
+router.post(/process-application\/postcode/, function (req, res) {
+    const destination = 'postcode-results';
     res.redirect( destination );
 });
 
-router.post(/process-application--manual-entry/, function (req, res) {
+router.post(/process-application\/manual-entry/, function (req, res) {
     const destination = 'review-application';
     res.redirect( destination );
 });
 
-router.post(/process-application--other/, function (req, res) {
-    const destination = 'process-application--postcode';
+router.post(/process-application\/other/, function (req, res) {
+  console.log('HELLO');
+    const destination = 'postcode';
     res.redirect( destination );
 });
 
-router.post(/send-a-letter/, function (req, res) {
+router.post(/process-application\/send-a-letter/, function (req, res) {
     const destination = 'confirmation?confirmationStatus=letterSent';
     res.redirect( destination );
 });
 
-// This has to go last as it can be picked up in the earlier URLs...
 router.post(/process-application/, function (req, res) {
-    const destination = 'process-application--other';
+    const destination = 'process-application/other';
     res.redirect( destination );
 });
-
 
 //
 // RADIO ADDRESS METHOD 

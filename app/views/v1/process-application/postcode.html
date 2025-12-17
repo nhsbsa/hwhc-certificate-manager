@@ -48,66 +48,53 @@
                <div class="nhsuk-card nhsuk-card--grey">
         <div class="nhsuk-card__content">
 
-              <h2 class="nhsuk-heading-m">Confirm contact details and due date</h2>
+              <h2 class="nhsuk-heading-m">Confirm patient address</h2>
 
-              <form action="process-application--other" method="post" novalidate>
+              <form method="post" novalidate>
+              <!--
+              
+              Can't use until Shai-halud is sorted...
 
-
-
-                  {{ input({
-                      label: {
-                        html: 'Phone number ' + 87 | getConfidenceTag + ' (optional)'
-                      },
-                      attributes: { type: 'tel', autocomplete: 'off' },
-                      classes: 'nhsuk-input--width-10',
-                      id: 'imagePhoneNumber',
-                      name: 'imagePhoneNumber',
-                      value: data.imagePhoneNumber or '07911 123456'
-                  }) }}
+              <form action="postcode-handler" method="get" novalidate>-->
 
 
-                   {{ input({
-                      label: {
-                        html: 'Email address ' + 0 | getConfidenceTag + ' (optional)'
-                      },
-                      attributes: { type: 'email', autocomplete: 'off' },
-                      classes: 'nhsuk-input--width-20',
-                      id: 'imageEmailAddress',
-                      name: 'imageEmailAddress',
-                      value: data.imageEmailAddress
-                  }) }}
-               
-
-
-                {{ dateInput({
-                  id: 'imageBabyDateOfBirth',
-                  namePrefix: 'imageBabyDateOfBirth',
-                  fieldset: {
+               {% call fieldset({
                     legend: {
-                      html: "Baby's date of birth " + 92 | getConfidenceTag
+                        text: 'Address details',
+                        classes: 'nhsuk-u-visually-hidden'
                     }
-                  },
-                  items: [
-                    {
-                      name: 'day',
-                      classes: 'nhsuk-input--width-2',
-                      value: data.imageBabyDateOfBirth.day or '10'
-                    },
-                    {
-                      name: 'month',
-                      classes: 'nhsuk-input--width-2',
-                      value: data.imageBabyDateOfBirth.month or '8'
-                    },
-                    {
-                      name: 'year',
-                      classes: 'nhsuk-input--width-4',
-                      value: data.imageBabyDateOfBirth.year or '2026'
-                    }
-                  ]
-                }) }}
+                }) %}
+
+                    <!-- POSTCODE -->
+                    {{ input({
+                        label: {
+                            html: 'Postcode ' + 89 | getConfidenceTag
+                        },
+                        classes: 'nhsuk-input--width-10',
+                        attributes: { 'autocomplete' : 'off' },
+                        id: 'imagePostcode',
+                        name: 'imagePostcode',
+                        value: data.imagePostcode or 'B14 9QX'
+                    }) }}
+
+                    <!-- BUILDING NUMBER OR NAME -->
+                    {{ input({
+                        label: {
+                            html: 'House number or name ' + 67 | getConfidenceTag
+                        },
+                        classes: 'nhsuk-input nhsuk-input--width-20',
+                        hint: {
+                            text: 'For example, 15 or Prospect Cottage'
+                        },
+                        id: 'imageHouseNumberOrName',
+                        name: 'imageHouseNumberOrName',
+                        value: data.imageBuildingNumberOrName or '12'
+                    }) }}
 
 
-                    
+                {% endcall %}
+
+
 
                     <hr class="nhsuk-section-break nhsuk-section-break--m" />
 
@@ -118,15 +105,11 @@
                       text : 'Continue'
                     }) }}
 
-                    {{ button({
-                      text : 'Cannot process application',
-                      href: 'cannot-process-application',
-                      classes: 'nhsuk-button--secondary'
-                    }) }}
 
                   </div>
 
-                 
+
+                  <p class="nhsuk-body"><a href="manual-entry">Enter address manually</a></p>
 
                 </form>
 
