@@ -52,15 +52,12 @@
             },
             {
               key: { text: 'Channel' },
-              value: { html: 'Digital' }
+              value: {
+                text: patient.certificateType | getApplicationChannelText(patient.channel) }
             },
             {
-              key: {
-                text: "Fulfilment"
-              },
-              value: {
-                html: "Email"
-              }
+              key: { text: 'Fulfilment' },
+              value: { html: ( patient.certificateFulfilment or 'email' ) | getCertificateFulfilmentText }
             },
             {
               key: {
