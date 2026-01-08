@@ -39,8 +39,8 @@
                value: { html: 'processing' | getStatusTextOrTag( true ) }
              },
              {
-               key: { text: 'reviewing' | getStatusTextOrTag },
-               value: { html: 'reviewing' | getStatusTextOrTag( true ) }
+               key: { text: 'pending' | getStatusTextOrTag },
+               value: { html: 'pending' | getStatusTextOrTag( true ) }
              },
              {
                key: { text: 'accepted' | getStatusTextOrTag },
@@ -382,7 +382,7 @@
                 const patients = [];
 
                 const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',');
-                const statuses = ['processing','reviewing','accepted','active','expired'];
+                const statuses = ['processing','pending','accepted','active','expired'];
 
                 names.forEach( function( name, i ){
 
@@ -558,8 +558,6 @@
                 return day + ' ' + month + ' ' + year;
 
               };
-
-
               
 
               return {
