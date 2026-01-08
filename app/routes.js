@@ -7,7 +7,7 @@ const router = express.Router();
 //
 router.use((req, res, next) => {
 
-  console.log('----------------------------------');
+  console.log('-----------------------------------');
   console.log(req.originalUrl);
 
   // Versions
