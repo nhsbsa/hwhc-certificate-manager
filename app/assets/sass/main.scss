@@ -209,3 +209,53 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   right: -5px;
   top: 2px;
 }
+
+
+
+
+/* JUST AFTER LABEL */
+
+.confidence-level {
+  vertical-align: text-bottom;
+  display: inline;
+  white-space: nowrap;
+}
+
+.confidence-level .confidence-score {
+  border-left: 0;
+}
+
+.confidence-level span:first-child {
+  margin-right: none;
+}
+
+/* UNDER LABEL VERSION 
+
+.confidence-level {
+  vertical-align: text-bottom;
+  display: block;
+  white-space: nowrap;
+  margin-bottom: 0.75rem;
+}
+
+.confidence-level .confidence-score {
+  border-left: 0;
+}
+
+*/
+
+
+
+/* ALIGN TO RIGHT VERSION
+
+.nhsuk-details__text .nhsuk-form-group {
+  position: relative;
+}
+
+.confidence-level {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+}
+*/

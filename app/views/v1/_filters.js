@@ -456,7 +456,7 @@ module.exports = function (env) {
 
     if( this.ctx.data.searchStatus ){
       searchTerms.status = this.ctx.data.searchStatus;
-      summary.push( 'status "Processing", "Reviewing" or "Accepted"' ); // Only used for role=backOffice
+      summary.push( 'status "Processing", "On hold", "Checking" or "Accepted"' ); // Only used for role=backOffice
     }
     if( this.ctx.data.searchCertificateReference ){
       searchTerms.certificateReference = this.ctx.data.searchCertificateReference;
@@ -564,13 +564,13 @@ module.exports = function (env) {
   //
   // GET CONFIDENCE TAG FUNCTION
   //
-  env.addFilter('getConfidenceTag', function( num ){
+  env.addFilter('getConfidenceTag', function( num, showEverything ){
     
     if( !Number.isInteger( num ) ){
       num = 0;
     }
 
-    const showLevels = [ 'low' ]; // Add the levels you wish to output here...
+    const showLevels = ( showEverything === true ) ? [ 'empty', 'low', 'medium', 'high' ] : [ 'low' ]; // Add the levels you wish to output here...
 
     let confidenceLevel = 'empty';
     let tag = '<span class="confidence-level"><span class="nhsuk-tag nhsuk-tag--grey">Empty</span></span>';
@@ -583,8 +583,8 @@ module.exports = function (env) {
     
     if( num > 30 ){
       confidenceLevel = 'medium';
-      tag =  '<span class="confidence-level confidence-level--'+confidenceLevel+'"><span class="nhsuk-tag nhsuk-tag--yellow">Medium</span>'
-      tag += '<span class="nhsuk-tag nhsuk-tag--yellow confidence-score">'+num+'</span></span>';
+      tag =  '<span class="confidence-level confidence-level--'+confidenceLevel+'"><span class="nhsuk-tag nhsuk-tag--blue">Medium</span>'
+      tag += '<span class="nhsuk-tag nhsuk-tag--blue confidence-score">'+num+'</span></span>';
     }
 
     if( num > 60 ){

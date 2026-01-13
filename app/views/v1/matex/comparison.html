@@ -1,0 +1,126 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'Application' %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    text: 'Back'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  <div class="nhsuk-grid-row to-keep">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
+        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}</h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row to-keep">
+    <div class="nhsuk-grid-column-full">
+
+          <div class="nhsuk-grid-row">
+            <div class="nhsuk-grid-column-one-third">
+
+              <h2 class="nhsuk-heading-m nhsuk-u-visually-hidden">Scanned application</h2>
+
+              <details class="expandable-image expandable-image--small">
+                <div class="expandable-image__inner">
+                  <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
+                </div>
+                <summary class="expandable-image__button nhsuk-button">
+                  <span class="closed">Expand image</span>
+                  <span class="open">Shrink image</span></summary>
+              </details>
+
+            </div>
+
+            <div class="nhsuk-grid-column-two-thirds">
+
+               <div class="nhsuk-card nhsuk-card--grey">
+                    <div class="nhsuk-card__content">
+
+                        {{ table({
+                            panel: false,
+                            caption: 'Application processing comparison',
+                            captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
+                            firstCellIsHeader: true,
+                            head: [
+                                { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
+                                { text: 'Confidence' },
+                                { text: 'Proposed value' },
+                                { text: 'Accepted value' }
+                            ],
+                            rows: [
+                                [
+                                    { text: 'First name' },
+                                    { html: 39 | getConfidenceTag(true) },
+                                    { text: 'Sorah' },
+                                    { text: 'Sarah' }
+                                ],
+                                [
+                                    { text: 'Last name' },
+                                    { html: 17 | getConfidenceTag(true) },
+                                    { text: 'Jaaahnson' },
+                                    { text: 'Johnson' }
+                                ],
+                                [
+                                    { text: 'Date of birth' },
+                                    { html: 89 | getConfidenceTag(true) },
+                                    { text: '2 July 1995' },
+                                    { text: '2 July 1995' }
+                                ],
+                                [
+                                    { text: 'NHS number' },
+                                    { html: 99 | getConfidenceTag(true) },
+                                    { text: '1252 567 987' },
+                                    { text: '1252 567 987' }
+                                ],
+                                [
+                                    { text: 'Address' },
+                                    { html: 78 | getConfidenceTag(true) },
+                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
+                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
+                                ],
+                                [
+                                    { text: 'Phone number' },
+                                    { html: 75 | getConfidenceTag(true) },
+                                    { html: '07911 123456' },
+                                    { html: '07911 123456' }
+                                ],
+                                [
+                                    { text: 'Email address' },
+                                    { html: 0 | getConfidenceTag(true) },
+                                    { html: '' },
+                                    { html: '' }
+                                ],
+                                [
+                                    { text: "Baby's birth date" },
+                                    { html: 78 | getConfidenceTag(true) },
+                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
+                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
+                                ]
+                            ]
+                            }) }}
+              
+
+                    </div>
+                </div>
+                
+
+            </div>
+
+          </div>
+
+    </div>
+  </div>
+
+{% endblock %}
