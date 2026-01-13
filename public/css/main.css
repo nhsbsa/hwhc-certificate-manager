@@ -20973,7 +20973,8 @@ b {
   background-color: #354550;
 }
 
-.nhsuk-tag--expired-grey {
+.nhsuk-tag--expired-grey,
+.nhsuk-tag--deleted-grey {
   color: #354550;
   border-color: #dbe0e3;
   background-color: #f0f4f5;

@@ -14,7 +14,7 @@
 
   <div class="nhsuk-grid-row">
 
-    <div class="nhsuk-grid-column-one-half">
+    <div class="nhsuk-grid-column-one-third">
         <h2 class="nhsuk-heading-m">Certificate types used</h2>
         {{ summaryList({
            rows: [
@@ -30,34 +30,64 @@
          }) }}
     </div>
 
-    <div class="nhsuk-grid-column-one-half">
-        <h2 class="nhsuk-heading-m">Statuses used</h2>
-         {{ summaryList({
-           rows: [
-             {
-               key: { text: 'processing' | getStatusTextOrTag },
-               value: { html: 'processing' | getStatusTextOrTag( true ) }
-             },
-             {
-               key: { text: 'pending' | getStatusTextOrTag },
-               value: { html: 'pending' | getStatusTextOrTag( true ) }
-             },
-             {
-               key: { text: 'accepted' | getStatusTextOrTag },
-               value: { html: 'accepted' | getStatusTextOrTag( true ) }
-             },
-             {
-               key: { text: 'active' | getStatusTextOrTag },
-               value: { html: 'active' | getStatusTextOrTag( true ) }
-             },
-             {
-               key: { text: 'expired' | getStatusTextOrTag },
-               value: { html: 'expired' | getStatusTextOrTag( true ) }
-             }
+    <div class="nhsuk-grid-column-two-thirds">
+
+        {{ table({
+          panel: false,
+          caption: 'Statuses used',
+          firstCellIsHeader: true,
+        
+          rows: [
+              [
+                { text: 'processing' | getStatusTextOrTag },
+                { html: 'processing' | getStatusTextOrTag( true ) },
+                { html: '<span class="nhsuk-u-font-size-14">Application scanned and added to system</span>' }
+              ],
+              [
+                { text: 'on-hold' | getStatusTextOrTag },
+                { html: 'on-hold' | getStatusTextOrTag( true ) },
+                { html: '<span class="nhsuk-u-font-size-14">Application is on hold while more information is requested from either the patient, the GP, or a paper key-in</span>' }
+              ],
+              [
+                { text: 'checking' | getStatusTextOrTag },
+                { html: 'checking' | getStatusTextOrTag( true ) },
+                { html: '<span class="nhsuk-u-font-size-14">Application has been processed and is awaiting a quality control check</span>' }
+              ],
+              [
+                { text: 'accepted' | getStatusTextOrTag },
+                { html: 'accepted' | getStatusTextOrTag( true ) },
+                { html: '<span class="nhsuk-u-font-size-14">Application has been successfully processed and is awaiting production</span>' }
+              ],
+              [
+                { text: 'active' | getStatusTextOrTag },
+                { html: 'active' | getStatusTextOrTag( true ) },
+                { html: '<span class="nhsuk-u-font-size-14">Certificate is active</span>' }
+              ],
+              [
+                { text: 'expired' | getStatusTextOrTag },
+                { html: 'expired' | getStatusTextOrTag( true ) },
+                { html: '<span class="nhsuk-u-font-size-14">Certificate has expired</span>' }
+              ],
+              [
+                { text: 'deleted' | getStatusTextOrTag },
+                { html: 'deleted' | getStatusTextOrTag( true ) },
+                { html: '<span class="nhsuk-u-font-size-14">A request has been made to delete the certificate</span>' }
+              ]
            ]
-         }) }}
+        }) }}
+
+
+        
     </div>
   </div>
+
+
+
+
+
+
+           
+
   
 
           
@@ -312,107 +342,49 @@
 
               };
 
+              
+
+              
+
               //
-              // GENERATE LAST NOTE FUNCTION
+              // GENERATE CHANNEL FUNCTION
               //
-              function _generateLastNote( status, certificateType ){
+              function _generateChannel( certificateType, certificateStatus ){
 
-                let note = '';
-                
-                switch( status ){
+                let channel = 'Digital';
 
-                    case 'processing':
-                      note = { title: 'Application scanned' };
-                      break;
+                switch( certificateType ){
 
-                    case 'reviewing':
+                  case 'hrtppc':
+                    
+                    const rand = Math.round(Math.random()*100);
+                    if( rand < 10 ){
+                      channel = 'Pharmacy';
+                    }
+                    if( rand < 2 ) {
+                      channel = 'Telephony';
+                    }
 
-                      let options = ['Application returned to GP','Application returned to patient','Paper key-in requested','Unable to process'];
-                      let num = Math.round(Math.random()*(options.length-1));
-                      note = {
-                        title: options[num]
-                      };
+                    break;
 
-                      if( num === 0 ){
-                        // Application returned to GP
-                        let gpOptions = ['Missing GP signature.','Missing patient postcode.','Missing patient name.'];
-                        note.text = gpOptions[Math.round(Math.random()*(gpOptions.length-1))] + ' Letter PE07 sent.';
-                      } else if( num === 1 ){
-                        // Application returned to patient
-                        let patientOptions = ['Missing patient signature.','No GP stamp on form.'];
-                        note.text = patientOptions[Math.round(Math.random()*(patientOptions.length-1))] + ' Letter PE05 sent.';
-                      } else if( num === 3){
-                        // Unable to process
-                        let unableReasons = ['Half of the form was missing.','Not enough information and no GP signature on form.','Blank form.'];
-                        note.text = unableReasons[Math.round(Math.random()*(unableReasons.length-1))];
+                  case 'matex':
+
+                    if( ['processing','pending','accepted','reviewing'].indexOf(certificateStatus) > -1 ){
+                      channel = 'Paper';
+                    } else {
+                      const rand = Math.round(Math.random()*100);
+                      if( rand < 40 ){
+                        channel = 'Paper';
                       }
+                    }
 
-                      break;
-
-                    case 'accepted':
-                      note = { title: 'Application accepted and awaiting print' };
-                      break;
-
-                    case 'active':
-                      
-                      note = { title: 'Certificate issued' };
-                      if( certificateType === 'matex' ){
-                        let routes = ['Certificate issued online','Certificate issued via pharmacy','Certificate issued via telesales'];
-                        note = { title: routes[Math.round(Math.random()*(routes.length-1))] };
-                      }
-
-                      break;
-
-                    case 'expired':
-                      note = { title: 'Certificate expired' };
-                      break;
+                    break;
 
                 }
 
-                return note;
+                return channel;
 
-
-              };
-
-              //
-              // GENERATE PATIENT DATA FUNCTION
-              //
-              function _generatePatientData(){
-
-                const patients = [];
-
-                const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',');
-                const statuses = ['processing','pending','accepted','active','expired'];
-
-                names.forEach( function( name, i ){
-
-                    const obj = name;
-
-                    obj.id = i;
-                    obj.nhsNumber = _generateNHSNumber();
-                    obj.certificateType = certificateTypes[Math.round(Math.random())*(certificateTypes.length-1)];
-                    obj.status = ( obj.certificateType === 'hrtppc' ) ? 'active' : statuses[Math.round(Math.random()*(statuses.length-1))];
-                    obj.certificateReference = _generateCertificateReference( obj.certificateType, obj.status );
-
-                    if( obj.status === 'matex' ){
-                      obj.dueDate = _generateStartDate();
-                      obj.endDate = _generateEndDate( obj.startDate );
-                    } else {
-                      obj.startDate = _generateStartDate();
-                      obj.endDate = _generateEndDate( obj.startDate );
-                    }
-                    
-                    obj.address = ( addresses.length > i ) ? addresses[i] : addresses[Math.round(Math.random()*(addresses.length-1))];
-                    obj.lastNote = _generateLastNote( obj.status );
-
-
-                    patients.push(obj);
-
-                });
-
-                return JSON.stringify( patients );
-
-              };
+              }
 
               //
               // GENERATE IMAGE REFERENCE FUNCTION
@@ -556,6 +528,62 @@
                 const year = startDate.getFullYear();
 
                 return day + ' ' + month + ' ' + year;
+
+              };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              //
+              // GENERATE PATIENT DATA FUNCTION
+              //
+              function _generatePatientData(){
+
+                const patients = [];
+
+                const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',');
+                const statuses = ['processing','pending','accepted','active','expired'];
+
+                names.forEach( function( name, i ){
+
+                    const obj = name;
+
+                    obj.id = i;
+                    obj.nhsNumber = _generateNHSNumber();
+                    obj.certificateType = certificateTypes[Math.round(Math.random())*(certificateTypes.length-1)];
+                    obj.status = ( obj.certificateType === 'hrtppc' ) ? 'active' : statuses[Math.round(Math.random()*(statuses.length-1))];
+                    obj.certificateReference = _generateCertificateReference( obj.certificateType, obj.status );
+                    obj.channel = _generateChannel( obj.certificateType, obj.status );
+
+
+                    if( obj.status === 'matex' ){
+                      obj.dueDate = _generateStartDate();
+                      obj.endDate = _generateEndDate( obj.startDate );
+                    } else {
+                      obj.startDate = _generateStartDate();
+                      obj.endDate = _generateEndDate( obj.startDate );
+                    }
+                    
+                    obj.address = ( addresses.length > i ) ? addresses[i] : addresses[Math.round(Math.random()*(addresses.length-1))];
+
+
+                    patients.push(obj);
+
+                });
+
+                return JSON.stringify( patients );
 
               };
               
