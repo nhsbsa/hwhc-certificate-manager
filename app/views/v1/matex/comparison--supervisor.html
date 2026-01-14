@@ -15,11 +15,28 @@
     {% set patient = data.patientID | getPatientData %}
   {% endif %}
 
+
+  {% macro mistakeCheckBox( field, shortField ) %}
+
+    {{ checkboxes({
+        idPrefix: 'incorrect-'+shortField,
+        name: 'incorrect-'+shortField,
+        
+        items: [
+            { value: 'yes', html: '<span class="nhsuk-u-visually-hidden">'+field+' is incorrect</span>' }
+            ]
+        }) }}
+
+  {% endmacro %}
+
+
+
+
   <div class="nhsuk-grid-row to-keep">
     <div class="nhsuk-grid-column-full">
 
       <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}{% if data.showProcessorError === 'true' or data.showNotesBox === 'true' %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}</h1>
+        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }} {{ 'checking' | getStatusTextOrTag( true ) | safe }}</h1>
 
     </div>
   </div>
@@ -57,61 +74,84 @@
                                 { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
                                 { text: 'Confidence' },
                                 { text: 'Proposed value' },
-                                { text: 'Accepted value' }
+                                { text: 'Accepted value' },
+                                { text: 'Incorrect?' }
                             ],
                             rows: [
                                 [
                                     { text: 'First name' },
                                     { html: 39 | getConfidenceTag(true) },
                                     { text: patient.firstName or 'Sorah' },
-                                    { text: patient.firstName or 'Sarah' }
+                                    { text: patient.firstName or 'Sarah' },
+                                    { html: mistakeCheckBox('First name','first-name') }
                                 ],
                                 [
                                     { text: 'Last name' },
                                     { html: 17 | getConfidenceTag(true) },
                                     { text: patient.lastName or 'Jaaahnson' },
-                                    { text: patient.lastName or 'Johnson' }
+                                    { text: patient.lastName or 'Johnson' },
+                                    { html: mistakeCheckBox('Last name','last-name') }
                                 ],
                                 [
                                     { text: 'Date of birth' },
                                     { html: 89 | getConfidenceTag(true) },
                                     { text: '2 July 1995' },
-                                    { text: '2 July 1995' }
+                                    { text: '2 July 1995' },
+                                    { html: mistakeCheckBox('Date of birth','date-of-birth') }
                                 ],
                                 [
                                     { text: 'NHS number' },
                                     { html: 99 | getConfidenceTag(true) },
                                     { text: '1252 567 987' },
-                                    { text: '1252 567 987' }
+                                    { text: '1252 567 987' },
+                                    { html: mistakeCheckBox('NHS number','nhs-number') }
                                 ],
                                 [
                                     { text: 'Address' },
                                     { html: 78 | getConfidenceTag(true) },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
-                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
+                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
+                                    { html: mistakeCheckBox('Address','address') }
                                 ],
                                 [
                                     { text: 'Phone number' },
                                     { html: 75 | getConfidenceTag(true) },
                                     { html: '07911 123456' },
-                                    { html: '07911 123456' }
+                                    { html: '07911 123456' },
+                                    { html: mistakeCheckBox('Phone number','phone-number') }
                                 ],
                                 [
                                     { text: 'Email address' },
                                     { html: 0 | getConfidenceTag(true) },
                                     { html: '' },
-                                    { html: '' }
+                                    { html: '' },
+                                    { html: mistakeCheckBox('Email address','email-address') }
                                 ],
                                 [
                                     { text: "Baby's birth date" },
                                     { html: 78 | getConfidenceTag(true) },
                                     { html: '10 January 2026' },
-                                    { html: '10 January 2026' }
+                                    { html: '10 January 2026' },
+                                    { html: mistakeCheckBox("Baby's birth date",'babys-dob') }
                                 ]
                             ]
                             }) }}
 
-                        
+                            {% if data.showProcessorError === 'true'%}
+                                <h2 class="nhsuk-heading-m">Comments from assessor</h2>
+                                {{ insetText({                              
+                                    html: '<p class="nhsuk-body">You forgot to correct the name of the patient.</p>'
+                                }) }}
+
+                                {{ button({
+                                    href: '../process-application/review-application',
+                                    text: 'Edit application'
+                                }) }}
+                            {% endif %}
+
+
+                            {% if data.showNotesBox === 'true'%}
+
                                 {% set noHTML %}
                                     {{ textarea({
                                         name: 'feedback',
@@ -154,6 +194,9 @@
                                     href: '#',
                                     text: 'Leave feedback'
                                 }) }}
+
+
+                            {% endif %}
 
               
 

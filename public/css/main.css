@@ -21165,8 +21165,8 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   border-left: 0;
 }
 
-.confidence-level span:first-child {
-  margin-right: none;
+.confidence-level span + span {
+  display: none;
 }
 
 /* UNDER LABEL VERSION 
