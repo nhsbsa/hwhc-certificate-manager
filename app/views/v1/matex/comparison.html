@@ -19,7 +19,7 @@
     <div class="nhsuk-grid-column-full">
 
       <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}{% if data.showProcessorError === 'true' %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}</h1>
+        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}{% if data.showProcessorError === 'true' or data.showNotesBox === 'true' %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}</h1>
 
     </div>
   </div>
@@ -122,6 +122,56 @@
                                     text: 'Edit application'
                                 }) }}
                             {% endif %}
+
+
+                            {% if data.showNotesBox === 'true'%}
+
+                                {% set noHTML %}
+                                    {{ textarea({
+                                        name: 'feedback',
+                                        id: 'feedback',
+                                        label: {
+                                            text: "What needs to be corrected?",
+                                            isPageHeading: false
+                                        }
+                                    }) }}
+                                {% endset %}
+
+
+                                {{ radios({
+                                idPrefix: 'processingApproved',
+                                name: 'processingApproved',
+                                fieldset: {
+                                    legend: {
+                                        text: 'Has the application been processed correctly?',
+                                        classes: 'nhsuk-fieldset__legend--m',
+                                        isPageHeading: false
+                                    }
+                                },
+                                items: [
+                                    {
+                                        value: 'yes',
+                                        text: 'Yes'
+                                    },
+                                    {
+                                        value: 'no',
+                                        text: 'No',
+                                        conditional: {
+                                            html: noHTML
+                                        }
+                                    }
+                                ]
+                                }) }}
+                               
+
+                                {{ button({
+                                    href: '#',
+                                    text: 'Leave feedback'
+                                }) }}
+
+
+                            {% endif %}
+
               
 
                     </div>
