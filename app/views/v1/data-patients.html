@@ -369,7 +369,7 @@
 
                   case 'matex':
 
-                    if( ['processing','pending','accepted','reviewing'].indexOf(certificateStatus) > -1 ){
+                    if( ['processing','on-hold','accepted','checking'].indexOf(certificateStatus) > -1 ){
                       channel = 'Paper';
                     } else {
                       const rand = Math.round(Math.random()*100);
@@ -554,7 +554,7 @@
                 const patients = [];
 
                 const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',');
-                const statuses = ['processing','pending','accepted','active','expired'];
+                const statuses = ['processing','on-hold','accepted','active','expired'];
 
                 names.forEach( function( name, i ){
 
@@ -562,8 +562,19 @@
 
                     obj.id = i;
                     obj.nhsNumber = _generateNHSNumber();
-                    obj.certificateType = certificateTypes[Math.round(Math.random())*(certificateTypes.length-1)];
-                    obj.status = ( obj.certificateType === 'hrtppc' ) ? 'active' : statuses[Math.round(Math.random()*(statuses.length-1))];
+                    
+                    let lastThree = names.length - 4;
+
+                    if( i > lastThree ){
+                      obj.certificateType = 'matex';
+                      obj.status = 'checking'
+                    } else {
+                      obj.certificateType = certificateTypes[Math.round(Math.random())*(certificateTypes.length-1)];
+                      obj.status = ( obj.certificateType === 'hrtppc' ) ? 'active' : statuses[Math.round(Math.random()*(statuses.length-1))];
+                      
+                    }
+
+                    
                     obj.certificateReference = _generateCertificateReference( obj.certificateType, obj.status );
                     obj.channel = _generateChannel( obj.certificateType, obj.status );
 

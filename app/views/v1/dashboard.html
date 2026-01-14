@@ -4,6 +4,7 @@
 {% set bannerRole = 'backOffice' %}
 
 {% set dashboardRows = '' | getPatientData | getDashboardTableRows( 7 ) %}
+{% set checkingRows = '' | getPatientData | getCheckingTableRows %}
 
 {% block content %}
 
@@ -38,6 +39,23 @@
 
             </div>
   
+
+            {{ table({
+                panel: false,
+                caption: "Certificates you need to correct",
+                firstCellIsHeader: false,
+                responsive: true,
+                tableClasses: 'patient-table',
+                head: [
+                        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' ),
+                        { text: 'Postcode' },
+                        { text: 'Status' },
+                        { text: 'Reference' },
+                        { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
+                      ],
+                rows: checkingRows
+              }) }}
+
 
 
             {{ table({

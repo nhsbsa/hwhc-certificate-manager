@@ -1,0 +1,106 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'MATEX processing' %}
+{% set bannerRole = 'backOffice' %}
+
+{% set dashboardRows = '' | getPatientData | getDashboardTableRows( 7 ) %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+
+
+            <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
+
+            {{ insetText({
+              html: '386 forms awaiting processing',
+              classes: 'nhsuk-inset-text--summary'
+            }) }}
+
+
+            <div class="nhsuk-button-group">
+
+              {{ button({
+                text: 'Process an application',
+                href: 'process-application'
+              }) }}
+
+               {{ button({
+                text: 'Search for a certificate',
+                href: 'search',
+                classes: 'nhsuk-button--secondary'
+              }) }}
+
+            </div>
+  
+
+
+            {{ table({
+                panel: false,
+                caption: "Applications proccessing team overview",
+                captionClasses: 'nhsuk-u-margin-bottom-4',
+                firstCellIsHeader: false,
+                responsive: true,
+                tableClasses: 'patient-table',
+                head: [
+                        { html: 'Name' ),
+                        { text: 'Cipher' },
+                        { text: 'Role' },
+                        { text: 'Certificates processed today' },
+                        { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
+                      ],
+                rows: [
+                  [
+                    { text: 'James Smith' },
+                    { text: 'JASMI' },
+                    { text: 'Trainee' },
+                    { text: '59' },
+                    { html: '<a href="#">Check work</a>' }
+                  ],
+                  [
+                    { text: 'Aisha Collins' },
+                    { text: 'AICOL' },
+                    { text: '' },
+                    { text: '22' },
+                    { html: '<a href="#">View work</a>' }
+                  ],
+                  [
+                    { text: 'Zara Khan' },
+                    { text: 'ZAKHA' },
+                    { text: '' },
+                    { text: '0' },
+                    { html: '' }
+                  ],
+                  [
+                    { text: 'Daniel Thompson' },
+                    { text: 'DATHO' },
+                    { text: '' },
+                    { text: '64' },
+                    { html: '<a href="#">View work</a>' }
+                  ],
+                  [
+                    { text: 'Priya Patel' },
+                    { text: 'PRPAT' },
+                    { text: 'Supervisor' },
+                    { text: '0' },
+                    { html: '' }
+                  ]
+                ]
+              }) }}
+
+
+            
+
+          </div>
+        </div>
+
+
+      </div>
+  </div>
+
+{% endblock %}

@@ -20987,6 +20987,10 @@ b {
   max-width: none;
 }
 
+.nhsuk-tag.dashed {
+  border-style: dashed;
+}
+
 /* EXPANDABLE IMAGE */
 .expandable-image::details-content {
   content-visibility: visible;

@@ -29,7 +29,7 @@
 
 
   {% if patient.channel === 'Paper' %}
-    {% set channelHTML = 'Paper<br /><a class="nhsuk-link" href="comparison">View application</a>' %}
+    {% set channelHTML = 'Paper<br /><a class="nhsuk-link" href="comparison?showProcessorError=">View application</a>' %}
   {% else %}
     {% set channelHTML = 'Digital' %}
   {% endif %}

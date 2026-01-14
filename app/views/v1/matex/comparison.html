@@ -19,7 +19,7 @@
     <div class="nhsuk-grid-column-full">
 
       <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}</h1>
+        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}{% if data.showProcessorError === 'true' %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}</h1>
 
     </div>
   </div>
@@ -63,14 +63,14 @@
                                 [
                                     { text: 'First name' },
                                     { html: 39 | getConfidenceTag(true) },
-                                    { text: 'Sorah' },
-                                    { text: 'Sarah' }
+                                    { text: patient.firstName or 'Sorah' },
+                                    { text: patient.firstName or 'Sarah' }
                                 ],
                                 [
                                     { text: 'Last name' },
                                     { html: 17 | getConfidenceTag(true) },
-                                    { text: 'Jaaahnson' },
-                                    { text: 'Johnson' }
+                                    { text: patient.lastName or 'Jaaahnson' },
+                                    { text: patient.lastName or 'Johnson' }
                                 ],
                                 [
                                     { text: 'Date of birth' },
@@ -105,11 +105,23 @@
                                 [
                                     { text: "Baby's birth date" },
                                     { html: 78 | getConfidenceTag(true) },
-                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
-                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
+                                    { html: '10 January 2026' },
+                                    { html: '10 January 2026' }
                                 ]
                             ]
                             }) }}
+
+                            {% if data.showProcessorError === 'true'%}
+                                <h2 class="nhsuk-heading-m">Comments from assessor</h2>
+                                {{ insetText({                              
+                                    html: '<p class="nhsuk-body">You forgot to correct the name of the patient.</p>'
+                                }) }}
+
+                                {{ button({
+                                    href: '../process-application/review-application',
+                                    text: 'Edit application'
+                                }) }}
+                            {% endif %}
               
 
                     </div>
