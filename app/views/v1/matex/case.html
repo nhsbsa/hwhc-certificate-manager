@@ -22,7 +22,11 @@
     <div class="nhsuk-grid-column-full">
       <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '56 913 186 386' }} - {{ patient.lastName or 'Smith' }}, {{ patient.firstName or 'Jane' }} 
         {{ ( patient.certificateType or 'matex' ) | getCertificateTypeTextOrTag( true ) | safe }}
-        {{ ( patient.status or 'active' ) | getStatusTextOrTag( true ) | safe }}
+        {% if data.patientID %}
+          {{ patient.status | getStatusTextOrTag( true ) | safe }} {% if patient.checking === true %}{{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+        {% else %}
+          {{ 'active' | getStatusTextOrTag( true ) | safe }}
+        {% endif %}
       </h1>
     </div>
   </div>

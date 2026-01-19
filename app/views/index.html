@@ -26,11 +26,23 @@
             }) }}
 
             {{ button({
-              text: 'Back office staff',
+              text: 'Back office staff (standard)',
               href: '/v1/dashboard?role=backOffice'
             }) }}
 
+            {{ button({
+              text: 'Back office staff (supervisor)',
+              href: '/v1/dashboard--supervisor?role=backOffice'
+            }) }}
+
+             {{ button({
+              text: 'Quality control',
+              href: '/v1/dashboard--quality-control?role=qualityControl'
+            }) }}
+
           </div>
+
+          <p class="nhsuk-body"><a class="nhsuk-link" href="/v1/data-patients">View patient test data and statuses</a></p>
 
         {% endset %}
 

@@ -21195,4 +21195,23 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   right: 0;
   margin: 0;
 }
-*//*# sourceMappingURL=main.css.map */
+*/
+/* COMPARISON TABLE */
+.nhsuk-table.has-error .nhsuk-table__body .nhsuk-table__header {
+  padding-left: calc(0.625rem + 4px);
+  position: relative;
+}
+
+.nhsuk-table.has-error .nhsuk-table__body .nhsuk-table__header.error {
+  color: #d5281b;
+}
+
+.nhsuk-table__header.error::before {
+  content: "";
+  position: absolute;
+  top: 0.625rem;
+  bottom: 0.625rem;
+  left: 0;
+  width: 4px;
+  background-color: #d5281b;
+}/*# sourceMappingURL=main.css.map */

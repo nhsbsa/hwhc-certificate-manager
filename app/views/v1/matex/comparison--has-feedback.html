@@ -15,34 +15,19 @@
     {% set patient = data.patientID | getPatientData %}
   {% endif %}
 
-
-  {% macro mistakeCheckBox( field, shortField ) %}
-
-    {{ checkboxes({
-        idPrefix: 'incorrect-'+shortField,
-        name: 'incorrect-'+shortField,
-        
-        items: [
-            { value: 'yes', html: '<span class="nhsuk-u-visually-hidden">'+field+' is incorrect</span>' }
-            ]
-        }) }}
-
-  {% endmacro %}
-
-
-
-
   <div class="nhsuk-grid-row to-keep">
     <div class="nhsuk-grid-column-full">
 
       <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }} 
         
         {% if data.patientID %}
           {{ patient.status | getStatusTextOrTag( true ) | safe }} {% if patient.checking === true %}{{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
         {% else %}
           {{ 'accepted' | getStatusTextOrTag( true ) | safe }} {{ 'checking' | getStatusTextOrTag( true ) | safe }}
-        {% endif %}  
+        {% endif %}
+
+        </h1>
 
     </div>
   </div>
@@ -75,13 +60,14 @@
                             panel: false,
                             caption: 'Application processing comparison',
                             captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
+                            tableClasses: 'has-error',
                             firstCellIsHeader: true,
                             head: [
                                 { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
                                 { text: 'Confidence' },
                                 { text: 'Proposed value' },
                                 { text: 'Accepted value' },
-                                { text: 'Incorrect?' }
+                                { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
                             ],
                             rows: [
                                 [
@@ -89,120 +75,66 @@
                                     { html: 39 | getConfidenceTag(true) },
                                     { text: patient.firstName or 'Sorah' },
                                     { text: patient.firstName or 'Sarah' },
-                                    { html: mistakeCheckBox('First name','first-name') }
+                                    { html: '<a href="../process-application#imageFirstName">Change<span class="nhsuk-u-visually-hidden"> first name</span></a>' }
                                 ],
                                 [
-                                    { text: 'Last name' },
+                                    { text: 'Last name', classes: 'error' },
                                     { html: 17 | getConfidenceTag(true) },
                                     { text: patient.lastName or 'Jaaahnson' },
                                     { text: patient.lastName or 'Johnson' },
-                                    { html: mistakeCheckBox('Last name','last-name') }
+                                    { html: '<a href="../process-application#imageLastName">Change<span class="nhsuk-u-visually-hidden"> last name</span></a>' }
                                 ],
                                 [
                                     { text: 'Date of birth' },
                                     { html: 89 | getConfidenceTag(true) },
                                     { text: '2 July 1995' },
                                     { text: '2 July 1995' },
-                                    { html: mistakeCheckBox('Date of birth','date-of-birth') }
+                                    { html: '<a href="../process-application#imageDateOfBirth-day">Change<span class="nhsuk-u-visually-hidden"> date of birth</span></a>' }
                                 ],
                                 [
                                     { text: 'NHS number' },
                                     { html: 99 | getConfidenceTag(true) },
                                     { text: '1252 567 987' },
                                     { text: '1252 567 987' },
-                                    { html: mistakeCheckBox('NHS number','nhs-number') }
+                                    { html: '<a href="../process-application#imageNHSNumber">Change<span class="nhsuk-u-visually-hidden"> NHS number</span></a>' }
                                 ],
                                 [
                                     { text: 'Address' },
                                     { html: 78 | getConfidenceTag(true) },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
-                                    { html: mistakeCheckBox('Address','address') }
+                                    { html: '<a href="../process-application/postcode">Change<span class="nhsuk-u-visually-hidden"> address</span></a>' }
                                 ],
                                 [
                                     { text: 'Phone number' },
                                     { html: 75 | getConfidenceTag(true) },
                                     { html: '07911 123456' },
                                     { html: '07911 123456' },
-                                    { html: mistakeCheckBox('Phone number','phone-number') }
+                                    { html: '<a href="../process-application/other#imagePhoneNumber">Change<span class="nhsuk-u-visually-hidden"> phone number</span></a>' }
                                 ],
                                 [
                                     { text: 'Email address' },
                                     { html: 0 | getConfidenceTag(true) },
                                     { html: '' },
                                     { html: '' },
-                                    { html: mistakeCheckBox('Email address','email-address') }
+                                    { html: '<a href="../process-application/other#imageEmailAddress">Change<span class="nhsuk-u-visually-hidden"> email address</span></a>' }
                                 ],
                                 [
                                     { text: "Baby's birth date" },
                                     { html: 78 | getConfidenceTag(true) },
                                     { html: '10 January 2026' },
                                     { html: '10 January 2026' },
-                                    { html: mistakeCheckBox("Baby's birth date",'babys-dob') }
+                                    { html: '<a href="../process-application/other#imageBabyDateOfBirth">Change<span class="nhsuk-u-visually-hidden"> baby\'s birth date</span></a>' }
                                 ]
                             ]
                             }) }}
 
-                            {% if data.showProcessorError === 'true'%}
-                                <h2 class="nhsuk-heading-m">Comments from assessor</h2>
-                                {{ insetText({                              
-                                    html: '<p class="nhsuk-body">You forgot to correct the name of the patient.</p>'
-                                }) }}
 
-                                {{ button({
-                                    href: '../process-application/review-application',
-                                    text: 'Edit application'
-                                }) }}
-                            {% endif %}
+                            <h2 class="nhsuk-heading-m">Feedback</h2>
 
-
-
-                                {% set noHTML %}
-                                    {{ textarea({
-                                        name: 'feedback',
-                                        id: 'feedback',
-                                        label: {
-                                            text: "What needs to be corrected?",
-                                            isPageHeading: false
-                                        }
-                                    }) }}
-                                {% endset %}
-
-
-                                {{ radios({
-                                idPrefix: 'processingApproved',
-                                name: 'processingApproved',
-                                fieldset: {
-                                    legend: {
-                                        text: 'Has the application been processed correctly?',
-                                        classes: 'nhsuk-fieldset__legend--m',
-                                        isPageHeading: false
-                                    }
-                                },
-                                items: [
-                                    {
-                                        value: 'yes',
-                                        text: 'Yes'
-                                    },
-                                    {
-                                        value: 'no',
-                                        text: 'No',
-                                        conditional: {
-                                            html: noHTML
-                                        }
-                                    }
-                                ]
-                                }) }}
-                               
-
-                                {{ button({
-                                    href: '#',
-                                    text: 'Leave feedback'
-                                }) }}
-
-
-
-              
+                            {{ insetText({
+                              html: '<p>The last name is incorrect...</p>'
+                            }) }}
 
                     </div>
                 </div>

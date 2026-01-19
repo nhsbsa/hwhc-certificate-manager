@@ -42,7 +42,7 @@
 
             {{ table({
                 panel: false,
-                caption: "Applications proccessing team overview",
+                caption: "Applications proccessors working today",
                 captionClasses: 'nhsuk-u-margin-bottom-4',
                 firstCellIsHeader: false,
                 responsive: true,
@@ -51,44 +51,62 @@
                         { html: 'Name' ),
                         { text: 'Cipher' },
                         { text: 'Role' },
-                        { text: 'Certificates processed today' },
+                        { text: 'Accepted' },
+                        { text: 'On hold' },
+                        { text: 'Paper' },
+                        { text: 'Total' },
                         { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
                       ],
                 rows: [
                   [
-                    { text: 'James Smith' },
-                    { text: 'JASMI' },
-                    { text: 'Trainee' },
-                    { text: '59' },
-                    { html: '<a href="#">Check work</a>' }
-                  ],
-                  [
                     { text: 'Aisha Collins' },
                     { text: 'AICOL' },
                     { text: '' },
-                    { text: '22' },
-                    { html: '<a href="#">View work</a>' }
-                  ],
-                  [
-                    { text: 'Zara Khan' },
-                    { text: 'ZAKHA' },
-                    { text: '' },
                     { text: '0' },
-                    { html: '' }
+                    { text: '0' },
+                    { text: '0' },
+                    { text: '22' },
+                    { html: '<a href="processor?searchProcessor=AICOL">View</a>' }
                   ],
                   [
                     { text: 'Daniel Thompson' },
                     { text: 'DATHO' },
                     { text: '' },
+                    { text: '0' },
+                    { text: '0' },
+                    { text: '0' },
                     { text: '64' },
-                    { html: '<a href="#">View work</a>' }
+                    { html: '<a href="processor?searchProcessor=DATHO">View</a>' }
+                  ],
+                  [
+                    { text: 'James Smith' },
+                    { text: 'JASMI' },
+                    { text: 'Trainee' },
+                    { text: '0' },
+                    { text: '0' },
+                    { text: '0' },
+                    { text: '59' },
+                    { html: '<a href="processor?searchProcessor=JASMI">View</a>' }
                   ],
                   [
                     { text: 'Priya Patel' },
                     { text: 'PRPAT' },
                     { text: 'Supervisor' },
                     { text: '0' },
-                    { html: '' }
+                    { text: '0' },
+                    { text: '0' },
+                    { text: '79' },
+                    { html: '<a href="processor?searchProcessor=PRPAT">View</a>' }
+                  ],
+                  [
+                    { text: 'Zara Khan' },
+                    { text: 'ZAKHA' },
+                    { text: '' },
+                    { text: '0' },
+                    { text: '0' },
+                    { text: '0' },
+                    { text: '26' },
+                    { html: '<a href="processor?searchProcessor=ZAKHA">View</a>' }
                   ]
                 ]
               }) }}

@@ -263,3 +263,25 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   margin: 0;
 }
 */
+
+
+/* COMPARISON TABLE */
+
+.nhsuk-table.has-error .nhsuk-table__body .nhsuk-table__header {
+  padding-left: calc( 0.625rem + 4px );
+  position: relative;
+}
+
+.nhsuk-table.has-error .nhsuk-table__body .nhsuk-table__header.error {
+  color: $nhsuk-error-colour
+}
+
+.nhsuk-table__header.error::before {
+  content: '';
+  position: absolute;
+  top: 0.625rem;
+  bottom: 0.625rem;
+  left: 0;
+  width: 4px;
+  background-color: $nhsuk-error-colour;
+}

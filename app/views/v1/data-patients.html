@@ -49,14 +49,14 @@
                 { html: '<span class="nhsuk-u-font-size-14">Application is on hold while more information is requested from either the patient, the GP, or a paper key-in</span>' }
               ],
               [
-                { text: 'checking' | getStatusTextOrTag },
-                { html: 'checking' | getStatusTextOrTag( true ) },
-                { html: '<span class="nhsuk-u-font-size-14">Application has been processed and is awaiting a quality control check</span>' }
-              ],
-              [
                 { text: 'accepted' | getStatusTextOrTag },
                 { html: 'accepted' | getStatusTextOrTag( true ) },
                 { html: '<span class="nhsuk-u-font-size-14">Application has been successfully processed and is awaiting production</span>' }
+              ],
+              [
+                { text: 'checking' | getStatusTextOrTag },
+                { html: 'checking' | getStatusTextOrTag( true ) },
+                { html: '<span class="nhsuk-u-font-size-14">Application has been processed and is awaiting a quality control check</span>' }
               ],
               [
                 { text: 'active' | getStatusTextOrTag },
@@ -555,6 +555,13 @@
 
                 const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',');
                 const statuses = ['processing','on-hold','accepted','active','expired'];
+                const processors = [
+                  { key: 'AICOL', AICOL: false },
+                  { key: 'DATHO', DATHO: false },
+                  { key: 'PRPAT', PRPAT: false },
+                  { key: 'ZAKHA', ZAKHA: false },
+                  { key: 'JASMI', JASMI: false }
+                ];
 
                 names.forEach( function( name, i ){
 
@@ -562,22 +569,33 @@
 
                     obj.id = i;
                     obj.nhsNumber = _generateNHSNumber();
+                    obj.processor = processors[Math.round(Math.random()*(processors.length-1))].key;
                     
-                    let lastThree = names.length - 4;
 
-                    if( i > lastThree ){
+                   
+                    obj.certificateType = certificateTypes[Math.round(Math.random())*(certificateTypes.length-1)];
+                    obj.status = ( obj.certificateType === 'hrtppc' ) ? 'active' : statuses[Math.round(Math.random()*(statuses.length-1))];
+                    
+
+                    obj.checking = false;
+
+                    if( obj.processor === 'JASMI' ){
+                      obj.checking = true;
                       obj.certificateType = 'matex';
-                      obj.status = 'checking'
+                      obj.status = ( Math.round(Math.random()) === 1 ) ? 'on-hold' : 'accepted';
                     } else {
-                      obj.certificateType = certificateTypes[Math.round(Math.random())*(certificateTypes.length-1)];
-                      obj.status = ( obj.certificateType === 'hrtppc' ) ? 'active' : statuses[Math.round(Math.random()*(statuses.length-1))];
-                      
-                    }
+                      if( obj.certificateType === 'matex' && ['accepted','on-hold'].indexOf( obj.status ) > -1 && !processors[obj.processor] ){
+                        console.log('FOUND ONE ' + obj.status + ' FOR '+ obj.processor);
 
+                        obj.checking = true;
+                        processors[obj.processor] = true;
+                      }
+                    }
+                    
                     
                     obj.certificateReference = _generateCertificateReference( obj.certificateType, obj.status );
                     obj.channel = _generateChannel( obj.certificateType, obj.status );
-
+                    
 
                     if( obj.status === 'matex' ){
                       obj.dueDate = _generateStartDate();

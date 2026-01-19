@@ -2,7 +2,7 @@ module.exports = {
 
     debug: 'false',
 
-    role: 'callCentre', // callCentre, backOffice,
+    role: 'callCentre', // callCentre, backOffice, qualityControl
     
     NHSPrescriptionCost: '£9.90',
     HRTPPCCost: '£19.80',

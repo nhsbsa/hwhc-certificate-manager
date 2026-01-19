@@ -19,7 +19,15 @@
     <div class="nhsuk-grid-column-full">
 
       <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}{% if data.showProcessorError === 'true' or data.showNotesBox === 'true' %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}</h1>
+        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
+
+      {% if data.patientID %}
+          {{ patient.status | getStatusTextOrTag( true ) | safe }} {% if patient.checking === true %}{{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+        {% else %}
+          {{ 'accepted' | getStatusTextOrTag( true ) | safe }} {{ 'checking' | getStatusTextOrTag( true ) | safe }}
+        {% endif %}  
+        
+      </h1>
 
     </div>
   </div>
@@ -55,107 +63,52 @@
                             firstCellIsHeader: true,
                             head: [
                                 { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
-                                { text: 'Confidence' },
                                 { text: 'Proposed value' },
                                 { text: 'Accepted value' }
                             ],
                             rows: [
                                 [
                                     { text: 'First name' },
-                                    { html: 39 | getConfidenceTag(true) },
                                     { text: patient.firstName or 'Sorah' },
                                     { text: patient.firstName or 'Sarah' }
                                 ],
                                 [
                                     { text: 'Last name' },
-                                    { html: 17 | getConfidenceTag(true) },
                                     { text: patient.lastName or 'Jaaahnson' },
                                     { text: patient.lastName or 'Johnson' }
                                 ],
                                 [
                                     { text: 'Date of birth' },
-                                    { html: 89 | getConfidenceTag(true) },
                                     { text: '2 July 1995' },
                                     { text: '2 July 1995' }
                                 ],
                                 [
                                     { text: 'NHS number' },
-                                    { html: 99 | getConfidenceTag(true) },
                                     { text: '1252 567 987' },
                                     { text: '1252 567 987' }
                                 ],
                                 [
                                     { text: 'Address' },
-                                    { html: 78 | getConfidenceTag(true) },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
                                 ],
                                 [
                                     { text: 'Phone number' },
-                                    { html: 75 | getConfidenceTag(true) },
                                     { html: '07911 123456' },
                                     { html: '07911 123456' }
                                 ],
                                 [
                                     { text: 'Email address' },
-                                    { html: 0 | getConfidenceTag(true) },
                                     { html: '' },
                                     { html: '' }
                                 ],
                                 [
                                     { text: "Baby's birth date" },
-                                    { html: 78 | getConfidenceTag(true) },
                                     { html: '10 January 2026' },
                                     { html: '10 January 2026' }
                                 ]
                             ]
                             }) }}
-
-                        
-                                {% set noHTML %}
-                                    {{ textarea({
-                                        name: 'feedback',
-                                        id: 'feedback',
-                                        label: {
-                                            text: "What needs to be corrected?",
-                                            isPageHeading: false
-                                        }
-                                    }) }}
-                                {% endset %}
-
-
-                                {{ radios({
-                                idPrefix: 'processingApproved',
-                                name: 'processingApproved',
-                                fieldset: {
-                                    legend: {
-                                        text: 'Has the application been processed correctly?',
-                                        classes: 'nhsuk-fieldset__legend--m',
-                                        isPageHeading: false
-                                    }
-                                },
-                                items: [
-                                    {
-                                        value: 'yes',
-                                        text: 'Yes'
-                                    },
-                                    {
-                                        value: 'no',
-                                        text: 'No',
-                                        conditional: {
-                                            html: noHTML
-                                        }
-                                    }
-                                ]
-                                }) }}
-                               
-
-                                {{ button({
-                                    href: '#',
-                                    text: 'Leave feedback'
-                                }) }}
-
-              
 
                     </div>
                 </div>

@@ -1,0 +1,54 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'MATEX quality control checks for ' + ( 0 | alterTodaysDateByNumberOfDays )  %}
+{% set bannerRole = 'qualityControl' %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+
+
+            <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
+
+           
+            <h2 class="nhsuk-u-visually-hidden">Applications processors requiring checks</h2>
+
+            {% set processors = ['AICOL','DATHO','JASMI','PRPAT','ZAKHA'] %}
+
+            {% for processor in processors %}
+
+              {{ table({
+                panel: false,
+                caption: ( processor | getProcessor() ) + ' (' + processor + ')',
+                firstCellIsHeader: false,
+                responsive: true,
+                tableClasses: 'patient-table',
+                head: [
+                        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' ),
+                        { text: 'Postcode' },
+                        { text: 'Certificate type' },
+                        { text: 'Status' },
+                        { text: 'Checked?' },
+                        { text: 'Reference' },
+                        { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
+                      ],
+                rows:  '' | getPatientData | getQualityControlTableRows( processor, 1 )
+                
+              }) }}
+
+            {% endfor %}
+            
+
+          </div>
+        </div>
+
+
+      </div>
+  </div>
+
+{% endblock %}
