@@ -39,6 +39,7 @@ typings
 logs
 *.log
 npm-debug.log*
+osvscan.md
 
 # Dependency directories
 node_modules/

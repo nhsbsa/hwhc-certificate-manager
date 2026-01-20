@@ -2,39 +2,25 @@
 
 {% block header %}
 
-  {% if data.role === 'backOffice' %}
-
-      {% set account = {
+  {% set jobTitle = data.role | getJobTitle %}
+  
+  {% set account = {
         items: [
           {
             text: data.name or 'John Smith',
             icon: true
           },
-          { text: 'Applications processor' },
+          { text: jobTitle },
+          { 
+            text: 'Access keys: ' + data.accessKeys,
+            href: '/'+version+'/access-keys?returnURL=' + ( currentURL | urlencode )
+          },
           {
             text: 'Log out',
             href: '#'
           }
         ]
     } %}
-
-  {% else %}
-
-    {% set account = {
-        items: [
-          {
-            text: data.name or 'John Smith',
-            icon: true
-          },
-          { text: 'Customer contact adviser' },
-          {
-            text: 'Log out',
-            href: '#'
-          }
-        ]
-    } %}
-
-  {% endif %}
 
   {{ header({
     service: {

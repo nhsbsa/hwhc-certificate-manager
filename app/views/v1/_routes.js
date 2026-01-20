@@ -21,6 +21,26 @@ router.post(/index/, function (req, res) {
     res.redirect( destination );
 });
 
+router.post(/access-keys/, function (req, res) {
+    let destination = 'search';
+    if( req.session.data.returnURL && req.session.data.returnURL.indexOf( 'access-keys' ) === -1 ) {
+      destination = decodeURIComponent(req.session.data.returnURL);
+    } else {
+      switch( req.session.data.role ){
+        case 'backOffice':
+          destination = 'dashboard';
+          break;
+        case 'backOfficeSupervisor':
+          destination = 'dashboard--supervisor';
+          break;
+        case 'qualityControl':
+          destination = 'dashboard--quality-control';
+          break;
+      }
+    }
+    res.redirect( destination );
+});
+
 router.post(/search/, function (req, res) {
     const destination = 'search-results';
     res.redirect( destination );

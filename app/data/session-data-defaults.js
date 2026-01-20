@@ -2,13 +2,14 @@ module.exports = {
 
     debug: 'false',
 
-    role: 'callCentre', // callCentre, backOffice, qualityControl
+    role: 'callCentre', // callCentre, backOffice, backOfficeSupervisor, qualityControl
     
     NHSPrescriptionCost: '£9.90',
     HRTPPCCost: '£19.80',
 
+    accessKeys: 'on',
+
     v1: {
-        accessKeys: 'on',
         rowsPerPage: 10,
         currentPage: 0,
         certificateTypes: ['matex','hrtppc'],

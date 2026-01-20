@@ -2,12 +2,60 @@
 
 {% set pageName = 'Access keys' %}
 
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    text: 'Back'
+  }) }}
+{% endblock %}
+
+
+
 {% block content %}
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-grid-column-two-thirds">
 
         <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+        <p>Access keys are designed to help people who may have difficulty using a pointing device, such   as a mouse. They are keyboard shortcuts which provide a different from of navigation.</p>
+        <p>Pressing the 'alt key' and another key at the same time will preform a certain function. For example, 'alt' and 'I' will submit whatever you have entered or selected on a page.</p>
+        <p>The access keys you can use appear in brackets throughout the system.</p>
+        <!--<p>Do you want to use the access keys? You can change your decision at any time.</p>-->
+
+        <form method="post" novalidate>
+
+          {{ radios({
+            name: 'accessKeys',
+            value: data.accessKeys,
+            fieldset: {
+              legend: {
+                text: 'Do you want to use the access keys?',
+                isPageHeading: false,
+                classes: 'nhsuk-fieldset__legend--m'
+              }
+            },
+            hint: {
+              text: 'You can change your decision at any time.'
+            },
+            items: [
+              {
+                value: 'on',
+                text: 'Yes'
+              },
+              {
+                value: 'off',
+                text: 'No'
+              }
+            ]
+          }) }}
+
+          {{ button({
+            text: 'Submit'
+          }) }}
+
+        </form>
+
 
     </div>
 </div>

@@ -25,6 +25,7 @@ router.use((req, res, next) => {
   });
 
   res.locals.version = version;
+  res.locals.currentURL = req.originalUrl;
   
   // Load the required routes
   if (version) {

@@ -36,6 +36,31 @@ env.addFilter('getCertificateTypeTextOrTag', function ( service, isTag ) {
 });
 
 
+// 
+// GET JOB TITLE FILTER
+//
+env.addFilter('getJobTitle', function ( role ) {
+
+  let jobTitle = '';
+  switch( role ){
+    case 'backOffice':
+      jobTitle = 'Applications processor';
+      break;
+    case 'backOfficeSupervisor':
+      jobTitle = 'Applications processor (supervisor)';
+      break;
+    case 'callCentre':
+      jobTitle = 'Customer contact adviser';
+      break;
+    case 'qualityControl':
+      jobTitle = 'Quality reviewer';
+      break;
+  }
+
+  return jobTitle;
+});
+
+
 
 //
 // GET STATUS TEXT OR TAG FUNCTION
