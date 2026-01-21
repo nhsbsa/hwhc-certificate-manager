@@ -1,0 +1,105 @@
+{% extends 'layout.html' %}
+
+{% set pageName = 'Table filter test' %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+        <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+          <form method="post" novalidate>
+
+            {{ checkboxes({
+            idPrefix: 'filters',
+            name: 'filters',
+            value: data.filters,
+            fieldset: {
+              legend: {
+                text: 'Filters',
+                size: 'm',
+                isPageHeading: false
+              }
+            },
+            classes: 'nhsuk-checkboxes--small nhsuk-checkboxes--horizontal',
+            items: [
+              {
+                value: 'col1',
+                text: 'Show column one'
+              },
+              {
+                value: 'col2',
+                text: 'Show column two'
+              },
+              {
+                value: 'col3',
+                text: 'Show column three'
+              }
+            ]
+          }) }}
+
+          {{ button({
+            id: 'filterButton',
+            text: 'Apply filters',
+            classes: 'nhsuk-button--small'
+          }) }}
+          
+        </form>
+
+        <!-- STYLES -->
+        <style id="filterStyles"></style>
+
+        <script>
+
+          document.addEventListener('DOMContentLoaded',function(){
+
+            const table = document.querySelector('#exampleTable');
+            const style = document.querySelector('#filterStyles');
+            const btn = document.querySelector('#filterButton');
+
+            btn.addEventListener('click',function(e){
+
+              const classes = [];
+
+              ['col1','col2','col3'].forEach(function( key,i ){
+                if( !document.querySelector('input[value="'+key+'"]').checked ){
+                  classes.push('#exampleTable th:nth-child('+(i+1)+') { display: none; }');
+                  classes.push('#exampleTable td:nth-child('+(i+1)+') { display: none; }');
+                }
+              });
+
+              console.log( classes );
+              style.innerHTML = classes.join(' ');
+
+              e.preventDefault();
+              e.stopPropagation();
+
+            });
+
+          });
+          
+        </script>
+
+
+        <!-- TABLE -->
+
+          {{ table({
+            id: 'exampleTable',
+            caption: 'Test table',
+            head: [ { text: 'One' }, { text: 'Two' }, { text: 'Three' }, { text: 'Four' } ],
+            rows: [
+              [ { text: 'One' }, { text: 'Two' }, { text: 'Three' }, { text: 'Four' } ],
+              [ { text: 'One' }, { text: 'Two' }, { text: 'Three' }, { text: 'Four' } ],
+              [ { text: 'One' }, { text: 'Two' }, { text: 'Three' }, { text: 'Four' } ],
+              [ { text: 'One' }, { text: 'Two' }, { text: 'Three' }, { text: 'Four' } ]
+            ]
+          }) }}
+
+
+
+
+    </div>
+</div>
+
+{% endblock %}
