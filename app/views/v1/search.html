@@ -14,10 +14,27 @@
 
 {% block content %}
 
+  {% if data.role === 'callCentre' %}
+
+    <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+
+          {{ button({
+                text: 'Start HRT PPC application',
+                classes: 'nhsuk-button nhsuk-button--small nhsuk-button--secondary nhsuk-u-float-right',
+                href: "hrtppc/new-application"
+              }) }}
+
+        </div>
+      </div>
+
+  {% endif %}
+
+
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-          
 
           <div class="nhsuk-card nhsuk-card--grey">
             <div class="nhsuk-card__content">
@@ -119,10 +136,53 @@
 
                     <input type="hidden" name="searchStatus" value="" />
 
-                  {% else %}
+                  {% elif data.role === 'backOffice' %}
+    
+                    {{ select({
+                      label: {
+                        text: 'Certificate type'
+                      },
+                      id: 'searchCertificateType',
+                      name: 'searchCertificateType',
+                      value: data.searchCertificateType,
+                      items: [
+                        {
+                          value: '',
+                          text: 'All certificate types'
+                        },
+                        {
+                          value: 'hrtppc',
+                          text: 'HRT PPC'
+                        },
+                        {
+                          value: 'matex',
+                          text: 'Maternity exemption'
+                        }
+                      ]
+                    }) }}
 
                     <input type="hidden" name="searchCertificateType" value="matex" />
-                    <input type="hidden" name="searchStatus" value="processing,on-hold,checking,accepted" />
+
+                  {% else %}
+
+                      {{ select({
+                      label: {
+                        text: 'Application processor'
+                      },
+                      id: 'searchProcessor',
+                      name: 'searchProcessor',
+                      value: data.searchProcessor,
+                      items: [
+                        { value: '', text: 'Any processor' },
+                        { value: 'AICOL', text: 'AICOL' | getProcessor },
+                        { value: 'DATHO', text: 'DATHO' | getProcessor },
+                        { value: 'JASMI', text: 'JASMI' | getProcessor },
+                        { value: 'PRPAT', text: 'PRPAT' | getProcessor },
+                        { value: 'ZAKHA', text: 'ZAKHA' | getProcessor }
+                      ]
+                    }) }}
+
+                    <input type="hidden" name="searchCertificateType" value="matex" />
 
                   {% endif %}
 
