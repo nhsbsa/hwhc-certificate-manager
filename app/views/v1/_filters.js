@@ -117,38 +117,63 @@ env.addFilter('getStatusTextOrTag', function ( status, isTag ) {
   return _getStatusTextOrTag( status, isTag );
 });
 
+//
+// GET PROCESSOR FUNCTION
+//
+function _getProcessor( processors, cipher, key ){
 
+  let result = '';
 
+  if( processors && processors[cipher] ){
+    if( processors[cipher][key] ){
+      result = processors[cipher][key];
+    } else {
+      result = processors[cipher];
+    }
+  }
+
+  return result;
+
+}
 
 //
 // GET PROCESSOR FILTER
 //
-env.addFilter('getProcessor', function( cipher ){
-
-  let name = '';
-
-  switch( cipher ){
-    case 'AICOL':
-      name = 'Aisha Collins';
-      break;
-    case 'DATHO':
-      name = 'Daniel Thompson';
-      break;
-    case 'JASMI':
-      name = 'James Smith';
-      break;
-    case 'PRPAT':
-      name = 'Priya Patel';
-      break;
-    case 'ZAKHA':
-      name = 'Zara Khan';
-      break;
-  }
-
-  return name;
-
+env.addFilter('getProcessor', function( processors, cipher, key ){
+  return _getProcessor( processors, cipher, key );
 });
 
+
+//
+// GET SUPERVISOR DASHBOARD ROWS FILTER
+//
+env.addFilter('getSupervisorDashboardRows', function( processors ){
+
+  const rows = [];
+
+  Object.entries(processors).forEach(function( p ){
+
+    const processor = p[1]; // Weird quirk in how Object.entries works...
+
+    const arr = [
+      { text: processor.name },
+      { text: p[0] },
+      { text: ( processor.level !== 'standard' ) ? processor.level.charAt(0).toUpperCase() + processor.level.slice(1) : '' },
+      { text: processor.stats[0] },
+      { text: processor.stats[1] },
+      { text: processor.stats[2] },
+      { text: processor.stats[3] },
+      { html: ( processor.level === 'trainee' ) ? '<strong>10</strong> <span class="nhsuk-u-font-size-14">('+processor.checkingLevel+'%)</span></strong>' : '<strong>0</strong>' },
+      { html: '<a href="processor?searchChecking=true&searchProcessor='+p[0]+'">View<span class="nhsuk-u-visually-hidden">'+processor.name+'\'s account</spa></a>' }
+    ];
+
+    rows.push( arr );
+
+  });
+
+  return rows;
+
+});
 
 
   //
@@ -187,30 +212,40 @@ function _getFilteredResults( rows, searchTerms ){
     
       fRows.forEach( function( row ){
 
-        const needles = ( key === 'status' ) ?  searchTerms[key].split(',') : [searchTerms[key].trim().toLowerCase()];
-        let haystack;
+        if( key === 'checking' ){
 
-        switch( key ){
-
-          case 'postcode':
-            haystack = row.address[key].toLowerCase().split(' ').join('');
-            break;
-
-          case 'certificateReference':
-            haystack = row[key].toLowerCase().split(' ').join('');
-            break;
-
-          default: 
-            haystack = row[key].toLowerCase();
-            break;
-
-        }
-
-        needles.forEach(function( needle, i ){
-          if( haystack.indexOf( needle ) > -1 ){
+          if( row[key] === true ){
             filteredRows.push( row );
           }
-        });
+
+        } else {
+
+          const needles = ( key === 'status' ) ?  searchTerms[key].split(',') : [searchTerms[key].trim().toLowerCase()];
+          let haystack;
+
+          switch( key ){
+
+            case 'postcode':
+              haystack = row.address[key].toLowerCase().split(' ').join('');
+              break;
+
+            case 'certificateReference':
+              haystack = row[key].toLowerCase().split(' ').join('');
+              break;
+
+            default: 
+              haystack = row[key].toLowerCase();
+              break;
+
+          }
+
+          needles.forEach(function( needle, i ){
+            if( haystack.indexOf( needle ) > -1 ){
+              filteredRows.push( row );
+            }
+          });
+
+        }
         
 
       });
@@ -644,8 +679,13 @@ env.addFilter('getTableRows', function ( patientData ) {
   }
   if( this.ctx.data.searchStatus ){
     searchTerms.status = this.ctx.data.searchStatus;
-    summary.push( 'status "Processing", "On hold", "Checking" or "Accepted"' ); // Only used for role=backOffice
+    summary.push( 'specific statuses' ); // Only used for role=backOffice
   }
+  if( this.ctx.data.searchChecking ){
+    searchTerms.checking = ( this.ctx.data.searchStatus === 'true' || this.ctx.data.searchStatus === true ) ? true : false;
+    summary.push( 'that are being checked' );
+  }
+
   if( this.ctx.data.searchCertificateReference ){
     searchTerms.certificateReference = this.ctx.data.searchCertificateReference;
     summary.push( '"'+searchTerms.certificateReference+'" in certificate reference' );

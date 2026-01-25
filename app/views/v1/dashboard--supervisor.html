@@ -30,6 +30,12 @@
                 href: 'process-application'
               }) }}
 
+              {{ button({
+                text: 'Enter application manually',
+                href: 'enter-application-manually',
+                classes: 'nhsuk-button--secondary'
+              }) }}
+
                {{ button({
                 text: 'Search for a certificate',
                 href: 'search',
@@ -42,9 +48,9 @@
 
             {{ table({
                 panel: false,
-                caption: "Applications proccessors working today",
+                caption: "Applications processors working today",
                 captionClasses: 'nhsuk-u-margin-bottom-4',
-                firstCellIsHeader: false,
+                firstCellIsHeader: true,
                 responsive: true,
                 tableClasses: 'patient-table',
                 head: [
@@ -55,60 +61,10 @@
                         { text: 'On hold' },
                         { text: 'Paper' },
                         { text: 'Total' },
+                        { text: 'To check' },
                         { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
                       ],
-                rows: [
-                  [
-                    { text: 'Aisha Collins' },
-                    { text: 'AICOL' },
-                    { text: '' },
-                    { text: '0' },
-                    { text: '0' },
-                    { text: '0' },
-                    { text: '22' },
-                    { html: '<a href="processor?searchProcessor=AICOL">View</a>' }
-                  ],
-                  [
-                    { text: 'Daniel Thompson' },
-                    { text: 'DATHO' },
-                    { text: '' },
-                    { text: '0' },
-                    { text: '0' },
-                    { text: '0' },
-                    { text: '64' },
-                    { html: '<a href="processor?searchProcessor=DATHO">View</a>' }
-                  ],
-                  [
-                    { text: 'James Smith' },
-                    { text: 'JASMI' },
-                    { text: 'Trainee' },
-                    { text: '0' },
-                    { text: '0' },
-                    { text: '0' },
-                    { text: '59' },
-                    { html: '<a href="processor?searchProcessor=JASMI">View</a>' }
-                  ],
-                  [
-                    { text: 'Priya Patel' },
-                    { text: 'PRPAT' },
-                    { text: 'Supervisor' },
-                    { text: '0' },
-                    { text: '0' },
-                    { text: '0' },
-                    { text: '79' },
-                    { html: '<a href="processor?searchProcessor=PRPAT">View</a>' }
-                  ],
-                  [
-                    { text: 'Zara Khan' },
-                    { text: 'ZAKHA' },
-                    { text: '' },
-                    { text: '0' },
-                    { text: '0' },
-                    { text: '0' },
-                    { text: '26' },
-                    { html: '<a href="processor?searchProcessor=ZAKHA">View</a>' }
-                  ]
-                ]
+                rows: data.processors | getSupervisorDashboardRows
               }) }}
 
 

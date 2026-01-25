@@ -3,9 +3,9 @@
 {% set pageName = 'Search for a certificate' %}
 
 {% block beforeContent %}
-  {% if data.role === 'backOffice' %}
-  {{ backLink({
-      href: 'dashboard',
+  {% if data.role === 'backOffice' or data.role === 'backOfficeSupervisor' or data.role === 'qualityControl' %}
+    {{ backLink({
+      href: 'javascript:history.go(-1)',
       text: 'Back'
     }) }}
   {% endif %}

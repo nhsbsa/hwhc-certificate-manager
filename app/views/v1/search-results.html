@@ -4,10 +4,10 @@
 {% set pageName = '' | getSearchTitle %}
 
 {% block beforeContent %}
- {{ backLink({
-    href: 'search',
-    text: 'Back'
-  }) }}
+  {{ backLink({
+      href: 'javascript:history.go(-1)',
+      text: 'Back'
+    }) }}
 {% endblock %}
 
 {% block content %}

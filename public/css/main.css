@@ -12749,4 +12749,28 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   left: 0;
   width: 4px;
   background-color: #d5281b;
+}
+
+@media (min-width: 48.0625em) {
+  .horizontal-labels .nhsuk-form-group {
+    margin-bottom: 1rem;
+  }
+  .horizontal-labels .nhsuk-fieldset:has(.nhsuk-date-input) .nhsuk-fieldset__legend {
+    width: 300px;
+    float: left;
+    position: relative;
+    top: 2rem;
+  }
+  .horizontal-labels .nhsuk-form-group .nhsuk-label:not(.nhsuk-date-input__label) {
+    width: 300px;
+    float: left;
+    font-weight: 600;
+    line-height: 2rem;
+  }
+}
+/* STATS */
+@media (min-width: 48.0625em) {
+  .nhsuk-grid-column-one-quarter {
+    width: auto;
+  }
 }/*# sourceMappingURL=main.css.map */

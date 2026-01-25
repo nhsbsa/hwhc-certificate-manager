@@ -19,7 +19,7 @@
             <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
 
             {{ insetText({
-              html: '386 forms awaiting processing<br />You have processed 10 forms this session',
+              html: '386 forms awaiting processing<br />You have processed 10 forms today',
               classes: 'nhsuk-inset-text--summary'
             }) }}
 
@@ -29,6 +29,12 @@
               {{ button({
                 text: 'Process an application',
                 href: 'process-application'
+              }) }}
+
+              {{ button({
+                text: 'Enter application manually',
+                href: 'enter-application-manually',
+                classes: 'nhsuk-button--secondary'
               }) }}
 
                {{ button({

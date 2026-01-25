@@ -94,7 +94,6 @@ router.post(/process-application\/manual-entry/, function (req, res) {
 });
 
 router.post(/process-application\/other/, function (req, res) {
-  console.log('HELLO');
     const destination = 'postcode';
     res.redirect( destination );
 });
@@ -241,5 +240,24 @@ router.get(/postcode-handler/, function (req, res) {
 }
 
 });
+
+
+//
+// PROCESSOR EDIT
+//
+router.post(/processor-edit/, function (req, res) {
+
+    const newLevel = req.session.data.processorLevel;
+    const newCheckingLevel = req.session.data.checkingLevel;
+
+    req.session.data.processors[req.session.data.searchProcessor].level = newLevel;
+    req.session.data.processors[req.session.data.searchProcessor].checkingLevel = newCheckingLevel;
+    
+    const destination = 'processor';
+    res.redirect( destination );
+
+
+});
+
 
 module.exports = router;

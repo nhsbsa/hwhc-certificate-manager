@@ -1,0 +1,126 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% if data.searchProcessor %}
+  
+  {% set processor = data.processors | getProcessor( data.searchProcessor ) %}
+  {% set pageName = 'Edit ' + processor.name + ' (' + data.searchProcessor + ')' %}
+
+{% else %}
+  {% set pageName = 'Edit Alan Wintob (ALWIN)' %}
+{% endif %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'processor?searchProcessor='+data.searchProcessor,
+    text: 'Back'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+
+            <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
+
+              {% if processor.level === 'trainee' %}
+                {% set insetHTML = 'Trainee applications processor with ' + ( processor.checkingLevel or '100' ) + '% of applications being checked' %}
+              {% elif processor.level === 'supervisor' %}
+                {% set insetHTML = 'Supervisor applications processor' %}
+              {% elif processor.level === 'standard' %}
+                {% set insetHTML = 'Applications processor' %}
+              {% endif %}
+
+              <div class="nhsuk-grid-row">
+                <div class="nhsuk-grid-column-full">
+                  {{ insetText({
+                    classes: 'nhsuk-inset-text--summary',
+                    html: insetHTML
+                  }) }}
+                </div>
+              </div>
+
+            <form method="post" novalidate>
+
+              {% set yesHTML %}
+                <!-- CHECKING LEVEL -->
+                {{ input({
+                  label: {
+                    text: 'Checking level'
+                  },
+                  hint: {
+                    text: 'Enter a percentage between 1 and 100'
+                  },
+                  id: 'checkingLevel',
+                  name: 'checkingLevel',
+                  value: processor.checkingLevel or '100',
+                  classes: 'nhsuk-input--width-3',
+                  suffix: '%'
+                }) }}
+              {% endset %}
+
+              <!-- IS TRAINEE -->
+              {{ radios({
+                idPrefix: 'processorLevel',
+                name: 'processorLevel',
+                value: processor.level or 'trainee',
+                classes: '',
+                fieldset: {
+                  legend: {
+                    text: 'What level should this person be at?',
+                    isPageHeading: false
+                  }
+                },
+                items: [
+                  {
+                    value: 'trainee',
+                    text: 'Trainee',
+                    conditional: {
+                      html: yesHTML
+                    }
+                  },
+                  {
+                    value: 'standard',
+                    text: 'Standard'
+                  },
+                  {
+                    value: 'supervisor',
+                    text: 'Supervisor'
+                  }
+                ]
+              }) }}
+
+
+              <script>
+                document.addEventListener('DOMContentLoaded',function(){
+                  
+                  const textInput = document.querySelector('#checkingLevel');
+
+                  document.querySelectorAll('.nhsuk-radios input[type="radio"]').forEach(function( input ){
+                    input.addEventListener('change',function(e){
+                      if( e.target.value !== 'trainee' ){
+                        textInput.value = '0';
+                      }
+                    });
+                  });
+
+                });
+              </script>
+              
+
+              {{ button({
+                text: 'Submit'
+              }) }}
+
+            </form>
+
+
+            
+
+    </div>
+</div>
+
+{% endblock %}

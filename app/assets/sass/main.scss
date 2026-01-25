@@ -285,3 +285,40 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   width: 4px;
   background-color: $nhsuk-error-colour;
 }
+
+
+
+
+// HORIZONTAL LABELS
+
+@include nhsuk-media-query($from: desktop) {
+
+  .horizontal-labels .nhsuk-form-group {
+    margin-bottom: 1rem;
+  }
+
+  .horizontal-labels .nhsuk-fieldset:has(.nhsuk-date-input) .nhsuk-fieldset__legend {
+    width: 300px;
+    float: left;
+    position: relative;
+    top: 2rem;
+  }
+  
+  .horizontal-labels .nhsuk-form-group .nhsuk-label:not(.nhsuk-date-input__label) {
+    width: 300px;
+    float: left;
+    font-weight: 600;
+    line-height: 2rem;
+  }
+
+}
+
+
+
+/* STATS */
+
+@include nhsuk-media-query($from: desktop) {
+    .nhsuk-grid-column-one-quarter {
+        width: auto;
+    }
+}
