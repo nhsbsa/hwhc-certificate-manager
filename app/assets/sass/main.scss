@@ -13,8 +13,6 @@
   white-space: nowrap;
 }
 
- 
-
 .patient-table .nhsuk-body-s {
     font-weight: 400;
     margin: 0;
@@ -216,7 +214,6 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
 
 
 
-
 /* JUST AFTER LABEL */
 
 .confidence-level {
@@ -321,4 +318,33 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     .nhsuk-grid-column-one-quarter {
         width: auto;
     }
+}
+
+
+
+/* PROCESSOR TABLE */
+
+td:has(.nhsuk-icon) > span {
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+td .nhsuk-icon  {
+        position: relative;
+        top: 0.3rem;
+    }
+
+@include nhsuk-media-query($from: tablet) {
+
+    td:has(.nhsuk-icon) > span {
+      position: relative;
+      top: -0.625rem;
+    }
+
+    td .nhsuk-icon  {
+        position: relative;
+        top: 0.5rem;
+    }
+
+    
 }

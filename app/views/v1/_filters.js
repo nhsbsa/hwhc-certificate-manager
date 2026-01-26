@@ -606,7 +606,13 @@ env.addFilter( 'alterTodaysDateByNumberOfDays', function( daysOffset ){
 //
 // GET QUALITY CONTROL TABLE ROWS
 //
-env.addFilter( 'getQualityControlTableRows', function( patientData, processor, count ){
+env.addFilter( 'getQualityControlTableRows', function( patientData, cipher, count ){
+
+  const tick = '<svg class="nhsuk-icon nhsuk-icon--tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path fill="#007f3b" d="M11.4 18.8a2 2 0 0 1-2.7.1h-.1L4 14.1a1.5 1.5 0 0 1 2.1-2L10 16l8.1-8.1a1.5 1.5 0 1 1 2.2 2l-8.9 9Z"></path></svg>';
+  const cross = '<svg class="nhsuk-icon nhsuk-icon--cross" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path fill="#d5281b" d="M17 18.5c-.4 0-.8-.1-1.1-.4l-10-10c-.6-.6-.6-1.6 0-2.1.6-.6 1.5-.6 2.1 0l10 10c.6.6.6 1.5 0 2.1-.3.3-.6.4-1 .4z M7 18.5c-.4 0-.8-.1-1.1-.4-.6-.6-.6-1.5 0-2.1l10-10c.6-.6 1.5-.6 2.1 0 .6.6.6 1.5 0 2.1l-10 10c-.3.3-.6.4-1 .4z"></path></svg>';
+
+  const processor = this.ctx.data.processors[cipher];
+  console.log( processor );
 
   if( typeof patientData === 'string' ){
     patientData = JSON.parse( patientData );
@@ -623,18 +629,18 @@ env.addFilter( 'getQualityControlTableRows', function( patientData, processor, c
 
       const patient = patientData[i];
 
-      if( patient.checking === true && patient.processor === processor ){
+      if( patient.checking === true && patient.processor === cipher ){
 
         const checked = ( Math.round(Math.random()) === 1 ) ? true : false;
-        const url = ( checked ) ? patient.certificateType +'/comparison--has-feedback?patientID=' + patient.id : patient.certificateType +'/comparison--supervisor?patientID=' + patient.id;
+        const url = ( checked ) ? patient.certificateType +'/comparison--has-feedback?patientID=' + patient.id : patient.certificateType +'/comparison--leave-feedback?patientID=' + patient.id;
 
         const obj = [
           { html: '<strong>' + patient.lastName + ', ' + patient.firstName + '</strong><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
           { html: patient.address.postcode },
           { html: _getCertificateTypeTextOrTag( patient.certificateType, true ) },
           { html: _getStatusTextOrTag( patient.status, true ) },
-          { html: ( checked ) ? 'Checked' : 'To check' },
           { html: ( patient.status === 'processing' ) ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">'+ patient.certificateReference +'</span>' : patient.certificateReference },
+          { html: ( checked ) ?  tick + ' Checked' : cross + ' To check' },
           { html: '<a href="' + url + '">View <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag( patient.certificateType ) + '</span></a>' },
         ];
 

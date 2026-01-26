@@ -22,9 +22,11 @@
 
             {% for processor in processors %}
 
+              {% set processorObj = data.processors[processor] %}
+
               {{ table({
                 panel: false,
-                caption: ( processor | getProcessor() ) + ' (' + processor + ')',
+                caption: processorObj.name + ' (' + processor + ')',
                 firstCellIsHeader: false,
                 responsive: true,
                 tableClasses: 'patient-table',
@@ -33,8 +35,8 @@
                         { text: 'Postcode' },
                         { text: 'Certificate type' },
                         { text: 'Status' },
-                        { text: 'Checked?' },
                         { text: 'Reference' },
+                        { html: '<span class="nhsuk-u-visually-hidden">Has the application been checked?</spa>' },
                         { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
                       ],
                 rows:  '' | getPatientData | getQualityControlTableRows( processor, 1 )
