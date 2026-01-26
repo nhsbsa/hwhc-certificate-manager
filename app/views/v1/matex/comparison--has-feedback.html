@@ -64,56 +64,56 @@
                             firstCellIsHeader: true,
                             head: [
                                 { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
-                                { text: 'Confidence' },
+                                { text: 'Shown' },
                                 { text: 'Proposed value' },
                                 { text: 'Accepted value' }
                             ],
                             rows: [
                                 [
                                     { text: 'First name' },
-                                    { html: 39 | getConfidenceTag(true) },
-                                    { text: patient.firstName or 'Sorah' },
+                                    { html: 'Yes' },
+                                    { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
                                     { text: patient.firstName or 'Sarah' }
                                 ],
                                 [
                                     { text: 'Last name', classes: 'error' },
-                                    { html: 17 | getConfidenceTag(true) },
-                                    { text: patient.lastName or 'Jaaahnson' },
-                                    { text: patient.lastName or 'Johnson' }
+                                    { html: 'Yes' },
+                                    { text: '' },
+                                    { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' }
                                 ],
                                 [
                                     { text: 'Date of birth' },
-                                    { html: 89 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { text: '2 July 1995' },
                                     { text: '2 July 1995' }
                                   ],
                                 [
                                     { text: 'NHS number' },
-                                    { html: 99 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { text: '1252 567 987' },
                                     { text: '1252 567 987' }
                                 ],
                                 [
                                     { text: 'Address' },
-                                    { html: 78 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
                                 ],
                                 [
                                     { text: 'Phone number' },
-                                    { html: 75 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { html: '07911 123456' },
                                     { html: '07911 123456' }
                                 ],
                                 [
                                     { text: 'Email address' },
-                                    { html: 0 | getConfidenceTag(true) },
+                                    { html: 'Empty' },
                                     { html: '' },
                                     { html: '' }
                                 ],
                                 [
                                     { text: "Baby's birth date" },
-                                    { html: 78 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { html: '10 January 2026' },
                                     { html: '10 January 2026' }
                                 ]

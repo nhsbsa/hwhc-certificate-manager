@@ -457,15 +457,26 @@ env.addFilter('getTableHeadRows', function ( sortColumns ) {
 //
 // DRAW ROWS FUNCTION
 //
-function _drawRows( inputRows ){
+function _drawRows( inputRows, role, processor ){
 
   const rows = [];
 
   inputRows.forEach(function (patient) {
 
     let link = patient.certificateType +'/case?patientID=' + patient.id;
+
     if( patient.checking === true ){
-      link = patient.certificateType +'/comparison';
+      if( role === 'backOfficeSupervisor' ){
+
+        if( processor && processor.level && processor.level === 'trainee' ){
+          link = patient.certificateType +'/comparison--leave-feedback?patientID=' + patient.id;
+        } else {
+          link = patient.certificateType +'/comparison--has-feedback?patientID=' + patient.id;
+        }
+
+      } else {
+        link = patient.certificateType +'/comparison?patientID=' + patient.id;
+      }
     }
 
     
@@ -604,6 +615,21 @@ env.addFilter( 'alterTodaysDateByNumberOfDays', function( daysOffset ){
 
 
 //
+// CHANGE ONE LETTER FUNCTION
+//
+env.addFilter( 'changeOneLetter', function( toChange ){
+
+  const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
+  const newLetter = letters[Math.round(Math.random()*(letters.length-1))];
+  const num = Math.round(Math.random()*(toChange.length-2))+1;
+  const newString = toChange.substring(0, num) + newLetter + toChange.substring(num + 1);
+
+  return newString;
+
+});
+
+
+//
 // GET QUALITY CONTROL TABLE ROWS
 //
 env.addFilter( 'getQualityControlTableRows', function( patientData, cipher, count ){
@@ -736,7 +762,11 @@ env.addFilter('getTableRows', function ( patientData ) {
 
   this.ctx.data[this.ctx.version].noOfFilteredRows = filteredPatientData.length;
 
-  return _drawRows( paginatedPatientData );
+  // Extras for the rows
+  const role = this.ctx.data.role;
+  const processor = ( this.ctx.data.searchProcessor ) ? this.ctx.data.processors[this.ctx.data.searchProcessor] : {};
+
+  return _drawRows( paginatedPatientData, role, processor );
 
 });
 

@@ -69,13 +69,13 @@
                             rows: [
                                 [
                                     { text: 'First name' },
-                                    { text: patient.firstName or 'Sorah' },
+                                    { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
                                     { text: patient.firstName or 'Sarah' }
                                 ],
                                 [
                                     { text: 'Last name' },
-                                    { text: patient.lastName or 'Jaaahnson' },
-                                    { text: patient.lastName or 'Johnson' }
+                                    { text: '' },
+                                    { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' }
                                 ],
                                 [
                                     { text: 'Date of birth' },
@@ -109,6 +109,27 @@
                                 ]
                             ]
                             }) }}
+
+
+                            {% if data.role === 'callCentre' %}
+
+                                  {{ textarea({
+                                        name: 'notes',
+                                        id: 'notes',
+                                        classes: 'nhsuk-u-width-two-thirds',
+                                        label: {
+                                            text: 'Note',
+                                            isPageHeading: false
+                                        }
+                                  }) }}
+
+                                  {{ button({
+                                    href: '#',
+                                    text: 'Add note'
+                                }) }}
+
+                                
+                            {% endif %}
 
                     </div>
                 </div>

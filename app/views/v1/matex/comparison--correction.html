@@ -64,7 +64,7 @@
                             firstCellIsHeader: true,
                             head: [
                                 { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
-                                { text: 'Confidence' },
+                                { text: 'Shown' },
                                 { text: 'Proposed value' },
                                 { text: 'Accepted value' },
                                 { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
@@ -72,56 +72,56 @@
                             rows: [
                                 [
                                     { text: 'First name' },
-                                    { html: 39 | getConfidenceTag(true) },
-                                    { text: patient.firstName or 'Sorah' },
+                                    { html: 'Yes' },
+                                    { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
                                     { text: patient.firstName or 'Sarah' },
                                     { html: '<a href="../process-application#imageFirstName">Change<span class="nhsuk-u-visually-hidden"> first name</span></a>' }
                                 ],
                                 [
                                     { text: 'Last name', classes: 'error' },
-                                    { html: 17 | getConfidenceTag(true) },
-                                    { text: patient.lastName or 'Jaaahnson' },
-                                    { text: patient.lastName or 'Johnson' },
+                                    { html: 'Yes' },
+                                    { text: '' },
+                                    { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' },
                                     { html: '<a href="../process-application#imageLastName">Change<span class="nhsuk-u-visually-hidden"> last name</span></a>' }
                                 ],
                                 [
                                     { text: 'Date of birth' },
-                                    { html: 89 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { text: '2 July 1995' },
                                     { text: '2 July 1995' },
                                     { html: '<a href="../process-application#imageDateOfBirth-day">Change<span class="nhsuk-u-visually-hidden"> date of birth</span></a>' }
                                 ],
                                 [
                                     { text: 'NHS number' },
-                                    { html: 99 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { text: '1252 567 987' },
                                     { text: '1252 567 987' },
                                     { html: '<a href="../process-application#imageNHSNumber">Change<span class="nhsuk-u-visually-hidden"> NHS number</span></a>' }
                                 ],
                                 [
                                     { text: 'Address' },
-                                    { html: 78 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
                                     { html: '<a href="../process-application/postcode">Change<span class="nhsuk-u-visually-hidden"> address</span></a>' }
                                 ],
                                 [
                                     { text: 'Phone number' },
-                                    { html: 75 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { html: '07911 123456' },
                                     { html: '07911 123456' },
                                     { html: '<a href="../process-application/other#imagePhoneNumber">Change<span class="nhsuk-u-visually-hidden"> phone number</span></a>' }
                                 ],
                                 [
                                     { text: 'Email address' },
-                                    { html: 0 | getConfidenceTag(true) },
+                                    { html: 'Empty' },
                                     { html: '' },
                                     { html: '' },
                                     { html: '<a href="../process-application/other#imageEmailAddress">Change<span class="nhsuk-u-visually-hidden"> email address</span></a>' }
                                 ],
                                 [
                                     { text: "Baby's birth date" },
-                                    { html: 78 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { html: '10 January 2026' },
                                     { html: '10 January 2026' },
                                     { html: '<a href="../process-application/other#imageBabyDateOfBirth">Change<span class="nhsuk-u-visually-hidden"> baby\'s birth date</span></a>' }

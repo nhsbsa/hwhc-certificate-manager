@@ -86,56 +86,56 @@
                             rows: [
                                 [
                                     { text: 'First name' },
-                                    { html: 39 | getConfidenceTag(true) },
-                                    { text: patient.firstName or 'Sorah' },
+                                    { html: 'Yes' },
+                                    { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
                                     { text: patient.firstName or 'Sarah' },
                                     { html: mistakeCheckBox('First name','first-name') }
                                 ],
                                 [
                                     { text: 'Last name' },
-                                    { html: 17 | getConfidenceTag(true) },
-                                    { text: patient.lastName or 'Jaaahnson' },
-                                    { text: patient.lastName or 'Johnson' },
+                                    { html: 'Yes' },
+                                    { text: '' },
+                                    { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' },
                                     { html: mistakeCheckBox('Last name','last-name') }
                                 ],
                                 [
                                     { text: 'Date of birth' },
-                                    { html: 89 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { text: '2 July 1995' },
                                     { text: '2 July 1995' },
                                     { html: mistakeCheckBox('Date of birth','date-of-birth') }
                                 ],
                                 [
                                     { text: 'NHS number' },
-                                    { html: 99 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { text: '1252 567 987' },
                                     { text: '1252 567 987' },
                                     { html: mistakeCheckBox('NHS number','nhs-number') }
                                 ],
                                 [
                                     { text: 'Address' },
-                                    { html: 78 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
                                     { html: mistakeCheckBox('Address','address') }
                                 ],
                                 [
                                     { text: 'Phone number' },
-                                    { html: 75 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { html: '07911 123456' },
                                     { html: '07911 123456' },
                                     { html: mistakeCheckBox('Phone number','phone-number') }
                                 ],
                                 [
                                     { text: 'Email address' },
-                                    { html: 0 | getConfidenceTag(true) },
+                                    { html: 'Empty' },
                                     { html: '' },
                                     { html: '' },
                                     { html: mistakeCheckBox('Email address','email-address') }
                                 ],
                                 [
                                     { text: "Baby's birth date" },
-                                    { html: 78 | getConfidenceTag(true) },
+                                    { html: 'No' },
                                     { html: '10 January 2026' },
                                     { html: '10 January 2026' },
                                     { html: mistakeCheckBox("Baby's birth date",'babys-dob') }
