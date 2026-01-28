@@ -38,7 +38,7 @@
                       <div class="nhsuk-button-group">
 
                          {% set destination = '../dashboard--quality-control' %}
-                        {% if data.user === 'backOfficeSupervisor' %}
+                        {% if data.role === 'backOfficeSupervisor' %}
                           {% set destination = '../dashboard--supervisor' %}
                         {% endif %}
 
