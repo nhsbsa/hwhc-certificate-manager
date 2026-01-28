@@ -161,6 +161,7 @@
                                     {{ textarea({
                                         name: 'feedback',
                                         id: 'feedback',
+                                        classes: 'nhsuk-u-width-two-thirds',
                                         label: {
                                             text: "What needs to be corrected?",
                                             isPageHeading: false
@@ -168,6 +169,8 @@
                                     }) }}
                                 {% endset %}
 
+
+                                <form method="post" novalidate>
 
                                 {{ radios({
                                 idPrefix: 'processingApproved',
@@ -196,10 +199,10 @@
                                
 
                                 {{ button({
-                                    href: '#',
                                     text: 'Leave feedback'
                                 }) }}
 
+                                </form>
 
 
               

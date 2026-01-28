@@ -1,0 +1,58 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Application checked' %}
+{% set searchProcessor = data.searchProcessor or 'JASMI' %}
+
+{% block content %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+            <div class="nhsuk-grid-column-two-thirds">
+
+
+                       <!-- APPLICATION FAILED QUALITY CONTROL -->
+                      {% set panelHTML %}
+
+                      <p>The application processed by {{ data.processors[searchProcessor].name + ' ('+ searchProcessor +')' }} did not pass checking because the following field was incorrect:</p>
+                      <ul>
+                        <li>Last name</li>
+                      </ul> 
+
+                      {% endset %}
+
+                      {{ panel({
+                          titleText: pageName,
+                          html: panelHTML
+                      }) }}
+
+
+                      <h2 class="nhsuk-heading-s">What happens next?</h2>
+                      <p class="nhsuk-body">{{ data.processors[searchProcessor].name }} will now make the change you have requested.</p>
+                      <p class="nhsuk-body">Once they have corrected their mistake, you will need to review the application again.</p>
+
+                      <div class="nhsuk-button-group">
+
+                        {{ button({
+                          text : 'Back to dashboard',
+                          href: '../dashboard--quality-control'
+                        }) }}
+
+                      </div>
+
+
+
+                
+
+            </div>
+
+          </div>
+
+    </div>
+  </div>
+
+{% endblock %}

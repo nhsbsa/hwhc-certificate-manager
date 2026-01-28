@@ -1,0 +1,54 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Application checked' %}
+{% set searchProcessor = data.searchProcessor or 'JASMI' %}
+
+{% block content %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+            <div class="nhsuk-grid-column-two-thirds">
+
+
+                       <!-- APPLICATION PASSED QUALITY CONTROL -->
+                      {% set panelHTML %}
+
+                        <p>The application processed by {{ data.processors[searchProcessor].name + ' ('+ searchProcessor +')' }} successfully passed checking.</p>
+
+                      {% endset %}
+
+                      {{ panel({
+                          titleText: pageName,
+                          html: panelHTML
+                      }) }}
+
+
+                      <h2 class="nhsuk-heading-s">What happens next?</h2>
+                      <p class="nhsuk-body">The application will now proceed as usual. There is nothing more for you to do.</p>
+
+                      <div class="nhsuk-button-group">
+
+                        {{ button({
+                          text : 'Back to dashboard',
+                          href: '../dashboard--quality-control'
+                        }) }}
+
+                      </div>
+
+
+
+                
+
+            </div>
+
+          </div>
+
+    </div>
+  </div>
+
+{% endblock %}
