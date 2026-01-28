@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'MATEX quality control checks for ' + ( 0 | alterTodaysDateByNumberOfDays )  %}
+{% set pageName = 'MATEX quality control checks' %}
 {% set bannerRole = 'qualityControl' %}
 
 {% block content %}
@@ -14,6 +14,16 @@
 
 
             <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
+
+            <div class="nhsuk-button-group">
+
+               {{ button({
+                text: 'Search for a certificate',
+                href: 'search',
+                classes: 'nhsuk-button--secondary'
+              }) }}
+
+            </div>
 
            
             <h2 class="nhsuk-u-visually-hidden">Applications processors requiring checks</h2>
