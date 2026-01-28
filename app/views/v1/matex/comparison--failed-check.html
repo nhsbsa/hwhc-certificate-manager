@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen-normal-content.html' %}
 
-{% set pageName = 'Application checked' %}
+{% set pageName = 'Quality check complete' %}
 {% set searchProcessor = data.searchProcessor or 'JASMI' %}
 
 {% block content %}
@@ -18,7 +18,7 @@
                        <!-- APPLICATION FAILED QUALITY CONTROL -->
                       {% set panelHTML %}
 
-                      <p>The application processed by {{ data.processors[searchProcessor].name + ' ('+ searchProcessor +')' }} did not pass checking because the following field was incorrect:</p>
+                      <p>The application failed the quality check because of incorrect or missing information for:</p>
                       <ul>
                         <li>Last name</li>
                       </ul> 
@@ -32,8 +32,7 @@
 
 
                       <h2 class="nhsuk-heading-s">What happens next?</h2>
-                      <p class="nhsuk-body">{{ data.processors[searchProcessor].name }} will now make the change you have requested.</p>
-                      <p class="nhsuk-body">Once they have corrected their mistake, you will need to review the application again.</p>
+                      <p class="nhsuk-body">We’ll tell {{ data.processors[searchProcessor].name }} what corrections they need to make and any other feedback you gave. When they have made these corrections, you’ll need to review the application again.</p>
 
                       <div class="nhsuk-button-group">
 

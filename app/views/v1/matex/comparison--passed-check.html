@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen-normal-content.html' %}
 
-{% set pageName = 'Application checked' %}
+{% set pageName = 'Quality check complete' %}
 {% set searchProcessor = data.searchProcessor or 'JASMI' %}
 
 {% block content %}
@@ -18,7 +18,7 @@
                        <!-- APPLICATION PASSED QUALITY CONTROL -->
                       {% set panelHTML %}
 
-                        <p>The application processed by {{ data.processors[searchProcessor].name + ' ('+ searchProcessor +')' }} successfully passed checking.</p>
+                        <p>The application passed the quality check</p>
 
                       {% endset %}
 
@@ -29,7 +29,7 @@
 
 
                       <h2 class="nhsuk-heading-s">What happens next?</h2>
-                      <p class="nhsuk-body">The application will now proceed as usual. There is nothing more for you to do.</p>
+                      <p class="nhsuk-body">You do not need to do anything else with this application. It will continue as usual. We’ll tell {{ data.processors[searchProcessor].name }} about this successful quality check.</p>
 
                       <div class="nhsuk-button-group">
 
