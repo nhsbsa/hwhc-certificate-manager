@@ -37,9 +37,14 @@
 
                       <div class="nhsuk-button-group">
 
+                         {% set destination = '../dashboard--quality-control' %}
+                        {% if data.user === 'backOfficeSupervisor' %}
+                          {% set destination = '../dashboard--supervisor' %}
+                        {% endif %}
+
                         {{ button({
                           text : 'Back to dashboard',
-                          href: '../dashboard--quality-control'
+                          href: destination 
                         }) }}
 
                       </div>
