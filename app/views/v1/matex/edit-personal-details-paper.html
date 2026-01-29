@@ -107,15 +107,13 @@
                           name: "postcode",
                           classes: "nhsuk-input--width-5",
                           value: "TR11 0TS"
-                        }) + '
-                      
-                      <div class="postcode-button">
-                        ' + button({
-                          text: "Edit address using postcode search",
-                          classes: "nhsuk-button--secondary-solid",
+                        }) 
+                        
+                        + button({
+                          text: "Edit address using postcode search (S)",
+                          classes: "nhsuk-button--secondary-solid nhsuk-button--small",
                           href: "postcode-search"
                         }) + '
-                      </div>
                     </div>
                     '
                   }
@@ -125,10 +123,25 @@
                     text: "Date of birth" 
                   },
                   value: { 
-                    html: input({
-                      suffix: "(ddmmyy)",
-                      classes: "nhsuk-input--width-5",
-                      value: "241297"
+                    html: dateInput({
+                      id: "date-of-birth",
+                      items: [
+                        {
+                          name: "day",
+                          classes: "nhsuk-input--width-2",
+                          value: 24
+                        },
+                        {
+                          name: "month",
+                          classes: "nhsuk-input--width-2",
+                          value: 7
+                        },
+                        {
+                          name: "year",
+                          classes: "nhsuk-input--width-4",
+                          value: 1997
+                        }
+                      ]
                     })
                   }
                 },
@@ -164,10 +177,25 @@
                     text: "Baby's birth date" 
                   },
                   value: { 
-                    html: input({
-                      suffix: "(ddmmyy)",
-                      classes: "nhsuk-input--width-5",
-                      value: "041125"
+                    html: dateInput({
+                      id: "date-of-birth",
+                      items: [
+                        {
+                          name: "day",
+                          classes: "nhsuk-input--width-2",
+                          value: 4
+                        },
+                        {
+                          name: "month",
+                          classes: "nhsuk-input--width-2",
+                          value: 11
+                        },
+                        {
+                          name: "year",
+                          classes: "nhsuk-input--width-4",
+                          value: 2025
+                        }
+                      ]
                     })
                   }
                 },
@@ -215,7 +243,6 @@
             }) 
           }}
 
-          <a href="#" class="nhsuk-link">View image</a>
         </div>
       </div>
       </div>
@@ -224,9 +251,8 @@
 
 <style>
 
-  .postcode-button .nhsuk-button {
-    margin: 0;
-    padding: 8px 12px;
+  .postcode-block .nhsuk-button {
+    margin-bottom: 1rem;
   }
 
 

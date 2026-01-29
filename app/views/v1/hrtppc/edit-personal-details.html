@@ -108,15 +108,13 @@
                           name: "postcode",
                           classes: "nhsuk-input--width-5",
                           value: "TR11 0TS"
-                        }) + '
-                      
-                      <div class="postcode-button">
-                        ' + button({
+                        }) 
+                        
+                        + button({
                           text: "Edit address using postcode search (S)",
-                          classes: "nhsuk-button--secondary-solid",
+                          classes: "nhsuk-button--secondary nhsuk-button--small",
                           href: "postcode-search"
                         }) + '
-                      </div>
                     </div>               
                     '
                   }
@@ -227,15 +225,10 @@
 
 <style>
 
-    .postcode-block {
-      display: flex;
-      flex-direction: column;
-    }
+  .postcode-block .nhsuk-button {
+    margin-bottom: 1rem;
+  }
 
-    .postcode-button .nhsuk-button {
-      margin: 0;
-      padding: 8px 16px;
-    }
 
   /* --------------------------------------------------- */
   /* STACKING BREAKPOINT — small screens (≤425px)      */

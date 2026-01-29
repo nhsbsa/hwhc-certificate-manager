@@ -4,7 +4,7 @@
 
 {% block beforeContent %}
  {{ backLink({
-    href: 'javascript:history.back();',
+    href: '../search-results',
     text: 'Back'
   }) }}
 {% endblock %}
@@ -28,32 +28,61 @@
 
     <div class="nhsuk-grid-column-one-third">
 
-      {{ card({
-        heading: "Certificate details",
-        headingLevel: "2",
-        headingClasses: "nhsuk-heading-s",
-        descriptionHtml: summaryList({
+      {{ summaryList({
+        card: {
+          heading: "Certificate details",
+          headingSize: "s",
           classes: "summary-list--single-line",
+          actions: {
+            items: [
+              {
+                text: "Edit details",
+                href: "edit-certificate",
+                classes: "nhsuk-link--no-visited-state"
+              }
+            ]
+          }
+        },
           rows: [
             {
-              key: { text: 'Reference' },
-              value: { text: patient.certificateReference or 'HRT R33P ITIX' }
+              key: { 
+                text: "Reference" 
+              },
+              value: { 
+                text: patient.certificateReference or "HRT R33P ITIX" 
+              }
             },
             {
-              key: { text: 'Type' },
-              value: { html: ( patient.certificateType or 'hrtppc' ) | getCertificateTypeTextOrTag( true ) }
+              key: { 
+                text: "Type" 
+              },
+              value: { 
+                html: ( patient.certificateType or "hrtppc" ) | getCertificateTypeTextOrTag( true ) 
+              }
             },
             {
-              key: { text: 'Status' },
-              value: { html: ( patient.status or 'active' ) | getStatusTextOrTag( true ) }
+              key: { 
+                text: "Status" 
+              },
+              value: { 
+                html: ( patient.status or 'active' ) | getStatusTextOrTag( true ) 
+              }
             },
             {
-              key: { text: 'Channel' },
-              value: { text: patient.channel or 'Digital' }
+              key: { 
+                text: "Channel" 
+              },
+              value: { 
+                text: patient.channel or "Digital" 
+              }
             },
             {
-              key: { text: 'Fulfilment' },
-              value: { text: patient.certificateFulfilment or 'email' | getCertificateFulfilmentText }
+              key: { 
+                text: "Fulfilment" 
+              },
+              value: { 
+                text: patient.certificateFulfilment or "email" | getCertificateFulfilmentText 
+              }
             },
             {
               key: {
@@ -72,6 +101,7 @@
               }
             },
             {
+              classes: "nhsuk-summary-list__row--no-border",
               key: {
                 text: "Application date"
               },
@@ -80,13 +110,7 @@
               }
             }
           ]
-        })
-        +
-        button({
-          text: "Edit certificate details",
-          classes: "nhsuk-button--secondary nhsuk-u-margin-top-5",
-          href: "edit-certificate"
-        })
+
       }) }}
     
     </div>
@@ -95,12 +119,21 @@
 
 
     <div class="nhsuk-grid-column-one-third">
-      {{ card({
-        heading: "Personal details",
-        headingLevel: "2",
-        headingClasses: "nhsuk-heading-s",
-        descriptionHtml: summaryList({
+      {{ summaryList({
+        card: {
+          heading: "Personal details",
+          headingSize: "s",
           classes: "summary-list--single-line",
+          actions: {
+            items: [
+              {
+                text: "Edit details",
+                href: "edit-personal-details",
+                classes: "nhsuk-link--no-visited-state"
+              }
+            ]
+          }
+        },
           rows: [
             {
               key: { text: 'Last name' },
@@ -136,6 +169,7 @@
               }
             },
             {
+              classes: "nhsuk-summary-list__row--no-border",
               key: {
                 text: "NHS number"
               },
@@ -144,13 +178,7 @@
               }
             }
           ]
-        })
-        +
-        button({
-          text: "Edit personal details",
-          classes: "nhsuk-button--secondary nhsuk-u-margin-top-5",
-          href: "edit-personal-details"
-        })
+
       }) }}
     </div>
 
@@ -181,62 +209,15 @@
       {% from "tabs/macro.njk" import tabs %}
       {% from "tables/macro.njk" import table %}
 
-      {% set EventsContent %}
-        <div class="scroll-container">
-        {{ nhsappTimeline({
-          items: [
-          {
-            headingText: 'Address line 1 updated',
-            html: '
-              <ul class="nhsuk-list nhsuk-u-margin-top-1">
-                <li>Address line 1: "14 Bridge St" TO "101 Test Lane"</li>
-              </ul>
-              <p class="nhsuk-body-s nhsuk-u-margin-top-1">22 December 2025 2:30pm</p>
-            ',
-            active: true
-          },
-          {
-            headingText: 'Application complete',
-            html: '
-              <ul class="nhsuk-list nhsuk-u-margin-top-1">
-                <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Active</li>
-              </ul>
-              <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:35am</p>
-            '
-          },
-            {
-              headingText: 'Card payment',
-              html: '
-                <ul class="nhsuk-list nhsuk-u-margin-top-1">
-                  <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Success</li>
-                </ul>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:32am</p>
-              '
-            },
-            {
-              headingText: 'Application submitted',
-              html: '
-              <ul class="nhsuk-list nhsuk-u-margin-top-1">
-                <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Pending</li>
-              </ul>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:30am</p>
-                '
-            }
-          ]
-        }) }}
-      </div>
-
-      {% endset -%} 
-
       {% set NotesContent %}
       <div class="scroll-container">
       {{ nhsappTimeline({
         items: [
           {
-            headingText: '22 December 2025 2:30pm',
+            headingText: 'Note added by [NameOfAgent]',
             html: '
-              <p class="nhsuk-u-margin-bottom-1">Maria Li (Customer contact adviser)</p>
-              <p class="nhsuk-u-margin-bottom-1">"Applicant phoned to confirm address change."</p>
+              <p class="nhsuk-u-margin-bottom-1">"Applicant called to confirm address change."</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-1">16 January 2026 11:37am</p>
             ',
             active: true
           }
@@ -245,55 +226,133 @@
       </div>
       {% endset -%} 
 
+      {% set EventsContent %}
+        <div class="scroll-container">
+        {{ nhsappTimeline({
+          items: [
+          {
+            headingText: 'Deleted',
+            html: '
+              <p class="nhsuk-u-margin-bottom-1">Certificate deleted</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-2">4 April 2034 9:00am</p>
+            ',
+            active: true
+          },
+          {
+            headingText: 'Expired',
+            html: '
+              <p class="nhsuk-u-margin-bottom-1">Certificate expired</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-2">24 November 2026 9:00am</p>
+            '
+          },
+          {
+            headingText: 'Address updated',
+            html: '
+              <p class="nhsuk-u-margin-bottom-1">Address line 1 changed from [PreviousValue] to [NewValue] by [NameOfAgent]</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-2">16 January 2026 11:35am</p>
+            '
+          },
+          {
+            headingText: 'Active',
+            html: '
+              <p class="nhsuk-u-margin-bottom-1">Certificate produced and sent to patient</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-2">25 November 2025 3:02pm</p>
+            '
+          },
+          {
+            headingText: 'Application complete',
+            html: '
+              <ul class="nhsuk-list nhsuk-u-margin-top-1">
+                <li>Status: Active</li>
+              </ul>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:35am</p>
+            '
+          },
+          {
+            headingText: 'Success',
+            html: '
+              <p class="nhsuk-u-margin-bottom-1">Card payment successful</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-2">25 November 2025 3:01pm</p>
+            '
+          },
+            {
+              headingText: 'On hold',
+              html: '
+                <p class="nhsuk-u-margin-bottom-1">Application submitted</p>
+                <p class="nhsuk-body-s nhsuk-u-margin-top-2">25 November 2025 3:00pm</p>
+              '
+            }
+          ]
+        }) }}
+      </div>
+
+      {% endset -%} 
+
+
+
       {% set FullLogContent %}
       <div class="scroll-container">
       {{ nhsappTimeline({
         items: [
         {
-          headingText: 'Note added',
-          html: '
-            <p class="nhsuk-u-margin-bottom-1">Maria Li (Customer contact adviser)</p>
-            <p class="nhsuk-u-margin-bottom-1">"Applicant phoned to confirm address change."</p>
-            <p class="nhsuk-body-s nhsuk-u-margin-top-1">22 December 2025 2:30pm</p>
-          ',
-          active: true
-        },
-        {
-          headingText: 'Address line 1 updated',
-          html: '
-            <ul class="nhsuk-list nhsuk-u-margin-top-1">
-              <li>Address line 1: "14 Bridge St" TO "101 Test Lane"</li>
-            </ul>
-            <p class="nhsuk-body-s nhsuk-u-margin-top-1">22 December 2025 2:30pm</p>
-          '
-        },
-        {
-          headingText: 'Application complete',
-          html: '
-            <ul class="nhsuk-list nhsuk-u-margin-top-1">
-              <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Active</li>
-            </ul>
-            <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:35am</p>
-          '
-        },
-          {
-            headingText: 'Card payment',
+            headingText: 'Deleted',
             html: '
-              <ul class="nhsuk-list nhsuk-u-margin-top-1">
-                <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Success</li>
-              </ul>
-              <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:32am</p>
+              <p class="nhsuk-u-margin-bottom-1">Certificate deleted</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-2">4 April 2034 9:00am</p>
+            ',
+            active: true
+          },
+          {
+            headingText: 'Expired',
+            html: '
+              <p class="nhsuk-u-margin-bottom-1">Certificate expired</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-2">24 November 2026 9:00am</p>
             '
           },
           {
-            headingText: 'Application submitted',
+            headingText: 'Note added by [NameOfAgent]',
             html: '
-            <ul class="nhsuk-list nhsuk-u-margin-top-1">
-              <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Pending</li>
-            </ul>
-              <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:30am</p>
+              <p class="nhsuk-u-margin-bottom-1">"Applicant called to confirm address change."</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-1">16 January 2026 11:37am</p>
+            '
+          },
+          {
+            headingText: 'Address updated',
+            html: '
+              <p class="nhsuk-u-margin-bottom-1">Address line 1 changed from [PreviousValue] to [NewValue] by [NameOfAgent]</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-2">16 January 2026 11:35am</p>
+            '
+          },
+          {
+            headingText: 'Active',
+            html: '
+              <p class="nhsuk-u-margin-bottom-1">Certificate produced and sent to patient</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-2">25 November 2025 3:02pm</p>
+            '
+          },
+          {
+            headingText: 'Application complete',
+            html: '
+              <ul class="nhsuk-list nhsuk-u-margin-top-1">
+                <li>Status: Active</li>
+              </ul>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:35am</p>
+            '
+          },
+          {
+            headingText: 'Success',
+            html: '
+              <p class="nhsuk-u-margin-bottom-1">Card payment successful</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-top-2">25 November 2025 3:01pm</p>
+            '
+          },
+            {
+              headingText: 'On hold',
+              html: '
+                <p class="nhsuk-u-margin-bottom-1">Application submitted</p>
+                <p class="nhsuk-body-s nhsuk-u-margin-top-2">25 November 2025 3:00pm</p>
               '
-          }
+            }
         ]
       }) }}
     </div>
@@ -354,10 +413,6 @@
       /* Base (default) layout: applies to 426px–1023px & >1024px */
       /* --------------------------------------------------- */
 
-      .summary-list--single-line {
-        margin-bottom: 0;
-      }
-
       .summary-list--single-line .nhsuk-summary-list__row {
         display: flex;
         flex-wrap: nowrap;
@@ -367,36 +422,14 @@
       .summary-list--single-line .nhsuk-summary-list__key {
         flex: 0 0 auto;
         white-space: nowrap;
-        margin-right: 5rem;
+        margin-right: 3rem;
       }
 
-      .summary-list--single-line .nhsuk-summary-list__value {
-        flex: 1 1 auto;
-        min-width: 0;
-        white-space: normal;
-        overflow-wrap: anywhere;
-        word-break: break-word;
-      }
-
-      /* Buttons row (default: left & right inline) */
-      .summary-list--single-line .nhsuk-summary-list__row--no-border {
+      .nhsuk-grid-row-buttons {
         display: flex;
-        justify-content: space-between;
-        flex-wrap: nowrap;
-        margin-top: 1rem;
+        gap: 1rem;
       }
 
-      .summary-list--single-line .nhsuk-summary-list__row--no-border 
-        .nhsuk-summary-list__key,
-      .summary-list--single-line .nhsuk-summary-list__row--no-border 
-        .nhsuk-summary-list__value {
-        flex: 0 0 auto;
-        margin: 0;
-      }
-
-      .nhsuk-grid-row-buttons .nhsuk-button--secondary-solid {
-          margin-left: 1rem;
-      }
 
       /* --------------------------------------------------- */
       /* STACKING BREAKPOINT 1 — small screens (≤425px)      */
@@ -410,15 +443,6 @@
           padding-bottom: 0.5rem;
         }
 
-        .summary-list--single-line .nhsuk-summary-list__key {
-          margin: 0;
-        }
-
-        .summary-list--single-line .nhsuk-summary-list__row--no-border {
-          flex-direction: column;
-          align-items: stretch;
-          gap: 0.5rem;
-        }
       }
 
 
@@ -473,18 +497,15 @@
           display: flex;
           flex-direction: column;
           height: 100%;
+          margin-bottom: 2rem;
         }
 
         .nhsuk-grid-row .nhsuk-card__content {
           flex: 1 1 auto;
         }
 
-        .nhsuk-grid-row-buttons .nhsuk-button--secondary {
-          margin-left: 1rem;
-        }
-
         .scroll-container {
-          max-height: calc(100vh - 372px);
+          max-height: calc(100vh - 425px);
           min-height: 0;
           overflow-y: auto;
         }
