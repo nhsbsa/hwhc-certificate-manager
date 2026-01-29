@@ -1,8 +1,9 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set filteredRows = '' | getPatientData | getTableRows %}
+{% set filteredRows = '' | getPatientData | getTableRows( true ) %}
 {% set pageName = '' | getSearchTitle %}
-{% set processor = data.processors | getProcessor(data.searchProcessor) %}
+{% set searchProcessor = data.searchProcessor or 'JASMI' %}
+{% set processor = data.processors | getProcessor(searchProcessor) %}
 
 {% block beforeContent %}
   {{ backLink({
@@ -19,14 +20,19 @@
       <div class="nhsuk-card">
             <div class="nhsuk-card__content">
 
-            <h1 class="nhsuk-heading-m">{{ processor.name + ' (' + data.searchProcessor + ')' }}</h1>
+            <h1 class="nhsuk-heading-m">{{ processor.name + ' (' + searchProcessor + ')' }}</h1>
+
+            {% set insetHTML = '' %}
+            {% if data.changesMade === 'true' %}
+              {% set insetHTML = '<strong>Your changes have been applied</strong><br /><br />' %}
+            {% endif %}
 
             {% if processor.level === 'trainee' %}
-              {% set insetHTML = 'Trainee applications processor with ' + ( processor.checkingLevel or '100' ) + '% of applications being checked&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+data.searchProcessor+'">Edit account</a>' %}
+              {% set insetHTML = insetHTML + 'Trainee applications processor with ' + ( processor.checkingLevel or '100' ) + '% of applications being checked&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+searchProcessor+'">Edit account</a>' %}
             {% elif processor.level === 'supervisor' %}
-              {% set insetHTML = 'Supervisor applications processor&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+data.searchProcessor+'">Edit account</a>' %}
+              {% set insetHTML = insetHTML + 'Supervisor applications processor&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+searchProcessor+'">Edit account</a>' %}
             {% elif processor.level === 'standard' %}
-              {% set insetHTML = 'Applications processor&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+data.searchProcessor+'">Edit account</a>' %}
+              {% set insetHTML = insetHTML + 'Applications processor&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+searchProcessor+'">Edit account</a>' %}
             {% endif %}
 
               <div class="nhsuk-grid-row">
@@ -93,7 +99,7 @@
 
             {{ button({
               text: 'View all applications processed by ' + processor.name,
-              href: 'search-results?searchProcessor='+data.searchProcessor +'&searchChecking=',
+              href: 'search-results?searchProcessor='+searchProcessor +'&searchChecking=',
               classes: 'nhsuk-button--small nhsuk-button--secondary'
             }) }}
       
@@ -111,7 +117,7 @@
                 firstCellIsHeader: false,
                 responsive: true,
                 tableClasses: 'patient-table',
-                head: true | getTableHeadRows,
+                head: true | getTableHeadRows( true ),
                 rows: filteredRows
               }) }}
 

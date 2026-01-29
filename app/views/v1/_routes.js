@@ -4,8 +4,6 @@ const router = express.Router();
 const axios = require('axios');
 
 router.post(/index/, function (req, res) {
-
-  console.log('TOP RULE');
     
     let destination = 'search';
 
@@ -253,9 +251,8 @@ router.post(/processor-edit/, function (req, res) {
     req.session.data.processors[req.session.data.searchProcessor].level = newLevel;
     req.session.data.processors[req.session.data.searchProcessor].checkingLevel = newCheckingLevel;
     
-    const destination = 'processor';
+    const destination = 'processor?changesMade=true';
     res.redirect( destination );
-
 
 });
 
@@ -266,7 +263,7 @@ router.post(/comparison--leave-feedback/, function( req, res ){
 
   const destination = ( req.session.data.processingApproved === 'no' ) ? 'comparison--failed-check' : 'comparison--passed-check';
   res.redirect( destination );
-  
+
 });
 
 

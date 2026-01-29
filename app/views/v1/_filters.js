@@ -415,7 +415,7 @@ env.addFilter('getSearchTitle', function(){
 //
 // GET TABLE HEAD ROWS FILTER
 //
-env.addFilter('getTableHeadRows', function ( sortColumns ) {
+env.addFilter('getTableHeadRows', function ( sortColumns, processorTable ) {
 
   sortColumns = ( typeof sortColumns === 'boolean' ) ? sortColumns : true;
 
@@ -444,7 +444,7 @@ env.addFilter('getTableHeadRows', function ( sortColumns ) {
             { text: 'Type' },
             { text: 'Status' },
             { text: 'Reference' },
-            { text: 'End date' },
+            { text: ( processorTable ) ? 'Being checked by' : 'End date' },
             { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
           ];
 
@@ -457,7 +457,7 @@ env.addFilter('getTableHeadRows', function ( sortColumns ) {
 //
 // DRAW ROWS FUNCTION
 //
-function _drawRows( inputRows, role, processor ){
+function _drawRows( inputRows, role, processor, processorTable ){
 
   const rows = [];
 
@@ -479,17 +479,18 @@ function _drawRows( inputRows, role, processor ){
       }
     }
 
-    
+    const checkedBy = ( processor.level === 'trainee' ) ? 'Supervisor' : 'Quality control';
+    const penultimate = ( processorTable ) ? checkedBy : patient.endDate; 
 
-    const obj = [
-      { html: '<strong>' + patient.lastName + ', ' + patient.firstName + '</strong><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
-      { html: patient.address.postcode },
-      { html: _getCertificateTypeTextOrTag( patient.certificateType, true )},
-      { html: ( patient.checking === true ) ? _getStatusTextOrTag( 'checking', true ) : _getStatusTextOrTag( patient.status, true )  },
-      { html: ( patient.status === 'processing' ) ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">'+ patient.certificateReference +'</span>' : patient.certificateReference },
-      { text: patient.endDate },
-      { html: '<a href="'+ link + '">View <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag( patient.certificateType ) + '</span></a>' },
-    ];
+     let obj = [
+        { html: '<strong>' + patient.lastName + ', ' + patient.firstName + '</strong><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
+        { html: patient.address.postcode },
+        { html: _getCertificateTypeTextOrTag( patient.certificateType, true )},
+        { html: ( patient.checking === true ) ? _getStatusTextOrTag( 'checking', true ) : _getStatusTextOrTag( patient.status, true )  },
+        { html: ( patient.status === 'processing' ) ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">'+ patient.certificateReference +'</span>' : patient.certificateReference },
+        { text: penultimate },
+        { html: '<a href="'+ link + '">View <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag( patient.certificateType ) + '</span></a>' },
+      ];
 
     rows.push(obj);
 
@@ -689,7 +690,7 @@ env.addFilter( 'getQualityControlTableRows', function( patientData, cipher, coun
 //
 // GET TABLE ROWS FILTER
 //
-env.addFilter('getTableRows', function ( patientData ) {
+env.addFilter('getTableRows', function ( patientData, processorTable ) {
 
   if( typeof patientData === 'string' ){
     patientData = JSON.parse( patientData );
@@ -766,7 +767,7 @@ env.addFilter('getTableRows', function ( patientData ) {
   const role = this.ctx.data.role;
   const processor = ( this.ctx.data.searchProcessor ) ? this.ctx.data.processors[this.ctx.data.searchProcessor] : {};
 
-  return _drawRows( paginatedPatientData, role, processor );
+  return _drawRows( paginatedPatientData, role, processor, processorTable );
 
 });
 
