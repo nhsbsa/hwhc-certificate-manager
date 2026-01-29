@@ -32,18 +32,18 @@
   </div>
 
 
-  {% if patient.channel === 'Paper' %}
-  {% set channelHTML = 'Paper' %}
 
-  {% set cardActions = {
-    items: [
-      {
-        text: "View application",
-        href: "comparison?showProcessorError=",
-        classes: "nhsuk-link--no-visited-state"
-      }
-    ]
-  } %}
+
+  {% set channelLinkHtml %}
+  <br>
+  <a class="nhsuk-link nhsuk-link--no-visited-state"
+     href="comparison?showProcessorError=">
+    View application
+  </a>
+  {% endset %}
+
+  {% if patient.channel === 'Paper' %}
+  {% set channelHTML = 'Paper' ~ channelLinkHtml %}
 
   {% set personalDetailsActions = {
     items: [
@@ -80,8 +80,7 @@
         card: {
           heading: "Certificate details",
           headingSize: "s",
-          classes: "summary-list--single-line",
-          actions: cardActions
+          classes: "summary-list--single-line"
         },
           rows: [
             {
@@ -245,31 +244,13 @@
         {% from "tables/macro.njk" import table %}
 
 
-        {% set NotesContent %}
-        <div class="notes-container">
-        
+        {% set NotesContent %}        
           <div class="sticky-add-note">
-            <details class="nhsuk-details nhsuk-u-margin-bottom-3" data-module="nhsuk-details">
-              <summary class="nhsuk-details__summary">
-                <span class="nhsuk-details__summary-text nhsuk-u-font-weight-bold">
-                  Add note
-                </span>
-              </summary>
-        
-              <div class="nhsuk-details__text">
-                {{ textarea({
-                  id: "note-input",
-                  name: "noteContent",
-                  label: { text: "Write your note here..." },
-                  rows: 4
-                }) }}
-        
-                {{ button({
-                  text: "Save note",
-                  classes: "nhsuk-button--secondary-solid nhsuk-u-margin-top-2"
-                }) }}
-              </div>
-            </details>
+            <a
+              href="add-note"
+              class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-font-weight-bold">
+              Add note
+            </a>
           </div>
         
           <div class="scroll-container">
@@ -301,7 +282,6 @@
             }) }}
           </div>
         
-        </div>
       {% endset -%}
       
 
@@ -771,39 +751,18 @@
         }
 
         .sticky-add-note {
-        /* Keep sticky at top */
-        position: sticky;
-        border-bottom: 1px solid #dcdcdc;
-
-        /* flex-friendly: shrink when collapsed */
-        flex-shrink: 0;
-      }
-
-      /* Only allow the inner content to occupy space when open */
-      .sticky-add-note details {
-        display: block;
-      }
-
-      .sticky-add-note details > .nhsuk-details__text {
-        display: none; /* hide content by default */
-      }
-
-      .sticky-add-note details[open] > .nhsuk-details__text {
-        display: block; /* show content when expanded */
-      }
+          position: sticky;
+          border-bottom: 1px solid #dcdcdc;
+          padding: 0 0 0.5rem;
+          display: flex;
+          justify-content: flex-end;
+        }
 
       .scroll-container {
         max-height: calc(101vh - 425px);
         min-height: 0;
         overflow-y: auto;
         padding-top: 1rem;
-      }
-
-      .scroll-container.fixed-height-scroll {
-        max-height: calc(101vh - 425px);
-        overflow-y: auto;
-        padding-top: 1rem;
-        flex: 1 1 auto;
       }
 
       }

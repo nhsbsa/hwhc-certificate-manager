@@ -210,23 +210,34 @@
       {% from "tables/macro.njk" import table %}
 
       {% set NotesContent %}
-      <div class="scroll-container">
-      {{ nhsappTimeline({
-        items: [
-          {
-            headingText: 'Note added by [NameOfAgent]',
-            html: '
-              <p class="nhsuk-u-margin-bottom-1">"Applicant called to confirm address change."</p>
-              <p class="nhsuk-body-s nhsuk-u-margin-top-1">16 January 2026 11:37am</p>
-            ',
-            active: true
-          }
-        ]
-      }) }}
-      </div>
-      {% endset -%} 
 
-      {% set EventsContent %}
+          <div class="sticky-add-note">
+            <a
+              href="add-note"
+              class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-font-weight-bold">
+              Add note
+            </a>
+          </div>
+
+          <div class="scroll-container">
+          {{ nhsappTimeline({
+            items: [
+              {
+                headingText: 'Note added by [NameOfAgent]',
+                html: '
+                  <p class="nhsuk-u-margin-bottom-1">"Applicant called to confirm address change."</p>
+                  <p class="nhsuk-body-s nhsuk-u-margin-top-1">16 January 2026 11:37am</p>
+                ',
+                active: true
+              }
+            ]
+          }) }}
+
+        </div>
+
+        {% endset -%} 
+
+        {% set EventsContent %}
         <div class="scroll-container">
         {{ nhsappTimeline({
           items: [
@@ -508,6 +519,15 @@
           max-height: calc(100vh - 425px);
           min-height: 0;
           overflow-y: auto;
+          margin-top: 1rem;
+        }
+
+        .sticky-add-note {
+          position: sticky;
+          border-bottom: 1px solid #dcdcdc;
+          padding: 0 0 0.5rem;
+          display: flex;
+          justify-content: flex-end;
         }
 
       }

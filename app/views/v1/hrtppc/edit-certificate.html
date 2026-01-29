@@ -57,10 +57,7 @@
 
 
       {{ summaryList({
-        heading: "Certificate details",
-        headingLevel: "2",
-        headingClasses: "nhsuk-heading-s",
-          classes: "nhsuk-summary-list--no-border",
+        classes: "nhsuk-summary-list--no-border",
           rows: [
             {
               key: { 
@@ -188,6 +185,11 @@
     display: flex;
     align-items: last baseline;
     white-space: nowrap;
+  }
+
+  .nhsuk-summary-list__value .nhsuk-radios,
+  .nhsuk-summary-list__value .nhsuk-textarea {
+    margin-top: 0.5rem;
   }
 
 
