@@ -323,6 +323,11 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
 
 
 /* PROCESSOR TABLE */
+@include nhsuk-media-query($from: tablet) {
+  .quality-check .nhsuk-table__header {
+    width: calc( 100% / 7 );
+  }
+}
 
 td:has(.nhsuk-icon) > span {
   vertical-align: top;

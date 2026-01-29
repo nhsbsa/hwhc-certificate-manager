@@ -12775,6 +12775,11 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   }
 }
 /* PROCESSOR TABLE */
+@media (min-width: 40.0625em) {
+  .quality-check .nhsuk-table__header {
+    width: 14.2857142857%;
+  }
+}
 td:has(.nhsuk-icon) > span {
   vertical-align: top;
   white-space: nowrap;

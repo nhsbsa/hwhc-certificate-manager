@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'MATEX quality control checks' %}
+{% set pageName = 'MATEX quality checks' %}
 {% set bannerRole = 'qualityControl' %}
 
 {% block content %}
@@ -14,6 +14,26 @@
 
 
             <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
+
+            {{ insetText({
+              id: 'to-check',
+              html: '<span class="inner"></span>',
+              classes: 'nhsuk-inset-text--summary'
+            }) }}
+
+            <script>
+              document.addEventListener('DOMContentLoaded',function(){
+
+                const toCheck = document.querySelector('#to-check .inner');
+                const stillToCheck = document.querySelectorAll('.nhsuk-icon--cross').length;
+                const alreadyChecked = document.querySelectorAll('.hsuk-icon--tick').length;
+
+                const txt = ( stillToCheck === 0 ) ? 'All applications have been checked' : stillToCheck + ' applications still need be checked'
+                toCheck.textContent = txt;
+
+              });
+            </script>
+
 
             <div class="nhsuk-button-group">
 
@@ -38,7 +58,7 @@
                 caption: processorObj.name + ' (' + processor + ')',
                 firstCellIsHeader: false,
                 responsive: true,
-                tableClasses: 'patient-table',
+                tableClasses: 'patient-table quality-check',
                 head: [
                         { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' ),
                         { text: 'Postcode' },
