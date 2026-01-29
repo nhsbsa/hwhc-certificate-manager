@@ -53,7 +53,7 @@ env.addFilter('getJobTitle', function ( role ) {
       jobTitle = 'Customer contact adviser';
       break;
     case 'qualityControl':
-      jobTitle = 'Quality reviewer';
+      jobTitle = 'Quality checker';
       break;
   }
 
@@ -479,7 +479,7 @@ function _drawRows( inputRows, role, processor, processorTable ){
       }
     }
 
-    const checkedBy = ( processor.level === 'trainee' ) ? 'Supervisor' : 'Quality control';
+    const checkedBy = ( processor.level === 'trainee' ) ? 'Supervisor' : 'Quality checker';
     const penultimate = ( processorTable ) ? checkedBy : patient.endDate; 
 
      let obj = [
