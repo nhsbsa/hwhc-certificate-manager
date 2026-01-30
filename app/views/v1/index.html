@@ -24,15 +24,19 @@
                 items: [
                     {
                         value: 'callCentre',
-                        text: 'Call centre'
+                        text: 'callCentre' | getJobTitle
                     },
                     {
                         value: 'backOffice',
-                        text: 'Back office'
+                        text: 'backOffice' | getJobTitle
+                    },
+                    {
+                        value: 'backOfficeSupervisor',
+                        text: 'backOfficeSupervisor' | getJobTitle
                     },
                     {
                         value: 'qualityControl',
-                        text: 'Quality control'
+                        text: 'qualityControl' | getJobTitle
                     }
                 ]
             }) }}

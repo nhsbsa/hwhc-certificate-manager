@@ -47,7 +47,7 @@ env.addFilter('getJobTitle', function ( role ) {
       jobTitle = 'Applications processor';
       break;
     case 'backOfficeSupervisor':
-      jobTitle = 'Applications processor (supervisor)';
+      jobTitle = 'Supervisor applications processor';
       break;
     case 'callCentre':
       jobTitle = 'Customer contact adviser';
@@ -158,7 +158,6 @@ env.addFilter('getSupervisorDashboardRows', function( processors ){
     const arr = [
       { text: processor.name },
       { text: p[0] },
-      { text: ( processor.level !== 'standard' ) ? processor.level.charAt(0).toUpperCase() + processor.level.slice(1) : '' },
       { text: processor.stats[0] },
       { text: processor.stats[1] },
       { text: processor.stats[2] },

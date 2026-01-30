@@ -21,22 +21,22 @@
           <div class="nhsuk-button-group">
 
             {{ button({
-              text: 'Call centre agents',
+              text: 'callCentre' | getJobTitle,
               href: '/v1/search?role=callCentre'
             }) }}
 
             {{ button({
-              text: 'Back office staff (standard)',
+              text: 'backOffice' | getJobTitle,
               href: '/v1/dashboard?role=backOffice'
             }) }}
 
             {{ button({
-              text: 'Back office staff (supervisor)',
+              text: 'backOfficeSupervisor' | getJobTitle,
               href: '/v1/dashboard--supervisor?role=backOfficeSupervisor'
             }) }}
 
              {{ button({
-              text: 'Quality control',
+              text: 'qualityControl' | getJobTitle,
               href: '/v1/dashboard--quality-control?role=qualityControl'
             }) }}
 

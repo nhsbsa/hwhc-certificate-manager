@@ -27,7 +27,7 @@
             <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
 
               {% if processor.level === 'trainee' %}
-                {% set insetHTML = 'Trainee applications processor with ' + ( processor.checkingLevel or '100' ) + '% of applications being checked' %}
+                {% set insetHTML = 'Applications processor with ' + ( processor.checkingLevel or '100' ) + '% of applications being checked' %}
               {% elif processor.level === 'supervisor' %}
                 {% set insetHTML = 'Supervisor applications processor' %}
               {% elif processor.level === 'standard' %}
@@ -49,7 +49,7 @@
                 <!-- CHECKING LEVEL -->
                 {{ input({
                   label: {
-                    text: 'Checking level'
+                    text: 'How many should be checked?'
                   },
                   hint: {
                     text: "Enter a percentage between 1 and 100. Any changes will take effect from the processor's next working day.",
@@ -71,25 +71,21 @@
                 classes: '',
                 fieldset: {
                   legend: {
-                    text: 'What level should this person be at?',
+                    text: "Should this processor's applications be checked?",
                     isPageHeading: false
                   }
                 },
                 items: [
                   {
                     value: 'trainee',
-                    text: 'Trainee',
+                    html: 'Yes',
                     conditional: {
                       html: yesHTML
                     }
                   },
                   {
                     value: 'standard',
-                    text: 'Standard'
-                  },
-                  {
-                    value: 'supervisor',
-                    text: 'Supervisor'
+                    html: 'No'
                   }
                 ]
               }) }}

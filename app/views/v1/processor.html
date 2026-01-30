@@ -28,9 +28,9 @@
             {% endif %}
 
             {% if processor.level === 'trainee' %}
-              {% set insetHTML = insetHTML + 'Trainee applications processor with ' + ( processor.checkingLevel or '100' ) + '% of applications being checked&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+searchProcessor+'">Edit account</a>' %}
+              {% set insetHTML = insetHTML + 'Applications processor with ' + ( processor.checkingLevel or '100' ) + '% of applications being checked&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+searchProcessor+'">Edit account</a>' %}
             {% elif processor.level === 'supervisor' %}
-              {% set insetHTML = insetHTML + 'Supervisor applications processor&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+searchProcessor+'">Edit account</a>' %}
+              {% set insetHTML = insetHTML + 'Supervisor applications processor' %}
             {% elif processor.level === 'standard' %}
               {% set insetHTML = insetHTML + 'Applications processor&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+searchProcessor+'">Edit account</a>' %}
             {% endif %}
