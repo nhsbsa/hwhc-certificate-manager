@@ -267,4 +267,24 @@ router.post(/comparison--leave-feedback/, function( req, res ){
 });
 
 
+//
+// RESET SEARCH
+//
+router.get(/reset-search/,function( req, res ){
+  
+  const destination = 'search';
+
+  delete req.session.data.searchProcessor;
+  delete req.session.data.searchCertificateType;
+  delete req.session.data.searchCertificateReference;
+  delete req.session.data.searchPostcode;
+  delete req.session.data.searchFirstName;
+  delete req.session.data.searchLastName;
+
+  res.redirect( destination );
+
+
+});
+
+
 module.exports = router;
