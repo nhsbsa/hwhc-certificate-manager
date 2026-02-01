@@ -12509,7 +12509,8 @@ b {
 }
 
 .nhsuk-tag--expired-grey,
-.nhsuk-tag--deleted-grey {
+.nhsuk-tag--deleted-grey,
+.nhsuk-tag--rejected-grey {
   color: #354550;
   border-color: #dbe0e3;
   background-color: #f0f4f5;

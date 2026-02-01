@@ -100,6 +100,10 @@ function _getStatusTextOrTag( status, isTag ){
       txt = ( isTag ) ? '<strong class="nhsuk-tag nhsuk-tag--deleted-grey">Deleted</strong>' : 'Deleted';
       break;
 
+    case 'rejected':
+      txt = ( isTag ) ? '<strong class="nhsuk-tag nhsuk-tag--rejected-grey">Rejected</strong>' : 'Rejected';
+      break;
+
     default:
       txt = status;
 

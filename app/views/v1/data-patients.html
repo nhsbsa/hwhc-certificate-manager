@@ -14,8 +14,8 @@
 
   <div class="nhsuk-grid-row">
 
-    <div class="nhsuk-grid-column-one-third">
-        <h2 class="nhsuk-heading-m">Certificate types used</h2>
+    <div class="nhsuk-grid-column-two-thirds">
+        <h2 class="nhsuk-heading-s">Certificate types</h2>
         {{ summaryList({
            rows: [
              {
@@ -29,47 +29,47 @@
            ]
          }) }}
     </div>
+    </div>
 
-    <div class="nhsuk-grid-column-two-thirds">
+    <div class="nhsuk-grid-row">
+
+    <div class="nhsuk-grid-column-one-half">
 
         {{ table({
           panel: false,
-          caption: 'Statuses used',
+          caption: 'Statuses',
           firstCellIsHeader: true,
         
           rows: [
               [
-                { text: 'processing' | getStatusTextOrTag },
                 { html: 'processing' | getStatusTextOrTag( true ) },
                 { html: '<span class="nhsuk-u-font-size-14">Application scanned and added to system</span>' }
               ],
               [
-                { text: 'on-hold' | getStatusTextOrTag },
                 { html: 'on-hold' | getStatusTextOrTag( true ) },
                 { html: '<span class="nhsuk-u-font-size-14">Application is on hold while more information is requested from either the patient, the GP, or a paper key-in</span>' }
               ],
               [
-                { text: 'accepted' | getStatusTextOrTag },
                 { html: 'accepted' | getStatusTextOrTag( true ) },
                 { html: '<span class="nhsuk-u-font-size-14">Application has been successfully processed and is awaiting production</span>' }
               ],
               [
-                { text: 'checking' | getStatusTextOrTag },
+                { html: 'rejected' | getStatusTextOrTag( true ) },
+                { html: '<span class="nhsuk-u-font-size-14">The application has been rejected</span>' }
+              ],
+              [
                 { html: 'checking' | getStatusTextOrTag( true ) },
                 { html: '<span class="nhsuk-u-font-size-14">Application has been processed and is awaiting a quality control check</span>' }
               ],
               [
-                { text: 'active' | getStatusTextOrTag },
                 { html: 'active' | getStatusTextOrTag( true ) },
                 { html: '<span class="nhsuk-u-font-size-14">Certificate is active</span>' }
               ],
               [
-                { text: 'expired' | getStatusTextOrTag },
                 { html: 'expired' | getStatusTextOrTag( true ) },
                 { html: '<span class="nhsuk-u-font-size-14">Certificate has expired</span>' }
               ],
               [
-                { text: 'deleted' | getStatusTextOrTag },
                 { html: 'deleted' | getStatusTextOrTag( true ) },
                 { html: '<span class="nhsuk-u-font-size-14">A request has been made to delete the certificate</span>' }
               ]
@@ -79,6 +79,40 @@
 
         
     </div>
+
+
+  <div class="nhsuk-grid-column-one-half">
+
+        {{ table({
+          panel: false,
+          caption: 'Roles',
+          firstCellIsHeader: true,
+        
+          rows: [
+              [
+                { text: 'callCentre' | getJobTitle },
+                { html: '<span class="nhsuk-u-font-size-14">Dealing with patients calling and emailing regarding their application</span>' }
+              ],
+              [
+                { text: 'backOffice' | getJobTitle },
+                { html: '<span class="nhsuk-u-font-size-14">Processing scanned images and correcting mistakes</span>' }
+              ],
+              [
+                { text: 'backOfficeSupervisor' | getJobTitle },
+                { html: '<span class="nhsuk-u-font-size-14">Monitoring the work of the application processors</span>' }
+              ],
+              [
+                { text: 'qualityControl' | getJobTitle },
+                { html: '<span class="nhsuk-u-font-size-14">Performing quality checks on a fixed number of applications</span>' }
+              ]
+           ]
+        }) }}
+
+
+        
+    </div>
+
+
   </div>
 
 
