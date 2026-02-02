@@ -1,0 +1,166 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Edit certificate details' %}
+
+{% block beforeContent %}
+ {{ backLink({
+    href: 'javascript:history.go(-1)',
+    text: 'Back'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+  </div>
+</div>
+
+
+{% if patient.channel === 'Paper' %}
+{% set channelHTML = 'Paper' %}
+
+{% else %}
+  {% set channelHTML = 'Digital' %}
+
+{% endif %}
+
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-card nhsuk-card--grey">
+      <div class="nhsuk-card__content">
+
+
+      {{ summaryList({
+        classes: "nhsuk-summary-list--no-border",
+          rows: [
+          {
+            key: { text: 'Reference' },
+            value: { text: patient.certificateReference or '69 013 893 438' }
+          },
+          {
+            key: { text: 'Type' },
+            value: { html: ( patient.certificateType or 'matex' ) | getCertificateTypeTextOrTag( true ) }
+          },
+          {
+            key: { text: 'Status' },
+            value: { html: ( patient.status or 'active' ) | getStatusTextOrTag( true ) }
+          },
+          {
+            key: { text: 'Channel' },
+            value: { text: channelHTML | safe }
+          },
+            {
+              key: { 
+                text: "Fulfilment" 
+              },
+              value: {
+                classes: "fulfilment-value",
+                html: radios({
+                  idPrefix: "example-inline",
+                  name: "exampleInline",
+                  classes: "nhsuk-radios--inline summary-list-radios",
+                  items: [
+                    { 
+                      value: "email", 
+                      text: "Email",
+                      checked: true
+                    },
+                    { 
+                      value: "post", 
+                      text: "Post" 
+                    }
+                  ]
+                })
+              }
+            },
+            {
+              key: { 
+                text: "Start date" 
+              },
+              value: { 
+                html: "25 November 2025"
+              }
+            },
+            {
+              key: { 
+                text: "Expiry date" 
+              },
+              value: { 
+                html: "24 November 2026" 
+              }
+            },
+            {
+              key: { 
+                text: "Application date" 
+              },
+              value: { 
+                html: "25 November 2025" 
+              }
+            },
+            {
+              classes: "nhsuk-summary-list__row--no-border",
+              key: { 
+                text: "Notes" 
+              },
+              value:
+              { 
+                html: textarea ({
+                  id: "notes",
+                  name: "notes"
+                })
+              }
+            }
+          ]
+      }) }}
+
+      <div class="nhsuk-button-group">
+        {{ button
+          ({ 
+            text: 'Submit',
+            href: "case"
+          })
+        }}
+        {{ button
+          ({ classes: "nhsuk-button--secondary-solid", 
+            text: 'Cancel',
+            href: "../search"
+          }) 
+        }}
+      </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+
+.summary-list-radios {
+    display: flex;
+    align-items: last baseline;
+    white-space: nowrap;
+  }
+
+  .nhsuk-summary-list__value .nhsuk-radios,
+  .nhsuk-summary-list__value .nhsuk-textarea {
+    margin-top: 0.5rem;
+  }
+
+
+    /* --------------------------------------------------- */
+    /* GRID COLUMN BREAKPOINT — 1024px only   */
+    /* --------------------------------------------------- */
+    @media (min-width: 1024px) and (max-width: 1024px) {
+      .nhsuk-grid-column-one-half {
+      width: 66.666%
+    }
+  }
+
+</style>
+
+
+
+{% endblock %}

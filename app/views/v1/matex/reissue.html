@@ -226,10 +226,25 @@
                     text: "Date of birth" 
                   },
                   value: { 
-                    html: input({
-                      suffix: "(ddmmyy)",
-                      classes: "nhsuk-input--width-5",
-                      value: "241297"
+                    html: dateInput({
+                      id: "date-of-birth",
+                      items: [
+                        {
+                          name: "day",
+                          classes: "nhsuk-input--width-2",
+                          value: 24
+                        },
+                        {
+                          name: "month",
+                          classes: "nhsuk-input--width-2",
+                          value: 7
+                        },
+                        {
+                          name: "year",
+                          classes: "nhsuk-input--width-4",
+                          value: 1997
+                        }
+                      ]
                     })
                   }
                 },
@@ -265,10 +280,25 @@
                     text: "Baby's birth date" 
                   },
                   value: { 
-                    html: input({
-                      suffix: "(ddmmyy)",
-                      classes: "nhsuk-input--width-5",
-                      value: "041125"
+                    html: dateInput({
+                      id: "date-of-birth",
+                      items: [
+                        {
+                          name: "day",
+                          classes: "nhsuk-input--width-2",
+                          value: 4
+                        },
+                        {
+                          name: "month",
+                          classes: "nhsuk-input--width-2",
+                          value: 11
+                        },
+                        {
+                          name: "year",
+                          classes: "nhsuk-input--width-4",
+                          value: 2025
+                        }
+                      ]
                     })
                   }
                 },

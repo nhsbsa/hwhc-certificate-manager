@@ -226,10 +226,25 @@
                     text: "Date of birth" 
                   },
                   value: { 
-                    html: input({
-                      suffix: "(ddmmyy)",
-                      classes: "nhsuk-input--width-5",
-                      value: "241297"
+                    html: dateInput({
+                      id: "date-of-birth",
+                      items: [
+                        {
+                          name: "day",
+                          classes: "nhsuk-input--width-2",
+                          value: 24
+                        },
+                        {
+                          name: "month",
+                          classes: "nhsuk-input--width-2",
+                          value: 7
+                        },
+                        {
+                          name: "year",
+                          classes: "nhsuk-input--width-4",
+                          value: 1997
+                        }
+                      ]
                     })
                   }
                 },
@@ -265,10 +280,25 @@
                     text: "Baby's birth date" 
                   },
                   value: { 
-                    html: input({
-                      suffix: "(ddmmyy)",
-                      classes: "nhsuk-input--width-5",
-                      value: "151025"
+                    html: dateInput({
+                      id: "date-of-birth",
+                      items: [
+                        {
+                          name: "day",
+                          classes: "nhsuk-input--width-2",
+                          value: 4
+                        },
+                        {
+                          name: "month",
+                          classes: "nhsuk-input--width-2",
+                          value: 11
+                        },
+                        {
+                          name: "year",
+                          classes: "nhsuk-input--width-4",
+                          value: 2025
+                        }
+                      ]
                     })
                   }
                 },
@@ -324,21 +354,12 @@
       .summary-list--single-line .nhsuk-summary-list__row {
         display: flex;
         flex-wrap: nowrap;
-        align-items: flex-start;
       }
 
       .summary-list--single-line .nhsuk-summary-list__key {
         flex: 0 0 auto;
         white-space: nowrap;
         margin-right: 5rem;
-      }
-
-      .summary-list--single-line .nhsuk-summary-list__value {
-        flex: 1 1 auto;
-        min-width: 0;
-        white-space: normal;
-        overflow-wrap: anywhere;
-        word-break: break-word;
       }
 
 
@@ -388,10 +409,6 @@
           .nhsuk-grid-row-buttons {
             margin-top: 2rem;
 
-          }
-
-          .nhsuk-button--secondary {
-            margin-left: 1rem;
           }
 
           .summary-list-radios {
