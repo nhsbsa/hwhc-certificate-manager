@@ -580,7 +580,7 @@ env.addFilter( 'getCheckingTableRows', function( patientData, count ){
           { html: _getCertificateTypeTextOrTag( patient.certificateType, true ) },
           { html: _getStatusTextOrTag( 'checking', true ) },
           { html: ( patient.status === 'processing' ) ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">'+ patient.certificateReference +'</span>' : patient.certificateReference },
-          { html: '<a href="'+ patient.certificateType +'/comparison--correction?patientID=' + patient.id + '&showProcessorError=true">View <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag( patient.certificateType ) + '</span></a>' },
+          { html: '<a href="'+ patient.certificateType +'/comparison--correction?patientID=' + patient.id + '">View <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag( patient.certificateType ) + '</span></a>' },
         ];
 
         rows.push(obj);

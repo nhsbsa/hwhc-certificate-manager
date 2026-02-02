@@ -143,18 +143,6 @@
                             ]
                             }) }}
 
-                            {% if data.showProcessorError === 'true'%}
-                                <h2 class="nhsuk-heading-m">Comments from assessor</h2>
-                                {{ insetText({                              
-                                    html: '<p class="nhsuk-body">You forgot to correct the name of the patient.</p>'
-                                }) }}
-
-                                {{ button({
-                                    href: '../process-application/review-application',
-                                    text: 'Edit application'
-                                }) }}
-                            {% endif %}
-
 
 
                                 {% set noHTML %}

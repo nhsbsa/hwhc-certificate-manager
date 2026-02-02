@@ -34,13 +34,24 @@
                       <div class="nhsuk-button-group">
 
                         {% set destination = '../dashboard--quality-control' %}
+                        {% set classes = '' %}
+
                         {% if data.role === 'backOfficeSupervisor' %}
+                          
                           {% set destination = '../dashboard--supervisor' %}
+                          {% set classes = 'nhsuk-button--secondary' %}
+
+                          {{ button({
+                            text : 'Back to ' + data.processors[data.searchProcessor].name +"'s applications",
+                            href: '../processor?searchProcessor=' + data.searchProcessor
+                          }) }}
+
                         {% endif %}
 
                         {{ button({
                           text : 'Back to dashboard',
-                          href: destination 
+                          href: destination,
+                          classes: classes
                         }) }}
 
                       </div>

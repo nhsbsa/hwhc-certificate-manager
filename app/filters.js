@@ -4,6 +4,32 @@
 module.exports = function (env) {
   const filters = {}
 
+
+  // 
+// GET JOB TITLE FILTER
+//
+filters.getJobTitle = function ( role ) {
+
+  let jobTitle = '';
+  switch( role ){
+    case 'backOffice':
+      jobTitle = 'Applications processor';
+      break;
+    case 'backOfficeSupervisor':
+      jobTitle = 'Supervisor applications processor';
+      break;
+    case 'callCentre':
+      jobTitle = 'Customer contact adviser';
+      break;
+    case 'qualityControl':
+      jobTitle = 'Quality checker';
+      break;
+  }
+
+  return jobTitle;
+  
+};
+
   /* ------------------------------------------------------------------
     add your methods to the filters obj below this comment block:
     @example:

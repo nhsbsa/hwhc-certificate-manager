@@ -16,6 +16,8 @@
             html: ''
           }) }}
 
+
+
         {% elseif data.confirmationStatus === 'requestPaperKeyIn' %}
 
           <!-- PAPER KEY-IN REQUESTED -->
@@ -23,6 +25,8 @@
             titleText: 'Paper key-in requested',
             html: 'Your request has been sent to the post room'
           }) }}
+
+
         
         {% elseif data.confirmationStatus === 'applicationRejected' %}
 
@@ -31,6 +35,9 @@
             titleText: 'Application rejected',
             html: ''
           }) }}
+
+          
+
 
         {% else %}
 
