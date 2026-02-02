@@ -18,31 +18,84 @@
 
           <p>An initial prototype for Help with Health Costs (HwHC) telesales. This first iteration will handle Maternity exemption (MATEX) and HRT PPC cases.</p>
 
-          <div class="nhsuk-button-group">
 
-            {{ button({
+          <h2 class="nhsuk-heading-m">{{ 'callCentre' | getJobTitle }}</h2>
+          <p class="nhsuk-body">Help patients calling and emailing regarding their application</p>
+
+          <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
+            <li>Field calls from patients</li>
+            <li>Answer emails from patients</li>
+            <li>Find records for patients</li>
+            <li>Amend records for patients</li>
+          </ul>         
+
+          {{ button({
               text: 'callCentre' | getJobTitle,
               href: '/v1/search?role=callCentre'
-            }) }}
+          }) }}
 
-            {{ button({
+
+          <hr class="nhsuk-section-break--m" />
+
+
+
+          <h2 class="nhsuk-heading-m">{{ 'backOffice' | getJobTitle }}</h2>
+          <p class="nhsuk-body">Process scanned applications, correct mistakes and request further information</p>
+
+          <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
+            <li>Process Matex paper applications</li>
+            <li>Answer letters from patients</li>
+            <li>Find records for patients</li>
+            <li>Amend records for patients</li>
+          </ul>         
+
+          {{ button({
               text: 'backOffice' | getJobTitle,
               href: '/v1/dashboard?role=backOffice'
             }) }}
 
-            {{ button({
+
+          <hr class="nhsuk-section-break--m" />
+
+
+           <h2 class="nhsuk-heading-m">{{ 'backOfficeSupervisor' | getJobTitle }}</h2>
+          <p class="nhsuk-body">Monitor the work of the application processors</p>
+
+          <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
+            <li>Check processing of other applications processors</li>
+            <li>Process Matex paper applications</li>
+            <li>Answer letters from patients</li>
+            <li>Find records for patients</li>
+            <li>Amend records for patients</li>
+          </ul>         
+
+          {{ button({
               text: 'backOfficeSupervisor' | getJobTitle,
-              href: '/v1/dashboard--supervisor?role=backOfficeSupervisor'
+              href: '/v1/dashboard?role=backOffice'
             }) }}
 
-             {{ button({
+
+          <hr class="nhsuk-section-break--m" />
+
+
+          <h2 class="nhsuk-heading-m">{{ 'qualityControl' | getJobTitle }}</h2>
+          <p class="nhsuk-body">Perform quality checks on a fixed number of applications</p>
+
+          <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
+            <li>Check processing of other applications processors</li>
+            <li>Find records</li>
+            <li>Amend records</li>
+          </ul>         
+
+           {{ button({
               text: 'qualityControl' | getJobTitle,
               href: '/v1/dashboard--quality-control?role=qualityControl'
             }) }}
 
-          </div>
 
-          <p class="nhsuk-body"><a class="nhsuk-link" href="/v1/data-patients">View patient test data and statuses</a></p>
+
+
+          <p class="nhsuk-body"><a class="nhsuk-link" href="/v1/data-patients">View patient test data, roles and statuses</a></p>
 
         {% endset %}
 
