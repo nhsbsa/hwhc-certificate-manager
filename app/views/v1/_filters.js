@@ -838,7 +838,7 @@ env.addFilter('getConfidenceTag', function( num, showEverything ){
     num = 0;
   }
 
-  const showLevels = ( showEverything === true ) ? [ 'empty', 'low', 'medium', 'high' ] : [ 'low' ]; // Add the levels you wish to output here...
+  const showLevels = ( showEverything === true ) ? [ 'empty', 'low', 'medium', 'high' ] : [ 'low','medium' ]; // Add the levels you wish to output here...
 
   let confidenceLevel = 'empty';
   let tag = '<span class="confidence-level"><span class="nhsuk-tag nhsuk-tag--grey">Empty</span></span>';
