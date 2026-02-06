@@ -135,13 +135,13 @@
           }
         },
           rows: [
+          {
+            key: { text: 'First name' },
+            value: { text: patient.firstName or 'Jane' }
+          },
             {
               key: { text: 'Last name' },
               value: { text: patient.lastName or 'Smith' }
-            },
-            {
-              key: { text: 'First name' },
-              value: { text: patient.firstName or 'Jane' }
             },
             {
               key: {
@@ -410,7 +410,7 @@
     }) }}
 
     {{ button({
-      classes: "nhsuk-button--secondary-solid",
+      classes: "nhsuk-button--secondary",
       text: 'Cancel',
       href: "../search"
     }) }}

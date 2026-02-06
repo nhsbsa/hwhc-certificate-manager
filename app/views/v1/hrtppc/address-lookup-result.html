@@ -1,0 +1,121 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Address lookup' %}
+
+{% block beforeContent %}
+ {{ backLink({
+    href: 'address-lookup',
+    text: 'Back'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+    <div class="nhsuk-card nhsuk-card--grey">
+      <div class="nhsuk-card__content">
+
+
+      
+        {% if not data.addressSearchResults or data.addressSearchResults.length === 0 %}
+
+          <!-- THE MESSAGE FUNCTION (i.e. dwpAddressPatternGetResultsStatus) FOR THESE PAGES IS SET IN THE FILTERS.JS FILE -->
+
+          <h1 class="nhsuk-heading-m">No address found</h1>
+          {{ data.addressSearchResults | dwpAddressPatternGetResultsStatus( data.addressSearchPostcode, data.addressSearchBuildingNumberOrName ) | safe }}
+
+          {{ button
+            ({ 
+              text: 'Search again',
+              href: "address-lookup"
+            })
+          }}
+          
+          {{ button
+            ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
+              text: 'Enter address manually',
+              href: "edit-personal-details"
+            }) 
+          }}
+
+          <p class="nhsuk-body"><a href="../search">Cancel</a></p>
+
+        {% else %}
+
+          <h1 class="nhsuk-heading-m">Select an address</h1>
+          {{ data.addressSearchResults | dwpAddressPatternGetResultsStatus( data.addressSearchPostcode, data.addressSearchBuildingNumberOrName ) | safe }}
+
+           <form action="address-lookup-result" method="post" novalidate>
+
+                {{ radios({
+                name: 'addressSearchResult',
+                fieldset: {
+                  legend: {
+                    text: 'Select an address',
+                    isPageHeading: false,
+                    classes: 'govuk-visually-hidden'
+                  }
+                },
+                items: data.addressSearchResults
+                }) }}
+
+
+                {{ button({
+                    text: 'Use this address'
+                }) }}
+
+                <p class="nhsuk-body"><a href="../search">Cancel</a></p>
+
+          </form>
+
+
+        {% endif %}
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<style>
+.postcode-subrow {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+}
+
+.postcode-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Stack buttons vertically on smaller screens */
+@media (max-width: 1024px) {
+  .postcode-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.25rem;
+  }
+
+}
+
+/* Small spacing between postcode text and "Change" link */
+.postcode-text + .nhsuk-summary-list__action {
+  margin-left: 1.5rem;
+}
+
+
+</style>
+
+{% endblock %}

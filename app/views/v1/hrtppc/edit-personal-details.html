@@ -4,7 +4,7 @@
 
 {% block beforeContent %}
  {{ backLink({
-    href: 'javascript:history.go(-1)',
+    href: 'case',
     text: 'Back'
   }) }}
 {% endblock %}
@@ -37,7 +37,7 @@
                     html: input ({
                       id: "first-name",
                       name: "firstName",
-                      value: "Jane"
+                      value: patient.firstName or 'Jane'
                     })
                   }
                 },
@@ -50,7 +50,7 @@
                     html: input ({
                       id: "last-name",
                       name: "lastName",
-                      value: "Smith"
+                      value: patient.lastName or 'Smith'
                     })
                   }
                 },
@@ -63,7 +63,7 @@
                     html: input ({
                       id: "address-line-1",
                       name: "addressLineOne",
-                      value: "101 Test Lane"
+                      value: data.addressLineOne or '101 Test Lane'
                     })
                   }
                 },
@@ -76,7 +76,7 @@
                     html: input ({
                       id: "address-line-2",
                       name: "addressLineTwo",
-                      value: "Stella"
+                      value: data.addressLineTwo or 'Stella'
                     })
                   }
                 },
@@ -90,7 +90,7 @@
                       id: "town",
                       name: "town",
                       classes: "nhsuk-u-width-two-thirds",
-                      value: "Goldcrest"
+                      value: data.town or 'Goldcrest Way'
                     })
                   }
                 },
@@ -98,38 +98,26 @@
                   key: { 
                   text: "Postcode" 
                   },
-                  classes: "postcode-value",
                   value: 
                   {
-                    html: '
-                    <div class="postcode-block">
-                      ' + input({
-                          id: "postcode",
-                          name: "postcode",
-                          classes: "nhsuk-input--width-5",
-                          value: "TR11 0TS"
-                        }) 
-                        
-                        + button({
-                          text: "Edit address using postcode search (S)",
-                          classes: "nhsuk-button--secondary nhsuk-button--small",
-                          href: "postcode-search"
-                        }) + '
-                    </div>               
-                    '
+                    html: input({
+                      id: "postcode",
+                      name: "postcode",
+                      classes: "nhsuk-input--width-5",
+                      value: data.postcode or 'TR11 0TS'
+                    })
                   }
                 },
                 {
                   key: { 
-                    text: "Telephone number" 
+                    text: "" 
                   },
                   value:
                   { 
-                    html: input ({
-                      id: "phone-number",
-                      name: "phone-number",
-                      classes: "nhsuk-u-width-one-third",
-                      value: "07123456789"
+                    html: button({
+                      text: "Change address fields using address lookup",
+                      classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-3",
+                      href: "address-lookup?returnTo=/v1/hrtppc/edit-personal-details"
                     })
                   }
                 },
@@ -203,7 +191,7 @@
               ]
           }) }}
 
-        <div class="nhsuk-button-group">
+          
           {{ button
             ({ 
               text: 'Submit',
@@ -211,12 +199,11 @@
             })
           }}
           {{ button
-            ({ classes: "nhsuk-button--secondary-solid", 
+            ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
               text: 'Cancel',
               href: "../search"
             }) 
           }}
-        </div>
 
       </div>
     </div>

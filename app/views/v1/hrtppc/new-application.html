@@ -37,7 +37,7 @@
             },
             id: "address-line-1",
             name: "addressLine1",
-            autocomplete: "address-line1"
+            value: data.addressLineOne or ''
           }) }}
 
           {{ input({
@@ -46,7 +46,7 @@
             },
             id: "address-line-2",
             name: "addressLine2",
-            autocomplete: "address-line2"
+            value: data.addressLineTwo or ''
           }) }}
 
           {{ input({
@@ -56,26 +56,24 @@
             classes: "nhsuk-u-width-one-half",
             id: "address-town",
             name: "addressTown",
-            autocomplete: "address-level2"
+            value: data.town or ''
           }) }}
 
           {{ input({
             label: {
               text: "Postcode"
             },
-            classes: "nhsuk-u-width-one-quarter",            id: "address-postcode",
+            classes: "nhsuk-u-width-one-quarter",            
+            id: "address-postcode",
             name: "addressPostcode",
-            autocomplete: "postal-code",
-            spellcheck: false
+            value: data.postcode or ''
           }) }}
 
-          <div class="postcode-button">
-            {{ button({
-              text: "Get address using postcode search",
-              classes: "nhsuk-button--secondary-solid",
-              href: "postcode-search"
-            }) }}
-          </div>
+          {{ button({
+            text: "Populate address fields using address lookup",
+            classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-10",
+            href: "address-lookup?returnTo=/v1/hrtppc/new-application"
+          }) }}
 
           {% call details({
             summaryText: "They don't know which address to use?"
@@ -114,7 +112,7 @@
 
         <hr class="nhsuk-u-margin-top-0">
 
-        <h3 class="nhsuk-heading-s">Date of birth</h3>
+        <h3 class="nhsuk-heading-m">Date of birth</h3>
 
         {{ dateInput({
           id: "date-of-birth",
@@ -140,7 +138,7 @@
 
         <hr class="nhsuk-u-margin-top-0">
 
-        <h3 class="nhsuk-heading-s">NHS number (Optional)</h3>
+        <h3 class="nhsuk-heading-m">NHS number (Optional)</h3>
 
         {{ input({
           classes: "nhsuk-u-width-one-third",
@@ -154,7 +152,7 @@
 
         <hr class="nhsuk-u-margin-top-0">
 
-        <h3 class="nhsuk-heading-s">Certificate start date</h3>
+        <h3 class="nhsuk-heading-m">Certificate start date</h3>
 
         {{ dateInput({
           id: "start-date",
@@ -183,7 +181,7 @@
 
         <hr class="nhsuk-u-margin-top-0">
 
-        <h3 class="nhsuk-heading-s">Certificate fulfilment</h3>
+        <h3 class="nhsuk-heading-m">Certificate fulfilment</h3>
 
         {% set emailHtml %}
           {{ input({
@@ -200,7 +198,7 @@
           fieldset: {
             legend: {
               text: "How do they want to receive their HRT PPC?",
-                size: "l",
+                size: "s",
               isPageHeading: false
             }
           },
@@ -246,7 +244,7 @@
 
         <hr class="nhsuk-u-margin-top-0">
 
-        <h3 class="nhsuk-heading-s">Payment</h3>
+        <h3 class="nhsuk-heading-m">Payment</h3>
 
         {{ warningCallout({
           heading: "Important information",
@@ -257,7 +255,7 @@
 
         <hr class="nhsuk-u-margin-top-0">
 
-        <h3 class="nhsuk-heading-s">Notes</h3>
+        <h3 class="nhsuk-heading-m">Notes</h3>
 
         {{ textarea({
           name: "example",
@@ -274,7 +272,7 @@
             })
           }}
           {{ button
-            ({ classes: "nhsuk-button--secondary-solid", 
+            ({ classes: "nhsuk-button--secondary", 
               text: 'Cancel',
               href: "../search"
             }) 

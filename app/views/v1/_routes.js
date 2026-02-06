@@ -114,8 +114,8 @@ router.post(/process-application/, function (req, res) {
 router.get(/postcode-handler/, function (req, res) {
 
   // Prep the variables
-  let addressSearchPostcode = req.session.data.imagePostcode.split(' ').join('').toUpperCase();
-  const addressSearchHouseNumberOrName = req.session.data.imageHouseNumberOrName || '';
+  let addressSearchPostcode = req.session.data.addressSearchPostcode.split(' ').join('').toUpperCase();
+  const addressSearchBuildingNumberOrName = req.session.data.addressSearchBuildingNumberOrName || '';
   const apiKey = process.env.POSTCODEAPIKEY;
   const regex = RegExp('^([A-PR-UWYZa-pr-uwyz](([0-9](([0-9]|[A-HJKSTUW])?)?)|([A-HK-Ya-hk-y][0-9]([0-9]|[ABEHMNPRVWXY])?)) ?[0-9][ABD-HJLNP-UW-Zabd-hjlnp-uw-z]{2})$', 'i');
   addressSearchPostcode = ( regex.test(addressSearchPostcode) ) ? addressSearchPostcode : '';
@@ -146,8 +146,8 @@ router.get(/postcode-handler/, function (req, res) {
 
   let baseURL = '';
 
-  if( addressSearchHouseNumberOrName ){
-    baseURL = 'https://api.os.uk/search/places/v1/find?query=' + encodeURI(addressSearchHouseNumberOrName);
+  if( addressSearchBuildingNumberOrName ){
+    baseURL = 'https://api.os.uk/search/places/v1/find?query=' + encodeURI(addressSearchBuildingNumberOrName);
   }
 
   if( addressSearchPostcode ){
@@ -178,7 +178,7 @@ router.get(/postcode-handler/, function (req, res) {
 
             if( addressSearchPostcode.indexOf(resultPostcode) === 0 ){
 
-              let bnon = addressSearchHouseNumberOrName.trim().toUpperCase();
+              let bnon = addressSearchBuildingNumberOrName.trim().toUpperCase();
               if( bnon ){
 
                 // WE HAVE A POSTCODE AND A BUILDING NAME/NUMBER, TRY TO NARROW THE RESULTS DOWN...
@@ -282,6 +282,185 @@ router.get(/reset-search/,function( req, res ){
   delete req.session.data.searchLastName;
 
   res.redirect( destination );
+
+
+});
+
+
+//
+// ADDRESS LOOKUP 
+//
+//
+router.get(/address-lookup/, function (req, res) {
+
+
+// STORE RETURN URL FROM QUERY STRING (ONCE)
+if (!req.session.returnTo && req.query.returnTo) {
+  req.session.returnTo = req.query.returnTo;
+}
+
+console.log('RETURN TO:', req.session.returnTo);
+
+
+  // Prep the variables
+  let addressSearchPostcode =
+  (req.query.addressSearchPostcode || '')
+    .split(' ')
+    .join('')
+    .toUpperCase();
+  const addressSearchBuildingNumberOrName = req.session.data.addressSearchBuildingNumberOrName || '';
+  const apiKey = process.env.POSTCODEAPIKEY;
+  const regex = RegExp('^([A-PR-UWYZa-pr-uwyz](([0-9](([0-9]|[A-HJKSTUW])?)?)|([A-HK-Ya-hk-y][0-9]([0-9]|[ABEHMNPRVWXY])?)) ?[0-9][ABD-HJLNP-UW-Zabd-hjlnp-uw-z]{2})$', 'i');
+  addressSearchPostcode = ( regex.test(addressSearchPostcode) ) ? addressSearchPostcode : '';
+
+  const updateResults = ( arr ) => {
+    req.session.data.addressSearchResults = arr;
+  };
+
+  const toTitleCase = ( str ) => {
+    return str.replace( /\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); } );
+  }
+
+  const formatAddress = ( address ) => {
+
+    const formattedAddress = [];
+    const addressParts = address.split(', ');
+    addressParts.forEach( ( part, i ) => {
+      if( i !== (addressParts.length - 1) ){
+        formattedAddress.push( toTitleCase( part ) );
+      } else {
+        formattedAddress.push( part );
+      }
+    });
+
+    return formattedAddress.join(', ');
+
+  };
+
+  let baseURL = '';
+
+  if( addressSearchBuildingNumberOrName ){
+    baseURL = 'https://api.os.uk/search/places/v1/find?query=' + encodeURI(addressSearchBuildingNumberOrName);
+  }
+
+  if( addressSearchPostcode ){
+    baseURL = 'https://api.os.uk/search/places/v1/postcode?postcode=' + encodeURI(addressSearchPostcode);
+  }
+
+  // Make the call
+  if( baseURL && apiKey ){
+
+    let url = baseURL + '&key=' + apiKey;
+
+    axios.get( url ).then( response => {
+
+      let filteredResults = [];
+
+      if( Array.isArray( response.data.results ) ){
+
+        response.data.results.forEach(function(result){
+
+          let resultPostcode = result.DPA.POSTCODE.split(' ').join('').toUpperCase();
+
+          let obj = { 
+            'text' : formatAddress( result.DPA.ADDRESS ),
+            'value' : formatAddress( result.DPA.ADDRESS )
+          };
+
+          if( addressSearchPostcode ){
+
+            if( addressSearchPostcode.indexOf(resultPostcode) === 0 ){
+
+              let bnon = addressSearchBuildingNumberOrName.trim().toUpperCase();
+              if( bnon ){
+
+                // WE HAVE A POSTCODE AND A BUILDING NAME/NUMBER, TRY TO NARROW THE RESULTS DOWN...
+
+                if( result.DPA.BUILDING_NAME ){
+
+                  if( result.DPA.SUB_BUILDING_NAME ){
+                    // We can check the SUB_BUILDING_NAME field as well...
+                    if( result.DPA.SUB_BUILDING_NAME.indexOf(bnon) > -1 || result.DPA.BUILDING_NAME.indexOf(bnon) > -1 ){
+                      filteredResults.push(obj);
+                    }
+                  } else {
+                    // We can only check the BUILDING_NAME field...
+                    if( result.DPA.BUILDING_NAME.indexOf(bnon) > -1 ){
+                      filteredResults.push(obj);
+                    }
+                  }
+          
+                } else if( result.DPA.BUILDING_NUMBER ) {
+        
+                    if( result.DPA.BUILDING_NUMBER === String(bnon) ){
+                      filteredResults.push(obj);
+                    }
+
+                }
+              } else {
+
+                // WE HAVE A POSTCODE, BUT NO BUILDING NAME/NUMBER, ALLOW EVERYTHING...
+                filteredResults.push(obj);
+              }
+            
+            }
+
+          } else {
+
+            // WE DON'T HAVE A POSTCODE, ONLY BUILDING NAME/NUMBER, ALLOW ANYTHING...
+            filteredResults.push(obj);
+
+         }
+
+        });
+
+      }
+
+      updateResults( filteredResults );
+      return res.render('v1/matex/address-lookup-result');
+
+    }).catch( (error) => { console.log( error ); });
+  
+
+    } else {
+
+      req.session.data.showErrors = true;
+      updateResults([]);
+
+      return res.render('v1/hrtppc/address-lookup');
+    }
+
+});
+
+router.get(/address-lookup-result/, function (req, res) {
+  res.render('v1/matex/address-lookup-result');
+
+});
+
+router.post(/address-lookup-result/, function (req, res) {
+
+  const selectedAddress = req.body.addressSearchResult;
+
+
+  if (!selectedAddress) {
+    return res.redirect('address-lookup-result');
+  }
+
+  // Split the address string
+  const parts = selectedAddress.split(',').map(p => p.trim());
+
+  
+ req.session.data.postcode = parts.pop() || '';
+ req.session.data.town = parts.pop() || '';
+ req.session.data.addressLineOne = parts.shift() || '';
+ req.session.data.addressLineTwo = parts.join(', ') || '';
+
+
+ const returnTo = req.session.returnTo;
+ delete req.session.returnTo;
+ 
+ return res.redirect(returnTo);
+ 
 
 
 });
