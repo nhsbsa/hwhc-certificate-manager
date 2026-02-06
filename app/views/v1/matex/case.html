@@ -45,29 +45,9 @@
   {% if patient.channel === 'Paper' %}
   {% set channelHTML = 'Paper' ~ channelLinkHtml %}
 
-  {% set personalDetailsActions = {
-    items: [
-      {
-        text: "Edit details",
-        href: "edit-personal-details-paper",
-        classes: "nhsuk-link--no-visited-state"
-      }
-    ]
-  } %}
-
   {% else %}
     {% set channelHTML = 'Digital' %}
     {% set cardActions = null %}
-
-    {% set personalDetailsActions = {
-      items: [
-        {
-          text: "Edit details",
-          href: "edit-personal-details",
-          classes: "nhsuk-link--no-visited-state"
-        }
-      ]
-    } %}
 
   {% endif %}
 
@@ -152,31 +132,31 @@
           heading: "Personal details",
           headingSize: "s",
           classes: "summary-list--single-line",
-          actions: personalDetailsActions
+          actions: {
+            items: [
+              {
+                text: "Edit details",
+                href: "edit-personal-details",
+                classes: "nhsuk-link--no-visited-state"
+              }
+            ]
+          }
         },
           rows: [
             {
-              key: { text: 'Last name' },
-              value: { text: patient.lastName or 'Smith' }
-            },
-            {
               key: { text: 'First name' },
               value: { text: patient.firstName or 'Jane' }
+            },
+            {
+              key: { text: 'Last name' },
+              value: { text: patient.lastName or 'Smith' }
             },
             {
               key: {
                 text: "Address"
               },
               value: {
-                html: ""
-              }
-            },
-            {
-              key: {
-                text: "Postcode"
-              },
-              value: {
-                html: "TR1 10TS"
+                html: "22 River Rd<br>Stella<br>Goldcrest Way<br>TR110TS"
               }
             },
             {
@@ -326,13 +306,6 @@
               '
             },
             {
-              headingText: 'Postcode updated',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Postcode changed from [PreviousValue] to [NewValue] by [NameOfAgent]</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">16 January 2026 11:35am</p>
-              '
-            },
-            {
               headingText: 'First name updated',
               html: '
                 <p class="nhsuk-u-margin-bottom-1">First name changed from [PreviousValue] to [NewValue] by [NameOfAgent]</p>
@@ -472,13 +445,6 @@
               headingText: 'Address updated',
               html: '
                 <p class="nhsuk-u-margin-bottom-1">Address changed from [PreviousValue] to [NewValue] by [NameOfAgent]</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">16 January 2026 11:35am</p>
-              '
-            },
-            {
-              headingText: 'Postcode updated',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Postcode changed from [PreviousValue] to [NewValue] by [NameOfAgent]</p>
                 <p class="nhsuk-body-s nhsuk-u-margin-top-2">16 January 2026 11:35am</p>
               '
             },
@@ -623,20 +589,22 @@
     </div>
 
 
-<div class="nhsuk-grid-row-buttons">
-
     {{ button({
       text: 'Reissue certificate',
       href: "reissue"
     }) }}
 
     {{ button({
-      classes: "nhsuk-button--secondary-solid",
+      classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+      text: 'Edit details',
+      href: "edit-details"
+    }) }}
+
+    {{ button({
+      classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
       text: 'Cancel',
       href: "../search"
     }) }}
-
-</div>
 
 
     <style>

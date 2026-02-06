@@ -4,7 +4,7 @@
 
 {% block beforeContent %}
  {{ backLink({
-    href: 'javascript:history.go(-1)',
+    href: 'case',
     text: 'Back'
   }) }}
 {% endblock %}
@@ -28,6 +28,19 @@
             headingClasses: "nhsuk-heading-s",
               classes: "nhsuk-summary-list--no-border",
               rows: [
+              {
+                key: { 
+                  text: "First name"
+                },
+                value: 
+                { 
+                  html: input ({
+                    id: "first-name",
+                    name: "firstName",
+                    value: patient.firstName or 'Jane'
+                  })
+                }
+              },
                 {
                   key: { 
                     text: "Last name"
@@ -37,20 +50,7 @@
                     html: input ({
                       id: "last-name",
                       name: "lastName",
-                      value: "Smith"
-                    })
-                  }
-                },
-                {
-                  key: { 
-                    text: "First name"
-                  },
-                  value: 
-                  { 
-                    html: input ({
-                      id: "first-name",
-                      name: "firstName",
-                      value: "Jane"
+                      value: patient.lastName or 'Smith'
                     })
                   }
                 },
@@ -63,7 +63,7 @@
                     html: input ({
                       id: "address-line-1",
                       name: "addressLineOne",
-                      disabled: true
+                      value: data.addressLineOne or '22 River Rd'
                     })
                   }
                 },
@@ -76,7 +76,7 @@
                     html: input ({
                       id: "address-line-2",
                       name: "addressLineTwo",
-                      disabled: true
+                      value: data.addressLineTwo or 'Stella'
                     })
                   }
                 },
@@ -90,7 +90,7 @@
                       id: "town",
                       name: "town",
                       classes: "nhsuk-u-width-two-thirds",
-                      disabled: true
+                      value: data.town or 'Goldcrest Way'
                     })
                   }
                 },
@@ -100,22 +100,25 @@
                   },
                   value: 
                   {
-                    html: '
-                    <div class="postcode-block">
-                      ' + input({
-                          id: "postcode",
-                          name: "postcode",
-                          classes: "nhsuk-input--width-5",
-                          value: "TR11 0TS"
-                        }) 
-                        
-                        + button({
-                          text: "Edit with address lookup",
-                          classes: "nhsuk-button--secondary-solid nhsuk-button--small",
-                          href: "address-lookup"
-                        }) + '
-                    </div>
-                    '
+                    html: input({
+                      id: "postcode",
+                      name: "postcode",
+                      classes: "nhsuk-input--width-5",
+                      value: data.postcode or 'TR11 0TS'
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "" 
+                  },
+                  value:
+                  { 
+                    html: button({
+                      text: "Change address fields using address lookup",
+                      classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-3",
+                      href: "address-lookup?returnTo=/v1/matex/edit-personal-details"
+                    })
                   }
                 },
                 {
@@ -168,7 +171,7 @@
                     html: input ({
                       id: "email",
                       name: "email",
-                      value: "jane.smith@example.com"
+                      value: ""
                     })
                   }
                 },
@@ -183,7 +186,7 @@
                         {
                           name: "day",
                           classes: "nhsuk-input--width-2",
-                          value: 2
+                          value: 4
                         },
                         {
                           name: "month",
@@ -228,33 +231,25 @@
               ]
           }) }}
 
-        <div class="nhsuk-button-group">
           {{ button
             ({ 
               text: 'Submit',
               href: "case"
             })
           }}
-          
           {{ button
-            ({ classes: "nhsuk-button--secondary-solid", 
+            ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
               text: 'Cancel',
               href: "../search"
             }) 
           }}
-          
-        </div>
+
       </div>
       </div>
     </div>
 </div>
 
 <style>
-
-.postcode-block .nhsuk-button {
-    margin-bottom: 1rem;
-  }
-
 
 
     /* --------------------------------------------------- */
