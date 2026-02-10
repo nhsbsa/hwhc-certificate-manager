@@ -44,10 +44,19 @@
 
   {% if patient.channel === 'Paper' %}
   {% set channelHTML = 'Paper' ~ channelLinkHtml %}
+  {% set fulfilment = data.fulfilment or patient.fulfilment or "Post" %}
+  {% set address = 
+    patient.address.buildingNumber + " " + patient.address.streetName + "<br>" +
+    patient.address.locality + "<br>" +
+    patient.address.postTown + "<br>" +
+    patient.address.county 
+  %}
+
 
   {% else %}
     {% set channelHTML = 'Digital' %}
-    {% set cardActions = null %}
+    {% set fulfilment = data.fulfilment or patient.fulfilment or "Email" %}
+    {% set address = '' %}
 
   {% endif %}
 
@@ -60,16 +69,7 @@
         card: {
           heading: "Certificate details",
           headingSize: "s",
-          classes: "summary-list--single-line",
-          actions: {
-            items: [
-              {
-                text: "Edit details",
-                href: "edit-certificate",
-                classes: "nhsuk-link--no-visited-state"
-              }
-            ]
-          }
+          classes: "summary-list--single-line"
         },
           rows: [
             {
@@ -90,7 +90,7 @@
             },
             {
               key: { text: 'Fulfilment' },
-              value: { text: patient.certificateFulfilment or 'email' | getCertificateFulfilmentText }
+              value: { text: fulfilment | safe }
             },
             {
               key: {
@@ -123,7 +123,6 @@
     
     </div>
 
-    
 
 
     <div class="nhsuk-grid-column-one-third">
@@ -131,16 +130,7 @@
         card: {
           heading: "Personal details",
           headingSize: "s",
-          classes: "summary-list--single-line",
-          actions: {
-            items: [
-              {
-                text: "Edit details",
-                href: "edit-personal-details",
-                classes: "nhsuk-link--no-visited-state"
-              }
-            ]
-          }
+          classes: "summary-list--single-line"
         },
           rows: [
             {
@@ -155,8 +145,14 @@
               key: {
                 text: "Address"
               },
+              value: { text: address | safe }
+            },
+            {
+              key: {
+                text: "Postcode"
+              },
               value: {
-                html: "22 River Rd<br>Stella<br>Goldcrest Way<br>TR110TS"
+                text: patient.address.postcode or "TR1 10TS"
               }
             },
             {
@@ -231,14 +227,7 @@
         {% from "tables/macro.njk" import table %}
 
 
-        {% set NotesContent %}        
-          <div class="sticky-add-note">
-            <a
-              href="add-note"
-              class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-font-weight-bold">
-              Add note
-            </a>
-          </div>
+        {% set NotesContent %}
         
           <div class="scroll-container">
             {{ nhsappTimeline({
@@ -348,9 +337,6 @@
                   <li>health professional\'s name</li>
                   <li>health professional\'s address</li>
                   <li>patient\'s date of birth</li>
-                  <li>patient\'s telephone number</li>
-                  <li>patient\'s email address</li>
-                  <li>patient\'s NHS number</li>
                   <li>patient\'s signature</li>
                   <li>date of patient\'s signature</li>
                   <li>child\'s due or birth date</li>
@@ -590,14 +576,14 @@
 
 
     {{ button({
-      text: 'Reissue certificate',
-      href: "reissue"
+      text: 'Edit or reissue',
+      href: "edit-or-reissue"
     }) }}
 
     {{ button({
       classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
-      text: 'Edit details',
-      href: "edit-details"
+      text: 'Add note',
+      href: "add-note"
     }) }}
 
     {{ button({
@@ -700,7 +686,7 @@
         }
 
       .scroll-container {
-        max-height: calc(101vh - 425px);
+        max-height: calc(101vh - 370px);
         min-height: 0;
         overflow-y: auto;
         padding-top: 1rem;

@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen-normal-content.html' %}
 
-{% set pageName = 'Edit personal details' %}
+{% set pageName = 'Edit details or reissue certificate' %}
 
 {% block beforeContent %}
  {{ backLink({
@@ -11,11 +11,57 @@
 
 {% block content %}
 
+{% if data.patientID %}
+{% set patient = data.patientID | getPatientData %}
+{% endif %}
+
+{#{ patient | dump }#}
+
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
     <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
   </div>
 </div>
+
+{% set channelLinkHtml %}
+<br>
+<a class="nhsuk-link nhsuk-link--no-visited-state"
+   href="comparison">
+  View application
+</a>
+{% endset %}
+
+
+{% if patient.channel === 'Paper' %}
+{% set channelHTML = 'Paper' ~ channelLinkHtml %}
+{% set fulfilment = data.fulfilment or patient.fulfilment or "post" %}
+{% set isDigital = false %}
+{% set emailHTML = '' %}
+
+{% else %}
+  {% set channelHTML = 'Digital' %}
+  {% set fulfilment = data.fulfilment or patient.fulfilment or "email" %}
+  {% set isDigital = true %}
+  {% set emailHTML = 'jane.smith@example.com' %}
+
+{% endif %}
+
+{% if isDigital %}
+  {% set addressValue1 = '' %}
+  {% set addressValue2 = '' %}
+  {% set townValue = '' %}
+  {% set countyValue = '' %}
+
+{% else %}
+  {% set addressValue1 = data.addressLineOne or patient.address.buildingNumber + " " + patient.address.streetName %}
+  {% set addressValue2 = data.addressLineTwo or patient.address.locality %}
+  {% set townValue = data.town or patient.address.postTown %}
+  {% set countyValue = data.county or patient.address.county %}
+
+{% endif %}
+
+
+
 
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
@@ -23,9 +69,6 @@
       <div class="nhsuk-card__content">
 
           {{ summaryList({
-            heading: "Personal details",
-            headingLevel: "2",
-            headingClasses: "nhsuk-heading-s",
               classes: "nhsuk-summary-list--no-border",
               rows: [
               {
@@ -55,45 +98,51 @@
                   }
                 },
                 {
-                  key: { 
-                    text: "Address line 1" 
-                  },
-                  value:
-                  { 
+                  key: { text: "Address line 1" },
+                  value: {
                     html: input ({
                       id: "address-line-1",
                       name: "addressLineOne",
-                      value: data.addressLineOne or '22 River Rd'
+                      value: addressValue1,
+                      disabled: isDigital
                     })
                   }
-                },
+                },                
                 {
-                  key: { 
-                    text: "Address line 2" 
-                  },
-                  value:
-                  { 
+                  key: { text: "Address line 2 (optional)" },
+                  value: {
                     html: input ({
                       id: "address-line-2",
                       name: "addressLineTwo",
-                      value: data.addressLineTwo or 'Stella'
+                      value: addressValue2,
+                      disabled: isDigital
                     })
                   }
-                },
+                },                
                 {
-                  key: { 
-                    text: "Town or city" 
-                  },
-                  value:
-                  { 
+                  key: { text: "Town or city" },
+                  value: {
                     html: input ({
                       id: "town",
                       name: "town",
                       classes: "nhsuk-u-width-two-thirds",
-                      value: data.town or 'Goldcrest Way'
+                      value: townValue,
+                      disabled: isDigital
                     })
                   }
-                },
+                },                
+                {
+                  key: { text: "County (optional)" },
+                  value: {
+                    html: input ({
+                      id: "county",
+                      name: "county",
+                      classes: "nhsuk-u-width-two-thirds",
+                      value: countyValue,
+                      disabled: isDigital
+                    })
+                  }
+                },                
                 {
                   key: { 
                   text: "Postcode" 
@@ -104,7 +153,7 @@
                       id: "postcode",
                       name: "postcode",
                       classes: "nhsuk-input--width-5",
-                      value: data.postcode or 'TR11 0TS'
+                      value: data.postcode or patient.address.postcode
                     })
                   }
                 },
@@ -117,7 +166,7 @@
                     html: button({
                       text: "Change address fields using address lookup",
                       classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-3",
-                      href: "address-lookup?returnTo=/v1/matex/edit-personal-details"
+                      href: "address-lookup?returnTo=/v1/matex/edit-or-reissue"
                     })
                   }
                 },
@@ -128,6 +177,7 @@
                   value: { 
                     html: dateInput({
                       id: "date-of-birth",
+                      classes: "nhsuk-dates--inline summary-list-dates",
                       items: [
                         {
                           name: "day",
@@ -158,7 +208,7 @@
                       id: "phone-number",
                       name: "phone-number",
                       classes: "nhsuk-input--width-10",
-                      value: "07700 123 456"
+                      value: "07700123456"
                     })
                   }
                 },
@@ -171,7 +221,7 @@
                     html: input ({
                       id: "email",
                       name: "email",
-                      value: ""
+                      value: emailHTML
                     })
                   }
                 },
@@ -182,6 +232,7 @@
                   value: { 
                     html: dateInput({
                       id: "date-of-birth",
+                      classes: "nhsuk-dates--inline summary-list-dates",
                       items: [
                         {
                           name: "day",
@@ -218,6 +269,50 @@
                 },
                 {
                   key: { 
+                    text: "Certificate fulfilment" 
+                  },
+                  value: {
+                    classes: "fulfilment-value",
+                    html: radios({
+                      idPrefix: "example-inline",
+                      name: "exampleInline",
+                      classes: "nhsuk-radios--inline summary-list-radios",
+                      items: [
+                        { 
+                          value: "email", 
+                          text: "Email",
+                          checked: fulfilment === "email"
+                        },
+                        { 
+                          value: "post", 
+                          text: "Post",
+                          checked: fulfilment === "post"
+                        }
+                      ]
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Certificate start date" 
+                  },
+                  value: {
+                    html:
+                      '<fieldset disabled class="no-fieldset-border">' ~
+                      dateInput({
+                        id: "certificate-start-date",
+                        classes: "nhsuk-dates--inline summary-list-dates",
+                        items: [
+                          { name: "day", classes: "nhsuk-input--width-2", value: 25 },
+                          { name: "month", classes: "nhsuk-input--width-2", value: 11 },
+                          { name: "year", classes: "nhsuk-input--width-4", value: 2025 }
+                        ]
+                      }) ~
+                      '</fieldset>'
+                  }
+                },              
+                {
+                  key: { 
                     text: "Notes" 
                   },
                   value:
@@ -231,18 +326,24 @@
               ]
           }) }}
 
-          {{ button
-            ({ 
-              text: 'Submit',
-              href: "case"
-            })
-          }}
-          {{ button
-            ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
-              text: 'Cancel',
-              href: "../search"
-            }) 
-          }}
+            {{ button
+              ({ 
+                text: 'Reissue',
+                href: "reissue-complete"
+              })
+            }}
+            {{ button
+              ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
+                text: 'Save changes',
+                href: "case"
+              }) 
+            }}
+            {{ button
+              ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
+                text: 'Cancel',
+                href: "../search"
+              }) 
+            }}
 
       </div>
       </div>
@@ -250,6 +351,28 @@
 </div>
 
 <style>
+
+  .summary-list-radios {
+      display: flex;
+      align-items: first baseline;
+      white-space: nowrap;
+    }
+
+  .summary-list-dates {
+    display: flex;
+    align-items: last baseline
+  }
+
+  .nhsuk-summary-list__value .nhsuk-radios,
+  .nhsuk-summary-list__value .nhsuk-textarea {
+    margin-top: 0.5rem;
+  }
+
+  .no-fieldset-border {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
 
 
     /* --------------------------------------------------- */

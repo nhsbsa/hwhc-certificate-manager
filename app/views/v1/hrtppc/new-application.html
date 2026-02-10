@@ -61,6 +61,16 @@
 
           {{ input({
             label: {
+              text: "County (optional)"
+            },
+            classes: "nhsuk-u-width-one-half",
+            id: "address-town",
+            name: "addressTown",
+            value: data.town or ''
+          }) }}
+
+          {{ input({
+            label: {
               text: "Postcode"
             },
             classes: "nhsuk-u-width-one-quarter",            
@@ -138,6 +148,20 @@
 
         <hr class="nhsuk-u-margin-top-0">
 
+        <h3 class="nhsuk-heading-m">Email address</h3>
+
+        {{ input({
+          classes: "nhsuk-u-width-two-thirds",
+          id: "email-address",
+          name: "emailAddress",
+          label: {
+            text: "Email address"
+          }
+        }) }}
+
+
+        <hr class="nhsuk-u-margin-top-0">
+
         <h3 class="nhsuk-heading-m">NHS number (Optional)</h3>
 
         {{ input({
@@ -183,18 +207,8 @@
 
         <h3 class="nhsuk-heading-m">Certificate fulfilment</h3>
 
-        {% set emailHtml %}
-          {{ input({
-            id: "email",
-            name: "email",
-            classes: "nhsuk-u-width-two-thirds",
-            label: {
-              text: "Email address"
-            }
-          }) }}
-        {% endset -%}
-
         {{ radios({
+          name: "fulfilment",
           fieldset: {
             legend: {
               text: "How do they want to receive their HRT PPC?",
@@ -205,13 +219,11 @@
           hint: {
             text: "We'll send them a renewal reminder one month before their HRT PPC is due to expire."
           },
+          classes: "nhsuk-radios--inline nhsuk-u-margin-top-3",
           items: [
             {
               value: "email",
-              text: "Email",
-              conditional: {
-                html: emailHtml
-              }
+              text: "Email"
             },
             {
               value: "post",
@@ -219,28 +231,7 @@
             }
           ]
         }) }}
-<!-- 
-        <hr class="nhsuk-u-margin-top-0">
 
-        <h3 class="nhsuk-heading-s">Contact details</h3>
-
-        {{ input({
-          classes: "nhsuk-u-width-two-thirds",
-          id: "email",
-          name: "email",
-          label: {
-            text: "Email address"
-          }
-        }) }}
-
-        {{ input({
-          classes: "nhsuk-u-width-one-third",
-          id: "phone-number",
-          name: "phoneNumber",
-          label: {
-            text: "Phone number"
-          }
-        }) }} -->
 
         <hr class="nhsuk-u-margin-top-0">
 

@@ -75,16 +75,9 @@ function getCertificateViewData(req) {
   };
 }
 
-router.get('/v1/hrtppc/edit-certificate', (req, res) => {
+router.get('/v1/hrtppc/edit-or-reissue', (req, res) => {
   res.render(
-    'v1/hrtppc/edit-certificate',
-    getCertificateViewData(req)
-  );
-});
-
-router.get('/v1/hrtppc/reissue', (req, res) => {
-  res.render(
-    'v1/hrtppc/reissue',
+    'v1/hrtppc/edit-or-reissue',
     getCertificateViewData(req)
   );
 });

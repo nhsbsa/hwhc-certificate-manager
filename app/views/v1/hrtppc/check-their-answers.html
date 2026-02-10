@@ -58,7 +58,7 @@
                       text: "Address"
                     },
                     value: {
-                      html: "101 Test Road<br>Stella<br>Goldcrest<br>TR11 0TS"
+                      html: "101 Test Road<br>Goldcrest Way<br>Newcastle<br>Tyne and Wear<br>TR11 0TS"
                     }
                   },
                   {
@@ -88,13 +88,11 @@
                 ]
               }) }}
 
-              <div class="edit-button">
-                {{ button({
-                  text: "Edit applicant's details",
-                  classes: "nhsuk-button--secondary-solid",
-                  href: "new-application"
-                }) }}
-              </div>
+              {{ button({
+                text: "Edit applicant's details",
+                classes: "nhsuk-button--secondary nhsuk-button--small",
+                href: "new-application"
+              }) }}
         
               <h2 class="nhsuk-heading-m">
                 Certificate details
@@ -178,7 +176,7 @@
                     })
                   }}
                   {{ button
-                    ({ classes: "nhsuk-button--secondary-solid", 
+                    ({ classes: "nhsuk-button--secondary", 
                       text: 'Cancel',
                       href: "../search"
                     }) 

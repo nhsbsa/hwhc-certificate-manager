@@ -449,12 +449,36 @@ router.post(/address-lookup-result/, function (req, res) {
   // Split the address string
   const parts = selectedAddress.split(',').map(p => p.trim());
 
+  // Last item is always postcode
+  req.session.data.postcode = parts.pop() || '';
   
- req.session.data.postcode = parts.pop() || '';
- req.session.data.town = parts.pop() || '';
- req.session.data.addressLineOne = parts.shift() || '';
- req.session.data.addressLineTwo = parts.join(', ') || '';
-
+  // Last remaining part is town
+  req.session.data.town = parts.pop() || '';
+  
+  // Optional county — only assign if it matches a known county
+  const knownCounties = [
+    'Bedfordshire', 'Berkshire', 'Bristol', 'Buckinghamshire', 'Cambridgeshire', 
+    'Cheshire', 'City of London', 'Cornwall', 'County Durham', 'Cumbria', 'Derbyshire', 
+    'Devon', 'Dorset', 'East Riding of Yorkshire', 'East Sussex', 'Essex', 'Gloucestershire', 
+    'Greater London', 'Greater Manchester', 'Hampshire', 'Herefordshire', 'Hertfordshire', 
+    'Isle of Wight', 'Kent', 'Lancashire', 'Leicestershire', 'Oxfordshire', 'Rutland', 'Shropshire', 
+    'Somerset', 'South Yorkshire', 'Staffordshire', 'Suffolk', 'Surrey', 'Tyne and Wear', 
+    'Warwickshire', 'West Midlands', 'West Sussex', 'West Yorkshire', 'Wiltshire', 'Worcestershire'
+  ];
+  
+  const lastPart = parts[parts.length - 1];
+  if (knownCounties.includes(lastPart)) {
+    req.session.data.county = parts.pop();
+  } else {
+    req.session.data.county = '';
+  }
+  
+  // First part is address line 1
+  req.session.data.addressLineOne = parts.shift() || '';
+  
+  // Anything left in the middle goes into address line 2
+  req.session.data.addressLineTwo = parts.join(', ') || '';
+  
 
  const returnTo = req.session.returnTo;
  delete req.session.returnTo;

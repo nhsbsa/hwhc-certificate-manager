@@ -2,6 +2,12 @@
 
 {% set pageName = 'Add note' %}
 
+{% block beforeContent %}
+ {{ backLink({
+    href: 'case',
+    text: 'Back'
+  }) }}
+{% endblock %}
 
 {% block content %}
 
@@ -36,7 +42,7 @@
           {{ button
             ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
               text: 'Cancel',
-              href: "case"
+              href: "../search"
             }) 
           }}
           

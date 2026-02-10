@@ -32,16 +32,7 @@
         card: {
           heading: "Certificate details",
           headingSize: "s",
-          classes: "summary-list--single-line",
-          actions: {
-            items: [
-              {
-                text: "Edit details",
-                href: "edit-certificate",
-                classes: "nhsuk-link--no-visited-state"
-              }
-            ]
-          }
+          classes: "summary-list--single-line"
         },
           rows: [
             {
@@ -123,16 +114,7 @@
         card: {
           heading: "Personal details",
           headingSize: "s",
-          classes: "summary-list--single-line",
-          actions: {
-            items: [
-              {
-                text: "Edit details",
-                href: "edit-personal-details",
-                classes: "nhsuk-link--no-visited-state"
-              }
-            ]
-          }
+          classes: "summary-list--single-line"
         },
           rows: [
           {
@@ -148,8 +130,14 @@
                 text: "Address"
               },
               value: {
-                html: "101 Test Lane<br>Stella<br>Goldcrest<br>TR110TS"
+                html:
+                  patient.address.buildingNumber + " " + patient.address.streetName + "<br>" +
+                  patient.address.locality + "<br>" +
+                  patient.address.postTown + "<br>" +
+                  patient.address.county + "<br>" +
+                  patient.address.postcode
               }
+              
             },
             {
               key: {
@@ -210,14 +198,6 @@
       {% from "tables/macro.njk" import table %}
 
       {% set NotesContent %}
-
-          <div class="sticky-add-note">
-            <a
-              href="add-note"
-              class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-font-weight-bold">
-              Add note
-            </a>
-          </div>
 
           <div class="scroll-container">
           {{ nhsappTimeline({
@@ -402,20 +382,22 @@
 
 </div>
 
-<div class="nhsuk-grid-row-buttons">
+  {{ button({
+    text: 'Edit or reissue',
+    href: "edit-or-reissue"
+  }) }}
 
-    {{ button({
-      text: 'Reissue certificate',
-      href: "reissue"
-    }) }}
+  {{ button({
+    classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+    text: 'Add note',
+    href: "add-note"
+  }) }}
 
-    {{ button({
-      classes: "nhsuk-button--secondary",
-      text: 'Cancel',
-      href: "../search"
-    }) }}
-
-</div>
+  {{ button({
+    classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+    text: 'Cancel',
+    href: "../search"
+  }) }}
 
 
     <!-- Summary list card styling -->
@@ -434,11 +416,6 @@
         flex: 0 0 auto;
         white-space: nowrap;
         margin-right: 3rem;
-      }
-
-      .nhsuk-grid-row-buttons {
-        display: flex;
-        gap: 1rem;
       }
 
 
@@ -516,7 +493,7 @@
         }
 
         .scroll-container {
-          max-height: calc(100vh - 425px);
+          max-height: calc(100vh - 420px);
           min-height: 0;
           overflow-y: auto;
           margin-top: 1rem;
