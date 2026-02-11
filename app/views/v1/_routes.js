@@ -101,6 +101,13 @@ router.post(/process-application\/send-a-letter/, function (req, res) {
     res.redirect( destination );
 });
 
+router.post(/process-application\/experimental--horizontal-labels/, function (req, res) {
+    const destination = 'review-application';
+    res.redirect( destination );
+});
+
+
+
 router.post(/process-application/, function (req, res) {
     const destination = 'process-application/other';
     res.redirect( destination );
