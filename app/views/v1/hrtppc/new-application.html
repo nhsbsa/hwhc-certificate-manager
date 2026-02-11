@@ -11,6 +11,7 @@
 
 {% block content %}
 
+
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
     <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
@@ -35,18 +36,18 @@
             label: {
               text: "Address line 1"
             },
-            id: "address-line-1",
-            name: "addressLine1",
-            value: data.addressLineOne or ''
+            id: "new-hrt-address-line-one",
+            name: "newHRT.addressLineOne",
+            value: data.newHRT.addressLineOne or ''
           }) }}
 
           {{ input({
             label: {
               text: "Address line 2 (optional)"
             },
-            id: "address-line-2",
-            name: "addressLine2",
-            value: data.addressLineTwo or ''
+            id: "new-hrt-address-line-two",
+            name: "newHRT.addressLineTwo",
+            value: data.newHRT.addressLineTwo or ''
           }) }}
 
           {{ input({
@@ -54,9 +55,9 @@
               text: "Town or city"
             },
             classes: "nhsuk-u-width-one-half",
-            id: "address-town",
-            name: "addressTown",
-            value: data.town or ''
+            id: "new-hrt-town",
+            name: "newHRT.town",
+            value: data.newHRT.town or ''
           }) }}
 
           {{ input({
@@ -64,9 +65,9 @@
               text: "County (optional)"
             },
             classes: "nhsuk-u-width-one-half",
-            id: "address-town",
-            name: "addressTown",
-            value: data.town or ''
+            id: "new-county",
+            name: "newHRT.county",
+            value: data.newHRT.county or ''
           }) }}
 
           {{ input({
@@ -74,15 +75,15 @@
               text: "Postcode"
             },
             classes: "nhsuk-u-width-one-quarter",            
-            id: "address-postcode",
-            name: "addressPostcode",
-            value: data.postcode or ''
+            id: "new-postcode",
+            name: "newHRT.postcode",
+            value: data.newHRT.postcode or ''
           }) }}
 
           {{ button({
             text: "Populate address fields using address lookup",
             classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-10",
-            href: "address-lookup?returnTo=/v1/hrtppc/new-application"
+            href: "address-lookup?source=newHRT&returnTo=/v1/hrtppc/new-application"
           }) }}
 
           {% call details({

@@ -8,12 +8,45 @@
 
 
 {% block content %}
+
+  {% if data.patientID %}
+  {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  {#{ patient | dump }#}
+
+  {% set addressValue1 = data.addressLineOne or patient.address.buildingNumber + " " + patient.address.streetName %}
+  {% set addressValue2 = data.addressLineTwo or patient.address.locality %}
+  {% set townValue = data.town or patient.address.postTown %}
+  {% set countyValue = data.county or patient.address.county %}
+  {% set postcodeValue = data.postcode or patient.address.postcode %}
+
+  {% if patient.channel === 'Digital' %}
+  {% set panelHtml %}
+    We have sent the certificate to <strong>{{ patient.email or 'jane.doe@example.com' }}</strong>.
+  {% endset %}
+
+  {% else %}
+
+  {% set panelHtml %}
+  We have sent the certificate to:<br>
+  <strong>
+    {{ addressValue1 }} <br>
+    {{ addressValue2 }}<br>
+    {{ townValue }}<br>
+    {{ countyValue }}<br>
+    {{ postcodeValue }}
+  </strong>
+  {% endset %}
+
+  {% endif %}
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
       {{ panel({
         titleText: "Reissue complete",
-        html: "We have sent the certificate to:<br><strong>jane.smith@example.com</strong>."
+        html: panelHtml
       }) }}
 
       <h2 class="nhsuk-heading-m">MATEX details</h2>
@@ -52,6 +85,14 @@
             },
             value: {
               text: "24 November 2026"
+            }
+          },
+          {
+            key: {
+              text: "Note"
+            },
+            value: {
+              text: "New certificate was requested after a lost/damaged one."
             }
           }
         ]

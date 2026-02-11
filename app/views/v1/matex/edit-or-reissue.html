@@ -53,10 +53,31 @@
   {% set countyValue = '' %}
 
 {% else %}
-  {% set addressValue1 = data.addressLineOne or patient.address.buildingNumber + " " + patient.address.streetName %}
-  {% set addressValue2 = data.addressLineTwo or patient.address.locality %}
-  {% set townValue = data.town or patient.address.postTown %}
-  {% set countyValue = data.county or patient.address.county %}
+
+{% if data.editMATEX.addressLineOne is defined %}
+  {% set addressValue1 = data.editMATEX.addressLineOne %}
+{% else %}
+  {% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
+{% endif %}
+
+{% if data.editMATEX.addressLineTwo is defined %}
+  {% set addressValue2 = data.editMATEX.addressLineTwo %}
+{% else %}
+  {% set addressValue2 = patient.address.locality %}
+{% endif %}
+
+{% if data.editMATEX.town is defined %}
+  {% set townValue = data.editMATEX.town %}
+{% else %}
+  {% set townValue = patient.address.postTown %}
+{% endif %}
+
+{% if data.editMATEX.county is defined %}
+  {% set countyValue = data.editMATEX.county %}
+{% else %}
+  {% set countyValue = patient.address.county %}
+{% endif %}
+
 
 {% endif %}
 
@@ -102,7 +123,7 @@
                   value: {
                     html: input ({
                       id: "address-line-1",
-                      name: "addressLineOne",
+                      name: "editMATEX.addressLineOne",
                       value: addressValue1,
                       disabled: isDigital
                     })
@@ -113,7 +134,7 @@
                   value: {
                     html: input ({
                       id: "address-line-2",
-                      name: "addressLineTwo",
+                      name: "editMATEX.addressLineTwo",
                       value: addressValue2,
                       disabled: isDigital
                     })
@@ -124,7 +145,7 @@
                   value: {
                     html: input ({
                       id: "town",
-                      name: "town",
+                      name: "editMATEX.town",
                       classes: "nhsuk-u-width-two-thirds",
                       value: townValue,
                       disabled: isDigital
@@ -136,7 +157,7 @@
                   value: {
                     html: input ({
                       id: "county",
-                      name: "county",
+                      name: "editMATEX.county",
                       classes: "nhsuk-u-width-two-thirds",
                       value: countyValue,
                       disabled: isDigital
@@ -151,9 +172,9 @@
                   {
                     html: input({
                       id: "postcode",
-                      name: "postcode",
+                      name: "editMATEX.postcode",
                       classes: "nhsuk-input--width-5",
-                      value: data.postcode or patient.address.postcode
+                      value: data.editMATEX.postcode or patient.address.postcode
                     })
                   }
                 },
@@ -166,7 +187,7 @@
                     html: button({
                       text: "Change address fields using address lookup",
                       classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-3",
-                      href: "address-lookup?returnTo=/v1/matex/edit-or-reissue"
+                      href: "address-lookup?source=editMATEX&returnTo=/v1/matex/edit-or-reissue"
                     })
                   }
                 },

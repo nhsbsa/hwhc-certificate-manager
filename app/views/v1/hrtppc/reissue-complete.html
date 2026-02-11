@@ -15,25 +15,30 @@
 
 {#{ patient | dump }#}
 
+
+{% if patient.channel === 'Digital' %}
+
+{% set panelHtml %}
+  We have sent the certificate to <strong>{{ patient.email or 'jane.doe@example.com' }}</strong>.
+{% endset %}
+
+{% else %}
+
+{% set panelHtml %}
+We have sent the certificate to:<br>
+<strong>
+  {{ patient.address.buildingNumber + " " + patient.address.streetName }}<br>
+  {{ patient.addressLineTwo }}<br>
+  {{ patient.town }}<br>
+  {{ patient.postcode }}
+</strong>
+{% endset %}
+
+{% endif %}
+
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
-      {% if patient.channel === 'Digital' %}
-      {% set panelHtml %}
-        We have sent the certificate to <strong>{{ patient.email or 'jane.doe@example.com' }}</strong>.
-      {% endset %}
-      {% else %}
-      {% set panelHtml %}
-      We have sent the certificate to:<br>
-      <strong>
-        {{ patient.address.buildingNumber + " " + patient.address.streetName }}<br>
-        {{ patient.addressLineTwo }}<br>
-        {{ patient.town }}<br>
-        {{ patient.postcode }}
-      </strong>
-      {% endset %}
-    
-      {% endif %}
 
 
       {{ panel({

@@ -300,13 +300,14 @@ router.get(/reset-search/,function( req, res ){
 //
 router.get(/address-lookup/, function (req, res) {
 
+  // Store return location and source journey
+  if (req.query.returnTo) {
+    req.session.returnTo = req.query.returnTo;
+  }
 
-// STORE RETURN URL FROM QUERY STRING (ONCE)
-if (!req.session.returnTo && req.query.returnTo) {
-  req.session.returnTo = req.query.returnTo;
-}
-
-console.log('RETURN TO:', req.session.returnTo);
+  if (req.query.source) {
+    req.session.lookupSource = req.query.source;
+  }
 
 
   // Prep the variables
@@ -439,12 +440,12 @@ console.log('RETURN TO:', req.session.returnTo);
 
 });
 
-router.get(/address-lookup-result/, function (req, res) {
-  res.render('v1/matex/address-lookup-result');
+  router.get(/address-lookup-result/, function (req, res) {
+    res.render('v1/matex/address-lookup-result');
 
-});
+  });
 
-router.post(/address-lookup-result/, function (req, res) {
+  router.post(/address-lookup-result/, function (req, res) {
 
   const selectedAddress = req.body.addressSearchResult;
 
@@ -453,14 +454,9 @@ router.post(/address-lookup-result/, function (req, res) {
     return res.redirect('address-lookup-result');
   }
 
-  // Split the address string
-  const parts = selectedAddress.split(',').map(p => p.trim());
 
-  // Last item is always postcode
-  req.session.data.postcode = parts.pop() || '';
-  
-  // Last remaining part is town
-  req.session.data.town = parts.pop() || '';
+  // Split the select address string
+  const parts = selectedAddress.split(',').map(p => p.trim());
   
   // Optional county — only assign if it matches a known county
   const knownCounties = [
@@ -472,28 +468,69 @@ router.post(/address-lookup-result/, function (req, res) {
     'Somerset', 'South Yorkshire', 'Staffordshire', 'Suffolk', 'Surrey', 'Tyne and Wear', 
     'Warwickshire', 'West Midlands', 'West Sussex', 'West Yorkshire', 'Wiltshire', 'Worcestershire'
   ];
+
+
   
+  // Build structured address
+  const newAddress = {
+    addressLineOne: '',
+    addressLineTwo: '',
+    town: '',
+    county: '',
+    postcode: ''
+  };
+
+  newAddress.postcode = parts.pop() || '';
+  newAddress.town = parts.pop() || '';
+
   const lastPart = parts[parts.length - 1];
   if (knownCounties.includes(lastPart)) {
-    req.session.data.county = parts.pop();
-  } else {
-    req.session.data.county = '';
+    newAddress.county = parts.pop();
   }
-  
-  // First part is address line 1
-  req.session.data.addressLineOne = parts.shift() || '';
-  
-  // Anything left in the middle goes into address line 2
-  req.session.data.addressLineTwo = parts.join(', ') || '';
-  
 
- const returnTo = req.session.returnTo;
- delete req.session.returnTo;
+  // Flat or apartment case
+  if (/^(flat|apartment)/i.test(parts[0]) && parts.length >= 2) {
+
+    const flatPart = parts.shift();           // "Apartment 1"
+    let buildingPart = parts.shift();         // "St. James House 3-6"
+
+    // Detect trailing number or number range in building part
+    const rangeMatch = buildingPart.match(/(.+)\s(\d+(-\d+)?)$/);
+
+    if (rangeMatch && parts.length >= 1) {
+      const buildingName = rangeMatch[1];     // "St. James House"
+      const buildingRange = rangeMatch[2];    // "3-6"
+      const streetPart = parts.shift();       // "Portland Terrace"
+
+      newAddress.addressLineOne = `${flatPart}, ${buildingName}`;
+      newAddress.addressLineTwo = `${buildingRange}, ${streetPart}`;
+    } else {
+      newAddress.addressLineOne = `${flatPart}, ${buildingPart}`;
+      newAddress.addressLineTwo = parts.join(', ') || '';
+    }
+
+  } else {
+    // Standard handling
+      if (parts.length > 0) {
+        newAddress.addressLineOne = parts.shift();        // first part
+        newAddress.addressLineTwo = parts.join(', ') || ''; // rest
+      }
+    }
+
+    const source = req.session.lookupSource;
+
+    if (source) {
+      req.session.data[source] = newAddress;
+    }
+  
+  
+    const returnTo = req.session.returnTo;
+    delete req.session.lookupSource;
+    delete req.session.returnTo;
+    
+    return res.redirect(returnTo);
+    
  
- return res.redirect(returnTo);
- 
-
-
 });
 
 

@@ -17,10 +17,30 @@
 
 {#{ patient | dump }#}
 
-{% set addressValue1 = data.addressLineOne if data.addressLineOne is defined and data.addressLineOne != "" else (patient.address.buildingNumber ~ " " ~ patient.address.streetName) %}
-{% set addressValue2 = data.addressLineTwo if data.addressLineTwo is defined and data.addressLineTwo != "" else patient.address.locality %}
-{% set townValue     = data.town if data.town is defined and data.town != "" else patient.address.postTown %}
-{% set countyValue   = data.county if data.county is defined and data.county != "" else patient.address.county %}
+{% if data.editHRT.addressLineOne is defined %}
+  {% set addressValue1 = data.editHRT.addressLineOne %}
+{% else %}
+  {% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
+{% endif %}
+
+{% if data.editHRT.addressLineTwo is defined %}
+  {% set addressValue2 = data.editHRT.addressLineTwo %}
+{% else %}
+  {% set addressValue2 = patient.address.locality %}
+{% endif %}
+
+{% if data.editHRT.town is defined %}
+  {% set townValue = data.editHRT.town %}
+{% else %}
+  {% set townValue = patient.address.postTown %}
+{% endif %}
+
+{% if data.editHRT.county is defined %}
+  {% set countyValue = data.editHRT.county %}
+{% else %}
+  {% set countyValue = patient.address.county %}
+{% endif %}
+
 
 
 {% if canEditCertificateStart %}
@@ -108,8 +128,8 @@
                   value:
                   { 
                     html: input ({
-                      id: "address-line-1",
-                      name: "addressLineOne",
+                      id: "edit-address-line-one",
+                      name: "editHRT.addressLineOne",
                       value: addressValue1
                     })
                   }
@@ -121,8 +141,8 @@
                   value:
                   { 
                     html: input ({
-                      id: "address-line-2",
-                      name: "addressLineTwo",
+                      id: "edit-hrt-address-line-two",
+                      name: "editHRT.addressLineTwo",
                       value: addressValue2
                     })
                   }
@@ -134,8 +154,8 @@
                   value:
                   { 
                     html: input ({
-                      id: "town",
-                      name: "town",
+                      id: "edit-hrt-town",
+                      name: "editHRT.town",
                       classes: "nhsuk-u-width-two-thirds",
                       value: townValue
                     })
@@ -145,8 +165,8 @@
                   key: { text: "County (optional)" },
                   value: {
                     html: input ({
-                      id: "county",
-                      name: "county",
+                      id: "edit-hrt-county",
+                      name: "editHRT.county",
                       classes: "nhsuk-u-width-two-thirds",
                       value: countyValue,
                       disabled: isDigital
@@ -160,10 +180,10 @@
                   value: 
                   {
                     html: input({
-                      id: "postcode",
-                      name: "postcode",
+                      id: "edit-hrt-postcode",
+                      name: "editHRT.postcode",
                       classes: "nhsuk-input--width-5",
-                      value: data.postcode or 'TR11 0TS'
+                      value: data.editHRT.postcode or patient.address.postcode
                     })
                   }
                 },
@@ -176,7 +196,7 @@
                     html: button({
                       text: "Change address fields using address lookup",
                       classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-3",
-                      href: "address-lookup?returnTo=/v1/hrtppc/edit-personal-details"
+                      href: "address-lookup?source=editHRT&returnTo=/v1/hrtppc/edit-or-reissue"
                     })
                   }
                 },
