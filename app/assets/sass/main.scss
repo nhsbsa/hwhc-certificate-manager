@@ -4,6 +4,10 @@
 
 // Add your custom CSS/Sass styles below.
 
+.hidden {
+  display: none;
+}
+
 *[id] {
   scroll-margin-top: 4rem;
 }
@@ -14,13 +18,17 @@
 }
 
 .patient-table .nhsuk-body-s {
-    font-weight: 400;
-    margin: 0;
+  font-weight: 400;
+  margin: 0;
 }
 
 .nhsuk-card--grey {
-    /*background-color: #d8dde0;*/
-    background-color: nhsuk-colour("grey-5");
+  /*background-color: #d8dde0;*/
+  background-color: nhsuk-colour("grey-5");
+}
+
+.nhsuk-card--grey .nhsuk-card__heading-container {
+  padding: 0;
 }
 
 .nhsuk-tag--dark-grey {
@@ -37,10 +45,10 @@
 }
 
 .nhsuk-inset-text--summary {
-    margin-top: 0;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    max-width: none;
+  margin-top: 0;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  max-width: none;
 }
 
 .nhsuk-tag.dashed {
@@ -86,7 +94,7 @@
 .expandable-image .expandable-image__inner img {
   display: block;
   width: auto;
-  border:  2rem solid nhsuk-colour("white");
+  border: 2rem solid nhsuk-colour("white");
 }
 
 .expandable-image[open] .expandable-image__inner {
@@ -104,7 +112,7 @@
 }
 
 .expandable-image .nhsuk-button:active {
-  top: calc( 1rem + 4px );
+  top: calc(1rem + 4px);
 }
 
 .expandable-image[open] .nhsuk-button {
@@ -127,7 +135,7 @@ body:has(.expandable-image[open]) {
   position: relative;
 }
 
-body:has(.expandable-image[open]) *:not(:has(.expandable-image[open])){
+body:has(.expandable-image[open]) *:not(:has(.expandable-image[open])) {
   display: none;
 }
 
@@ -137,7 +145,7 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
 }
 
 
-  /* TABLE SORTER STYLES */
+/* TABLE SORTER STYLES */
 
 [aria-sort] a,
 [aria-sort] a:hover {
@@ -179,7 +187,7 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   font-size: 0.5em;
 }
 
-[aria-sort] a + span {
+[aria-sort] a+span {
   display: block;
   margin: 0;
 }
@@ -227,7 +235,7 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   border-left: 0;
 }
 
- .confidence-level span + span {
+.confidence-level span+span {
   display: none;
 }
 
@@ -266,7 +274,7 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
 /* COMPARISON TABLE */
 
 .nhsuk-table.has-error .nhsuk-table__body .nhsuk-table__header {
-  padding-left: calc( 0.625rem + 4px );
+  padding-left: calc(0.625rem + 4px);
   position: relative;
 }
 
@@ -289,7 +297,25 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
 
 // HORIZONTAL LABELS
 
+.horizontal-labels .confidence-level .nhsuk-tag {
+  font-size: 0.875rem;
+}
+
+.horizontal-labels .nhsuk-fieldset:has(.nhsuk-date-input) .nhsuk-fieldset__legend {
+  font-weight: bold;
+}
+
+.nhsuk-grid-column-one-third+.nhsuk-grid-column-two-thirds {
+  margin-top: 1.25rem;
+}
+
 @include nhsuk-media-query($from: desktop) {
+
+  .nhsuk-grid-column-one-third,
+  .nhsuk-grid-column-two-thirds {
+    float: none;
+    width: 100%;
+  }
 
   .horizontal-labels .nhsuk-form-group {
     margin-bottom: 1rem;
@@ -301,13 +327,46 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     position: relative;
     top: 2rem;
   }
-  
+
   .horizontal-labels .nhsuk-form-group .nhsuk-label:not(.nhsuk-date-input__label) {
-    width: 300px;
+    width: 250px;
     float: left;
     font-weight: 600;
     line-height: 2rem;
   }
+
+
+  .horizontal-labels .nhsuk-input.nhsuk-input--width-20,
+  .horizontal-labels .nhsuk-date-input {
+    width: calc(100% - 250px);
+  }
+
+  .horizontal-labels .nhsuk-date-input {
+    width: calc(100% - 250px);
+    float: right;
+    position: relative;
+    top: -0.625rem;
+  }
+
+
+}
+
+
+
+@include nhsuk-media-query($from: large-desktop) {
+
+  .nhsuk-grid-column-one-third {
+    float: left;
+    width: calc(100%/3);
+  }
+
+ .nhsuk-grid-column-one-third + .nhsuk-grid-column-two-thirds {
+    margin-top: 0;
+    float: left;
+    width: calc((100%/3) * 2);
+  }
+
+
 
 }
 
@@ -316,41 +375,89 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
 /* STATS */
 
 @include nhsuk-media-query($from: desktop) {
-    .nhsuk-grid-column-one-quarter {
-        width: auto;
-    }
+  .nhsuk-grid-column-one-quarter {
+    width: auto;
+  }
 }
 
 
 
 /* PROCESSOR TABLE */
+
 @include nhsuk-media-query($from: tablet) {
   .quality-check .nhsuk-table__header {
-    width: calc( 100% / 7 );
+    width: calc(100% / 7);
   }
 }
 
-td:has(.nhsuk-icon) > span {
+td:has(.nhsuk-icon)>span {
   vertical-align: top;
   white-space: nowrap;
 }
 
-td .nhsuk-icon  {
-        position: relative;
-        top: 0.3rem;
-    }
+td .nhsuk-icon {
+  position: relative;
+  top: 0.3rem;
+}
 
 @include nhsuk-media-query($from: tablet) {
 
-    td:has(.nhsuk-icon) > span {
-      position: relative;
-      top: -0.625rem;
-    }
+  td:has(.nhsuk-icon)>span {
+    position: relative;
+    top: -0.625rem;
+  }
 
-    td .nhsuk-icon  {
-        position: relative;
-        top: 0.5rem;
-    }
+  td .nhsuk-icon {
+    position: relative;
+    top: 0.5rem;
+  }
 
-    
+
 }
+
+
+
+
+
+
+
+
+/* BREAKPOINTS */
+
+/*
+body::before {
+  padding: 0.625rem;
+  background-color: red;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block;
+  color: white;
+  content: 'mobile';
+  z-index: 999;
+}
+
+@include nhsuk-media-query($from: tablet) {
+
+  body::before {
+    content: 'tablet';
+  }
+
+}
+
+@include nhsuk-media-query($from: desktop) {
+
+  body::before {
+    content: 'desktop';
+  }
+
+}
+
+@include nhsuk-media-query($from: large-desktop) {
+
+  body::before {
+    content: 'large desktop';
+  }
+
+}
+  */

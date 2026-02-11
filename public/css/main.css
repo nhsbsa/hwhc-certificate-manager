@@ -12484,6 +12484,10 @@ b {
   overflow: hidden;
   text-overflow: ellipsis;
 } 
+.hidden {
+  display: none;
+}
+
 *[id] {
   scroll-margin-top: 4rem;
 }
@@ -12501,6 +12505,10 @@ b {
 .nhsuk-card--grey {
   /*background-color: #d8dde0;*/
   background-color: #f0f4f5;
+}
+
+.nhsuk-card--grey .nhsuk-card__heading-container {
+  padding: 0;
 }
 
 .nhsuk-tag--dark-grey {
@@ -12752,7 +12760,24 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   background-color: #d5281b;
 }
 
+.horizontal-labels .confidence-level .nhsuk-tag {
+  font-size: 0.875rem;
+}
+
+.horizontal-labels .nhsuk-fieldset:has(.nhsuk-date-input) .nhsuk-fieldset__legend {
+  font-weight: bold;
+}
+
+.nhsuk-grid-column-one-third + .nhsuk-grid-column-two-thirds {
+  margin-top: 1.25rem;
+}
+
 @media (min-width: 48.0625em) {
+  .nhsuk-grid-column-one-third,
+  .nhsuk-grid-column-two-thirds {
+    float: none;
+    width: 100%;
+  }
   .horizontal-labels .nhsuk-form-group {
     margin-bottom: 1rem;
   }
@@ -12763,10 +12788,31 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     top: 2rem;
   }
   .horizontal-labels .nhsuk-form-group .nhsuk-label:not(.nhsuk-date-input__label) {
-    width: 300px;
+    width: 250px;
     float: left;
     font-weight: 600;
     line-height: 2rem;
+  }
+  .horizontal-labels .nhsuk-input.nhsuk-input--width-20,
+  .horizontal-labels .nhsuk-date-input {
+    width: calc(100% - 250px);
+  }
+  .horizontal-labels .nhsuk-date-input {
+    width: calc(100% - 250px);
+    float: right;
+    position: relative;
+    top: -0.625rem;
+  }
+}
+@media (min-width: 61.875em) {
+  .nhsuk-grid-column-one-third {
+    float: left;
+    width: 33.3333333333%;
+  }
+  .nhsuk-grid-column-one-third + .nhsuk-grid-column-two-thirds {
+    margin-top: 0;
+    float: left;
+    width: 66.6666666667%;
   }
 }
 /* STATS */
@@ -12800,4 +12846,42 @@ td .nhsuk-icon {
     position: relative;
     top: 0.5rem;
   }
-}/*# sourceMappingURL=main.css.map */
+}
+/* BREAKPOINTS */
+/*
+body::before {
+  padding: 0.625rem;
+  background-color: red;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block;
+  color: white;
+  content: 'mobile';
+  z-index: 999;
+}
+
+@include nhsuk-media-query($from: tablet) {
+
+  body::before {
+    content: 'tablet';
+  }
+
+}
+
+@include nhsuk-media-query($from: desktop) {
+
+  body::before {
+    content: 'desktop';
+  }
+
+}
+
+@include nhsuk-media-query($from: large-desktop) {
+
+  body::before {
+    content: 'large desktop';
+  }
+
+}
+  *//*# sourceMappingURL=main.css.map */

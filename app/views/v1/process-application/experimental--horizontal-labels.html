@@ -46,20 +46,106 @@
             <div class="nhsuk-grid-column-two-thirds">
 
                <div class="nhsuk-card nhsuk-card--grey">
-        <div class="nhsuk-card__content">
 
-              <h2 class="nhsuk-heading-m">Details to correct</h2>
+                <!-- HEADER LOCK-UP -->
+                  <div class="nhsuk-card__content">
+
+                    <div class="nhsuk-card__heading-container">
+                      <h2 class="nhsuk-card__heading nhsuk-heading-m">Application details</h2>
+
+                      <div class="nhsuk-card__actions">
+                        {{ button({
+                          id: 'toggleButton',
+                          text: 'Show all fields',
+                          classes: 'nhsuk-button--small',
+                          attributes: { 'aria-pressed': 'false' }
+                        }) }}
+                      </div>
+
+                    </div>
+
+
+                  <!-- SCRIPTS -->
+                  <script>
+
+                    document.addEventListener('DOMContentLoaded', function(){
+
+                      const toggleButton = document.querySelector('#toggleButton');
+
+                      const highlightedFields = document.querySelectorAll('.horizontal-labels .nhsuk-label:not(.nhsuk-date-input__label):has(.confidence-level), .horizontal-labels .nhsuk-fieldset__legend:not(.nhsuk-u-visually-hidden):has(.confidence-level)');
+                      const allFields = document.querySelectorAll( '.horizontal-labels .nhsuk-label:not(.nhsuk-date-input__label), .horizontal-labels .nhsuk-fieldset__legend:not(.nhsuk-u-visually-hidden)' );
+                      const hrs = document.querySelectorAll('.horizontal-labels hr');
+
+
+                      const _showHighlightedFields = function(){
+
+                           allFields.forEach( function( field ){
+                               field.parentNode.classList.add('hidden');
+                             });
+ 
+                             highlightedFields.forEach( function( field ){
+                               field.parentNode.classList.remove('hidden');
+                             });
+ 
+                             hrs.forEach( function( hr ){
+                               hr.classList.add('hidden');
+                             } );
+
+                      };
+
+                       const _showAllFields = function(){
+
+                            allFields.forEach( function( field ){
+                              field.parentNode.classList.remove('hidden');
+                            });
+
+                            hrs.forEach( function( hr ){
+                              hr.classList.remove('hidden');
+                            } );
+
+                      };
+
+                      _showHighlightedFields();
+
+
+                      if( toggleButton ){
+
+                        toggleButton.addEventListener( 'click', function(e){ 
+
+                          if( toggleButton.getAttribute('aria-pressed') === 'false' ){
+                            
+                            // SHOWING ALL FIELDS
+                            toggleButton.setAttribute('aria-pressed', 'true' );
+                            toggleButton.textContent = 'Show highlighted fields';
+                            
+                            _showAllFields();
+
+                          } else {
+
+                            // SHOWING HIGHLIGHTED FIELDS
+                            toggleButton.setAttribute('aria-pressed', 'false' );
+                            toggleButton.textContent = 'Show all fields';
+
+                            _showHighlightedFields();
+
+                          }
+
+                          e.preventDefault();
+                          e.stopPropagation();
+
+                        });
+
+                      }
+
+                    });
+
+                  </script>
+
+
 
               <form class="horizontal-labels" method="post" novalidate>
 
-                
-
-                {{ button({
-                  id: 'fieldToggle',
-                  text: 'Show all fields',
-                  classes: 'nhsuk-button--small nhsuk-button--secondary',
-                  attributes: { aria-pressed: 'false' }
-                }) }}
+               
 
                 <!-- FULL NAME -->
                 {% call fieldset({
@@ -246,24 +332,24 @@
                   namePrefix: 'imageBabyDateOfBirth',
                   fieldset: {
                     legend: {
-                      html: "Baby's date of birth " + 92 | getConfidenceTag
+                      html: "Baby's date of birth " + 12 | getConfidenceTag
                     }
                   },
                   items: [
                     {
                       name: 'day',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageBabyDateOfBirth.day or '10'
+                      value: data.imageBabyDateOfBirth.day or ''
                     },
                     {
                       name: 'month',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageBabyDateOfBirth.month or '8'
+                      value: data.imageBabyDateOfBirth.month or ''
                     },
                     {
                       name: 'year',
                       classes: 'nhsuk-input--width-4',
-                      value: data.imageBabyDateOfBirth.year or '2026'
+                      value: data.imageBabyDateOfBirth.year or ''
                     }
                   ]
                 }) }}
