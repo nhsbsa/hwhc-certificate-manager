@@ -34,15 +34,39 @@
 
 {% if patient.channel === 'Paper' %}
 {% set channelHTML = 'Paper' ~ channelLinkHtml %}
-{% set fulfilment = data.fulfilment or patient.fulfilment or "post" %}
+{% set fulfilment = data.certificateFulfilment or patient.fulfilment or "post" %}
 {% set isDigital = false %}
 {% set emailHTML = '' %}
+{% set fulfilmentKey %} 
+Certificate fulfilment
+{% endset %}
+{% set fulfilmentValue %}
+{{  radios({
+    idPrefix: "example-inline",
+    name: "exampleInline",
+    classes: "nhsuk-radios--inline summary-list-radios",
+    items: [
+      { 
+        value: "email", 
+        text: "Email"
+      },
+      { 
+        value: "post", 
+        text: "Post",
+        checked: true
+      }
+    ]
+  }) }}
+{% endset %}
+
 
 {% else %}
   {% set channelHTML = 'Digital' %}
-  {% set fulfilment = data.fulfilment or patient.fulfilment or "email" %}
+  {% set fulfilment = data.certificateFulfilment or patient.fulfilment or "email" %}
   {% set isDigital = true %}
   {% set emailHTML = 'jane.smith@example.com' %}
+  {% set fulfilmentValue %} {% endset %}
+  {% set fulfilmentKey %} {% endset %}
 
 {% endif %}
 
@@ -290,48 +314,13 @@
                 },
                 {
                   key: { 
-                    text: "Certificate fulfilment" 
+                    text: fulfilmentKey | safe 
                   },
                   value: {
                     classes: "fulfilment-value",
-                    html: radios({
-                      idPrefix: "example-inline",
-                      name: "exampleInline",
-                      classes: "nhsuk-radios--inline summary-list-radios",
-                      items: [
-                        { 
-                          value: "email", 
-                          text: "Email",
-                          checked: fulfilment === "email"
-                        },
-                        { 
-                          value: "post", 
-                          text: "Post",
-                          checked: fulfilment === "post"
-                        }
-                      ]
-                    })
+                    html: fulfilmentValue | safe
                   }
-                },
-                {
-                  key: { 
-                    text: "Certificate start date" 
-                  },
-                  value: {
-                    html:
-                      '<fieldset disabled class="no-fieldset-border">' ~
-                      dateInput({
-                        id: "certificate-start-date",
-                        classes: "nhsuk-dates--inline summary-list-dates",
-                        items: [
-                          { name: "day", classes: "nhsuk-input--width-2", value: 25 },
-                          { name: "month", classes: "nhsuk-input--width-2", value: 11 },
-                          { name: "year", classes: "nhsuk-input--width-4", value: 2025 }
-                        ]
-                      }) ~
-                      '</fieldset>'
-                  }
-                },              
+                },        
                 {
                   key: { 
                     text: "Notes" 
@@ -388,12 +377,6 @@
   .nhsuk-summary-list__value .nhsuk-textarea {
     margin-top: 0.5rem;
   }
-
-  .no-fieldset-border {
-  border: 0;
-  padding: 0;
-  margin: 0;
-}
 
 
     /* --------------------------------------------------- */
