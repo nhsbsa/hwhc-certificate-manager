@@ -16,22 +16,29 @@
 {#{ patient | dump }#}
 
 
-{% if patient.channel === 'Digital' %}
+{% set addressValue1 = data.addressLineOne or patient.address.buildingNumber + " " + patient.address.streetName %}
+{% set addressValue2 = data.addressLineTwo or patient.address.locality %}
+{% set townValue = data.town or patient.address.postTown %}
+{% set countyValue = data.county or patient.address.county %}
+{% set postcodeValue = data.postcode or patient.address.postcode %}
 
-{% set panelHtml %}
-  We have sent the certificate to <strong>{{ patient.email or 'jane.doe@example.com' }}</strong>.
+{% if patient.channel === 'Digital' %}
+{% set sentAddressHtml %}
+  We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate (HRT PPC) to <strong>{{ patient.email or 'jane.doe@example.com' }}</strong>.
 {% endset %}
 
 {% else %}
 
-{% set panelHtml %}
-We have sent the certificate to:<br>
+{% set sentAddressHtml %}
+We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate (HRT PPC) to:<br>
 <strong>
-  {{ patient.address.buildingNumber + " " + patient.address.streetName }}<br>
-  {{ patient.addressLineTwo }}<br>
-  {{ patient.town }}<br>
-  {{ patient.postcode }}
-</strong>
+  {{ addressValue1 }} <br>
+  {{ addressValue2 }}<br>
+  {{ townValue }}<br>
+  {{ countyValue }}<br>
+  {{ postcodeValue }}
+</strong><br>
+<p>They will get a paper certificate in the post within 10 working days.</p>
 {% endset %}
 
 {% endif %}
@@ -43,49 +50,65 @@ We have sent the certificate to:<br>
 
       {{ panel({
         titleText: "Reissue complete",
-        html: panelHtml
+        text: "The customer will receive their certificate soon"
       }) }}
 
-      <h2 class="nhsuk-heading-m">HRT PPC details</h2>
+
+      <p>{{ sentAddressHtml | safe }}</p>
 
 
-      {{ summaryList({
-        classes: "nhsuk-summary-list--no-border",
-        rows: [
-          {
-            key: {
-              text: "Name"
-            },
-            value: {
-              text: "Jane Smith"
-            }
-          },
-          {
-            key: {
-              text: "Reference"
-            },
-            value: {
-              text: "HRT AF4A 488E"
-            }
-          },
-          {
-            key: {
-              text: "Start date"
-            },
-            value: {
-              text: "25 November 2025"
-            }
-          },
-          {
-            key: {
-              text: "Expiry date"
-            },
-            value: {
-              text: "24 November 2026"
-            }
-          }
-        ]
-      }) }}
+      <div class="nhsuk-card nhsuk-card--grey">
+        <div class="nhsuk-card__content">
+          <h2 class="nhsuk-heading-m">Customer's HRT PPC details</h2>
+
+
+          {{ summaryList({
+            rows: [
+              {
+                key: {
+                  text: "Name"
+                },
+                value: {
+                  text: patient.firstName + " " + patient.lastName or 'Jane Smith'
+                }
+              },
+              {
+                key: {
+                  text: "Reference"
+                },
+                value: {
+                  text: patient.certificateReference or 'HRT AF4A 488E'
+                }
+              },
+              {
+                key: {
+                  text: "Start date"
+                },
+                value: {
+                  text: "25 November 2025"
+                }
+              },
+              {
+                key: {
+                  text: "Expiry date"
+                },
+                value: {
+                  text: "24 November 2026"
+                }
+              },
+              {
+                classes: "nhsuk-summary-list__row--no-border",
+                key: {
+                  text: "Notes"
+                },
+                value: {
+                  text: "Customer wanted a new certificate sent after fulfilment change."
+                }
+              }
+            ]
+          }) }}
+        </div>
+      </div>
 
       {{ button({
         text: 'Search another certificate',

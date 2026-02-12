@@ -22,21 +22,22 @@
   {% set postcodeValue = data.postcode or patient.address.postcode %}
 
   {% if patient.channel === 'Digital' %}
-  {% set panelHtml %}
-    We have sent the certificate to <strong>{{ patient.email or 'jane.doe@example.com' }}</strong>.
+  {% set sentAddressHtml %}
+    We have sent the Maternity Exemption Certificate (MATEX) to <strong>{{ patient.email or 'jane.doe@example.com' }}</strong>.
   {% endset %}
 
   {% else %}
 
-  {% set panelHtml %}
-  We have sent the certificate to:<br>
+  {% set sentAddressHtml %}
+  We have sent the Maternity Exemption Certificate (MATEX) to:<br>
   <strong>
     {{ addressValue1 }} <br>
     {{ addressValue2 }}<br>
     {{ townValue }}<br>
     {{ countyValue }}<br>
     {{ postcodeValue }}
-  </strong>
+  </strong><br>
+  <p>They will get a paper certificate in the post within 10 working days.</p>
   {% endset %}
 
   {% endif %}
@@ -46,57 +47,60 @@
 
       {{ panel({
         titleText: "Reissue complete",
-        html: panelHtml
+        text: "The customer will receive their certificate soon"
       }) }}
 
-      <h2 class="nhsuk-heading-m">MATEX details</h2>
+      <p>{{ sentAddressHtml | safe }}</p>
+
+      <div class="nhsuk-card nhsuk-card--grey">
+        <div class="nhsuk-card__content">
+
+          <h2 class="nhsuk-heading-m">Customer's MATEX details</h2>
 
 
-      {{ summaryList({
-        classes: "nhsuk-summary-list--no-border",
-        rows: [
-          {
-            key: {
-              text: "Name"
-            },
-            value: {
-              text: "Jane Smith"
-            }
-          },
-          {
-            key: {
-              text: "Reference"
-            },
-            value: {
-              text: "123 4567 8901"
-            }
-          },
-          {
-            key: {
-              text: "Start date"
-            },
-            value: {
-              text: "25 November 2025"
-            }
-          },
-          {
-            key: {
-              text: "Expiry date"
-            },
-            value: {
-              text: "24 November 2026"
-            }
-          },
-          {
-            key: {
-              text: "Note"
-            },
-            value: {
-              text: "New certificate was requested after a lost/damaged one."
-            }
-          }
-        ]
-      }) }}
+          {{ summaryList({
+            rows: [
+              {
+                key: {
+                  text: "Name"
+                },
+                value: {
+                  text: patient.firstName + " " + patient.lastName or 'Jane Smith'
+                }
+              },
+              {
+                key: { text: "Reference" },
+                value: { text: patient.certificateReference or '56 913 186 386' }
+              },
+              {
+                key: {
+                  text: "Start date"
+                },
+                value: {
+                  text: "25 November 2025"
+                }
+              },
+              {
+                key: {
+                  text: "Expiry date"
+                },
+                value: {
+                  text: "24 November 2026"
+                }
+              },
+              {
+                classes: "nhsuk-summary-list__row--no-border",
+                key: {
+                  text: "Notes"
+                },
+                value: {
+                  text: "Customer wanted a new certificate sent after fulfilment change."
+                }
+              }
+            ]
+          }) }}
+        </div>
+      </div>
 
       {{ button({
         text: 'Search another certificate',
