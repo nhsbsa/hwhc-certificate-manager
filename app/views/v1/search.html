@@ -138,7 +138,7 @@
 
                   {% elif data.role === 'backOffice' %}
     
-                    {{ select({
+                    {#{ select({
                       label: {
                         text: 'Certificate type'
                       },
@@ -159,7 +159,7 @@
                           text: 'Maternity exemption'
                         }
                       ]
-                    }) }}
+                    }) }#}
 
                     <input type="hidden" name="searchCertificateType" value="matex" />
 

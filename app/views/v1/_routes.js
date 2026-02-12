@@ -41,6 +41,7 @@ router.post(/access-keys/, function (req, res) {
 
 router.post(/search/, function (req, res) {
     const destination = 'search-results';
+    req.session.data[res.locals.version].currentPage = 0;
     res.redirect( destination );
 });
 
@@ -281,17 +282,19 @@ router.get(/reset-search/,function( req, res ){
   
   const destination = 'search';
 
-  /*
   delete req.session.data.searchProcessor;
   delete req.session.data.searchCertificateType;
   delete req.session.data.searchCertificateReference;
   delete req.session.data.searchPostcode;
   delete req.session.data.searchFirstName;
   delete req.session.data.searchLastName;
-  */
+
+  delete req.session.data.searchStatus;
+  delete req.session.data.searchChecking;
+
+  req.session.data[res.locals.version].currentPage = 0;
 
   res.redirect( destination );
-
 
 });
 

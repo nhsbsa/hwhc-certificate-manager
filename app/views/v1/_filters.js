@@ -722,7 +722,7 @@ env.addFilter('getTableRows', function ( patientData, processorTable ) {
     summary.push( 'specific statuses' ); // Only used for role=backOffice
   }
   if( this.ctx.data.searchChecking ){
-    searchTerms.checking = ( this.ctx.data.searchStatus === 'true' || this.ctx.data.searchStatus === true ) ? true : false;
+    searchTerms.checking = ( this.ctx.data.searchChecking === 'true' || this.ctx.data.searchChecking === true ) ? true : false;
     summary.push( 'that are being checked' );
   }
 
