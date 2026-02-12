@@ -46,7 +46,7 @@
                <div class="nhsuk-card nhsuk-card--grey">
         <div class="nhsuk-card__content">
 
-              <h2 class="nhsuk-heading-m">Review patient details</h2>
+              <h2 class="nhsuk-heading-m">Review application</h2>
 
               <h3 class="nhsuk-heading-s">Personal details</h3>
 
@@ -137,6 +137,32 @@
                       actions: {
                         items: [
                           { href: 'other#imageBabyDateOfBirth', text: 'Change', visuallyHiddenText: "baby's date of birth" }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+
+                <h3 class="nhsuk-heading-s">Signatures</h3>
+
+                {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: 'Patient signature' },
+                      value: { text: 'Yes' },
+                      actions: {
+                        items: [
+                          { href: 'other#imagePatientSignature', text: 'Change', visuallyHiddenText: 'whether patient signature is present' }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Healthcare practitioner signature' },
+                      value: { text: 'Yes' },
+                      actions: {
+                        items: [
+                          { href: 'other#imageHealthcarePractitionerSignature', text: 'Change', visuallyHiddenText: 'whether healthcare practitioner signature is present' }
                         ]
                       }
                     }

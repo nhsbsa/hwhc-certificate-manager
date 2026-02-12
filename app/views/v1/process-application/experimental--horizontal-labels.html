@@ -355,6 +355,46 @@
                 }) }}
 
 
+                <hr />
+
+
+                <!-- SIGNATURES -->
+                {{ radios({
+                  idPrefix: 'imagePatientSignature',
+                  name: 'imagePatientSignature',
+                  value: data.imagePatientSignature,
+                  classes: 'nhsuk-radios--inline',
+                  fieldset: {
+                    legend: {
+                      text: 'Is the patient signature present?',
+                      isPageHeading: false
+                    }
+                  },
+                  items: [
+                    { value: 'yes', text: 'Yes' },
+                    { value: 'no', text: 'No' }
+                  ]
+                }) }}
+
+
+                 {{ radios({
+                  idPrefix: 'imageHealthcarePractitionerSignature',
+                  name: 'imageHealthcarePractitionerSignature',
+                  value: data.imageHealthcarePractitionerSignature,
+                  classes: 'nhsuk-radios--inline',
+                  fieldset: {
+                    legend: {
+                      text: 'Is the healthcare practitioner signature present?',
+                      isPageHeading: false
+                    }
+                  },
+                  items: [
+                    { value: 'yes', text: 'Yes' },
+                    { value: 'no', text: 'No' }
+                  ]
+                }) }}
+
+
 
 
                 <div class="nhsuk-button-group">

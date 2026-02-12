@@ -301,7 +301,8 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   font-size: 0.875rem;
 }
 
-.horizontal-labels .nhsuk-fieldset:has(.nhsuk-date-input) .nhsuk-fieldset__legend {
+.horizontal-labels .nhsuk-fieldset:has(.nhsuk-date-input) .nhsuk-fieldset__legend,
+.horizontal-labels .nhsuk-fieldset:has(.nhsuk-radios) .nhsuk-fieldset__legend {
   font-weight: bold;
 }
 
@@ -328,7 +329,12 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     top: 2rem;
   }
 
-  .horizontal-labels .nhsuk-form-group .nhsuk-label:not(.nhsuk-date-input__label) {
+  .horizontal-labels .nhsuk-fieldset:has(.nhsuk-radios) .nhsuk-fieldset__legend {
+    width: 250px;
+    float: left;
+  }
+
+  .horizontal-labels .nhsuk-form-group .nhsuk-label:not(.nhsuk-date-input__label):not(.nhsuk-radios__label) {
     width: 250px;
     float: left;
     font-weight: 600;
@@ -337,15 +343,19 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
 
 
   .horizontal-labels .nhsuk-input.nhsuk-input--width-20,
-  .horizontal-labels .nhsuk-date-input {
+  .horizontal-labels .nhsuk-date-input,
+  .horizontal-labels .nhsuk-radios {
     width: calc(100% - 250px);
   }
 
   .horizontal-labels .nhsuk-date-input {
-    width: calc(100% - 250px);
     float: right;
     position: relative;
     top: -0.625rem;
+  }
+
+  .horizontal-labels .nhsuk-radios {
+    float: right;
   }
 
 

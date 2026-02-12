@@ -19,15 +19,15 @@
     <div class="nhsuk-grid-column-full">
 
       <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }} 
-        
-        {% if data.patientID %}
-          {{ patient.status | getStatusTextOrTag( true ) | safe }} {% if patient.checking === true %}{{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
-        {% else %}
-          {{ 'accepted' | getStatusTextOrTag( true ) | safe }} {{ 'checking' | getStatusTextOrTag( true ) | safe }}
-        {% endif %}
+        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
 
-        </h1>
+      {% if data.patientID %}
+          {{ patient.status | getStatusTextOrTag( true ) | safe }}
+        {% else %}
+          {{ 'processing' | getStatusTextOrTag( true ) | safe }}
+        {% endif %}  
+        
+      </h1>
 
     </div>
   </div>
@@ -58,85 +58,51 @@
 
                         {{ table({
                             panel: false,
-                            caption: 'Application processing comparison',
+                            caption: 'Proposed values',
                             captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
-                            tableClasses: 'has-error',
                             firstCellIsHeader: true,
-                            head: [
-                                { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
-                                { text: 'Shown' },
-                                { text: 'Proposed value' },
-                                { text: 'Accepted value' }
-                            ],
                             rows: [
                                 [
                                     { text: 'First name' },
-                                    { html: 'Yes' },
-                                    { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
-                                    { text: patient.firstName or 'Sarah' }
+                                    { text: ( patient.firstName | changeOneLetter ) or 'Sorah' }
                                 ],
                                 [
-                                    { text: 'Last name', classes: 'error' },
-                                    { html: 'Yes' },
-                                    { text: '' },
-                                    { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' }
+                                    { text: 'Last name' },
+                                    { text: '' }
                                 ],
                                 [
                                     { text: 'Date of birth' },
-                                    { html: 'No' },
-                                    { text: '2 July 1995' },
                                     { text: '2 July 1995' }
-                                  ],
+                                ],
                                 [
                                     { text: 'NHS number' },
-                                    { html: 'No' },
-                                    { text: '1252 567 987' },
                                     { text: '1252 567 987' }
                                 ],
                                 [
                                     { text: 'Address' },
-                                    { html: 'No' },
-                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
                                 ],
                                 [
                                     { text: 'Phone number' },
-                                    { html: 'No' },
-                                    { html: '07911 123456' },
                                     { html: '07911 123456' }
                                 ],
                                 [
                                     { text: 'Email address' },
-                                    { html: 'Empty' },
-                                    { html: '' },
                                     { html: '' }
                                 ],
                                 [
                                     { text: "Baby's birth date" },
-                                    { html: 'No' },
-                                    { html: '10 January 2026' },
                                     { html: '10 January 2026' }
                                 ],
                                 [
                                     { text: 'Patient signature' },
-                                    { html: 'No' },
-                                    { html: 'Yes' },
                                     { html: 'Yes' }
                                 ],
                                 [
                                     { text: 'Healthcare practitioner signature' },
-                                    { html: 'No' },
-                                    { html: 'Yes' },
                                     { html: 'Yes' }
                                 ]
                             ]
-                            }) }}
-
-
-                            <h2 class="nhsuk-heading-m">Feedback</h2>
-
-                            {{ insetText({
-                              html: '<p>The last name is incorrect...</p>'
                             }) }}
 
                     </div>

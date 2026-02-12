@@ -623,10 +623,14 @@ env.addFilter( 'alterTodaysDateByNumberOfDays', function( daysOffset ){
 //
 env.addFilter( 'changeOneLetter', function( toChange ){
 
-  const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
-  const newLetter = letters[Math.round(Math.random()*(letters.length-1))];
-  const num = Math.round(Math.random()*(toChange.length-2))+1;
-  const newString = toChange.substring(0, num) + newLetter + toChange.substring(num + 1);
+  let newString = toChange;
+
+  if( toChange ){
+    const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
+    const newLetter = letters[Math.round(Math.random()*(letters.length-1))];
+    const num = Math.round(Math.random()*(toChange.length-2))+1;
+    newString = toChange.substring(0, num) + newLetter + toChange.substring(num + 1);
+  }
 
   return newString;
 
