@@ -20,13 +20,7 @@
 
       <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
         {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
-
-      {% if data.patientID %}
-          {{ patient.status | getStatusTextOrTag( true ) | safe }}
-        {% else %}
-          {{ 'processing' | getStatusTextOrTag( true ) | safe }}
-        {% endif %}  
-        
+        {{ 'processing' | getStatusTextOrTag( true ) | safe }}
       </h1>
 
     </div>
