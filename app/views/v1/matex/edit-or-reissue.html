@@ -42,8 +42,8 @@ Certificate fulfilment
 {% endset %}
 {% set fulfilmentValue %}
 {{  radios({
-    idPrefix: "example-inline",
-    name: "exampleInline",
+    idPrefix: "certificate-fulfilment",
+    name: "certificateFulfilment",
     classes: "nhsuk-radios--inline summary-list-radios",
     items: [
       { 
@@ -64,7 +64,7 @@ Certificate fulfilment
   {% set channelHTML = 'Digital' %}
   {% set fulfilment = data.certificateFulfilment or patient.fulfilment or "email" %}
   {% set isDigital = true %}
-  {% set emailHTML = 'jane.smith@example.com' %}
+  {% set emailHTML = data.email or patient.email or 'jane.smith@example.com' %}
   {% set fulfilmentValue %} {% endset %}
   {% set fulfilmentKey %} {% endset %}
 
@@ -308,7 +308,7 @@ Certificate fulfilment
                       id: "nhs-number",
                       name: "nhs-number",
                       classes: "nhsuk-input--width-10",
-                      value: "1234567890"
+                      value: patient.nhsNumber or "1234567890"
                     })
                   }
                 },

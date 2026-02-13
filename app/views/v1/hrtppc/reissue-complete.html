@@ -16,11 +16,11 @@
 {#{ patient | dump }#}
 
 
-{% set addressValue1 = data.addressLineOne or patient.address.buildingNumber + " " + patient.address.streetName %}
-{% set addressValue2 = data.addressLineTwo or patient.address.locality %}
-{% set townValue = data.town or patient.address.postTown %}
-{% set countyValue = data.county or patient.address.county %}
-{% set postcodeValue = data.postcode or patient.address.postcode %}
+{% set addressValue1 = data.editHRT.addressLineOne or patient.address.buildingNumber + " " + patient.address.streetName %}
+{% set addressValue2 = data.editHRT.addressLineTwo or patient.address.locality %}
+{% set townValue = data.editHRT.town or patient.address.postTown %}
+{% set countyValue = data.editHRT.county or patient.address.county %}
+{% set postcodeValue = data.editHRT.postcode or patient.address.postcode %}
 
 {% if patient.channel === 'Digital' %}
 {% set sentAddressHtml %}
@@ -35,7 +35,9 @@ We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate 
   {{ addressValue1 }} <br>
   {{ addressValue2 }}<br>
   {{ townValue }}<br>
+  {% if countyValue and countyValue | trim %}
   {{ countyValue }}<br>
+  {% endif %}
   {{ postcodeValue }}
 </strong><br>
 <p>They will get a paper certificate in the post within 10 working days.</p>
@@ -102,7 +104,7 @@ We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate 
                   text: "Notes"
                 },
                 value: {
-                  text: "Customer wanted a new certificate sent after fulfilment change."
+                  text: ""
                 }
               }
             ]

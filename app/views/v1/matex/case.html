@@ -32,8 +32,6 @@
   </div>
 
 
-
-
   {% set channelLinkHtml %}
   <br>
   <a class="nhsuk-link nhsuk-link--no-visited-state"
@@ -42,22 +40,50 @@
   </a>
   {% endset %}
 
+
+  {% if data.editMATEX.addressLineOne is defined %}
+  {% set addressValue1 = data.editMATEX.addressLineOne %}
+  {% else %}
+    {% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
+  {% endif %}
+
+  {% if data.editMATEX.addressLineTwo is defined %}
+    {% set addressValue2 = data.editMATEX.addressLineTwo %}
+  {% else %}
+    {% set addressValue2 = patient.address.locality %}
+  {% endif %}
+
+  {% if data.editMATEX.town is defined %}
+    {% set townValue = data.editMATEX.town %}
+  {% else %}
+    {% set townValue = patient.address.postTown %}
+  {% endif %}
+
+  {% if data.editMATEX.county is defined %}
+    {% set countyValue = data.editMATEX.county %}
+  {% else %}
+    {% set countyValue = patient.address.county %}
+  {% endif %}
+
+
   {% if patient.channel === 'Paper' %}
   {% set channelHTML = 'Paper' ~ channelLinkHtml %}
   {% set fulfilment = data.fulfilment or patient.fulfilment or "Post" %}
   {% set address = 
-    patient.address.buildingNumber + " " + patient.address.streetName + "<br>" +
-    patient.address.locality + "<br>" +
-    patient.address.postTown + "<br>" +
-    patient.address.county 
+    addressValue1 + "<br>" +
+    addressValue2 + "<br>" +
+    townValue + "<br>" +
+    countyValue 
     or '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS'
   %}
-
+  {% set emailHTML = '' %}
 
   {% else %}
+
     {% set channelHTML = 'Digital' %}
     {% set fulfilment = data.fulfilment or patient.fulfilment or "Email" %}
     {% set address = '' %}
+    {% set emailHTML = data.email or patient.email or 'jane.smith@example.com' %}
 
   {% endif %}
 
@@ -153,7 +179,7 @@
                 text: "Postcode"
               },
               value: {
-                text: patient.address.postcode or "TR1 10TS"
+                text: data.editMATEX.postcode or patient.address.postcode or "TR1 10TS"
               }
             },
             {
@@ -185,7 +211,7 @@
                 text: "Email address"
               },
               value: {
-                html: "jane.smith@example.com"
+                html: emailHTML
               }
             },
             {
@@ -326,7 +352,7 @@
             {
               headingText: 'Accepted',
               html: '
-                <p class="nhsuk-u-margin-bottom-1">Application processed by [NameOfProcessor] for processing overnight</p>
+                <p class="nhsuk-u-margin-bottom-1">Application processed by [NameOfProcessor] for production overnight</p>
                 <p class="nhsuk-body-s nhsuk-u-margin-top-2">2 December 2025 9:00am</p>
               '
             },
@@ -473,7 +499,7 @@
             {
               headingText: 'Accepted',
               html: '
-                <p class="nhsuk-u-margin-bottom-1">Application processed by [NameOfProcessor] for processing overnight</p>
+                <p class="nhsuk-u-margin-bottom-1">Application processed by [NameOfProcessor] for production overnight</p>
                 <p class="nhsuk-body-s nhsuk-u-margin-top-2">2 December 2025 9:00am</p>
               '
             },
@@ -575,24 +601,46 @@
       </div>  
     </div>
 
-
-    {{ button({
-      text: 'Edit or reissue',
-      href: "edit-or-reissue"
-    }) }}
-
-    {{ button({
-      classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
-      text: 'Add note',
-      href: "add-note"
-    }) }}
-
-    {{ button({
-      classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
-      text: 'Cancel',
-      href: "../search"
-    }) }}
-
+    
+    {% if patient.status == 'expired' or patient.status == 'deleted' %}
+      {{ button({
+        classes: "nhsuk-button--secondary",
+        text: "Add note",
+        href: "add-note"
+      }) }}
+      {{ button({
+        classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+        text: "Cancel",
+        href: "../search"
+      }) }}
+    {% elif patient.status == 'active' %}
+      {{ button({
+        text: "Edit or reissue",
+        href: "edit-or-reissue"
+      }) }}
+      {{ button({
+        classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+        text: "Add note",
+        href: "add-note"
+      }) }}
+      {{ button({
+        classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+        text: "Cancel",
+        href: "../search"
+      }) }}
+    {% else %}
+    
+      {{ button({
+        classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+        text: "Add note",
+        href: "add-note"
+      }) }}
+      {{ button({
+        classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+        text: "Cancel",
+        href: "../search"
+      }) }}
+    {% endif %}
 
     <style>
 

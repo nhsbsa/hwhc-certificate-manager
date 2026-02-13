@@ -24,6 +24,41 @@
     </div>
   </div>
 
+  {% if data.editHRT.addressLineOne is defined %}
+  {% set addressValue1 = data.editHRT.addressLineOne %}
+  {% else %}
+    {% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
+  {% endif %}
+
+  {% if data.editHRT.addressLineTwo is defined %}
+    {% set addressValue2 = data.editHRT.addressLineTwo %}
+  {% else %}
+    {% set addressValue2 = patient.address.locality %}
+  {% endif %}
+
+  {% if data.editHRT.town is defined %}
+    {% set townValue = data.editHRT.town %}
+  {% else %}
+    {% set townValue = patient.address.postTown %}
+  {% endif %}
+
+  {% if data.editHRT.county is defined %}
+    {% set countyValue = data.editHRT.county %}
+  {% else %}
+    {% set countyValue = patient.address.county %}
+  {% endif %}
+
+  {% set addressHTML %}
+    {{ addressValue1 }} <br>
+    {{ addressValue2 }}<br>
+    {{ townValue }}<br>
+    {% if countyValue and countyValue | trim %}
+    {{ countyValue }}<br>
+    {% endif %}
+    {{ postcodeValue }}
+  {% endset %}
+
+
   <div class="nhsuk-grid-row">
 
     <div class="nhsuk-grid-column-one-third">
@@ -130,13 +165,7 @@
                 text: "Address"
               },
               value: {
-                html:
-                  patient.address.buildingNumber + " " + patient.address.streetName + "<br>" +
-                  patient.address.locality + "<br>" +
-                  patient.address.postTown + "<br>" +
-                  patient.address.county + "<br>" +
-                  patient.address.postcode
-                  or '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS'
+                html: addressHTML or '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS'
               }
               
             },
@@ -383,22 +412,45 @@
 
 </div>
 
-  {{ button({
-    text: 'Edit or reissue',
-    href: "edit-or-reissue"
-  }) }}
+    {% if patient.status == 'expired' or patient.status == 'deleted' %}
+    {{ button({
+      classes: "nhsuk-button--secondary",
+      text: "Add note",
+      href: "add-note"
+    }) }}
+    {{ button({
+      classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+      text: "Cancel",
+      href: "../search"
+    }) }}
+    {% elif patient.status == 'active' %}
+    {{ button({
+      text: "Edit or reissue",
+      href: "edit-or-reissue"
+    }) }}
+    {{ button({
+      classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+      text: "Add note",
+      href: "add-note"
+    }) }}
+    {{ button({
+      classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+      text: "Cancel",
+      href: "../search"
+    }) }}
+    {% else %}
 
-  {{ button({
-    classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
-    text: 'Add note',
-    href: "add-note"
-  }) }}
-
-  {{ button({
-    classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
-    text: 'Cancel',
-    href: "../search"
-  }) }}
+    {{ button({
+      classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+      text: "Add note",
+      href: "add-note"
+    }) }}
+    {{ button({
+      classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+      text: "Cancel",
+      href: "../search"
+    }) }}
+    {% endif %}
 
 
     <!-- Summary list card styling -->
