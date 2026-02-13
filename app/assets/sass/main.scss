@@ -71,6 +71,14 @@
   padding-bottom: 100%;
 }
 
+.expandable-image.expandable-image--small {
+  padding-bottom: 50%;
+}
+
+.expandable-image + .nhsuk-card {
+  margin-top: 1.25rem;
+}
+
 .expandable-image[open] {
   position: fixed;
   top: 0;
