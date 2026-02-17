@@ -42,6 +42,13 @@
 {% endif %}
 
 
+{% set fulfilment = data.editHRT.certificateFulfilment or patient.fulfilment or "email" %}
+
+{% if fulfilment == "email" %}
+  {% set isEmail = true %}
+{% else %}
+  {% set isPost = true %}
+{% endif %}
 
 {% if canEditCertificateStart %}
 
@@ -86,6 +93,8 @@
     <div class="nhsuk-card nhsuk-card--grey">
       <div class="nhsuk-card__content">
 
+        <form action="edit-hrt" method="post">
+
           {{ summaryList({
             heading: "Personal details",
             headingLevel: "2",
@@ -100,8 +109,8 @@
                   { 
                     html: input ({
                       id: "first-name",
-                      name: "firstName",
-                      value: patient.firstName or 'Jane'
+                      name: "editHRT.firstName",
+                      value: data.editHRT.firstName or patient.firstName or 'Jane'
                     })
                   }
                 },
@@ -113,8 +122,8 @@
                   { 
                     html: input ({
                       id: "last-name",
-                      name: "lastName",
-                      value: patient.lastName or 'Smith'
+                      name: "editHRT.lastName",
+                      value: data.editHRT.lastName or patient.lastName or 'Smith'
                     })
                   }
                 },
@@ -165,8 +174,7 @@
                       id: "edit-hrt-county",
                       name: "editHRT.county",
                       classes: "nhsuk-u-width-two-thirds",
-                      value: countyValue,
-                      disabled: isDigital
+                      value: countyValue
                     })
                   }
                 },           
@@ -233,8 +241,8 @@
                   { 
                     html: input ({
                       id: "email",
-                      name: "email",
-                      value: "jane.smith@example.com"
+                      name: "editHRT.email",
+                      value: data.editHRT.email or patient.email or "jane.smith@example.com"
                     })
                   }
                 },
@@ -246,9 +254,9 @@
                   { 
                     html: input ({
                       id: "nhs-number",
-                      name: "nhs-number",
+                      name: "editHRT.nhsNumber",
                       classes: "nhsuk-u-width-one-third",
-                      value: "1234567890"
+                      value: data.editHRT.nhsNumber or patient.nhsNumber
                     })
                   }
                 },
@@ -259,18 +267,19 @@
                   value: {
                     classes: "fulfilment-value",
                     html: radios({
-                      idPrefix: "example-inline",
-                      name: "exampleInline",
+                      idPrefix: "certificate-fulfilment",
+                      name: "editHRT.certificateFulfilment",
                       classes: "nhsuk-radios--inline summary-list-radios",
                       items: [
                         { 
                           value: "email", 
                           text: "Email",
-                          checked: true
+                          checked: isEmail
                         },
                         { 
                           value: "post", 
-                          text: "Post"
+                          text: "Post",
+                          checked: isPost
                         }
                       ]
                     })
@@ -299,14 +308,18 @@
 
             {{ button
               ({ 
-                text: 'Reissue',
-                href: "reissue-complete"
+                text: "Reissue",
+                type: "submit",
+                name: "action",
+                value: "reissue"
               })
             }}
             {{ button
               ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
-                text: 'Save changes',
-                href: "case"
+              text: "Save changes",
+              type: "submit",
+              name: "save",
+              value: "1"
               }) 
             }}
             {{ button
@@ -315,6 +328,8 @@
                 href: "../search"
               }) 
             }}
+
+        </form>
 
       </div>
     </div>

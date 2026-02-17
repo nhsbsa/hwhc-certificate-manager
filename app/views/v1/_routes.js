@@ -445,12 +445,12 @@ router.get(/address-lookup/, function (req, res) {
 
 });
 
-  router.get(/address-lookup-result/, function (req, res) {
+router.get(/address-lookup-result/, function (req, res) {
     res.render('v1/matex/address-lookup-result');
 
-  });
+});
 
-  router.post(/address-lookup-result/, function (req, res) {
+router.post(/address-lookup-result/, function (req, res) {
 
   const selectedAddress = req.body.addressSearchResult;
 
@@ -538,5 +538,93 @@ router.get(/address-lookup/, function (req, res) {
  
 });
 
+// Pass edit inputs to case screen
+router.post(/edit-matex/, function (req, res) {
+  const data = req.session.data || {};
+  data.editMATEX = data.editMATEX || {}; 
+
+  if ('editMATEX.firstName' in req.body)
+    data.editMATEX.firstName = req.body['editMATEX.firstName'];
+
+  if ('editMATEX.lastName' in req.body)
+    data.editMATEX.lastName = req.body['editMATEX.lastName'];
+
+  if ('editMATEX.email' in req.body)
+    data.editMATEX.email = req.body['editMATEX.email'];
+
+  if ('editMATEX.certificateFulfilment' in req.body)
+    data.editMATEX.certificateFulfilment = req.body['editMATEX.certificateFulfilment'];
+
+  if ('editMATEX.addressLineOne' in req.body)
+    data.editMATEX.addressLineOne = req.body['editMATEX.addressLineOne'];
+
+  if ('editMATEX.addressLineTwo' in req.body)
+    data.editMATEX.addressLineTwo = req.body['editMATEX.addressLineTwo'];
+
+  if ('editMATEX.town' in req.body)
+    data.editMATEX.town = req.body['editMATEX.town'];
+
+  if ('editMATEX.county' in req.body)
+    data.editMATEX.county = req.body['editMATEX.county'];
+
+  if ('editMATEX.postcode' in req.body)
+    data.editMATEX.postcode = req.body['editMATEX.postcode'];
+
+  if ('editMATEX.telephoneNumber' in req.body)
+    data.editMATEX.telephoneNumber = req.body['editMATEX.telephoneNumber'];
+
+  req.session.data = data;
+
+  if (req.body.action === 'reissue') {
+    return res.redirect('/v1/matex/reissue-complete');
+  }
+  return res.redirect('/v1/matex/case');
+});
+
+
+router.post(/edit-hrt/, function (req, res) {
+  const data = req.session.data || {};
+  data.editHRT = data.editHRT || {}; 
+
+  if ('editHRT.firstName' in req.body)
+    data.editHRT.firstName = req.body['editHRT.firstName'];
+
+  if ('editHRT.lastName' in req.body)
+    data.editHRT.lastName = req.body['editHRT.lastName'];
+
+  if ('editHRT.email' in req.body)
+    data.editHRT.email = req.body['editHRT.email'];
+
+  if ('editHRT.certificateFulfilment' in req.body)
+    data.editHRT.certificateFulfilment = req.body['editHRT.certificateFulfilment'];
+
+  if ('editHRT.addressLineOne' in req.body)
+    data.editHRT.addressLineOne = req.body['editHRT.addressLineOne'];
+
+  if ('editHRT.addressLineTwo' in req.body)
+    data.editHRT.addressLineTwo = req.body['editHRT.addressLineTwo'];
+
+  if ('editHRT.town' in req.body)
+    data.editHRT.town = req.body['editHRT.town'];
+
+  if ('editHRT.county' in req.body)
+    data.editHRT.county = req.body['editHRT.county'];
+
+  if ('editHRT.postcode' in req.body)
+    data.editHRT.postcode = req.body['editHRT.postcode'];
+
+  if ('editHRT.telephoneNumber' in req.body)
+    data.editHRT.telephoneNumber = req.body['editHRT.telephoneNumber'];
+
+  req.session.data = data;
+
+  // if reissue button is clicked
+  if (req.body.action === 'reissue') {
+    return res.redirect ('/v1/hrtppc/reissue-complete')
+  }
+
+  // if save details is clicked
+  return res.redirect('/v1/hrtppc/case');
+});
 
 module.exports = router;

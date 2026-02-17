@@ -15,11 +15,12 @@
 
   {#{ patient | dump }#}
 
-  {% set addressValue1 = data.editMATEX.addressLineOne or patient.address.buildingNumber + " " + patient.address.streetName %}
-  {% set addressValue2 = data.editMATEX.addressLineTwo or patient.address.locality %}
-  {% set townValue = data.editMATEX.town or patient.address.postTown %}
-  {% set countyValue = data.editMATEX.county or patient.address.county %}
-  {% set postcodeValue = data.editMATEX.postcode or patient.address.postcode %}
+  {% if data.editMATEX.firstName is defined and data.editMATEX.lastName is defined %}
+  {% set fullName = (data.editMATEX.firstName ~ " " ~ data.editMATEX.lastName) | trim %}
+  {% else %}
+    {% set fullName = ((patient.firstName ~ " " ~ patient.lastName) | trim) | default('Jane Smith', true) %}
+  {% endif %}
+
 
   {% if data.editMATEX.addressLineOne is defined %}
   {% set addressValue1 = data.editMATEX.addressLineOne %}
@@ -45,9 +46,11 @@
     {% set countyValue = patient.address.county %}
   {% endif %}
 
-  {% if patient.channel === 'Digital' %}
+  {% set fulfilment = data.editMATEX.certificateFulfilment or patient.fulfilment or "Email" %}
+
+  {% if fulfilment == 'email' %}
   {% set sentAddressHtml %}
-    We have sent the Maternity Exemption Certificate (MATEX) to <strong>{{ patient.email or 'jane.doe@example.com' }}</strong>.
+    We have sent the Maternity Exemption Certificate (MATEX) to <strong>{{ data.editMATEX.email or patient.email or 'jane.doe@example.com' }}</strong>.
   {% endset %}
 
   {% else %}
@@ -62,7 +65,7 @@
     {{ countyValue }}<br>
     {% endif %}
     {{ postcodeValue }}
-  </strong><br>
+  </strong>
   <p>They will get a paper certificate in the post within 10 working days.</p>
   {% endset %}
 
@@ -91,7 +94,7 @@
                   text: "Name"
                 },
                 value: {
-                  text: patient.firstName + " " + patient.lastName or 'Jane Smith'
+                  text: fullName
                 }
               },
               {

@@ -17,12 +17,19 @@
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or 'HRT R33P ITIX' }} - {{ patient.lastName or 'Smith' }}, {{ patient.firstName or 'Jane' }} 
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or 'HRT R33P ITIX' }} - {{ data.editHRT.lastName or patient.lastName or 'Smith' }}, {{ data.editHRT.firstName or patient.firstName or 'Jane' }} 
         {{ ( patient.certificateType or 'hrtppc' ) | getCertificateTypeTextOrTag( true ) | safe }}
         {{ ( patient.status or 'active' ) | getStatusTextOrTag( true ) | safe }}
       </h1>
     </div>
   </div>
+
+  {% set firstName = data.editHRT.firstName or patient.firstName or 'Jane' %}
+  {% set lastName  = data.editHRT.lastName  or patient.lastName  or 'Smith' %}
+
+  {% set fulfilment = (data.editHRT.certificateFulfilment or patient.fulfilment or "post") %}
+
+  {% set emailHTML = data.editHRT.email or patient.email %}
 
   {% if data.editHRT.addressLineOne is defined %}
   {% set addressValue1 = data.editHRT.addressLineOne %}
@@ -46,6 +53,12 @@
     {% set countyValue = data.editHRT.county %}
   {% else %}
     {% set countyValue = patient.address.county %}
+  {% endif %}
+
+  {% if data.editHRT.postcode is defined %}
+  {% set postcodeValue = data.editHRT.postcode %}
+  {% else %}
+    {% set postcodeValue = patient.address.postcode %}
   {% endif %}
 
   {% set addressHTML %}
@@ -107,7 +120,7 @@
                 text: "Fulfilment" 
               },
               value: { 
-                text: patient.certificateFulfilment or "email" | getCertificateFulfilmentText 
+                text: fulfilment | capitalize
               }
             },
             {
@@ -154,11 +167,11 @@
           rows: [
           {
             key: { text: 'First name' },
-            value: { text: patient.firstName or 'Jane' }
+            value: { text: firstName }
           },
             {
               key: { text: 'Last name' },
-              value: { text: patient.lastName or 'Smith' }
+              value: { text: lastName}
             },
             {
               key: {
@@ -183,7 +196,7 @@
                 text: "Email address"
               },
               value: {
-                html: "jane.smith@example.com"
+                html: emailHTML
               }
             },
             {
@@ -192,7 +205,7 @@
                 text: "NHS number"
               },
               value: {
-                html: "1234567890"
+                html: data.editHRT.nhsNumber or patient.nhsNumber or "123 456 7890"
               }
             }
           ]

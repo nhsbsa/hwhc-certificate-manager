@@ -34,7 +34,7 @@
 
 {% if patient.channel === 'Paper' %}
 {% set channelHTML = 'Paper' ~ channelLinkHtml %}
-{% set fulfilment = data.certificateFulfilment or patient.fulfilment or "post" %}
+{% set fulfilment = data.editMATEX.certificateFulfilment or patient.fulfilment or "post" %}
 {% set isDigital = false %}
 {% set emailHTML = '' %}
 {% set fulfilmentKey %} 
@@ -43,7 +43,7 @@ Certificate fulfilment
 {% set fulfilmentValue %}
 {{  radios({
     idPrefix: "certificate-fulfilment",
-    name: "certificateFulfilment",
+    name: "editMATEX.certificateFulfilment",
     classes: "nhsuk-radios--inline summary-list-radios",
     items: [
       { 
@@ -62,9 +62,9 @@ Certificate fulfilment
 
 {% else %}
   {% set channelHTML = 'Digital' %}
-  {% set fulfilment = data.certificateFulfilment or patient.fulfilment or "email" %}
+  {% set fulfilment = data.editMATEX.certificateFulfilment or patient.fulfilment or "email" %}
   {% set isDigital = true %}
-  {% set emailHTML = data.email or patient.email or 'jane.smith@example.com' %}
+  {% set emailHTML = data.editMATEX.email or patient.email or 'jane.smith@example.com' %}
   {% set fulfilmentValue %} {% endset %}
   {% set fulfilmentKey %} {% endset %}
 
@@ -113,6 +113,8 @@ Certificate fulfilment
     <div class="nhsuk-card nhsuk-card--grey">
       <div class="nhsuk-card__content">
 
+        <form action="edit-matex" method="post">
+
           {{ summaryList({
               classes: "nhsuk-summary-list--no-border",
               rows: [
@@ -124,8 +126,8 @@ Certificate fulfilment
                 { 
                   html: input ({
                     id: "first-name",
-                    name: "firstName",
-                    value: patient.firstName or 'Jane'
+                    name: "editMATEX.firstName",
+                    value: data.editMATEX.firstName or patient.firstName or 'Jane'
                   })
                 }
               },
@@ -137,8 +139,8 @@ Certificate fulfilment
                   { 
                     html: input ({
                       id: "last-name",
-                      name: "lastName",
-                      value: patient.lastName or 'Smith'
+                      name: "editMATEX.lastName",
+                      value: data.editMATEX.lastName or patient.lastName or 'Smith'
                     })
                   }
                 },
@@ -217,6 +219,20 @@ Certificate fulfilment
                 },
                 {
                   key: { 
+                    text: "Telephone number" 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "phone-number",
+                      name: "editMATEX.telephoneNumber",
+                      classes: "nhsuk-input--width-10",
+                      value: data.editMATEX.telephoneNumber or "07700 123 456"
+                    })
+                  }
+                },
+                {
+                  key: { 
                     text: "Date of birth" 
                   },
                   value: { 
@@ -245,34 +261,34 @@ Certificate fulfilment
                 },
                 {
                   key: { 
-                    text: "Telephone number" 
-                  },
-                  value:
-                  { 
-                    html: input ({
-                      id: "phone-number",
-                      name: "phone-number",
-                      classes: "nhsuk-input--width-10",
-                      value: "07700123456"
-                    })
-                  }
-                },
-                {
-                  key: { 
                     text: "Email address" 
                   },
                   value:
                   { 
                     html: input ({
                       id: "email",
-                      name: "email",
+                      name: "editMATEX.email",
                       value: emailHTML
                     })
                   }
                 },
                 {
                   key: { 
-                    text: "Baby's birth date" 
+                    text: "NHS number" 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "nhs-number",
+                      name: "editMATEX.nhsNumber",
+                      classes: "nhsuk-input--width-10",
+                      value: data.editMATEX.nhsNumber or patient.nhsNumber or "1234567890"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Child's due or birth date" 
                   },
                   value: { 
                     html: dateInput({
@@ -282,7 +298,7 @@ Certificate fulfilment
                         {
                           name: "day",
                           classes: "nhsuk-input--width-2",
-                          value: 4
+                          value: 25
                         },
                         {
                           name: "month",
@@ -295,20 +311,6 @@ Certificate fulfilment
                           value: 2025
                         }
                       ]
-                    })
-                  }
-                },
-                {
-                  key: { 
-                    text: "NHS number" 
-                  },
-                  value:
-                  { 
-                    html: input ({
-                      id: "nhs-number",
-                      name: "nhs-number",
-                      classes: "nhsuk-input--width-10",
-                      value: patient.nhsNumber or "1234567890"
                     })
                   }
                 },
@@ -338,14 +340,18 @@ Certificate fulfilment
 
             {{ button
               ({ 
-                text: 'Reissue',
-                href: "reissue-complete"
+                text: "Reissue",
+                type: "submit",
+                name: "action",
+                value: "reissue"
               })
             }}
             {{ button
               ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
-                text: 'Save changes',
-                href: "case"
+                text: "Save changes",
+                type: "submit",
+                name: "save",
+                value: "1"
               }) 
             }}
             {{ button
@@ -354,6 +360,8 @@ Certificate fulfilment
                 href: "../search"
               }) 
             }}
+
+        </form>
 
       </div>
       </div>

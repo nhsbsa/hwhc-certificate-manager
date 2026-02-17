@@ -20,7 +20,7 @@
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '56 913 186 386' }} - {{ patient.lastName or 'Smith' }}, {{ patient.firstName or 'Jane' }} 
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '56 913 186 386' }} - {{ data.editMATEX.lastName or patient.lastName or 'Smith' }}, {{ data.editMATEX.firstName or patient.firstName or 'Jane' }} 
         {{ ( patient.certificateType or 'matex' ) | getCertificateTypeTextOrTag( true ) | safe }}
         {% if data.patientID %}
           {{ patient.status | getStatusTextOrTag( true ) | safe }} {% if patient.checking === true %}{{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
@@ -40,6 +40,9 @@
   </a>
   {% endset %}
 
+
+  {% set firstName = data.editMATEX.firstName or patient.firstName or 'Jane' %}
+  {% set lastName  = data.editMATEX.lastName  or patient.lastName  or 'Smith' %}
 
   {% if data.editMATEX.addressLineOne is defined %}
   {% set addressValue1 = data.editMATEX.addressLineOne %}
@@ -65,10 +68,18 @@
     {% set countyValue = patient.address.county %}
   {% endif %}
 
+  {% if data.editMATEX.postcode is defined %}
+  {% set postcodeValue = data.editMATEX.postcode %}
+  {% else %}
+    {% set postcodeValue = patient.address.postcode %}
+  {% endif %}
+
+
+  {% set fulfilment = data.editMATEX.certificateFulfilment or patient.fulfilment or "Email" %}
+
 
   {% if patient.channel === 'Paper' %}
   {% set channelHTML = 'Paper' ~ channelLinkHtml %}
-  {% set fulfilment = data.fulfilment or patient.fulfilment or "Post" %}
   {% set address = 
     addressValue1 + "<br>" +
     addressValue2 + "<br>" +
@@ -76,14 +87,17 @@
     countyValue 
     or '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS'
   %}
-  {% set emailHTML = '' %}
+
+  {% if fulfilment == 'email' %}
+    {% set emailHTML = data.editMATEX.email or patient.email or '' %}
+  {% else %}
+    {% set emailHTML = '' %}
+  {% endif %}
 
   {% else %}
 
     {% set channelHTML = 'Digital' %}
-    {% set fulfilment = data.fulfilment or patient.fulfilment or "Email" %}
     {% set address = '' %}
-    {% set emailHTML = data.email or patient.email or 'jane.smith@example.com' %}
 
   {% endif %}
 
@@ -117,7 +131,7 @@
             },
             {
               key: { text: 'Fulfilment' },
-              value: { text: fulfilment | safe }
+              value: { text: fulfilment | capitalize }
             },
             {
               key: {
@@ -162,11 +176,11 @@
           rows: [
             {
               key: { text: 'First name' },
-              value: { text: patient.firstName or 'Jane' }
+              value: { text: firstName }
             },
             {
               key: { text: 'Last name' },
-              value: { text: patient.lastName or 'Smith' }
+              value: { text: lastName }
             },
             {
               key: {
@@ -179,7 +193,7 @@
                 text: "Postcode"
               },
               value: {
-                text: data.editMATEX.postcode or patient.address.postcode or "TR1 10TS"
+                text: postcodeValue or "TR1 10TS"
               }
             },
             {
@@ -187,7 +201,7 @@
                 text: "Telephone number"
               },
               value: {
-                html: "07700 123 456"
+                html: data.editMATEX.telephoneNumber or "07700 123 456"
               }
             },
             {
@@ -200,14 +214,6 @@
             },
             {
               key: {
-                text: "NHS number"
-              },
-              value: {
-                html: "123 456 7890"
-              }
-            },
-            {
-              key: {
                 text: "Email address"
               },
               value: {
@@ -215,9 +221,17 @@
               }
             },
             {
+              key: {
+                text: "NHS number"
+              },
+              value: {
+                html: data.editMATEX.nhsNumber or patient.nhsNumber or "123 456 7890"
+              }
+            },
+            {
               classes: "nhsuk-summary-list__row--no-border",
               key: {
-                text: "Baby's birth date"
+                text: "Child's due or birth date"
               },
               value: {
                 html: "25 November 2025"
@@ -631,7 +645,7 @@
     {% else %}
     
       {{ button({
-        classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+        classes: "nhsuk-button--secondary",
         text: "Add note",
         href: "add-note"
       }) }}

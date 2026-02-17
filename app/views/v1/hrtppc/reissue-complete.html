@@ -15,6 +15,11 @@
 
 {#{ patient | dump }#}
 
+{% if data.editHRT.firstName is defined and data.editHRT.lastName is defined %}
+{% set fullName = (data.editHRT.firstName ~ " " ~ data.editHRT.lastName) | trim %}
+{% else %}
+  {% set fullName = ((patient.firstName ~ " " ~ patient.lastName) | trim) | default('Jane Smith', true) %}
+{% endif %}
 
 {% set addressValue1 = data.editHRT.addressLineOne or patient.address.buildingNumber + " " + patient.address.streetName %}
 {% set addressValue2 = data.editHRT.addressLineTwo or patient.address.locality %}
@@ -22,9 +27,12 @@
 {% set countyValue = data.editHRT.county or patient.address.county %}
 {% set postcodeValue = data.editHRT.postcode or patient.address.postcode %}
 
-{% if patient.channel === 'Digital' %}
+
+{% set fulfilment = data.editHRT.certificateFulfilment or patient.fulfilment or "Email" %}
+
+{% if fulfilment == 'email' %}
 {% set sentAddressHtml %}
-  We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate (HRT PPC) to <strong>{{ patient.email or 'jane.doe@example.com' }}</strong>.
+  We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate (HRT PPC) to <strong>{{ data.editHRT.email or patient.email or 'jane.doe@example.com' }}</strong>.
 {% endset %}
 
 {% else %}
@@ -39,7 +47,7 @@ We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate 
   {{ countyValue }}<br>
   {% endif %}
   {{ postcodeValue }}
-</strong><br>
+</strong>
 <p>They will get a paper certificate in the post within 10 working days.</p>
 {% endset %}
 
@@ -71,7 +79,7 @@ We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate 
                   text: "Name"
                 },
                 value: {
-                  text: patient.firstName + " " + patient.lastName or 'Jane Smith'
+                  text: fullName
                 }
               },
               {
