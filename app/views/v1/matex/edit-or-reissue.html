@@ -219,20 +219,6 @@ Certificate fulfilment
                 },
                 {
                   key: { 
-                    text: "Telephone number" 
-                  },
-                  value:
-                  { 
-                    html: input ({
-                      id: "phone-number",
-                      name: "editMATEX.telephoneNumber",
-                      classes: "nhsuk-input--width-10",
-                      value: data.editMATEX.telephoneNumber or "07700 123 456"
-                    })
-                  }
-                },
-                {
-                  key: { 
                     text: "Date of birth" 
                   },
                   value: { 
@@ -261,19 +247,6 @@ Certificate fulfilment
                 },
                 {
                   key: { 
-                    text: "Email address" 
-                  },
-                  value:
-                  { 
-                    html: input ({
-                      id: "email",
-                      name: "editMATEX.email",
-                      value: emailHTML
-                    })
-                  }
-                },
-                {
-                  key: { 
                     text: "NHS number" 
                   },
                   value:
@@ -283,6 +256,33 @@ Certificate fulfilment
                       name: "editMATEX.nhsNumber",
                       classes: "nhsuk-input--width-10",
                       value: data.editMATEX.nhsNumber or patient.nhsNumber or "1234567890"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Telephone number" 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "phone-number",
+                      name: "editMATEX.telephoneNumber",
+                      classes: "nhsuk-input--width-10",
+                      value: data.editMATEX.telephoneNumber or "07700 123 456"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Email address" 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "email",
+                      name: "editMATEX.email",
+                      value: emailHTML
                     })
                   }
                 },

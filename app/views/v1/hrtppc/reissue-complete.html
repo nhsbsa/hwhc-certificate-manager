@@ -31,24 +31,35 @@
 {% set fulfilment = data.editHRT.certificateFulfilment or patient.fulfilment or "Email" %}
 
 {% if fulfilment == 'email' %}
+{% set titleText %}
+The certificate has been reissued by email
+{% endset %}
+
 {% set sentAddressHtml %}
-  We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate (HRT PPC) to <strong>{{ data.editHRT.email or patient.email or 'jane.doe@example.com' }}</strong>.
+  We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate (HRT PPC) to:<br>
+  <strong>{{ data.editHRT.email or patient.email or 'jane.doe@example.com' }}</strong>.
+  <p>The certificate holder will get their digital certificate in the next few minutes.</p>
 {% endset %}
 
 {% else %}
+{% set titleText %}
+The certificate will be reissued by post
+{% endset %}
 
 {% set sentAddressHtml %}
 We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate (HRT PPC) to:<br>
 <strong>
   {{ addressValue1 }} <br>
+  {% if addressValue2 and addressValue2 | trim %}
   {{ addressValue2 }}<br>
+  {% endif %}
   {{ townValue }}<br>
   {% if countyValue and countyValue | trim %}
   {{ countyValue }}<br>
   {% endif %}
   {{ postcodeValue }}
 </strong>
-<p>They will get a paper certificate in the post within 10 working days.</p>
+<p>The certificate holder will get their paper certificate in the post in the next 10 working days.</p>
 {% endset %}
 
 {% endif %}
@@ -59,8 +70,8 @@ We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate 
 
 
       {{ panel({
-        titleText: "Reissue complete",
-        text: "The customer will receive their certificate soon"
+        titleText: "Certificate reissued",
+        text: titleText
       }) }}
 
 
@@ -69,11 +80,19 @@ We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate 
 
       <div class="nhsuk-card nhsuk-card--grey">
         <div class="nhsuk-card__content">
-          <h2 class="nhsuk-heading-m">Customer's HRT PPC details</h2>
+          <h2 class="nhsuk-heading-m">Certificate details</h2>
 
 
           {{ summaryList({
             rows: [
+              {
+                key: { 
+                  text: "Type" 
+                },
+                value: { 
+                  html: ( patient.certificateType or "hrtppc" ) | getCertificateTypeTextOrTag( true ) 
+                }
+              },
               {
                 key: {
                   text: "Name"
@@ -123,6 +142,12 @@ We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate 
       {{ button({
         text: 'Search another certificate',
         href: "../search"
+      }) }}
+
+      {{ button({
+        text: "View " + fullName + " certificate details",
+        classes: "nhsuk-button--secondary",
+        href: "case"
       }) }}
   
     </div>

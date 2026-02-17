@@ -80,13 +80,16 @@
 
   {% if patient.channel === 'Paper' %}
   {% set channelHTML = 'Paper' ~ channelLinkHtml %}
-  {% set address = 
-    addressValue1 + "<br>" +
-    addressValue2 + "<br>" +
-    townValue + "<br>" +
-    countyValue 
-    or '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS'
-  %}
+  {% set address %}
+  {{ addressValue1 | trim }}<br>
+  {% if addressValue2 and addressValue2 | trim %}{{ addressValue2 | trim }}<br>{% endif %}
+  {{ townValue | trim }}<br>
+  {% if countyValue and countyValue | trim %}{{ countyValue | trim }}{% endif %}
+  {% endset %}
+  
+  {% if address | trim == '' %}
+    {% set address = '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS' %}
+  {% endif %}
 
   {% if fulfilment == 'email' %}
     {% set emailHTML = data.editMATEX.email or patient.email or '' %}
@@ -198,14 +201,6 @@
             },
             {
               key: {
-                text: "Telephone number"
-              },
-              value: {
-                html: data.editMATEX.telephoneNumber or "07700 123 456"
-              }
-            },
-            {
-              key: {
                 text: "Date of birth"
               },
               value: {
@@ -214,18 +209,26 @@
             },
             {
               key: {
-                text: "Email address"
-              },
-              value: {
-                html: emailHTML
-              }
-            },
-            {
-              key: {
                 text: "NHS number"
               },
               value: {
                 html: data.editMATEX.nhsNumber or patient.nhsNumber or "123 456 7890"
+              }
+            },
+            {
+              key: {
+                text: "Telephone number"
+              },
+              value: {
+                html: data.editMATEX.telephoneNumber or "07700 123 456"
+              }
+            },
+            {
+              key: {
+                text: "Email address"
+              },
+              value: {
+                html: emailHTML
               }
             },
             {

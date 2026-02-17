@@ -32,6 +32,47 @@
     </div>
   </div>
 
+  {% if data.editMATEX.addressLineOne is defined %}
+  {% set addressValue1 = data.editMATEX.addressLineOne %}
+  {% else %}
+    {% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
+  {% endif %}
+
+  {% if data.editMATEX.addressLineTwo is defined %}
+    {% set addressValue2 = data.editMATEX.addressLineTwo %}
+  {% else %}
+    {% set addressValue2 = patient.address.locality %}
+  {% endif %}
+
+  {% if data.editMATEX.town is defined %}
+    {% set townValue = data.editMATEX.town %}
+  {% else %}
+    {% set townValue = patient.address.postTown %}
+  {% endif %}
+
+  {% if data.editMATEX.county is defined %}
+    {% set countyValue = data.editMATEX.county %}
+  {% else %}
+    {% set countyValue = patient.address.county %}
+  {% endif %}
+
+  {% if data.editMATEX.postcode is defined %}
+  {% set postcodeValue = data.editMATEX.postcode %}
+  {% else %}
+    {% set postcodeValue = patient.address.postcode %}
+  {% endif %}
+
+  {% set address %}
+  {{ addressValue1 | trim }}<br>
+  {% if addressValue2 and addressValue2 | trim %}{{ addressValue2 | trim }}<br>{% endif %}
+  {{ townValue | trim }}<br>
+  {% if countyValue and countyValue | trim %}{{ countyValue | trim }}{% endif %}
+  {% endset %}
+  
+  {% if address | trim == '' %}
+    {% set address = '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS' %}
+  {% endif %}
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
@@ -74,8 +115,8 @@
                                 ],
                                 [
                                     { text: 'Last name' },
-                                    { text: '' },
-                                    { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' }
+                                    { text: ( patient.lastName | changeOneLetter ) or '' },
+                                    { text: patient.lastName or 'Jahnson' }
                                 ],
                                 [
                                     { text: 'Date of birth' },
@@ -90,7 +131,7 @@
                                 [
                                     { text: 'Address' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
-                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
+                                    { html: address or '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
                                 ],
                                 [
                                     { text: 'Phone number' },
@@ -103,7 +144,7 @@
                                     { html: '' }
                                 ],
                                 [
-                                    { text: "Baby's birth date" },
+                                    { text: "Child's due or birth date" },
                                     { html: '10 January 2026' },
                                     { html: '10 January 2026' }
                                 ]
@@ -118,13 +159,13 @@
                                         id: 'notes',
                                         classes: 'nhsuk-u-width-two-thirds',
                                         label: {
-                                            text: 'Note',
+                                            text: 'Notes',
                                             isPageHeading: false
                                         }
                                   }) }}
 
                                   {{ button({
-                                    href: '#',
+                                    href: 'case',
                                     text: 'Add note'
                                 }) }}
 

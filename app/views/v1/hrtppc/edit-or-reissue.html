@@ -235,19 +235,6 @@
                 },
                 {
                   key: { 
-                    text: "Email address" 
-                  },
-                  value:
-                  { 
-                    html: input ({
-                      id: "email",
-                      name: "editHRT.email",
-                      value: data.editHRT.email or patient.email or "jane.smith@example.com"
-                    })
-                  }
-                },
-                {
-                  key: { 
                     text: "NHS number" 
                   },
                   value:
@@ -257,6 +244,19 @@
                       name: "editHRT.nhsNumber",
                       classes: "nhsuk-u-width-one-third",
                       value: data.editHRT.nhsNumber or patient.nhsNumber
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "Email address" 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "email",
+                      name: "editHRT.email",
+                      value: data.editHRT.email or patient.email or "jane.smith@example.com"
                     })
                   }
                 },

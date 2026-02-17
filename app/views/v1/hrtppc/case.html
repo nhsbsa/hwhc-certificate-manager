@@ -62,14 +62,18 @@
   {% endif %}
 
   {% set addressHTML %}
-    {{ addressValue1 }} <br>
-    {{ addressValue2 }}<br>
-    {{ townValue }}<br>
-    {% if countyValue and countyValue | trim %}
-    {{ countyValue }}<br>
-    {% endif %}
-    {{ postcodeValue }}
+
+  {{ addressValue1 | trim }}<br>
+  {% if addressValue2 and addressValue2 | trim %}{{ addressValue2 | trim }}<br>{% endif %}
+  {{ townValue | trim }}<br>
+  {% if countyValue and countyValue | trim %}{{ countyValue | trim }}{% endif %}<br>
+  {{ postcodeValue }}
+
   {% endset %}
+  
+  {% if addressHTML | trim == '' %}
+    {% set addressHTML = '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS' %}
+  {% endif %}
 
 
   <div class="nhsuk-grid-row">
@@ -193,19 +197,19 @@
             {
               classes: "nhsuk-summary-list__row",
               key: {
-                text: "Email address"
+                text: "NHS number"
               },
               value: {
-                html: emailHTML
+                html: data.editHRT.nhsNumber or patient.nhsNumber or "123 456 7890"
               }
             },
             {
               classes: "nhsuk-summary-list__row--no-border",
               key: {
-                text: "NHS number"
+                text: "Email address"
               },
               value: {
-                html: data.editHRT.nhsNumber or patient.nhsNumber or "123 456 7890"
+                html: emailHTML
               }
             }
           ]
