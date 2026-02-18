@@ -378,7 +378,7 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     width: calc(100%/3);
   }
 
- .nhsuk-grid-column-one-third + .nhsuk-grid-column-two-thirds {
+ .nhsuk-grid-column-two-thirds {
     margin-top: 0;
     float: left;
     width: calc((100%/3) * 2);
