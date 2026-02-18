@@ -56,6 +56,10 @@ app.locals.serviceName = config.serviceName
 // Use cookie middleware to parse cookies
 app.use(cookieParser())
 
+// Custom dependencies
+const csrf = require('@dr.pogodin/csurf');
+app.use( csrf({ cookie: true, httpOnly: true, sameSite: 'strict' }) );
+
 // Nunjucks configuration for application
 const appViews = [
   join(__dirname, 'app/views/'),

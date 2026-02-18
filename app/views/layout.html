@@ -8,6 +8,9 @@
 {% extends 'prototype-kit-template.njk' %}
 
 {% block head %}
+
+  <meta name="csrf-token" content="{{ csrfToken }}">
+
   <!-- Add your custom CSS or Sass in /app/assets/sass/main.scss -->
   <link href="/css/main.css" rel="stylesheet">
 {% endblock %}

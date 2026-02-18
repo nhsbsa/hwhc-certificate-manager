@@ -1,0 +1,116 @@
+{% extends 'layout.html' %}
+
+{% set pageName = 'JSON test' %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+        <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+        {{ input({
+            id: 'invalidator',
+            name: 'invalidator',
+            hint: { text: 'Any text added here will be added to the token, invalidating it' },
+            classes: 'nhsuk-input--width-10',
+            label: { text: 'Characters' }
+            }) }}
+    
+        <p>{{ csrfToken }}</p>
+
+        <div class="nhsuk-button-group">
+            {{ button({
+                id: 'btn-post',
+                text: 'Load data via POST'
+            }) }}
+        </div>
+
+        <p id="post-data">Data goes here</p>
+
+        <div class="nhsuk-button-group">
+            {{ button({
+                id: 'btn-get',
+                text: 'Load data via GET'
+            }) }}
+        </div>
+
+        <p id="get-data">Data goes here</p>
+
+        <script>
+
+            const postBtn = document.querySelector('#btn-post');
+            const postP = document.querySelector('#post-data');
+
+            const getBtn = document.querySelector('#btn-get');
+            const getP = document.querySelector('#get-data');
+
+            const meta = document.querySelector('meta[name="csrf-token"]');
+            const token = meta.getAttribute('content');
+            const jsonUrl = '/v1/data.json';
+
+            const invalidator = document.querySelector('#invalidator');
+
+            postBtn.addEventListener('click',function(e){
+
+                console.log('POST button');
+
+                _getData( jsonUrl, 'POST', token + invalidator.value.trim(), postP );
+
+                e.preventDefault();
+                e.stopPropagation();
+
+            });
+
+            getBtn.addEventListener('click',function(e){
+
+                console.log('GET button');
+
+                _getData( jsonUrl, 'GET', token + invalidator.value.trim(), getP );
+
+                e.preventDefault();
+                e.stopPropagation();
+
+            });
+
+
+            async function _getData( url, method, token, output ) {
+
+                method = ( ['GET','POST'].indexOf(method) > -1 ) ? method : 'POST';
+                output.innerText = '';
+
+                const params = { 
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'CSRF-Token': token
+                    }
+                };
+
+                try {
+                    const response = await fetch(url, params);
+                    if (!response.ok) {
+                        output.innerText = response.status;
+                        throw new Error(`Response status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    output.innerText = JSON.stringify( result );
+                    console.log(result);
+
+                } catch (error) {
+                    output.innerText = error.message;
+                    console.error(error.message);
+                }
+            }
+
+
+        </script>
+
+
+        
+
+    </div>
+</div>
+
+{% endblock %}
