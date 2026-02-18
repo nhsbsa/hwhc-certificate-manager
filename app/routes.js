@@ -37,7 +37,7 @@ router.use((req, res, next) => {
 
   res.locals.version = version;
   res.locals.currentURL = req.originalUrl;
-  res.locals.csrfToken = req.csrfToken();
+  //res.locals.csrfToken = req.csrfToken();
   
   // Load the required routes
   if (version) {

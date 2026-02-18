@@ -40,6 +40,7 @@ router.post(/access-keys/, function (req, res) {
 });
 
 router.post(/search/, function (req, res) {
+  //console.log( search );
     const destination = 'search-results';
     req.session.data[res.locals.version].currentPage = 0;
     res.redirect( destination );

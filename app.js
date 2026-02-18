@@ -58,7 +58,7 @@ app.use(cookieParser())
 
 // Custom dependencies
 const csrf = require('@dr.pogodin/csurf');
-app.use( csrf({ cookie: true, httpOnly: true, sameSite: 'strict' }) );
+//app.use( csrf({ cookie: true, httpOnly: true, sameSite: 'lax' }) );
 
 // Nunjucks configuration for application
 const appViews = [
