@@ -467,12 +467,14 @@ function _drawRows( inputRows, role, processor, processorTable ){
   inputRows.forEach(function (patient) {
 
     let link = patient.certificateType +'/case?patientID=' + patient.id;
+    let action = 'View ';
 
     if( patient.checking === true ){
       if( role === 'backOfficeSupervisor' ){
 
         if( processor && processor.level && processor.level === 'trainee' ){
           link = patient.certificateType +'/comparison--leave-feedback?patientID=' + patient.id;
+          action = 'Check ';
         } else {
           link = patient.certificateType +'/comparison--has-feedback?patientID=' + patient.id;
         }
@@ -484,15 +486,16 @@ function _drawRows( inputRows, role, processor, processorTable ){
 
     const checkedBy = ( processor.level === 'trainee' ) ? 'Supervisor' : 'Quality checker';
     const penultimate = ( processorTable ) ? checkedBy : patient.endDate; 
+    
 
      let obj = [
         { html: '<strong>' + patient.lastName + ', ' + patient.firstName + '</strong><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
         { html: patient.address.postcode },
         { html: _getCertificateTypeTextOrTag( patient.certificateType, true )},
-        { html: ( patient.checking === true ) ? _getStatusTextOrTag( 'checking', true ) : _getStatusTextOrTag( patient.status, true )  },
+        { html: ( patient.checking === true ) ? _getStatusTextOrTag( patient.status, true ) + ' ' + _getStatusTextOrTag( 'checking', true ) : _getStatusTextOrTag( patient.status, true )  },
         { html: ( patient.status === 'processing' ) ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">'+ patient.certificateReference +'</span>' : patient.certificateReference },
         { text: penultimate },
-        { html: '<a href="'+ link + '">View <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag( patient.certificateType ) + '</span></a>' },
+        { html: '<a href="'+ link + '">'+action+'<span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag( patient.certificateType ) + '</span></a>' },
       ];
 
     rows.push(obj);
