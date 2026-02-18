@@ -665,17 +665,20 @@ env.addFilter( 'getQualityControlTableRows', function( patientData, cipher, coun
 
       if( patient.checking === true && patient.processor === cipher ){
 
-        const checked = ( Math.round(Math.random()) === 1 ) ? true : false;
+        //const checked = ( Math.round(Math.random()) === 1 ) ? true : false;
+        //{ html: ( checked ) ?  tick + ' Checked' : cross + ' To check' },
+        const checked = false; // Forcing everything to be checked on QC view
+
         const url = ( checked ) ? patient.certificateType +'/comparison--has-feedback?patientID=' + patient.id : patient.certificateType +'/comparison--leave-feedback?patientID=' + patient.id;
 
         const obj = [
           { html: '<strong>' + patient.lastName + ', ' + patient.firstName + '</strong><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
           { html: patient.address.postcode },
           { html: _getCertificateTypeTextOrTag( patient.certificateType, true ) },
-          { html: _getStatusTextOrTag( patient.status, true ) },
+          { html: _getStatusTextOrTag( patient.status, true ) + ' ' + _getStatusTextOrTag( 'checking', true ) },
           { html: ( patient.status === 'processing' ) ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">'+ patient.certificateReference +'</span>' : patient.certificateReference },
-          { html: ( checked ) ?  tick + ' Checked' : cross + ' To check' },
-          { html: '<a href="' + url + '">View <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag( patient.certificateType ) + '</span></a>' },
+          
+          { html: '<a href="' + url + '">Check <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag( patient.certificateType ) + '</span></a>' },
         ];
 
         rows.push(obj);

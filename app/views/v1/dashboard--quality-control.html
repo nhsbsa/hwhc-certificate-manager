@@ -17,22 +17,9 @@
 
             {{ insetText({
               id: 'to-check',
-              html: '<span class="inner"></span>',
+              html: '<span class="inner">5 applications need to be checked</span>',
               classes: 'nhsuk-inset-text--summary'
             }) }}
-
-            <script>
-              document.addEventListener('DOMContentLoaded',function(){
-
-                const toCheck = document.querySelector('#to-check .inner');
-                const stillToCheck = document.querySelectorAll('.nhsuk-icon--cross').length;
-                const alreadyChecked = document.querySelectorAll('.hsuk-icon--tick').length;
-
-                const txt = ( stillToCheck === 0 ) ? 'All applications have been checked' : stillToCheck + ' applications still need be checked'
-                toCheck.textContent = txt;
-
-              });
-            </script>
 
 
             <div class="nhsuk-button-group">
@@ -53,6 +40,9 @@
 
               {% set processorObj = data.processors[processor] %}
 
+
+             {# { html: '<span class="nhsuk-u-visually-hidden">Has the application been checked?</spa>' }, #}
+
               {{ table({
                 panel: false,
                 caption: processorObj.name + ' (' + processor + ')',
@@ -65,7 +55,6 @@
                         { text: 'Certificate type' },
                         { text: 'Status' },
                         { text: 'Reference' },
-                        { html: '<span class="nhsuk-u-visually-hidden">Has the application been checked?</spa>' },
                         { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
                       ],
                 rows:  '' | getPatientData | getQualityControlTableRows( processor, 1 )
