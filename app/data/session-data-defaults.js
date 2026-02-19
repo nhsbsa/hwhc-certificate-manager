@@ -8,6 +8,7 @@ module.exports = {
     HRTPPCCost: '£19.80',
 
     accessKeys: 'on',
+    log: 'eventsAndNotes', // 'eventsAndNotes', 'notesOnly', 'eventsOnly'
 
     processors: {
         'AICOL': {

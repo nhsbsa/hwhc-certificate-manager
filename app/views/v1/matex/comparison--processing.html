@@ -30,21 +30,9 @@
     <div class="nhsuk-grid-column-full">
 
           <div class="nhsuk-grid-row">
-            <div class="nhsuk-grid-column-one-third">
+         
 
-              <h2 class="nhsuk-heading-m nhsuk-u-visually-hidden">Scanned application</h2>
-
-              <details class="expandable-image expandable-image--small">
-                <div class="expandable-image__inner">
-                  <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
-                </div>
-                <summary class="expandable-image__button nhsuk-button">
-                  <span class="closed">Expand image</span>
-                  <span class="open">Shrink image</span></summary>
-              </details>
-
-            </div>
-
+            <!-- TWO THIRDS -->
             <div class="nhsuk-grid-column-two-thirds">
 
                <div class="nhsuk-card nhsuk-card--grey">
@@ -53,8 +41,13 @@
                         {{ table({
                             panel: false,
                             caption: 'Proposed values',
+                            classes: 'table-head-visually-hidden',
                             captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
                             firstCellIsHeader: true,
+                            head: [
+                                { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
+                                { text: 'Accepted value' }
+                            ],
                             rows: [
                                 [
                                     { text: 'First name' },
@@ -124,6 +117,51 @@
                 
 
             </div>
+
+
+            <!-- ONE THIRD -->
+            <div class="nhsuk-grid-column-one-third">
+
+              <h2 class="nhsuk-heading-m nhsuk-u-visually-hidden">Scanned application</h2>
+
+              <details class="expandable-image expandable-image--small expandable-image--half">
+                <div class="expandable-image__inner">
+                  <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
+                </div>
+                <summary class="expandable-image__button nhsuk-button">
+                  <span class="closed">Expand image</span>
+                  <span class="open">Shrink image</span></summary>
+              </details>
+
+
+              <div class="nhsuk-card nhsuk-card--grey">
+                <div class="nhsuk-card__content">
+                  <div class="scroll-container">
+                    
+                    {% from 'nhsapp/components/timeline/macro.njk' import nhsappTimeline %}
+
+                    {{ nhsappTimeline({
+                        id: 'timeline-application',
+                        items: [
+                          {
+                            headingText: 'Application scanned',
+                            isPastItem: true,
+                            html: '<span class="nhsuk-body-s">23 November 2025, 08:30</span>'
+                          }
+                        ]
+                      }) }}
+
+                  </div>
+                </div>
+              </div>
+
+              
+
+            </div>
+
+
+
+
 
           </div>
 

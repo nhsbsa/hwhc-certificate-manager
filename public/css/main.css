@@ -12502,6 +12502,16 @@ b {
   margin: 0;
 }
 
+.table-head-visually-hidden thead {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
 .nhsuk-card--grey {
   /*background-color: #d8dde0;*/
   background-color: #f0f4f5;
@@ -12550,11 +12560,10 @@ b {
   padding-bottom: 100%;
 }
 
-/*
-.expandable-image.expandable-image--small {
+.expandable-image.expandable-image--half {
   padding-bottom: 50%;
 }
-*/
+
 .expandable-image + .nhsuk-card {
   margin-top: 1.25rem;
 }
@@ -12864,6 +12873,19 @@ td .nhsuk-icon {
     top: 0.5rem;
   }
 }
+/* TIMELINE APPLICATION */
+#timeline-application .nhsapp-timeline__item:not(:last-child):before {
+  border-left: 2px solid #aeb7bd;
+}
+
+#timeline-application .nhsapp-timeline__header {
+  font-weight: 600;
+}
+
+#timeline-application .nhsapp-timeline__item:not(:first-child):not(.nhsapp-timeline__item--past) .nhsapp-timeline__header {
+  color: #4c6272;
+}
+
 /* BREAKPOINTS */
 /*
 body::before {

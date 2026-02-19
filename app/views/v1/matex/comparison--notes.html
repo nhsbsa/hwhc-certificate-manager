@@ -20,7 +20,7 @@
 
       <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
         {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
-        {{ 'processing' | getStatusTextOrTag( true ) | safe }}
+        {{ ( patient.status or 'on-hold' ) | getStatusTextOrTag( true ) | safe }}
       </h1>
 
     </div>
@@ -40,7 +40,8 @@
 
               {{ table({
                             panel: false,
-                            caption: 'Application processing comparison',
+                            caption: 'Proposed values',
+                            classes: 'table-head-visually-hidden',
                             captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
                             firstCellIsHeader: true,
                             head: [
@@ -131,9 +132,10 @@
          <!-- ONE THIRD -->
         <div class="nhsuk-grid-column-one-third">
 
+        
           <h2 class="nhsuk-heading-m nhsuk-u-visually-hidden">Scanned application</h2>
 
-          <details class="expandable-image expandable-image--small">
+          <details class="expandable-image expandable-image--small expandable-image--half">
             <div class="expandable-image__inner">
               <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
             </div>
@@ -142,6 +144,7 @@
               <span class="open">Shrink image</span></summary>
           </details>
 
+
           <div class="nhsuk-card nhsuk-card--grey">
             <div class="nhsuk-card__content">
 
@@ -149,7 +152,45 @@
                 
                 {% from 'nhsapp/components/timeline/macro.njk' import nhsappTimeline %}
 
+                <p class="nhsuk-body-s"><a href="?log=notesOnly">Notes only</a> | <a href="?log=eventsOnly">Events only</a> | <a href="?log=eventsAndNotes">Both</a></p>
+
+                {% if ( data.log === 'eventsAndNotes') %}
+
+                  <!-- EVENTS AND NOTES -->
+
+                {% elif data.log === 'eventsOnly' %}
+
+                  <!-- NOTES ONLY -->
+                  <style>
+
+                    #timeline-application .nhsapp-timeline__item:not(:first-child):not(.nhsapp-timeline__item--past) {
+                      display: none;
+                    }
+
+                  </style>
+
+                {% elif data.log === 'notesOnly' %}
+
+                  <!-- NOTES ONLY -->
+
+                  <style>
+
+                    #timeline-application .nhsapp-timeline__item:first-child,
+                    #timeline-application .nhsapp-timeline__item.nhsapp-timeline__item--past {
+                      display: none;
+                    }
+
+                    #timeline-application .nhsapp-timeline__item:not(.nhsapp-timeline__item--past):has( + .nhsapp-timeline__item--past:last-child )::before {
+                      content: none;
+                    }
+
+
+                  </style>
+
+                {% endif %}
+
                 {{ nhsappTimeline({
+                    id: 'timeline-application',
                     items: [
                       {
                         headingText: 'Application accepted and awaiting print',
@@ -157,7 +198,16 @@
                         active: true
                       },
                       {
+                        headingText: 'Note added',
+                        html: '<p class="nhsuk-body-s">Patient rang the contact centre to enquire about their application.</p><span class="nhsuk-body-s">23 November 2025, 10:30</span>'
+                      },
+                       {
+                        headingText: 'Note added',
+                        html: '<span class="nhsuk-body-s">23 November 2025, 10:30</span>'
+                      },
+                      {
                         headingText: 'Application scanned',
+                        isPastItem: true,
                         html: '<span class="nhsuk-body-s">23 November 2025, 08:30</span>'
                       }
                     ]
