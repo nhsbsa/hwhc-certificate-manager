@@ -21,11 +21,35 @@
   {% set fullName = ((patient.firstName ~ " " ~ patient.lastName) | trim) | default('Jane Smith', true) %}
 {% endif %}
 
-{% set addressValue1 = data.editHRT.addressLineOne or patient.address.buildingNumber + " " + patient.address.streetName %}
-{% set addressValue2 = data.editHRT.addressLineTwo or patient.address.locality %}
-{% set townValue = data.editHRT.town or patient.address.postTown %}
-{% set countyValue = data.editHRT.county or patient.address.county %}
-{% set postcodeValue = data.editHRT.postcode or patient.address.postcode %}
+{% if data.editHRT.addressLineOne is defined %}
+{% set addressValue1 = data.editHRT.addressLineOne %}
+{% else %}
+  {% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
+{% endif %}
+
+{% if data.editHRT.addressLineTwo is defined %}
+  {% set addressValue2 = data.editHRT.addressLineTwo %}
+{% else %}
+  {% set addressValue2 = patient.address.locality %}
+{% endif %}
+
+{% if data.editHRT.town is defined %}
+  {% set townValue = data.editHRT.town %}
+{% else %}
+  {% set townValue = patient.address.postTown %}
+{% endif %}
+
+{% if data.editHRT.county is defined %}
+  {% set countyValue = data.editHRT.county %}
+{% else %}
+  {% set countyValue = patient.address.county %}
+{% endif %}
+
+{% if data.editHRT.postcode is defined %}
+{% set postcodeValue = data.editHRT.postcode %}
+{% else %}
+  {% set postcodeValue = patient.address.postcode %}
+{% endif %}
 
 
 {% set fulfilment = data.editHRT.certificateFulfilment or patient.fulfilment or "Email" %}
@@ -155,8 +179,6 @@ We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate 
 
   <style>
 
-    .nhsuk-grid-row .nhsuk-button--secondary {
-      margin-left: 1rem;
-    }
+
   </style>
 {% endblock %}

@@ -300,243 +300,341 @@ router.get(/reset-search/,function( req, res ){
 });
 
 
-//
+
 // ADDRESS LOOKUP 
-//
-//
-router.get(/address-lookup/, function (req, res) {
+router.get(/^\/[^\/]+\/address-lookup$/, function (req, res) {
+  function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function normPostcode(s) { return (s || '').replace(/\s+/g, '').toUpperCase(); }
 
-  // Store return location and source journey
-  if (req.query.returnTo) {
-    req.session.returnTo = req.query.returnTo;
-  }
+const qs = require('querystring');
+const parsed = qs.parse(req.url.split('?')[1] || '');
 
-  if (req.query.source) {
-    req.session.lookupSource = req.query.source;
-  }
+// If lookup is opened fresh (no user input), clear previous state
+const noParamsProvided =
+  !parsed.addressSearchPostcode &&
+  !parsed.addressSearchBuildingNumberOrName;
+
+// Only clear when user is entering lookup from another page (not from result screen)
+if (noParamsProvided && !parsed.source && !parsed.returnTo) {
+  req.session.data.addressSearchPostcode = '';
+  req.session.data.addressSearchBuildingNumberOrName = '';
+  req.session.data.addressSearchResults = [];
+}
+
+// If user clicked "Search again", wipe previous search state
+const isSearchAgain =
+  !parsed.addressSearchPostcode &&
+  !parsed.addressSearchBuildingNumberOrName &&
+  !parsed.source &&   // optional, avoids accidental journey resets
+  !parsed.returnTo;
+
+if (isSearchAgain) {
+  req.session.data.addressSearchPostcode = '';
+  req.session.data.addressSearchBuildingNumberOrName = '';
+  req.session.data.addressSearchResults = [];
+}
+
+// Normalise source to a journey folder and remember which source invoked lookup
+const sourceAlias = { matex: 'matex', hrtppc: 'hrtppc', newHRT: 'hrtppc' }; 
+
+// Remember raw source (which page invoked lookup)
+req.session.lookupSourceRaw = parsed.source || req.session.lookupSourceRaw || 'hrtppc';
+
+// Set the journey used for template folders
+const normalisedJourney = sourceAlias[req.session.lookupSourceRaw] || req.session.lookupJourney || 'hrtppc';
+req.session.lookupJourney = normalisedJourney;
+
+req.session.data.lookupJourney = req.session.lookupJourney;
+
+req.session.returnTo = parsed.returnTo || req.session.returnTo;
+
+req.session.data.addressSearchPostcode = parsed.addressSearchPostcode || '';
+
+req.session.data.addressSearchBuildingNumberOrName =
+  parsed.addressSearchBuildingNumberOrName || '';
 
 
   // Prep the variables
   let addressSearchPostcode =
-  (req.query.addressSearchPostcode || '')
-    .split(' ')
-    .join('')
-    .toUpperCase();
+  (parsed.addressSearchPostcode || '').replace(/\s+/g, '').toUpperCase();
+
   const addressSearchBuildingNumberOrName = req.session.data.addressSearchBuildingNumberOrName || '';
   const apiKey = process.env.POSTCODEAPIKEY;
   const regex = RegExp('^([A-PR-UWYZa-pr-uwyz](([0-9](([0-9]|[A-HJKSTUW])?)?)|([A-HK-Ya-hk-y][0-9]([0-9]|[ABEHMNPRVWXY])?)) ?[0-9][ABD-HJLNP-UW-Zabd-hjlnp-uw-z]{2})$', 'i');
   addressSearchPostcode = ( regex.test(addressSearchPostcode) ) ? addressSearchPostcode : '';
 
-  const updateResults = ( arr ) => {
-    req.session.data.addressSearchResults = arr;
-  };
-
-  const toTitleCase = ( str ) => {
-    return str.replace( /\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); } );
-  }
-
-  const formatAddress = ( address ) => {
-
-    const formattedAddress = [];
-    const addressParts = address.split(', ');
-    addressParts.forEach( ( part, i ) => {
-      if( i !== (addressParts.length - 1) ){
-        formattedAddress.push( toTitleCase( part ) );
-      } else {
-        formattedAddress.push( part );
-      }
-    });
-
-    return formattedAddress.join(', ');
-
-  };
 
   let baseURL = '';
-
-  if( addressSearchBuildingNumberOrName ){
-    baseURL = 'https://api.os.uk/search/places/v1/find?query=' + encodeURI(addressSearchBuildingNumberOrName);
+  if (addressSearchPostcode) {
+  // Prefer postcode endpoint when available (scoped to that postcode)
+  baseURL = 'https://api.os.uk/search/places/v1/postcode?postcode=' + encodeURI(addressSearchPostcode);
+  } else if (addressSearchBuildingNumberOrName) {
+  // Only fall back to find?query=... when there is no postcode at all
+  baseURL = 'https://api.os.uk/search/places/v1/find?query=' + encodeURI(addressSearchBuildingNumberOrName);
   }
-
-  if( addressSearchPostcode ){
-    baseURL = 'https://api.os.uk/search/places/v1/postcode?postcode=' + encodeURI(addressSearchPostcode);
-  }
-
-  // Make the call
-  if( baseURL && apiKey ){
-
-    let url = baseURL + '&key=' + apiKey;
-
-    axios.get( url ).then( response => {
-
-      let filteredResults = [];
-
-      if( Array.isArray( response.data.results ) ){
-
-        response.data.results.forEach(function(result){
-
-          let resultPostcode = result.DPA.POSTCODE.split(' ').join('').toUpperCase();
-
-          let obj = { 
-            'text' : formatAddress( result.DPA.ADDRESS ),
-            'value' : formatAddress( result.DPA.ADDRESS )
-          };
-
-          if( addressSearchPostcode ){
-
-            if( addressSearchPostcode.indexOf(resultPostcode) === 0 ){
-
-              let bnon = addressSearchBuildingNumberOrName.trim().toUpperCase();
-              if( bnon ){
-
-                // WE HAVE A POSTCODE AND A BUILDING NAME/NUMBER, TRY TO NARROW THE RESULTS DOWN...
-
-                if( result.DPA.BUILDING_NAME ){
-
-                  if( result.DPA.SUB_BUILDING_NAME ){
-                    // We can check the SUB_BUILDING_NAME field as well...
-                    if( result.DPA.SUB_BUILDING_NAME.indexOf(bnon) > -1 || result.DPA.BUILDING_NAME.indexOf(bnon) > -1 ){
-                      filteredResults.push(obj);
-                    }
-                  } else {
-                    // We can only check the BUILDING_NAME field...
-                    if( result.DPA.BUILDING_NAME.indexOf(bnon) > -1 ){
-                      filteredResults.push(obj);
-                    }
-                  }
-          
-                } else if( result.DPA.BUILDING_NUMBER ) {
-        
-                    if( result.DPA.BUILDING_NUMBER === String(bnon) ){
-                      filteredResults.push(obj);
-                    }
-
-                }
-              } else {
-
-                // WE HAVE A POSTCODE, BUT NO BUILDING NAME/NUMBER, ALLOW EVERYTHING...
-                filteredResults.push(obj);
-              }
-            
-            }
-
-          } else {
-
-            // WE DON'T HAVE A POSTCODE, ONLY BUILDING NAME/NUMBER, ALLOW ANYTHING...
-            filteredResults.push(obj);
-
-         }
-
-        });
-
-      }
-
-      updateResults( filteredResults );
-      return res.render('v1/matex/address-lookup-result');
-
-    }).catch( (error) => { console.log( error ); });
   
 
-    } else {
 
-      req.session.data.showErrors = true;
-      updateResults([]);
+  if (!baseURL || !apiKey) {
+    req.session.data.addressSearchResults = [];
+    const journey = req.session.lookupJourney;
+    return res.render(`v1/${journey}/address-lookup`);
+  }
 
-      return res.render('v1/hrtppc/address-lookup');
+
+
+  const url = baseURL + '&key=' + apiKey;
+
+  axios.get(url).then(response => {
+
+    const results = [];
+  
+    function toTitleCase(str) {
+      return str.replace(/\w\S*/g, txt =>
+        txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+      );
+    }
+  
+
+  const targetPostcode = normPostcode(req.session.data.addressSearchPostcode);
+  const bnonRaw = (req.session.data.addressSearchBuildingNumberOrName || '').trim();
+  const isNumericBnon = /^[0-9]+[A-Za-z]?$/.test(bnonRaw); // 4, 4A, etc.
+  const bnonUpper = bnonRaw.toUpperCase();
+
+  if (Array.isArray(response.data.results)) {
+  response.data.results.forEach(result => {
+
+  const dpa = result.DPA;
+
+  let raw = (dpa.ADDRESS || '').trim();
+  raw = raw.replace(/^(\d+)\s*,\s+/, "$1 ");
+  
+  // DISPLAY VALUE (title-case except postcode)
+  const rawParts = raw.split(',');
+  const postcode = rawParts.pop().trim().toUpperCase();
+  const before = toTitleCase(rawParts.join(', ').trim());
+  const display = [before, postcode].filter(Boolean).join(', ');
+  
+  const resPc = normPostcode(dpa.POSTCODE);
+
+  // 1) Postcode filter (when we searched by postcode)
+  if (targetPostcode && resPc !== targetPostcode) return;
+
+  //
+  // 2) BUILDING / FLAT / TEXT FILTER (FINAL VERSION)
+  //
+  if (bnonRaw) {
+
+    const bn     = (dpa.BUILDING_NUMBER || '').toUpperCase();      // 10, 10A, 6, etc.
+    const sub    = (dpa.SUB_BUILDING_NAME || '').toUpperCase();    // FLAT 6, APARTMENT 6-9
+    const bname  = (dpa.BUILDING_NAME || '').toUpperCase();        // ST. JAMES HOUSE 3-6
+    const org    = (dpa.ORGANISATION_NAME || '').toUpperCase();    // DALEY LETTINGS
+    const addr   = raw.toUpperCase();
+
+    let keep = false;
+
+  // ---------------------------
+  // A) NUMERIC INPUT (10, 10A, 6)
+  // ---------------------------
+  if (isNumericBnon) {
+
+    const match = bnonUpper.match(/^(\d+)([A-Z]?)$/);
+    const nStr  = match[1];        // numeric part
+    const n     = parseInt(nStr);  // integer
+    const suff  = match[2];        // letter suffix (A)
+
+    // Normalise building number and address for comparisons
+    const bnNS    = bn.replace(/\s+/g, '');       // e.g. "10A"
+    const addrNS  = addr.replace(/\s+/g, '');     // e.g. "10,PORTLAND..."
+
+    // (A1) EXACT SUFFIX MATCH (user enters "10A")
+    if (suff) {
+      keep = (bnNS === `${nStr}${suff}`);
     }
 
+    // (A2) NUMBER MATCH (user enters "10" → match 10 AND 10A)
+    if (!keep && !suff) {
+      const r = new RegExp(`^${escapeRegex(nStr)}([A-Z])?$`); // 10 or 10A
+      keep =
+        r.test(bnNS) ||
+        addrNS.startsWith(`${nStr},`) ||
+        addrNS.startsWith(`${nStr}`);
+    }
+
+    // (A3) FLAT NUMBER MATCH (Flat 6, Flat 6-9)
+    if (!keep) {
+      const flatMatch = sub.match(/^(FLAT|APARTMENT)\s+(\d+)(?:\s*-\s*(\d+))?/);
+      if (flatMatch) {
+        const start = parseInt(flatMatch[2]);
+        const end   = flatMatch[3] ? parseInt(flatMatch[3]) : start;
+        if (n >= start && n <= end) keep = true;
+      }
+    }
+
+    // (A4) BUILDING NAME RANGE MATCH ("St. James House 3-6")
+    if (!keep) {
+      const range = bname.match(/(\d+)\s*[-–]\s*(\d+)\s*$/);
+      if (range) {
+        const lo = parseInt(range[1]);
+        const hi = parseInt(range[2]);
+        if (n >= lo && n <= hi) keep = true;
+      }
+    }
+
+    if (!keep) return;
+  }
+
+  // ---------------------------
+  // B) TEXT INPUT (e.g. "daley")
+  // ---------------------------
+  else {
+    if (
+      org.includes(bnonUpper) ||
+      bname.includes(bnonUpper) ||
+      sub.includes(bnonUpper)
+    ) {
+      keep = true;
+    }
+
+    if (!keep) return;
+  }
+}
+
+
+results.push({
+  text: display,   // pretty
+  value: raw       // original OS format — REQUIRED for correct split in POST
+});
+});
+}
+
+  
+    req.session.data.addressSearchResults = results;
+  
+    const journey = req.session.lookupJourney || 'matex';
+    return res.redirect(`/v1/${journey}/address-lookup-result`);
+  
+  }).catch(err => {
+    console.error(err);
+    const journey = req.session.lookupJourney || 'matex';
+    return res.render(`v1/${journey}/address-lookup`);
+  });
+  
 });
 
-router.get(/address-lookup-result/, function (req, res) {
-    res.render('v1/matex/address-lookup-result');
 
+router.get(/^\/[^\/]+\/address-lookup-result$/, function (req, res) {
+  
+  const journey = req.session.lookupJourney || 'matex';
+  return res.render(`v1/${journey}/address-lookup-result`);
 });
 
-router.post(/address-lookup-result/, function (req, res) {
 
+router.post(/^\/[^\/]+\/address-lookup-result$/, function (req, res) {
+
+  function toTitleCase(str) {
+    return str.replace(/\w\S*/g, (txt) =>
+    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    );
+    }
+    
   const selectedAddress = req.body.addressSearchResult;
 
+  console.log("RAW IN POST:", selectedAddress);
 
-  if (!selectedAddress) {
-    return res.redirect('address-lookup-result');
-  }
+// Split the selected address string
+const parts = selectedAddress.split(',').map(p => p.trim());
 
+// Optional county — only assign if it matches a known county
+const knownCounties = [
+  'Bedfordshire', 'Berkshire', 'Bristol', 'Buckinghamshire', 'Cambridgeshire', 
+  'Cheshire', 'City of London', 'Cornwall', 'County Durham', 'Cumbria', 'Derbyshire', 
+  'Devon', 'Dorset', 'East Riding of Yorkshire', 'East Sussex', 'Essex', 'Gloucestershire', 
+  'Greater London', 'Greater Manchester', 'Hampshire', 'Herefordshire', 'Hertfordshire', 
+  'Isle of Wight', 'Kent', 'Lancashire', 'Leicestershire', 'Oxfordshire', 'Rutland', 'Shropshire', 
+  'Somerset', 'South Yorkshire', 'Staffordshire', 'Suffolk', 'Surrey', 'Tyne and Wear', 
+  'Warwickshire', 'West Midlands', 'West Sussex', 'West Yorkshire', 'Wiltshire', 'Worcestershire'
+];
 
-  // Split the select address string
-  const parts = selectedAddress.split(',').map(p => p.trim());
-  
-  // Optional county — only assign if it matches a known county
-  const knownCounties = [
-    'Bedfordshire', 'Berkshire', 'Bristol', 'Buckinghamshire', 'Cambridgeshire', 
-    'Cheshire', 'City of London', 'Cornwall', 'County Durham', 'Cumbria', 'Derbyshire', 
-    'Devon', 'Dorset', 'East Riding of Yorkshire', 'East Sussex', 'Essex', 'Gloucestershire', 
-    'Greater London', 'Greater Manchester', 'Hampshire', 'Herefordshire', 'Hertfordshire', 
-    'Isle of Wight', 'Kent', 'Lancashire', 'Leicestershire', 'Oxfordshire', 'Rutland', 'Shropshire', 
-    'Somerset', 'South Yorkshire', 'Staffordshire', 'Suffolk', 'Surrey', 'Tyne and Wear', 
-    'Warwickshire', 'West Midlands', 'West Sussex', 'West Yorkshire', 'Wiltshire', 'Worcestershire'
-  ];
+// Build structured address
+const newAddress = {
+  addressLineOne: '',
+  addressLineTwo: '',
+  town: '',
+  county: '',
+  postcode: ''
+};
 
+newAddress.postcode = parts.pop() || '';
+newAddress.town = parts.pop() || '';
 
-  
-  // Build structured address
-  const newAddress = {
-    addressLineOne: '',
-    addressLineTwo: '',
-    town: '',
-    county: '',
-    postcode: ''
-  };
+const lastPart = parts[parts.length - 1];
+if (knownCounties.includes(lastPart)) {
+  newAddress.county = parts.pop();
+}
 
-  newAddress.postcode = parts.pop() || '';
-  newAddress.town = parts.pop() || '';
+// FLATS / APARTMENTS CASE
+// ------------------------------
+if (/^(flat|apartment)/i.test(parts[0]) && parts.length >= 2) {
 
-  const lastPart = parts[parts.length - 1];
-  if (knownCounties.includes(lastPart)) {
-    newAddress.county = parts.pop();
-  }
+  const flatAndBuilding = parts.shift();     // "APARTMENT 4 ST. JAMES HOUSE"
+  const rangeAndStreet  = parts.shift();     // "3-6 PORTLAND TERRACE"
 
-  // Flat or apartment case
-  if (/^(flat|apartment)/i.test(parts[0]) && parts.length >= 2) {
+  // Detect pattern: "<range> <street>"
+  // Example: "3-6 PORTLAND TERRACE"
+  const rangeMatch = rangeAndStreet.match(/^(\d+(-\d+)?)\s+(.+)$/);
 
-    const flatPart = parts.shift();           // "Apartment 1"
-    let buildingPart = parts.shift();         // "St. James House 3-6"
+  if (rangeMatch) {
+    const range = rangeMatch[1];             // "3-6"
+    const street = rangeMatch[3];            // "PORTLAND TERRACE"
 
-    // Detect trailing number or number range in building part
-    const rangeMatch = buildingPart.match(/(.+)\s(\d+(-\d+)?)$/);
-
-    if (rangeMatch && parts.length >= 1) {
-      const buildingName = rangeMatch[1];     // "St. James House"
-      const buildingRange = rangeMatch[2];    // "3-6"
-      const streetPart = parts.shift();       // "Portland Terrace"
-
-      newAddress.addressLineOne = `${flatPart}, ${buildingName}`;
-      newAddress.addressLineTwo = `${buildingRange}, ${streetPart}`;
-    } else {
-      newAddress.addressLineOne = `${flatPart}, ${buildingPart}`;
-      newAddress.addressLineTwo = parts.join(', ') || '';
-    }
+    newAddress.addressLineOne = toTitleCase(flatAndBuilding);
+    newAddress.addressLineTwo = toTitleCase(`${range} ${street}`);
 
   } else {
-    // Standard handling
-      if (parts.length > 0) {
-        newAddress.addressLineOne = parts.shift();        // first part
-        newAddress.addressLineTwo = parts.join(', ') || ''; // rest
-      }
-    }
+    // Fallback if pattern unexpected
+    newAddress.addressLineOne = toTitleCase(flatAndBuilding);
+    newAddress.addressLineTwo = toTitleCase(rangeAndStreet);
+  }
 
-    const source = req.session.lookupSource;
+} else {
+  // STANDARD HOUSE
+  if (parts.length > 0) {
+    newAddress.addressLineOne = parts.shift();     // ← THIS fixes "10 Portland Terrace"
+    newAddress.addressLineTwo = parts.join(', ') || '';
+  }
+}
 
-    if (source) {
-      req.session.data[source] = newAddress;
-    }
+
+// Map which namespace to use based on source (page that opened lookup)
+const sourceToNamespace = {
+  matex: 'editMATEX',
+  hrtppc: 'editHRT',
+  newHRT: 'newHRT' 
+};
+
+const rawSource = req.session.lookupSourceRaw || 'hrtppc';
+const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJourney] || 'editHRT';
+
   
+  // Title-case line1 and line2 AFTER parsing
+  newAddress.addressLineOne = toTitleCase(newAddress.addressLineOne);
+  newAddress.addressLineTwo = toTitleCase(newAddress.addressLineTwo);
   
-    const returnTo = req.session.returnTo;
-    delete req.session.lookupSource;
-    delete req.session.returnTo;
-    
-    return res.redirect(returnTo);
-    
- 
+  // But keep postcode UPPERCASE
+  newAddress.postcode = newAddress.postcode.toUpperCase();
+  
+  // Town should also be cleaned
+  newAddress.town = toTitleCase(newAddress.town);
+  
+  // County only if present
+  if (newAddress.county)
+    newAddress.county = toTitleCase(newAddress.county);
+
+  req.session.data[ns] = newAddress;
+
+  const returnTo = req.session.returnTo;
+  return res.redirect(returnTo);
 });
 
 // Pass edit inputs to case screen

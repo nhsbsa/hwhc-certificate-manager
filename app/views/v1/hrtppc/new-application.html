@@ -18,6 +18,14 @@
   </div>
 </div>
 
+{% set fulfilment = data.newHRT.certificateFulfilment or "email" %}
+
+{% if fulfilment == "email" %}
+  {% set isEmail = true %}
+{% else %}
+  {% set isPost = true %}
+{% endif %}
+
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
     <div class="nhsuk-card nhsuk-card--grey">
@@ -83,7 +91,7 @@
           {{ button({
             text: "Populate address fields using address lookup",
             classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-10",
-            href: "address-lookup?source=newHRT&returnTo=/v1/hrtppc/new-application"
+            href: "/v1/hrtppc/address-lookup?source=newHRT&returnTo=/v1/hrtppc/new-application"
           }) }}
 
           {% call details({
@@ -105,7 +113,7 @@
         {{ input({
           classes: "nhsuk-u-width-two-thirds",
           id: "first-name",
-          name: "firstName",
+          name: "newHRT.firstName",
           label: {
             text: "First name"
           }
@@ -114,7 +122,7 @@
         {{ input({
           classes: "nhsuk-u-width-two-thirds",
           id: "last-name",
-          name: "lastName",
+          name: "newHRT.lastName",
           label: {
             text: "Last name"
           }
@@ -127,7 +135,7 @@
 
         {{ dateInput({
           id: "date-of-birth",
-          namePrefix: "dateOfBirth",
+          namePrefix: "newHRT.dateOfBirth",
           fieldset: {
           },
           items: [
@@ -154,7 +162,7 @@
         {{ input({
           classes: "nhsuk-u-width-one-third",
           id: "nhs-number",
-          name: "nhsNumber",
+          name: "newHRT.nhsNumber",
           label: {
             text: "NHS number"
           }
@@ -168,7 +176,7 @@
         {{ input({
           classes: "nhsuk-u-width-two-thirds",
           id: "email-address",
-          name: "emailAddress",
+          name: "newHRT.emailAddress",
           label: {
             text: "Email address"
           }
@@ -181,7 +189,7 @@
 
         {{ dateInput({
           id: "start-date",
-          namePrefix: "startDate",
+          namePrefix: "newHRT.startDate",
           fieldset: {
           },
           hint: {
@@ -209,7 +217,7 @@
         <h3 class="nhsuk-heading-m">Certificate fulfilment</h3>
 
         {{ radios({
-          name: "fulfilment",
+          name: "newHRT.certificateFulfilment",
           fieldset: {
             legend: {
               text: "How do they want to receive their HRT PPC?",
@@ -224,11 +232,13 @@
           items: [
             {
               value: "email",
-              text: "Email"
+              text: "Email",
+              checked: isEmail
             },
             {
               value: "post",
-              text: "Post"
+              text: "Post",
+              checked: isPost
             }
           ]
         }) }}
@@ -250,8 +260,8 @@
         <h3 class="nhsuk-heading-m">Notes</h3>
 
         {{ textarea({
-          name: "example",
-          id: "example",
+          name: "newHRT.notes",
+          id: "notes",
           value: "A new HRT prepaid certificate created using telephony sales channel."
         }) }}
         
