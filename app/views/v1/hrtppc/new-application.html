@@ -5,7 +5,7 @@
 {% block beforeContent %}
  {{ backLink({
     href: 'javascript:history.go(-1)',
-    text: 'Back'
+    html: '<span data-ak="B">Back</span>'
   }) }}
 {% endblock %}
 
@@ -32,17 +32,39 @@
       <div class="nhsuk-card__content">
 
         <h2 class="nhsuk-heading-m">Applicant's details</h2>
-
-        <h3 class="nhsuk-heading-s">Applicant's address</h3>
-
+        
+        <h3 class="nhsuk-heading-s">Applicant's name</h3>
 
         {% call fieldset({
 
         }) %}
 
+        {{ input({
+          classes: "nhsuk-u-width-two-thirds",
+          id: "first-name",
+          name: "newHRT.firstName",
+          label: {
+            html: '<span data-ak="S">First name</span>'
+          }
+        }) }}
+
+        {{ input({
+          classes: "nhsuk-u-width-two-thirds",
+          id: "last-name",
+          name: "newHRT.lastName",
+          label: {
+            html: '<span data-ak="A">Last name</span>'
+          }
+        }) }}
+
+
+        <hr class="nhsuk-u-margin-top-0">
+
+        <h3 class="nhsuk-heading-s">Applicant's address</h3>
+
           {{ input({
             label: {
-              text: "Address line 1"
+              html: '<span data-ak="1">Address line 1</span>'
             },
             id: "new-hrt-address-line-one",
             name: "newHRT.addressLineOne",
@@ -51,7 +73,7 @@
 
           {{ input({
             label: {
-              text: "Address line 2 (optional)"
+              html: '<span data-ak="2">Address line 2 (optional)</span>'
             },
             id: "new-hrt-address-line-two",
             name: "newHRT.addressLineTwo",
@@ -60,7 +82,7 @@
 
           {{ input({
             label: {
-              text: "Town or city"
+              html: '<span data-ak="U">Town or city</span>' 
             },
             classes: "nhsuk-u-width-one-half",
             id: "new-hrt-town",
@@ -70,7 +92,7 @@
 
           {{ input({
             label: {
-              text: "County (optional)"
+              html: '<span data-ak="R">County (optional)</span>' 
             },
             classes: "nhsuk-u-width-one-half",
             id: "new-county",
@@ -80,7 +102,7 @@
 
           {{ input({
             label: {
-              text: "Postcode"
+              html: '<span data-ak="Z">Postcode</span>' 
             },
             classes: "nhsuk-u-width-one-quarter",            
             id: "new-postcode",
@@ -89,7 +111,7 @@
           }) }}
 
           {{ button({
-            text: "Populate address fields using address lookup",
+            html: '<span data-ak="G">Populate address fields using address lookup</span>',
             classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-10",
             href: "/v1/hrtppc/address-lookup?source=newHRT&returnTo=/v1/hrtppc/new-application"
           }) }}
@@ -108,30 +130,8 @@
 
         <hr class="nhsuk-u-margin-top-0">
 
-        <h3 class="nhsuk-heading-s">Applicant's name</h3>
-
-        {{ input({
-          classes: "nhsuk-u-width-two-thirds",
-          id: "first-name",
-          name: "newHRT.firstName",
-          label: {
-            text: "First name"
-          }
-        }) }}
-
-        {{ input({
-          classes: "nhsuk-u-width-two-thirds",
-          id: "last-name",
-          name: "newHRT.lastName",
-          label: {
-            text: "Last name"
-          }
-        }) }}
-
-
-        <hr class="nhsuk-u-margin-top-0">
-
         <h3 class="nhsuk-heading-m">Date of birth</h3>
+        <p class="nhsuk-label" for="app-dob"><span data-ak="X">Date of birth</span></p>
 
         {{ dateInput({
           id: "date-of-birth",
@@ -164,7 +164,7 @@
           id: "nhs-number",
           name: "newHRT.nhsNumber",
           label: {
-            text: "NHS number"
+            html: '<span data-ak="V">NHS number</span>'
           }
         }) }}
 
@@ -178,7 +178,7 @@
           id: "email-address",
           name: "newHRT.emailAddress",
           label: {
-            text: "Email address"
+            html: '<span data-ak="J">Email address</span>' 
           }
         }) }}
 
@@ -186,6 +186,7 @@
         <hr class="nhsuk-u-margin-top-0">
 
         <h3 class="nhsuk-heading-m">Certificate start date</h3>
+        <p class="nhsuk-label" for="app-start-date"><span data-ak="H">Start date</span></p>
 
         {{ dateInput({
           id: "start-date",
@@ -232,12 +233,12 @@
           items: [
             {
               value: "email",
-              text: "Email",
+              html: '<span data-ak="L">Email</span>',
               checked: isEmail
             },
             {
               value: "post",
-              text: "Post",
+              html: '<span data-ak="N">Post</span>',
               checked: isPost
             }
           ]
@@ -262,6 +263,10 @@
         {{ textarea({
           name: "newHRT.notes",
           id: "notes",
+          label: {
+            html: '<span data-ak="C">Add note</span>',
+            size: "s"
+          },
           value: "A new HRT prepaid certificate created using telephony sales channel."
         }) }}
         
@@ -269,14 +274,14 @@
         <div class="nhsuk-button-group">
           {{ button
             ({ 
-              text: 'Submit',
+              html: '<span data-ak="K">Submit</span>',
               href: "check-their-answers"
             })
           }}
           {{ button
             ({ classes: "nhsuk-button--secondary", 
-              text: 'Cancel',
-              href: "../search"
+            html: '<span data-ak="M">Cancel</span>',
+            href: "../search"
             }) 
           }}
         </div>

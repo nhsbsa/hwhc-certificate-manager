@@ -499,3 +499,16 @@ body::before {
 
 }
   */
+
+
+/* ACCESS KEYS VISUAL HINTS */
+
+// When ON: show (X) after any element with data-ak="X" //
+.accesskeys-on [data-ak]::after {
+  content: " (" attr(data-ak) ")";
+}
+
+// When OFF: show nothing //
+.accesskeys-off [data-ak]::after {
+  content: "";
+}

@@ -5,7 +5,7 @@
 {% block beforeContent %}
  {{ backLink({
     href: 'case',
-    text: 'Back'
+    html: '<span data-ak="B">Back</span>'
   }) }}
 {% endblock %}
 
@@ -26,7 +26,7 @@
           name: "example",
           id: "example",
           label: {
-            text: "New note",
+            html: '<span data-ak="N">New note</span>',
             size: "s",
             isPageHeading: true
           }
@@ -34,15 +34,15 @@
 
           {{ button
             ({ 
-              text: 'Submit',
+              html: '<span data-ak="K">Submit</span>',
               href: "case"
             })
           }}
 
           {{ button
             ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
-              text: 'Cancel',
-              href: "../search"
+            html: '<span data-ak="M">Cancel</span>',
+            href: "../search"
             }) 
           }}
           

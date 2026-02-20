@@ -5,7 +5,7 @@
 {% block beforeContent %}
  {{ backLink({
     href: '../search-results',
-    text: 'Back'
+    html: '<span data-ak="B">Back</span>'
   }) }}
 {% endblock %}
 
@@ -434,39 +434,39 @@
     {% if patient.status == 'expired' or patient.status == 'deleted' %}
     {{ button({
       classes: "nhsuk-button--secondary",
-      text: "Add note",
+      html: '<span data-ak="I">Add note</span>',
       href: "add-note"
     }) }}
     {{ button({
       classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
-      text: "Cancel",
+      html: '<span data-ak="M">Cancel</span>',
       href: "../search"
     }) }}
     {% elif patient.status == 'active' %}
     {{ button({
-      text: "Edit or reissue",
+      html: '<span data-ak="K">Edit or reissue</span>',
       href: "edit-or-reissue"
     }) }}
     {{ button({
       classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
-      text: "Add note",
+      html: '<span data-ak="I">Add note</span>',
       href: "add-note"
     }) }}
     {{ button({
       classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
-      text: "Cancel",
+      html: '<span data-ak="M">Cancel</span>',
       href: "../search"
     }) }}
     {% else %}
 
     {{ button({
       classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
-      text: "Add note",
+      html: '<span data-ak="I">Add note</span>',
       href: "add-note"
     }) }}
     {{ button({
       classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
-      text: "Cancel",
+      html: '<span data-ak="M">Cancel</span>',
       href: "../search"
     }) }}
     {% endif %}

@@ -5,7 +5,7 @@
 {% block beforeContent %}
  {{ backLink({
     href: 'javascript:history.go(-1)',
-    text: 'Back'
+    html: '<span data-ak="B">Back</span>'
   }) }}
 {% endblock %}
 
@@ -39,14 +39,14 @@
         <div class="nhsuk-button-group">
           {{ button
             ({ 
-              text: 'Submit',
+              html: '<span data-ak="K">Submit</span>',
               href: "../search"
             })
           }}
           {{ button
             ({ classes: "nhsuk-button--secondary", 
-              text: 'Cancel',
-              href: "../search"
+            html: '<span data-ak="M">Cancel</span>',
+            href: "../search"
             }) 
           }}
         </div>

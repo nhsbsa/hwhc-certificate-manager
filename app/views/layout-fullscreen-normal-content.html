@@ -12,11 +12,11 @@
           },
           { text: jobTitle },
           { 
-            text: 'Access keys: ' + data.accessKeys,
+            html: '<span data-ak="T">Access keys: ' ~ (data.accessKeys or "off") ~ '</span>',
             href: '/'+version+'/access-keys?returnURL=' + ( currentURL | urlencode )
           },
           {
-            text: 'Sign out',
+            html: '<span data-ak="W">Sign out</span>',
             href: '#'
           }
         ]
@@ -62,6 +62,14 @@
         {
           href: '/prototype-admin/reset?returnPage=' + (currentPage | urlencode),
           text: 'Reset data'
+        },
+        {
+          href: '#',
+          text: 'Accessibility statement'
+        },
+        {
+          href: '#',
+          text: 'Help us improve this service'
         }
       ]
     },

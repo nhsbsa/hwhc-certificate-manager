@@ -21,6 +21,8 @@
     {% set fullName = ((patient.firstName ~ " " ~ patient.lastName) | trim) | default('Jane Smith', true) %}
   {% endif %}
 
+  {% set buttonText = "<span data-ak='V'>View " ~ fullName ~ "'s certificate</span>" %}
+
 
   {% if data.editMATEX.addressLineOne is defined %}
   {% set addressValue1 = data.editMATEX.addressLineOne %}
@@ -154,13 +156,13 @@
       </div>
 
       {{ button({
-        text: 'Search another certificate',
+        html: '<span data-ak="S">New search</span>',
         href: "../search"
       }) }}
 
       {{ button({
-        text: "View " + fullName + " certificate details",
-        classes: "nhsuk-button--secondary",
+        html: buttonText,
+        classes: "nhsuk-button--secondary nhsuk-u-margin-left-2",
         href: "case"
       }) }}
 

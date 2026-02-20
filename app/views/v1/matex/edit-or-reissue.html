@@ -5,7 +5,7 @@
 {% block beforeContent %}
  {{ backLink({
     href: 'case',
-    text: 'Back'
+    html: '<span data-ak="B">Back</span>'
   }) }}
 {% endblock %}
 
@@ -48,11 +48,11 @@ Certificate fulfilment
     items: [
       { 
         value: "email", 
-        text: "Email"
+        html: '<span data-ak="L">Email</span>'
       },
       { 
         value: "post", 
-        text: "Post",
+        html: '<span data-ak="N">Post</span>',
         checked: true
       }
     ]
@@ -120,7 +120,7 @@ Certificate fulfilment
               rows: [
               {
                 key: { 
-                  text: "First name"
+                  html: '<span data-ak="S">First name</span>'
                 },
                 value: 
                 { 
@@ -132,8 +132,8 @@ Certificate fulfilment
                 }
               },
                 {
-                  key: { 
-                    text: "Last name"
+                  key: {
+                  html: '<span data-ak="A">Last name</span>'
                   },
                   value:
                   { 
@@ -145,7 +145,9 @@ Certificate fulfilment
                   }
                 },
                 {
-                  key: { text: "Address line 1" },
+                  key: { 
+                    html: '<span data-ak="1">Address line 1</span>'
+                  },
                   value: {
                     html: input ({
                       id: "address-line-1",
@@ -156,7 +158,9 @@ Certificate fulfilment
                   }
                 },                
                 {
-                  key: { text: "Address line 2 (optional)" },
+                  key: { 
+                    html: '<span data-ak="2">Address line 2 (optional)</span>'
+                },
                   value: {
                     html: input ({
                       id: "address-line-2",
@@ -167,7 +171,9 @@ Certificate fulfilment
                   }
                 },                
                 {
-                  key: { text: "Town or city" },
+                  key: { 
+                    html: '<span data-ak="U">Town or city</span>' 
+                  },
                   value: {
                     html: input ({
                       id: "town",
@@ -179,7 +185,9 @@ Certificate fulfilment
                   }
                 },                
                 {
-                  key: { text: "County (optional)" },
+                  key: { 
+                    html: '<span data-ak="R">County (optional)</span>' 
+                  },
                   value: {
                     html: input ({
                       id: "county",
@@ -192,7 +200,7 @@ Certificate fulfilment
                 },                
                 {
                   key: { 
-                  text: "Postcode" 
+                    html: '<span data-ak="Z">Postcode</span>' 
                   },
                   value: 
                   {
@@ -210,16 +218,17 @@ Certificate fulfilment
                   },
                   value:
                   { 
-                    html: button({
-                      text: "Change address fields using address lookup",
-                      classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-3",
-                      href: "address-lookup?source=matex&returnTo=/v1/matex/edit-or-reissue"
+                    html:
+                      button({
+                        html: '<span data-ak="G">Change address fields using address lookup</span>',
+                        classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-3",
+                        href: "address-lookup?source=matex&returnTo=/v1/matex/edit-or-reissue"
                     })
                   }
                 },
                 {
                   key: { 
-                    text: "Date of birth" 
+                    html: '<span data-ak="X">Date of birth</span>'
                   },
                   value: { 
                     html: dateInput({
@@ -247,7 +256,7 @@ Certificate fulfilment
                 },
                 {
                   key: { 
-                    text: "NHS number" 
+                    html: '<span data-ak="V">NHS number</span>'
                   },
                   value:
                   { 
@@ -261,7 +270,7 @@ Certificate fulfilment
                 },
                 {
                   key: { 
-                    text: "Telephone number" 
+                    html: '<span data-ak="Q">Telephone number</span>'
                   },
                   value:
                   { 
@@ -275,7 +284,7 @@ Certificate fulfilment
                 },
                 {
                   key: { 
-                    text: "Email address" 
+                    html: '<span data-ak="J">Email address</span>' 
                   },
                   value:
                   { 
@@ -288,7 +297,7 @@ Certificate fulfilment
                 },
                 {
                   key: { 
-                    text: "Child's due or birth date" 
+                    html: '<span data-ak="Y">Child\'s due or birth date</span>'
                   },
                   value: { 
                     html: dateInput({
@@ -325,7 +334,7 @@ Certificate fulfilment
                 },        
                 {
                   key: { 
-                    text: "Notes" 
+                    html: '<span data-ak="C">Notes</span>' 
                   },
                   value:
                   { 
@@ -340,7 +349,7 @@ Certificate fulfilment
 
             {{ button
               ({ 
-                text: "Reissue",
+                html: '<span data-ak="K">Reissue</span>',
                 type: "submit",
                 name: "action",
                 value: "reissue"
@@ -348,16 +357,16 @@ Certificate fulfilment
             }}
             {{ button
               ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
-                text: "Save changes",
-                type: "submit",
+              html: '<span data-ak="I">Save changes</span>',
+              type: "submit",
                 name: "save",
                 value: "1"
               }) 
             }}
             {{ button
               ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
-                text: 'Cancel',
-                href: "../search"
+              html: '<span data-ak="M">Cancel</span>',
+              href: "../search"
               }) 
             }}
 

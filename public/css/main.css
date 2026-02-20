@@ -12923,4 +12923,12 @@ body::before {
   }
 
 }
-  *//*# sourceMappingURL=main.css.map */
+  */
+/* ACCESS KEYS VISUAL HINTS */
+.accesskeys-on [data-ak]::after {
+  content: " (" attr(data-ak) ")";
+}
+
+.accesskeys-off [data-ak]::after {
+  content: "";
+}/*# sourceMappingURL=main.css.map */

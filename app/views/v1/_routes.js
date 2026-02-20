@@ -20,6 +20,9 @@ router.post(/index/, function (req, res) {
 });
 
 router.post(/access-keys/, function (req, res) {
+
+  req.session.data.accessKeys = req.body.accessKeys;
+
     let destination = 'search';
     if( req.session.data.returnURL && req.session.data.returnURL.indexOf( 'access-keys' ) === -1 ) {
       destination = decodeURIComponent(req.session.data.returnURL);

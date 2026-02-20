@@ -5,7 +5,7 @@
 {% block beforeContent %}
  {{ backLink({
     href: 'javascript:history.go(-1)',
-    text: 'Back'
+    html: '<span data-ak="B">Back</span>'
   }) }}
 {% endblock %}
 
@@ -16,6 +16,56 @@
     <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
   </div>
 </div>
+
+{% if data.newHRT.firstName is defined and data.newHRT.lastName is defined %}
+{% set fullName = (data.newHRT.firstName ~ " " ~ data.newHRT.lastName) | trim %}
+{% else %}
+  {% set fullName = 'Jane Smith' %}
+{% endif %}
+
+{% if data.newHRT.addressLineOne is defined %}
+{% set addressValue1 = data.newHRT.addressLineOne %}
+{% else %}
+  {% set addressValue1 = "101 Test Road" %}
+{% endif %}
+
+{% if data.newHRT.addressLineTwo is defined %}
+  {% set addressValue2 = data.newHRT.addressLineTwo %}
+{% else %}
+  {% set addressValue2 = "Goldcrest Way" %}
+{% endif %}
+
+{% if data.newHRT.town is defined %}
+  {% set townValue = data.newHRT.town %}
+{% else %}
+  {% set townValue = "Newcastle" %}
+{% endif %}
+
+{% if data.newHRT.county is defined %}
+  {% set countyValue = data.newHRT.county %}
+{% else %}
+  {% set countyValue = "Tyne and Wear" %}
+{% endif %}
+
+{% if data.newHRT.postcode is defined %}
+{% set postcodeValue = data.newHRT.postcode %}
+{% else %}
+  {% set postcodeValue = "TR11 0TS" %}
+{% endif %}
+
+{% set addressHTML %}
+  {{ addressValue1 }} <br>
+  {% if addressValue2 and addressValue2 | trim %}
+  {{ addressValue2 }}<br>
+  {% endif %}
+  {{ townValue }}<br>
+  {% if countyValue and countyValue | trim %}
+  {{ countyValue }}<br>
+  {% endif %}
+  {{ postcodeValue }}
+{% endset %}
+
+{% set fulfilment = data.newHRT.certificateFulfilment or "email" %}
 
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
@@ -34,7 +84,7 @@
                       text: "Name"
                     },
                     value: {
-                      text: "Jane Smith"
+                      text: fullName
                     }
                   },
                   {
@@ -50,7 +100,7 @@
                       text: "NHS number"
                     },
                     value: {
-                      text: "123 456 7890"
+                      text: data.newHRT.nhsNumber or "123 456 7890"
                     }
                   },
                   {
@@ -58,7 +108,7 @@
                       text: "Address"
                     },
                     value: {
-                      html: "101 Test Road<br>Goldcrest Way<br>Newcastle<br>Tyne and Wear<br>TR11 0TS"
+                      html: addressHTML
                     }
                   },
                   {
@@ -66,7 +116,7 @@
                       text: "Receive HRT PPC and renewal reminder by email or post"
                     },
                     value: {
-                      html: "Email"
+                      html: fulfilment | capitalize
                     }
                   },
                   {
@@ -74,7 +124,7 @@
                       text: "Email address"
                     },
                     value: {
-                      html: "jane.smith@example.com"
+                      html: data.newHRT.emailAddress or "jane.smith@example.com"
                     }
                   },
                   {
@@ -89,7 +139,7 @@
               }) }}
 
               {{ button({
-                text: "Edit applicant's details",
+                html: '<span data-ak="I">Edit applicant\'s details</span>',
                 classes: "nhsuk-button--secondary nhsuk-button--small",
                 href: "new-application"
               }) }}
@@ -171,14 +221,14 @@
                 <div class="nhsuk-button-group">
                   {{ button
                     ({ 
-                      text: 'Card payment call',
+                      html: '<span data-ak="K">Card payment call</span>',
                       href: "card-payment"
                     })
                   }}
                   {{ button
                     ({ classes: "nhsuk-button--secondary", 
-                      text: 'Cancel',
-                      href: "../search"
+                    html: '<span data-ak="M">Cancel</span>',
+                    href: "../search"
                     }) 
                   }}
                 </div>

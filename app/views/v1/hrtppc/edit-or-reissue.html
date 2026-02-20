@@ -5,7 +5,7 @@
 {% block beforeContent %}
  {{ backLink({
     href: 'case',
-    text: 'Back'
+    html: '<span data-ak="B">Back</span>'
   }) }}
 {% endblock %}
 
@@ -67,7 +67,7 @@
   {% endset %}
 
   {% set certificateStartKey %} 
-    Certificate start date 
+    html: '<span data-ak="H">Certificate start date</span>',
   {% endset %}
 
   {% else %}
@@ -103,7 +103,7 @@
               rows: [
                 {
                   key: { 
-                    text: "First name"
+                    html: '<span data-ak="S">First name</span>'
                   },
                   value: 
                   { 
@@ -116,7 +116,7 @@
                 },
                 {
                   key: { 
-                    text: "Last name"
+                    html: '<span data-ak="A">Last name</span>'
                   },
                   value:
                   { 
@@ -129,7 +129,7 @@
                 },
                 {
                   key: { 
-                    text: "Address line 1" 
+                    html: '<span data-ak="1">Address line 1</span>'
                   },
                   value:
                   { 
@@ -142,8 +142,8 @@
                 },
                 {
                   key: { 
-                    text: "Address line 2" 
-                  },
+                    html: '<span data-ak="2">Address line 2 (optional)</span>'
+                 },
                   value:
                   { 
                     html: input ({
@@ -155,7 +155,7 @@
                 },
                 {
                   key: { 
-                    text: "Town" 
+                    html: '<span data-ak="U">Town or city</span>' 
                   },
                   value:
                   { 
@@ -168,7 +168,9 @@
                   }
                 },
                 {
-                  key: { text: "County (optional)" },
+                  key: { 
+                    html: '<span data-ak="R">County (optional)</span>' 
+                  },
                   value: {
                     html: input ({
                       id: "edit-hrt-county",
@@ -180,7 +182,7 @@
                 },           
                 {
                   key: { 
-                  text: "Postcode" 
+                    html: '<span data-ak="Z">Postcode</span>' 
                   },
                   value: 
                   {
@@ -199,7 +201,7 @@
                   value:
                   { 
                     html: button({
-                      text: "Change address fields using address lookup",
+                      html: '<span data-ak="G">Change address fields using address lookup</span>',
                       classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-3",
                       href: "address-lookup?source=hrtppc&returnTo=/v1/hrtppc/edit-or-reissue"
                     })
@@ -207,7 +209,7 @@
                 },
                 {
                   key: { 
-                    text: "Date of birth" 
+                    html: '<span data-ak="X">Date of birth</span>'
                   },
                   value: { 
                     html: dateInput({
@@ -235,7 +237,7 @@
                 },
                 {
                   key: { 
-                    text: "NHS number" 
+                    html: '<span data-ak="V">NHS number</span>'
                   },
                   value:
                   { 
@@ -249,7 +251,7 @@
                 },
                 {
                   key: { 
-                    text: "Email address" 
+                    html: '<span data-ak="J">Email address</span>' 
                   },
                   value:
                   { 
@@ -273,12 +275,12 @@
                       items: [
                         { 
                           value: "email", 
-                          text: "Email",
+                          html: '<span data-ak="L">Email</span>',
                           checked: isEmail
                         },
                         { 
                           value: "post", 
-                          text: "Post",
+                          html: '<span data-ak="N">Post</span>',
                           checked: isPost
                         }
                       ]
@@ -293,7 +295,7 @@
                 },              
                 {
                   key: { 
-                    text: "Notes" 
+                    html: '<span data-ak="C">Notes</span>' 
                   },
                   value:
                   { 
@@ -308,7 +310,7 @@
 
             {{ button
               ({ 
-                text: "Reissue",
+                html: '<span data-ak="K">Reissue</span>',
                 type: "submit",
                 name: "action",
                 value: "reissue"
@@ -316,7 +318,7 @@
             }}
             {{ button
               ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
-              text: "Save changes",
+              html: '<span data-ak="I">Save changes</span>',
               type: "submit",
               name: "save",
               value: "1"
@@ -324,7 +326,7 @@
             }}
             {{ button
               ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
-                text: 'Cancel',
+                html: '<span data-ak="M">Cancel</span>',
                 href: "../search"
               }) 
             }}

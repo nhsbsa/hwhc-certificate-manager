@@ -15,6 +15,12 @@
   <link href="/css/main.css" rel="stylesheet">
 {% endblock %}
 
+{% if data.accessKeys == 'on' %}
+  {% set accessKeysClass = 'accesskeys-on' %}
+{% else %}
+  {% set accessKeysClass = 'accesskeys-off' %}
+{% endif %}
+
 <!-- Edit the header -->
 <!-- Header code examples can be found at https://service-manual.nhs.uk/design-system/components/header -->
 {% block header %}
@@ -22,7 +28,8 @@
     service: {
       text: serviceName,
       href: '/'
-    }
+    },
+    htmlClasses: accessKeysClass
   }) }}
 {% endblock %}
 
@@ -65,6 +72,19 @@
 {% endblock %}
 
 {% block bodyEnd %}
+<script>
+  (function() {
+    var setting = "{{ data.accessKeys }}";  
+  
+    if (setting === "on") {
+      document.body.classList.add("accesskeys-on");
+      document.body.classList.remove("accesskeys-off");
+    } else {
+      document.body.classList.add("accesskeys-off");
+      document.body.classList.remove("accesskeys-on");
+    }
+  })();
+  </script>
   <script src="/nhsuk-frontend/nhsuk-frontend.min.js" type="module"></script>
   <script type="module">
     import { initAll } from '/nhsuk-frontend/nhsuk-frontend.min.js'
