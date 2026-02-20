@@ -141,7 +141,7 @@
                 text: "Start date"
               },
               value: {
-                html: "25 November 2025"
+                html: (data.editMATEX.startDisplay  or "25 November 2025") 
               }
             },
             {
@@ -149,7 +149,7 @@
                 text: "Expiry date"
               },
               value: {
-                html: "24 November 2026"
+                html: (data.editMATEX.expiryDisplay or "24 November 2026")
               }
             },
             {
@@ -236,8 +236,10 @@
               key: {
                 text: "Child's due or birth date"
               },
-              value: {
-                html: "25 November 2025"
+              value: {                
+                html: (
+                  data.editMATEX.childDOBDisplay or "25 November 2025"
+                )
               }
             }
           ]

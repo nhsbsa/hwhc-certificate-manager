@@ -642,38 +642,81 @@ const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJ
 
 // Pass edit inputs to case screen
 router.post(/edit-matex/, function (req, res) {
+
+  req.session.data.editMATEX = req.session.data.editMATEX || {};
+
+  // Accept any common name pattern from the dateInput macro
+  const pick = (...candidates) =>
+    candidates.find(v => v !== undefined && v !== null && v !== '') || '';
+
+  // Your log showed bare keys: 'day', 'month', 'year'
+  const d = pick(
+    req.body['childDOB-day'],
+    req.body?.childDOB?.day,
+    req.body['childDOB.day'],
+    req.body['day']               // <-- bare (your log)
+  );
+  const m = pick(
+    req.body['childDOB-month'],
+    req.body?.childDOB?.month,
+    req.body['childDOB.month'],
+    req.body['month']             // <-- bare
+  );
+  const y = pick(
+    req.body['childDOB-year'],
+    req.body?.childDOB?.year,
+    req.body['childDOB.year'],
+    req.body['year']              // <-- bare
+  );
+
+  // If user submitted anything, these will be set; otherwise leave defaults as-is
+  if (d && m && y) {
+    const day   = parseInt(d, 10);
+    const month = parseInt(m, 10);
+    const year  = parseInt(y, 10);
+
+    const dob = new Date(year, month - 1, day);
+    if (!isNaN(dob.getTime())) {
+      // Expiry = (DOB + 1 year) - 1 day
+      const expiry = new Date(dob);
+      expiry.setFullYear(expiry.getFullYear() + 1);
+      expiry.setDate(expiry.getDate() - 1);
+
+      // Format (no template filters needed)
+      const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+      // ISO + Display for child DOB
+      req.session.data.editMATEX.childDOBISO      = dob.toISOString().slice(0,10);
+      req.session.data.editMATEX.childDOBDisplay = fmt.format(dob);
+
+      // ISO + Display for expiry
+      req.session.data.editMATEX.expiryISO        = expiry.toISOString().slice(0,10);
+      req.session.data.editMATEX.expiryDisplay    = fmt.format(expiry);
+
+      // Start date rule: start = child's due/birth date
+      req.session.data.editMATEX.startISO         = req.session.data.editMATEX.childDOBISO;
+      req.session.data.editMATEX.startDisplay     = req.session.data.editMATEX.childDOBDisplay;
+
+      // Also prefill helpers so the edit page re-opens with the last inputs
+      req.session.data.childDOBDay   = String(day);
+      req.session.data.childDOBMonth = String(month);
+      req.session.data.childDOBYear  = String(year);
+    }
+  }
+
   const data = req.session.data || {};
-  data.editMATEX = data.editMATEX || {}; 
+  data.editMATEX = data.editMATEX || {};
 
-  if ('editMATEX.firstName' in req.body)
-    data.editMATEX.firstName = req.body['editMATEX.firstName'];
-
-  if ('editMATEX.lastName' in req.body)
-    data.editMATEX.lastName = req.body['editMATEX.lastName'];
-
-  if ('editMATEX.email' in req.body)
-    data.editMATEX.email = req.body['editMATEX.email'];
-
-  if ('editMATEX.certificateFulfilment' in req.body)
-    data.editMATEX.certificateFulfilment = req.body['editMATEX.certificateFulfilment'];
-
-  if ('editMATEX.addressLineOne' in req.body)
-    data.editMATEX.addressLineOne = req.body['editMATEX.addressLineOne'];
-
-  if ('editMATEX.addressLineTwo' in req.body)
-    data.editMATEX.addressLineTwo = req.body['editMATEX.addressLineTwo'];
-
-  if ('editMATEX.town' in req.body)
-    data.editMATEX.town = req.body['editMATEX.town'];
-
-  if ('editMATEX.county' in req.body)
-    data.editMATEX.county = req.body['editMATEX.county'];
-
-  if ('editMATEX.postcode' in req.body)
-    data.editMATEX.postcode = req.body['editMATEX.postcode'];
-
-  if ('editMATEX.telephoneNumber' in req.body)
-    data.editMATEX.telephoneNumber = req.body['editMATEX.telephoneNumber'];
+  if ('editMATEX.firstName' in req.body) data.editMATEX.firstName = req.body['editMATEX.firstName'];
+  if ('editMATEX.lastName'  in req.body) data.editMATEX.lastName  = req.body['editMATEX.lastName'];
+  if ('editMATEX.email'     in req.body) data.editMATEX.email     = req.body['editMATEX.email'];
+  if ('editMATEX.certificateFulfilment' in req.body) data.editMATEX.certificateFulfilment = req.body['editMATEX.certificateFulfilment'];
+  if ('editMATEX.addressLineOne' in req.body) data.editMATEX.addressLineOne = req.body['editMATEX.addressLineOne'];
+  if ('editMATEX.addressLineTwo' in req.body) data.editMATEX.addressLineTwo = req.body['editMATEX.addressLineTwo'];
+  if ('editMATEX.town' in req.body)          data.editMATEX.town   = req.body['editMATEX.town'];
+  if ('editMATEX.county' in req.body)        data.editMATEX.county = req.body['editMATEX.county'];
+  if ('editMATEX.postcode' in req.body)      data.editMATEX.postcode = req.body['editMATEX.postcode'];
+  if ('editMATEX.telephoneNumber' in req.body) data.editMATEX.telephoneNumber = req.body['editMATEX.telephoneNumber'];
 
   req.session.data = data;
 
@@ -727,6 +770,21 @@ router.post(/edit-hrt/, function (req, res) {
 
   // if save details is clicked
   return res.redirect('/v1/hrtppc/case');
+});
+
+router.get(/edit-or-reissue/, function (req, res) {
+  const iso = req.session.data?.editMATEX?.childDOBISO; // e.g. "2025-12-05"
+  if (iso && /^\d{4}-\d{2}-\d{2}$/.test(iso)) {
+    req.session.data.childDOBYear  = iso.substring(0, 4);
+    req.session.data.childDOBMonth = iso.substring(5, 7);
+    req.session.data.childDOBDay   = iso.substring(8,10);
+  } else {
+    // ensure defaults are present if nothing is saved yet
+    req.session.data.childDOBYear  = req.session.data.childDOBYear  || '2025';
+    req.session.data.childDOBMonth = req.session.data.childDOBMonth || '11';
+    req.session.data.childDOBDay   = req.session.data.childDOBDay   || '25';
+  }
+  return res.render('v1/matex/edit-or-reissue');
 });
 
 module.exports = router;
