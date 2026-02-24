@@ -31,12 +31,12 @@
 </a>
 {% endset %}
 
+{% set emailHTML = data.editMATEX.email or patient.email or '' %}
 
 {% if patient.channel === 'Paper' %}
 {% set channelHTML = 'Paper' ~ channelLinkHtml %}
-{% set fulfilment = data.editMATEX.certificateFulfilment or patient.fulfilment or "post" %}
+{% set fulfilment = data['editMATEX.certificateFulfilment'] or data.editMATEX.certificateFulfilment or patient.fulfilment or "post" %}
 {% set isDigital = false %}
-{% set emailHTML = '' %}
 {% set fulfilmentKey %} 
 Certificate fulfilment
 {% endset %}
@@ -48,12 +48,13 @@ Certificate fulfilment
     items: [
       { 
         value: "email", 
-        html: '<span data-ak="L">Email</span>'
+        html: '<span data-ak="L">Email</span>',
+        checked: fulfilment == "email"
       },
       { 
         value: "post", 
         html: '<span data-ak="N">Post</span>',
-        checked: true
+        checked: fulfilment == "post"
       }
     ]
   }) }}
@@ -62,9 +63,8 @@ Certificate fulfilment
 
 {% else %}
   {% set channelHTML = 'Digital' %}
-  {% set fulfilment = data.editMATEX.certificateFulfilment or patient.fulfilment or "email" %}
+  {% set fulfilment = data['editMATEX.certificateFulfilment'] or data.editMATEX.certificateFulfilment or patient.fulfilment or "email" %}
   {% set isDigital = true %}
-  {% set emailHTML = data.editMATEX.email or patient.email or 'jane.smith@example.com' %}
   {% set fulfilmentValue %} {% endset %}
   {% set fulfilmentKey %} {% endset %}
 
@@ -110,6 +110,22 @@ Certificate fulfilment
 {% set childDOBMonth = data.childDOBMonth or '11'   %}
 {% set childDOBDay   = data.childDOBDay   or '25'   %}
 
+{% if data.errors %}
+  {{ errorSummary({
+      titleText: "There is a problem",
+      errorList: data.errors
+  }) }}
+{% endif %}
+
+{% set emailError = null %}
+
+{% if data.errors %}
+  {% for err in data.errors %}
+    {% if err.href == "#email" %}
+      {% set emailError = { text: err.text } %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
 
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
@@ -294,7 +310,8 @@ Certificate fulfilment
                     html: input ({
                       id: "email",
                       name: "editMATEX.email",
-                      value: emailHTML
+                      value: emailHTML,
+                      errorMessage: emailError
                     })
                   }
                 },
