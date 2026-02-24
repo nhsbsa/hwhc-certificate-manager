@@ -157,6 +157,8 @@
 
 
           <p id="certificateTypes" class="nhsuk-u-visually-hidden">{% for type in data[version].certificateTypes %}{% if loop.index0 !== 0 %},{% endif %}{{ type }}{% endfor %}</p>
+          <p id="processors" class="nhsuk-u-visually-hidden">{% for cipher, processor in data.processors %}{% if loop.index0 !== 0 %},{% endif %}{{ cipher + '|' + processor.name }}{% endfor %}</p>
+
 
           <script>
 
@@ -589,6 +591,9 @@
 
                 const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',');
                 const statuses = ['processing','on-hold','accepted','active','expired'];
+                
+                const processors = [];
+                /* Now generated from session data
                 const processors = [
                   { key: 'AICOL', AICOL: false },
                   { key: 'DATHO', DATHO: false },
@@ -596,6 +601,18 @@
                   { key: 'ZAKHA', ZAKHA: false },
                   { key: 'JASMI', JASMI: false }
                 ];
+                */
+
+                const processorsP = document.querySelector('#processors').innerHTML.split(',');
+                processorsP.forEach( function( p ){
+                  const cipher = p.split('|')[0];
+                  const name = p.split('|')[1];
+                  const obj = { key: cipher, name: name }
+                  obj[cipher] = false;
+                  processors.push( obj );
+                });
+
+                
 
                 names.forEach( function( name, i ){
 
@@ -603,10 +620,11 @@
 
                     obj.id = i;
                     obj.nhsNumber = _generateNHSNumber();
-                    obj.processor = processors[Math.round(Math.random()*(processors.length-1))].key;
-                    
 
-                   
+                    const processor = processors[Math.round(Math.random()*(processors.length-1))];
+                    obj.processor = processor.key;
+                    obj.processorName = processor.name;
+                    
                     obj.certificateType = certificateTypes[Math.round(Math.random())*(certificateTypes.length-1)];
                     obj.status = ( obj.certificateType === 'hrtppc' ) ? 'active' : statuses[Math.round(Math.random()*(statuses.length-1))];
                     

@@ -51,21 +51,16 @@
     <div class="nhsuk-grid-column-full">
 
           <div class="nhsuk-grid-row">
+
+            <!-- ONE THIRD -->
             <div class="nhsuk-grid-column-one-third">
 
-              <h2 class="nhsuk-heading-m nhsuk-u-visually-hidden">Scanned application</h2>
-
-              <details class="expandable-image expandable-image--small">
-                <div class="expandable-image__inner">
-                  <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
-                </div>
-                <summary class="expandable-image__button nhsuk-button">
-                  <span class="closed">Expand image</span>
-                  <span class="open">Shrink image</span></summary>
-              </details>
+              {% from '../macros/image.njk' import image %}
+              {{ image() }}
 
             </div>
 
+            <!-- TWO THIRDS -->
             <div class="nhsuk-grid-column-two-thirds">
 
                <div class="nhsuk-card nhsuk-card--grey">

@@ -1,0 +1,17 @@
+{% macro image( classes ) %}
+
+    <details class="expandable-image{{ ' ' + classes}}">
+
+        <h2 class="nhsuk-heading-m nhsuk-u-visually-hidden">Scanned application</h2>
+        
+        <div class="expandable-image__inner">
+            <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
+        </div>
+        <summary class="expandable-image__button nhsuk-button">
+            <span class="closed">Expand image</span>
+            <span class="open">Shrink image</span>
+        </summary>
+
+    </details>
+
+{% endmacro %}

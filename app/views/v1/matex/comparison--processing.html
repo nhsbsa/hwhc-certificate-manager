@@ -120,42 +120,15 @@
 
 
             <!-- ONE THIRD -->
-            <div class="nhsuk-grid-column-one-third">
-
-              <h2 class="nhsuk-heading-m nhsuk-u-visually-hidden">Scanned application</h2>
-
-              <details class="expandable-image expandable-image--small expandable-image--half">
-                <div class="expandable-image__inner">
-                  <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
-                </div>
-                <summary class="expandable-image__button nhsuk-button">
-                  <span class="closed">Expand image</span>
-                  <span class="open">Shrink image</span></summary>
-              </details>
-
-
-              <div class="nhsuk-card nhsuk-card--grey">
-                <div class="nhsuk-card__content">
-                  <div class="scroll-container">
-                    
-                    {% from 'nhsapp/components/timeline/macro.njk' import nhsappTimeline %}
-
-                    {{ nhsappTimeline({
-                        id: 'timeline-application',
-                        items: [
-                          {
-                            headingText: 'Application scanned',
-                            isPastItem: true,
-                            html: '<span class="nhsuk-body-s">23 November 2025, 08:30</span>'
-                          }
-                        ]
-                      }) }}
-
-                  </div>
-                </div>
-              </div>
+            <div class="nhsuk-grid-column-one-third sticky-column">
 
               
+              {% from '../macros/image.njk' import image %}
+              {{ image( 'expandable-image--half' ) }}
+
+              {% from '../macros/notes.njk' import notes %}
+              {{ notes( 'processing' ) }}
+
 
             </div>
 

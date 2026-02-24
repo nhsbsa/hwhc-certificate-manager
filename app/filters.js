@@ -5,33 +5,40 @@ module.exports = function (env) {
   const filters = {}
 
 
-  // 
-// GET JOB TITLE FILTER
-//
-filters.getJobTitle = function ( role ) {
-
-  let jobTitle = '';
-  switch( role ){
-    case 'backOffice':
-      jobTitle = 'Applications processor';
-      break;
-    case 'backOfficeSupervisor':
-      jobTitle = 'Supervisor applications processor';
-      break;
-    case 'callCentre':
-      jobTitle = 'Customer contact adviser';
-      break;
-    case 'qualityControl':
-      jobTitle = 'Quality checker';
-      break;
+  //
+  // GET RANDOM NUMBER
+  //
+  filters.getRandomNumber = function( max ){
+    return Math.round(Math.random()*max);
   }
 
-  return jobTitle;
-  
-};
+  // 
+  // GET JOB TITLE FILTER
+  //
+  filters.getJobTitle = function ( role ) {
+
+    let jobTitle = '';
+    switch( role ){
+      case 'backOffice':
+        jobTitle = 'Applications processor';
+        break;
+      case 'backOfficeSupervisor':
+        jobTitle = 'Supervisor applications processor';
+        break;
+      case 'callCentre':
+        jobTitle = 'Customer contact adviser';
+        break;
+      case 'qualityControl':
+        jobTitle = 'Quality checker';
+        break;
+    }
+
+    return jobTitle;
+    
+  };
 
 
-//
+  //
   // DWP ADDRESS PATTERN GET RESULTS STATUS FILTER
   //
   filters.dwpAddressPatternGetResultsStatus = function( results, postcode, buildingNumberOrName ){
