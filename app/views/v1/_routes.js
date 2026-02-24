@@ -643,6 +643,30 @@ const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJ
 // Pass edit inputs to case screen
 router.post(/edit-matex/, function (req, res) {
 
+  const fulfilment = req.body['editMATEX.certificateFulfilment'];
+  const email = req.body['editMATEX.email'];
+  const errors = [];
+
+  //email fulfilment selected but email address not entered
+  if (fulfilment === 'email' && (!email || email.trim() === "")) {
+    errors.push ({
+      text: "We do not have an email address for this customer. Add their email address and try again",
+      href: "#email"
+    });
+  }
+
+  if (errors.length > 0) {
+    req.session.data.errors = errors;
+
+    req.session.data['editMATEX.certificateFulfilment'] = fulfilment;
+    req.session.data['editMATEX.email'] = email;
+ 
+    return res.redirect('edit-or-reissue');
+  }
+
+  req.session.data.errors = null;
+
+  
   req.session.data.editMATEX = req.session.data.editMATEX || {};
 
   // Accept any common name pattern from the dateInput macro

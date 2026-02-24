@@ -4,8 +4,8 @@
 
 {% block beforeContent %}
  {{ backLink({
-    href: '../search-results',
-    html: '<span data-ak="B">Back</span>'
+  href: 'javascript:history.go(-1)',
+  html: '<span data-ak="B">Back</span>'
   }) }}
 {% endblock %}
 
