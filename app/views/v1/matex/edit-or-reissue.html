@@ -118,13 +118,39 @@ Certificate fulfilment
 {% endif %}
 
 {% set emailError = null %}
-
 {% if data.errors %}
   {% for err in data.errors %}
     {% if err.href == "#email" %}
       {% set emailError = { text: err.text } %}
     {% endif %}
   {% endfor %}
+{% endif %}
+
+{% set addressLineOneError = null %}
+{% if data.errors %}
+  {% for err in data.errors %}
+    {% if err.href == "#address-line-1" %}
+      {% set addressLineOneError = { text: err.text } %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+
+{% set postcodeError = null %}
+{% if data.errors %}
+  {% for err in data.errors %}
+    {% if err.href == "#postcode" %}
+      {% set postcodeError = { text: err.text } %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% if data.editMATEX.postcode %}
+  {% set postcodeValue = data.editMATEX.postcode %}
+  {% elif postcodeError %}
+  {% set postcodeValue = "" %}
+  {% else %}
+  {% set postcodeValue = patient.address.postcode %}
 {% endif %}
 
 <div class="nhsuk-grid-row">
@@ -172,6 +198,7 @@ Certificate fulfilment
                       id: "address-line-1",
                       name: "editMATEX.addressLineOne",
                       value: addressValue1,
+                      errorMessage: addressLineOneError,
                       disabled: isDigital
                     })
                   }
@@ -227,7 +254,8 @@ Certificate fulfilment
                       id: "postcode",
                       name: "editMATEX.postcode",
                       classes: "nhsuk-input--width-5",
-                      value: data.editMATEX.postcode or patient.address.postcode
+                      value: postcodeValue,
+                      errorMessage: postcodeError
                     })
                   }
                 },
@@ -361,7 +389,7 @@ Certificate fulfilment
                   { 
                     html: textarea ({
                       id: "notes",
-                      name: "notes"
+                      name: "editMATEX.notes"
                     })
                   }
                 }

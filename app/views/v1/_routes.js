@@ -645,9 +645,12 @@ router.post(/edit-matex/, function (req, res) {
 
   const fulfilment = req.body['editMATEX.certificateFulfilment'];
   const email = req.body['editMATEX.email'];
+  const addressLineOne = req.body['editMATEX.addressLineOne'];
+  const postcode = req.body['editMATEX.postcode'];
+
   const errors = [];
 
-  //email fulfilment selected but email address not entered
+  //Email fulfilment selected but email address not entered
   if (fulfilment === 'email' && (!email || email.trim() === "")) {
     errors.push ({
       text: "Enter the certificate holder's email address",
@@ -655,15 +658,51 @@ router.post(/edit-matex/, function (req, res) {
     });
   }
 
-  if (errors.length > 0) {
-    req.session.data.errors = errors;
+  //Fulfilment is Post but address and/or postcode missing
+  if (fulfilment === 'post') {
 
-    req.session.data['editMATEX.certificateFulfilment'] = fulfilment;
-    req.session.data['editMATEX.email'] = email;
- 
-    return res.redirect('edit-or-reissue');
+    const missingAddress = !addressLineOne || addressLineOne.trim() === "";
+    const missingPostcode = !postcode || postcode.trim() === "";
+
+    if (missingAddress) {
+      errors.push({
+        text: "Enter certificate holder's address line 1",
+        href: "#address-line-1"
+      });
+    }
+    else if (missingPostcode) {
+      errors.push({
+        text: "Enter certificate holder's postcode",
+        href: "#postcode"
+      });
+    }
   }
 
+  //If errors, redirect back
+  if (errors.length > 0) {
+    const data = {
+      ...req.session.data,
+      errors,
+      editMATEX: {
+        ...(req.session.data.editMATEX || {}),
+        certificateFulfilment: fulfilment ?? '',
+        email: email ?? '',
+        addressLineOne: addressLineOne ?? '',
+        postcode: postcode ?? ''
+      }
+    };
+  
+    // Optionally also set flattened keys if your template reads those
+    data['editMATEX.certificateFulfilment'] = data.editMATEX.certificateFulfilment;
+    data['editMATEX.email'] = data.editMATEX.email;
+    data['editMATEX.addressLineOne'] = data.editMATEX.addressLineOne;
+    data['editMATEX.postcode'] = data.editMATEX.postcode;
+  
+    // Do NOT update req.session here; just render the error state
+    return res.status(400).render('v1/matex/edit-or-reissue', { data });
+  }
+
+  //No errors? Continue as normal
   req.session.data.errors = null;
 
   
@@ -740,6 +779,7 @@ router.post(/edit-matex/, function (req, res) {
   if ('editMATEX.county' in req.body)        data.editMATEX.county = req.body['editMATEX.county'];
   if ('editMATEX.postcode' in req.body)      data.editMATEX.postcode = req.body['editMATEX.postcode'];
   if ('editMATEX.telephoneNumber' in req.body) data.editMATEX.telephoneNumber = req.body['editMATEX.telephoneNumber'];
+  if ('editMATEX.notes' in req.body) data.editMATEX.notes = req.body['editMATEX.notes'];
 
   req.session.data = data;
 
