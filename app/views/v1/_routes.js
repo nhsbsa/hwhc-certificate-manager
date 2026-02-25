@@ -650,7 +650,7 @@ router.post(/edit-matex/, function (req, res) {
   //email fulfilment selected but email address not entered
   if (fulfilment === 'email' && (!email || email.trim() === "")) {
     errors.push ({
-      text: "We do not have an email address for this customer. Add their email address and try again",
+      text: "Enter the certificate holder's email address",
       href: "#email"
     });
   }
@@ -673,24 +673,23 @@ router.post(/edit-matex/, function (req, res) {
   const pick = (...candidates) =>
     candidates.find(v => v !== undefined && v !== null && v !== '') || '';
 
-  // Your log showed bare keys: 'day', 'month', 'year'
   const d = pick(
     req.body['childDOB-day'],
     req.body?.childDOB?.day,
     req.body['childDOB.day'],
-    req.body['day']               // <-- bare (your log)
+    req.body['day']  
   );
   const m = pick(
     req.body['childDOB-month'],
     req.body?.childDOB?.month,
     req.body['childDOB.month'],
-    req.body['month']             // <-- bare
+    req.body['month'] 
   );
   const y = pick(
     req.body['childDOB-year'],
     req.body?.childDOB?.year,
     req.body['childDOB.year'],
-    req.body['year']              // <-- bare
+    req.body['year']            
   );
 
   // If user submitted anything, these will be set; otherwise leave defaults as-is
