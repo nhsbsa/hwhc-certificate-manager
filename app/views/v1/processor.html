@@ -14,6 +14,8 @@
 
 {% block content %}
 
+{% set buttonText = "<span data-ak='V'>View all applications processed by " ~ processor.name ~ "</span>" %}
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
@@ -28,11 +30,11 @@
             {% endif %}
 
             {% if processor.level === 'trainee' %}
-              {% set insetHTML = insetHTML + 'Applications processor with ' + ( processor.checkingLevel or '100' ) + '% of applications being checked&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+searchProcessor+'">Edit account</a>' %}
+              {% set insetHTML = insetHTML + 'Applications processor with ' + ( processor.checkingLevel or '100' ) + '% of applications being checked&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+searchProcessor+'"><span data-ak="C">Edit account</span></a>' %}
             {% elif processor.level === 'supervisor' %}
               {% set insetHTML = insetHTML + 'Supervisor applications processor' %}
             {% elif processor.level === 'standard' %}
-              {% set insetHTML = insetHTML + 'Applications processor&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+searchProcessor+'">Edit account</a>' %}
+              {% set insetHTML = insetHTML + 'Applications processor&nbsp;&nbsp;<a class="nhsuk-link" href="processor-edit?searchProcessor='+searchProcessor+'"><span data-ak="C">Edit account</span></a>' %}
             {% endif %}
 
               <div class="nhsuk-grid-row">
@@ -98,7 +100,7 @@
             
 
             {{ button({
-              text: 'View all applications processed by ' + processor.name,
+              html: buttonText,
               href: 'search-results?searchProcessor='+searchProcessor +'&searchChecking=',
               classes: 'nhsuk-button--small nhsuk-button--secondary'
             }) }}

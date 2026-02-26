@@ -55,6 +55,7 @@
         <h3 class="nhsuk-heading-s">Applicant's address</h3>
 
           {{ input({
+            classes: "nhsuk-u-width-two-thirds",
             label: {
               html: '<span data-ak="1">Address line 1</span>'
             },
@@ -64,6 +65,7 @@
           }) }}
 
           {{ input({
+            classes: "nhsuk-u-width-two-thirds",
             label: {
               html: '<span data-ak="2">Address line 2 (optional)</span>'
             },
@@ -73,20 +75,20 @@
           }) }}
 
           {{ input({
+            classes: "nhsuk-u-width-one-half",
             label: {
               html: '<span data-ak="U">Town or city</span>' 
             },
-            classes: "nhsuk-u-width-one-half",
             id: "new-hrt-town",
             name: "newHRT.town",
             value: data.newHRT.town or ''
           }) }}
 
           {{ input({
+            classes: "nhsuk-u-width-one-half",
             label: {
               html: '<span data-ak="R">County (optional)</span>' 
             },
-            classes: "nhsuk-u-width-one-half",
             id: "new-county",
             name: "newHRT.county",
             value: data.newHRT.county or ''
@@ -96,7 +98,7 @@
             label: {
               html: '<span data-ak="Z">Postcode</span>' 
             },
-            classes: "nhsuk-u-width-one-quarter",            
+            classes: "nhsuk-input--width-10",            
             id: "new-postcode",
             name: "newHRT.postcode",
             value: data.newHRT.postcode or ''
@@ -264,7 +266,7 @@
         <div class="nhsuk-button-group">
           {{ button
             ({ 
-              html: '<span data-ak="K">Submit</span>',
+              html: '<span data-ak="I">Submit</span>',
               href: "check-their-answers"
             })
           }}
