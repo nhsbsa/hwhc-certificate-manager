@@ -1,0 +1,304 @@
+{% extends 'layout.html' %}
+
+{% set pageName = 'Application selection demo' %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+          <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {{ input({
+        id: 'recordsInSession',
+        name: 'recordsInSession',
+        classes: 'nhsuk-input--width-2',
+        value: data.recordsInSession or '75',
+        label: {
+          text: 'How many records will the processor handle?'
+        }
+      }) }}
+
+      {{ input({
+        id: 'matexLimit',
+        name: 'matexLimit',
+        classes: 'nhsuk-input--width-2',
+        value: data.matexLimit or '20',
+        label: {
+          text: 'How many MATEX certificates should be handled before a Quality Check takes place?'
+        }
+      }) }}
+
+      {{ input({
+        id: 'checkingLevel',
+        name: 'checkingLevel',
+        classes: 'nhsuk-input--width-2',
+        value: data.checkingLevel or '55',
+        suffix: { text: '%' },
+        label: {
+          text: 'What is the percentage of checks to be performed by the supervisor?'
+        }
+      }) }}
+
+      {{ button({
+        id: 'demoButton',
+        text: 'Start demo'
+      }) }}
+
+
+
+
+      <!-- DEMO HOLDER -->
+      <div class="demo-holder"></div>
+
+
+
+      <style>
+
+
+        .id-key li::before {
+          content: '';
+          height: 1em;
+          width: 1em;
+          display: inline-block;
+          margin-right: 0.5em;
+          background-color: #CCC;
+        }
+
+        .id-key li.supervisor::before {
+          background-color: green;
+        }
+
+         .id-key li.quality::before {
+          background-color: salmon;
+        }
+
+        .id-applications,
+        .id-applications li {
+          display: block;
+          overflow: hidden;
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .id-applications li {
+          display: block;
+          
+          height: 2.5rem;
+          line-height: 2.5rem;
+          width: calc( ( 100% - ( 9 * 1.25rem ) ) / 10 );
+          float: left;
+
+          background-color: #CCC;
+          color: black;
+          font-weight: 600;
+          text-align: center;
+          margin-left: 1.25rem;
+          margin-top: 1.25rem;
+        }
+
+         .id-applications li:nth-child(-n+10) {
+          margin-top: 0;
+        }
+
+        .id-applications li:nth-child(10n+1) {
+          margin-left: 0;
+        }
+
+         .id-applications li.supervisor {
+            background-color: green;
+            color: white;
+         }
+
+          .id-applications li.quality {
+            background-color: salmon;
+            color: white;
+          }
+
+      </style>
+   
+
+      <script>
+
+        const Demonstration = (function(){
+
+          //
+          // INIT FUNCTION
+          //
+          function _init(){
+
+            console.log( '_init();' );
+
+            const button = document.querySelector('#demoButton');
+            button.addEventListener('click',function(){
+              _drawOutput();
+            });
+
+          }
+
+          //
+          // DRAW TABLE FUNCTION
+          //
+          function _drawOutput(){
+
+            console.log( '_drawOutput();' );
+
+
+            // Clear previous output
+            const demoHolder = document.querySelector('.demo-holder');
+            demoHolder.innerHTML = '';
+
+            // Create new ouput
+            let html = '<h2>Application checks</h2>';
+
+            html += '<ul class="id-key nhsuk-list"><li class="nhsuk-u-font-size-14">Unchecked</li><li class="nhsuk-u-font-size-14 supervisor">Supervisor check</li><li class="nhsuk-u-font-size-14 quality">Quality check</li></ul>';
+            html += '<ul class="id-applications">';
+
+            const recordsInSessionInput = document.querySelector('#recordsInSession');
+            const matexLimitInput = document.querySelector('#matexLimit');
+            const checkingLevelInput = document.querySelector('#checkingLevel');
+
+            const recordsInSession = ( !Number.isNaN( parseInt(recordsInSessionInput.value) ) ) ? parseInt(recordsInSessionInput.value) : 75;
+            const matexLimit = ( !Number.isNaN( parseInt(matexLimitInput.value) ) ) ? parseInt(matexLimitInput.value) : 20;
+            const checkingLevel = ( !Number.isNaN( parseInt( checkingLevelInput.value ) ) ) ? parseInt(checkingLevelInput.value) : 55;
+
+            if( checkingLevel > 100 ){
+              checkingLevel = 100;
+            }
+
+            const qualityChecks = ( checkingLevel === 100 ) ? 0 : 1;
+
+            const recordsForSupervisorChecks = Math.round( matexLimit * ( checkingLevel / 100 ) );
+            const expectedSupervisorChecks = Math.round( recordsInSession * ( checkingLevel / 100 ) );
+
+            const logs = [ ['Processing begins - ' + recordsInSession + ' to process' ] ];
+
+            logs.push( ['Expecting '+ expectedSupervisorChecks +' supervisor checks to be performed'] );
+            
+            let matexLimitCount = 0;
+            let matexLimitPass = 0;
+
+            let qualityCheckApplication = -1;
+            let supervisorCheckApplications = [];
+            let noOfSupervisorCheckApplications = 0;
+
+            for( let i = 0; i < recordsInSession; i++ ) {
+
+              if( matexLimitCount === 0 ){
+                
+                supervisorCheckApplications = [];
+                
+                for( let j = 0; j < matexLimit; j++ ){
+                  supervisorCheckApplications.push( i + j );
+                }
+                
+                logs.push( ['Round '+( matexLimitPass + 1 )+' - beginning selection process'] );
+
+                if( matexLimitPass < qualityChecks ){
+
+                  let num = Math.round(Math.random()*(supervisorCheckApplications.length-1));
+                  qualityCheckApplication = supervisorCheckApplications[num];
+                  supervisorCheckApplications.splice(num,1);
+
+                  logs.push( ['Selected application '+(qualityCheckApplication+1)+' for a quality check'] );             
+                
+                }
+                
+                logs.push( ['Selecting '+recordsForSupervisorChecks+' applications for supervisor checks'] );
+
+                let loop = matexLimit - recordsForSupervisorChecks;
+                for( j=0;j<loop;j++){
+                  
+                  let num = Math.round(Math.random()*(supervisorCheckApplications.length-1));
+                  supervisorCheckApplications.splice(num,1);
+
+                }
+
+                logs.push( ['Selected '+supervisorCheckApplications.join(', ')] );
+
+                matexLimitCount = matexLimit;
+                matexLimitPass++;
+
+              }
+
+              let txt = 'Drawing application '+(i+1);
+              let addToHTML = '<li><span class="nhsuk-u-visually hidden">Application </span>'+(i+1)+'</li>';
+
+              if( qualityCheckApplication === i ){
+                txt += ' - Quality check';
+                addToHTML = '<li class="quality"><span class="nhsuk-u-visually hidden">Application </span>'+(i+1)+'</li>';
+              }
+
+              if( supervisorCheckApplications.indexOf(i) > -1 ){
+                txt += ' - Supervisor check';
+                noOfSupervisorCheckApplications++;
+                addToHTML = '<li class="supervisor"><span class="nhsuk-u-visually hidden">Application </span>'+(i+1)+'</li>';
+              }
+
+              logs.push( [txt] );
+              html += addToHTML;
+
+              matexLimitCount--;
+
+
+            }
+
+
+            html += '</ul>';
+            html += '<hr />';
+
+            html += '<p>Expected supervisor checks: '+expectedSupervisorChecks+' applications ( '+recordsInSession+' * ('+checkingLevel+' / 100 )) = '+( recordsInSession * (checkingLevel/100) )+'</p>';
+
+            let check = ( qualityChecks === 1 ) ? 'check' : 'checks';
+
+            html += '<p>Performed '+qualityChecks+' quality '+check+'</p>'
+
+            if( expectedSupervisorChecks !== noOfSupervisorCheckApplications ){
+              html += '<p style="color: rgb(213, 40, 27);"><strong>Performed '+noOfSupervisorCheckApplications+' supervisor checks</strong></p>';
+            } else {
+              html += '<p style="color: #007f3b"><strong>Performed '+noOfSupervisorCheckApplications+' supervisor checks</strong></p>';
+            }
+
+
+            html += '<details class="nhsuk-details"><summary class="nhsuk-details__summary"><span class="nhsuk-details__summary-text">Processing log</span></summary>';
+            html += '<div class="nhsuk-details__text"><ul class="nhsuk-list">';
+
+            logs.forEach(function( log ){
+              html += '<li>'+log+'</li>';
+            });
+
+            html += '</ul></div></details>';
+
+  
+    
+
+
+            demoHolder.innerHTML = html;
+
+
+          }
+
+          return {
+            init: _init
+          }
+
+        })();
+
+        document.addEventListener('DOMContentLoaded',function(){
+          Demonstration.init();
+        });
+
+      </script>
+      
+
+    </div>
+  </div>
+
+{% endblock %}
