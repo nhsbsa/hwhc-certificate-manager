@@ -80,70 +80,70 @@
                             ],
                             rows: [
                                 [
-                                    { text: 'First name' },
+                                    { html: '<span data-ak="S">First name</span>'},
                                     { html: 'Yes' },
                                     { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
                                     { text: patient.firstName or 'Sarah' },
                                     { html: mistakeCheckBox('First name','first-name') }
                                 ],
                                 [
-                                    { text: 'Last name' },
+                                    { html: '<span data-ak="A">Last name</span>' },
                                     { html: 'Yes' },
                                     { text: '' },
                                     { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' },
                                     { html: mistakeCheckBox('Last name','last-name') }
                                 ],
                                 [
-                                    { text: 'Date of birth' },
+                                    { html: '<span data-ak="X">Date of birth</span>' },
                                     { html: 'No' },
                                     { text: '2 July 1995' },
                                     { text: '2 July 1995' },
                                     { html: mistakeCheckBox('Date of birth','date-of-birth') }
                                 ],
                                 [
-                                    { text: 'NHS number' },
+                                    { html: '<span data-ak="V">NHS number</span>' },
                                     { html: 'No' },
                                     { text: '1252 567 987' },
                                     { text: '1252 567 987' },
                                     { html: mistakeCheckBox('NHS number','nhs-number') }
                                 ],
                                 [
-                                    { text: 'Address' },
+                                    { html: '<span data-ak="Z">Address</span>' },
                                     { html: 'No' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
                                     { html: mistakeCheckBox('Address','address') }
                                 ],
                                 [
-                                    { text: 'Phone number' },
+                                    { html: '<span data-ak="Q">Phone number</span>' },
                                     { html: 'No' },
                                     { html: '07911 123456' },
                                     { html: '07911 123456' },
                                     { html: mistakeCheckBox('Phone number','phone-number') }
                                 ],
                                 [
-                                    { text: 'Email address' },
+                                    { html: '<span data-ak="J">Email address</span>' },
                                     { html: 'Empty' },
                                     { html: '' },
                                     { html: '' },
                                     { html: mistakeCheckBox('Email address','email-address') }
                                 ],
                                 [
-                                    { text: "Baby's birth date" },
+                                    { html: '<span data-ak="C">Baby\'s birth date</span>' },
                                     { html: 'No' },
                                     { html: '10 January 2026' },
                                     { html: '10 January 2026' },
                                     { html: mistakeCheckBox("Baby's birth date",'babys-dob') }
                                 ],
                                 [
-                                    { text: 'Patient signature' },
+                                    { html: '<span data-ak="U">Patient signature</span>' },
                                     { html: 'No' },
                                     { html: 'Yes' },
                                     { html: 'Yes' },
                                     { html: mistakeCheckBox('Patient signature','patient-sig') }
                                 ],
                                 [
-                                    { text: 'Healthcare practitioner signature' },
+                                    { html: '<span data-ak="H">Healthcare practitioner signature</span>' },
                                     { html: 'No' },
                                     { html: 'Yes' },
                                     { html: 'Yes' },
@@ -182,11 +182,11 @@
                                 items: [
                                     {
                                         value: 'yes',
-                                        text: 'Yes'
+                                        html: '<span data-ak="L">Yes</span>'
                                     },
                                     {
                                         value: 'no',
-                                        text: 'No',
+                                        html: '<span data-ak="N">No</span>',
                                         conditional: {
                                             html: noHTML
                                         }
@@ -196,7 +196,7 @@
                                
 
                                 {{ button({
-                                    text: 'Leave feedback'
+                                    html: '<span data-ak="I">Leave feedback</span>'
                                 }) }}
 
                                 </form>

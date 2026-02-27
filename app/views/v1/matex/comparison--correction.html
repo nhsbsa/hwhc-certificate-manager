@@ -151,12 +151,12 @@
                             <div class="nhsuk-button-group">
 
                               {{ button({
-                                text : 'Approve application',
+                                html: '<span data-ak="I">Approve application</span>',
                                 href: '../process-application/confirmation?certificateStatus=applicationApproved'
                               }) }}
 
                               {{ button({
-                                text : 'Cannot process application',
+                                html: '<span data-ak="K">Cannot process application</span>',
                                 href: '../process-application/cannot-process-application',
                                 classes: 'nhsuk-button--secondary'
                               }) }}

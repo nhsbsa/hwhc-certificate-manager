@@ -78,14 +78,14 @@
                 items: [
                   {
                     value: 'trainee',
-                    html: 'Yes',
+                    html: '<span data-ak="L">Yes</span>',
                     conditional: {
                       html: yesHTML
                     }
                   },
                   {
                     value: 'standard',
-                    html: 'No'
+                    html: '<span data-ak="N">No</span>'
                   }
                 ]
               }) }}
@@ -109,7 +109,7 @@
               
 
               {{ button({
-                text: 'Submit'
+                html: '<span data-ak="I">Submit</span>'
               }) }}
 
             </form>

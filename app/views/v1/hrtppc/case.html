@@ -434,7 +434,7 @@
     {% if patient.status == 'expired' or patient.status == 'deleted' %}
     {{ button({
       classes: "nhsuk-button--secondary",
-      html: '<span data-ak="I">Add note</span>',
+      html: '<span data-ak="K">Add note</span>',
       href: "add-note"
     }) }}
     {{ button({
@@ -444,12 +444,12 @@
     }) }}
     {% elif patient.status == 'active' %}
     {{ button({
-      html: '<span data-ak="K">Edit or reissue</span>',
+      html: '<span data-ak="I">Edit or reissue</span>',
       href: "edit-or-reissue"
     }) }}
     {{ button({
       classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
-      html: '<span data-ak="I">Add note</span>',
+      html: '<span data-ak="K">Add note</span>',
       href: "add-note"
     }) }}
     {{ button({
@@ -461,7 +461,7 @@
 
     {{ button({
       classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
-      html: '<span data-ak="I">Add note</span>',
+      html: '<span data-ak="K">Add note</span>',
       href: "add-note"
     }) }}
     {{ button({
