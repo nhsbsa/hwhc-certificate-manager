@@ -22,18 +22,12 @@
         value: data.recordsInSession or '75',
         label: {
           text: 'How many records will the processor handle?'
+        },
+        hint: {
+          text: 'In real life, this will vary per processor, and is solely used on the this page for demonstration purposes.'
         }
       }) }}
 
-      {{ input({
-        id: 'matexLimit',
-        name: 'matexLimit',
-        classes: 'nhsuk-input--width-2',
-        value: data.matexLimit or '20',
-        label: {
-          text: 'How many MATEX certificates should be handled before a Quality Check takes place?'
-        }
-      }) }}
 
       {{ input({
         id: 'checkingLevel',
@@ -42,9 +36,25 @@
         value: data.checkingLevel or '55',
         suffix: { text: '%' },
         label: {
-          text: 'What is the percentage of checks to be performed by the supervisor?'
+          text: 'What percentage of applications should be checked by the supervisor?'
         }
       }) }}
+
+
+      {{ input({
+        id: 'matexLimit',
+        name: 'matexLimit',
+        classes: 'nhsuk-input--width-2',
+        value: data.matexLimit or '20',
+        label: {
+          text: 'When should quality checks take place?'
+        },
+        hint: { text: 'Quality checks will only take place when supervisor checks are less than 100%.' },
+        prefix: '1 quality check for every',
+        suffix: 'Matex applications'
+      }) }}
+
+      
 
       {{ button({
         id: 'demoButton',
@@ -60,6 +70,18 @@
 
 
       <style>
+
+        .nhsuk-input-wrapper__prefix,
+        .nhsuk-input-wrapper__suffix {
+          font-size: 1rem;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+
+        }
+
+        #matexLimit {
+          text-align: center;
+        }
 
 
         .id-key li::before {
@@ -173,19 +195,23 @@
               checkingLevel = 100;
             }
 
-            const qualityChecks = ( checkingLevel === 100 ) ? 0 : 1;
+            const qualityChecksPerMatexLimit = ( checkingLevel === 100 ) ? 0 : 1;
 
-            const recordsForSupervisorChecks = Math.round( matexLimit * ( checkingLevel / 100 ) );
-            const expectedSupervisorChecks = Math.round( recordsInSession * ( checkingLevel / 100 ) );
+            const recordsForSupervisorChecks = Math.round( ( matexLimit - qualityChecksPerMatexLimit ) * ( checkingLevel / 100 ) );
+
+            const expectedQualityChecks = Math.ceil( recordsInSession / matexLimit );
+            const expectedSupervisorChecks = Math.round( (recordsInSession - expectedQualityChecks) * ( checkingLevel / 100 ) );
 
             const logs = [ ['Processing begins - ' + recordsInSession + ' to process' ] ];
 
+            logs.push( ['Expecting '+ expectedQualityChecks +' quality checks to be performed'] );
             logs.push( ['Expecting '+ expectedSupervisorChecks +' supervisor checks to be performed'] );
             
             let matexLimitCount = 0;
             let matexLimitPass = 0;
 
             let qualityCheckApplication = -1;
+            let qualityCheckApplications = [];
             let supervisorCheckApplications = [];
             let noOfSupervisorCheckApplications = 0;
 
@@ -201,10 +227,13 @@
                 
                 logs.push( ['Round '+( matexLimitPass + 1 )+' - beginning selection process'] );
 
-                if( matexLimitPass < qualityChecks ){
+                if( qualityChecksPerMatexLimit === 1){
 
                   let num = Math.round(Math.random()*(supervisorCheckApplications.length-1));
                   qualityCheckApplication = supervisorCheckApplications[num];
+                  if( qualityCheckApplication < recordsInSession ){
+                    qualityCheckApplications.push( qualityCheckApplications );
+                  }
                   supervisorCheckApplications.splice(num,1);
 
                   logs.push( ['Selected application '+(qualityCheckApplication+1)+' for a quality check'] );             
@@ -213,7 +242,8 @@
                 
                 logs.push( ['Selecting '+recordsForSupervisorChecks+' applications for supervisor checks'] );
 
-                let loop = matexLimit - recordsForSupervisorChecks;
+                let loop = matexLimit - qualityChecksPerMatexLimit - recordsForSupervisorChecks;
+                
                 for( j=0;j<loop;j++){
                   
                   let num = Math.round(Math.random()*(supervisorCheckApplications.length-1));
@@ -254,11 +284,18 @@
             html += '</ul>';
             html += '<hr />';
 
-            html += '<p>Expected supervisor checks: '+expectedSupervisorChecks+' applications ( '+recordsInSession+' * ('+checkingLevel+' / 100 )) = '+( recordsInSession * (checkingLevel/100) )+'</p>';
+            html += '<p>Expected quality checks: '+expectedQualityChecks+'</p>';
+            html += '<p>Expected supervisor checks: '+expectedSupervisorChecks+' applications</p>';
 
-            let check = ( qualityChecks === 1 ) ? 'check' : 'checks';
 
-            html += '<p>Performed '+qualityChecks+' quality '+check+'</p>'
+            let check = ( qualityCheckApplications.length === 1 ) ? 'check' : 'checks';
+
+            if( expectedQualityChecks !== qualityCheckApplications.length ){
+              html += '<p style="color: rgb(213, 40, 27);"><strong>Performed '+qualityCheckApplications.length+' quality '+check+'</strong></p>';
+            } else {
+              html += '<p style="color: #007f3b"><strong>Performed '+qualityCheckApplications.length+' quality '+check+'</strong></p>';
+            }
+
 
             if( expectedSupervisorChecks !== noOfSupervisorCheckApplications ){
               html += '<p style="color: rgb(213, 40, 27);"><strong>Performed '+noOfSupervisorCheckApplications+' supervisor checks</strong></p>';
