@@ -6,149 +6,244 @@
     {% set today = 0 | alterTodaysDateByNumberOfDays %}
     {% set processorFullName = patient.processorName + ' (' + patient.processor + ')' %}
 
-    {% if patient.certificateType === 'matex' and patient.channel === 'Paper' %}
+    {% if patient.certificateType === 'matex' %}
 
-        <!-- PAPER ROUTE -->
+        {% if patient.channel === 'Paper' %}
 
-        {% if ( ( 10 | getRandomNumber ) === 0 ) %}
-            {% set processingText = 'Application manually entered, ready for processing' %}
-        {% else %}
-            {% set processingText = 'Application scanned, ready for processing' %}
-        {% endif %}
+            <!-- PAPER ROUTE -->
 
-        {% set items = [
-            {
-                headingText: 'Processing',
-                isPastItem: true,
-                html: '<p class="nhsuk-body-s">'+processingText+'</p><span class="nhsuk-body-s">'+yesterday+', 8:30 am</span>'
-            }
-        ] %}
-
-        {% if patient.status !== 'processing' %}
-
-            <!-- REJECTED -->
-            {% if patient.status === 'rejected' %}
-
-                {% set reasonForRejection = [
-                    'child has already reached their first birthday',
-                    'patient is outside England',
-                    'patient is under 16',
-                    'patient is over 60',
-                    'patient already has a valid exemption certificate'
-                ] | random %}
-
-                {% set rejectedText = '<p class="nhsuk-body-s">Application rejected because '+reasonForRejection+' by '+processorFullName+'</p>' %}
-
-                {% set items = ( items.push({
-                    headingText: 'Rejected',
-                    isPastItem: true,
-                    html: rejectedText + '<span class="nhsuk-body-s">'+yesterday+', 9:56 am</span>'
-                }), items ) %}
-
+            {% if ( ( 10 | getRandomNumber ) === 0 ) %}
+                {% set processingText = 'Application manually entered, ready for processing' %}
+            {% else %}
+                {% set processingText = 'Application scanned, ready for processing' %}
             {% endif %}
 
-            <!-- ON HOLD -->
-            {% if patient.status === 'on-hold' %}
-
-                {% set num = 2 | getRandomNumber %}
-                    
-                {% if num === 0 %}
-                    <!-- WITH PATIENT -->
-
-                    {% set patientReasons = [
-                        "patient's date of birth",
-                        "patient's telephone number",
-                        "patient's email address",
-                        "child's due or birth date",
-                        "health professional's signature"
-                    ] | randomiseAndConvertToList %}
-
-                    {% set onHoldText = '<p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Further information requested from patient by '+processorFullName+':</p>' + patientReasons %}
-
-
-                {% elif num === 1 %}
-                    <!-- WITH HCP -->
-
-                    {% set hcpReasons = [
-                        "patient's name",
-                        "patient's address and postcode",
-                        "patient's email address",
-                        "patient's signature",
-                        "child's due or birth date",
-                        "health professional's signature",
-                        "health professional's name",
-                        "Part 3 of the application form"
-                    ] | randomiseAndConvertToList %}
-
-                    {% set onHoldText = '<p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Further information requested from health care professional by '+processorFullName+':</p>' + hcpReasons %}
-
-                {% elif num === 2 %}
-                    <!-- RESCAN -->
-                    {% set onHoldText = '<p class="nhsuk-body-s">Rescan requested by '+processorFullName+'</p>' %}
-                    
-                {% endif %}
-
-                {% set items = ( items.push({
-                    headingText: 'On hold',
+            {% set items = [
+                {
+                    headingText: 'Processing',
                     isPastItem: true,
-                    html: onHoldText + '<span class="nhsuk-body-s nhsuk-u-margin-bottom-0">'+yesterday+', 9:56 am</span>'
-                }), items ) %}
+                    html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">'+processingText+'</p><span class="nhsuk-u-font-size-14">'+yesterday+', 8:30 am</span>'
+                }
+            ] %}
 
+            {% if patient.status !== 'processing' %}
 
-                 {% if 2 | getRandomNumber === 0 and num === 1 %}
+                <!-- REJECTED -->
+                {% if patient.status === 'rejected' %}
 
-                    <!-- NAGGY PATIENT -->
+                    {% set reasonForRejection = [
+                        'child has already reached their first birthday',
+                        'patient is outside England',
+                        'patient is under 16',
+                        'patient is over 60',
+                        'patient already has a valid exemption certificate'
+                    ] | random %}
+
+                    {% set rejectedText = '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Application rejected because '+reasonForRejection+' by '+processorFullName+'</p>' %}
+
                     {% set items = ( items.push({
-                        headingText: 'Note added',
-                        html: '<p class="nhsuk-body-s">Patient rang up to ask about their Matex. Advised that more information was needed from their HCP.</p><span class="nhsuk-body-s">'+yesterday+', 12:55 pm</span>'
-                    }), items ) %}
-
-
-                {% endif %}
-
-
-                {% if 5 | getRandomNumber === 0 and num === 2 %}
-
-                    <!-- ADD AN EXTRA PAPER KEY-IN -->
-                    {% set items = ( items.push({
-                        headingText: 'Note added',
-                        html: '<p class="nhsuk-body-s">Literally could not see a thing. I need to check the paper.</p><span class="nhsuk-body-s">'+yesterday+', 12:55 pm</span>'
-                    }), items ) %}
-
-                    {% set onHoldText = '<p class="nhsuk-body-s">Paper form requested by '+processorFullName+'</p>' %}
-                    {% set items = ( items.push({
-                        headingText: 'On hold',
+                        headingText: 'Rejected',
                         isPastItem: true,
-                        html: onHoldText + '<span class="nhsuk-body-s nhsuk-u-margin-bottom-0">'+yesterday+', 12:56 pm</span>'
+                        html: rejectedText + '<span class="nhsuk-u-font-size-14">'+yesterday+', 9:56 am</span>'
                     }), items ) %}
+
+                {% else %}
+
+                <!-- ON HOLD -->
+                {% if patient.status === 'on-hold' or patient.status === 'active' or patient.status === 'expired' %}
+
+                        {% set num = 2 | getRandomNumber %}
+                            
+                        {% if num === 0 %}
+                            <!-- WITH PATIENT -->
+
+                            {% set patientReasons = [
+                                "patient's date of birth",
+                                "patient's telephone number",
+                                "patient's email address",
+                                "child's due or birth date",
+                                "health professional's signature"
+                            ] | randomiseAndConvertToList %}
+
+                            {% set onHoldText = '<p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Further information requested from patient by '+processorFullName+':</p>' + patientReasons %}
+
+
+                        {% elif num === 1 %}
+                            <!-- WITH HCP -->
+
+                            {% set hcpReasons = [
+                                "patient's name",
+                                "patient's address and postcode",
+                                "patient's email address",
+                                "patient's signature",
+                                "child's due or birth date",
+                                "health professional's signature",
+                                "health professional's name",
+                                "Part 3 of the application form"
+                            ] | randomiseAndConvertToList %}
+
+                            {% set onHoldText = '<p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Further information requested from health care professional by '+processorFullName+':</p>' + hcpReasons %}
+
+                        {% elif num === 2 %}
+                            <!-- RESCAN -->
+                            {% set onHoldText = '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Rescan requested by '+processorFullName+'</p>' %}
+                            
+                        {% endif %}
+
+                        <!-- ACTUALLY PUTTING IT ON HOLD -->
+                        {% set items = ( items.push({
+                            headingText: 'On hold',
+                            isPastItem: true,
+                            html: onHoldText + '<span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+yesterday+', 9:56 am</span>'
+                        }), items ) %}
+
+
+                        {% if 2 | getRandomNumber === 0 and num === 1 %}
+
+                            <!-- NAGGY PATIENT -->
+                            {% set items = ( items.push({
+                                headingText: 'Note',
+                                html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Patient rang up to ask about their Matex. Advised that more information was needed from their HCP.</p><span class="nhsuk-u-font-size-14">'+yesterday+', 12:55 pm</span>'
+                            }), items ) %}
+
+
+                        {% endif %}
+
+
+                        {% if 5 | getRandomNumber === 0 and num === 2 %}
+
+                            <!-- ADD AN EXTRA PAPER KEY-IN -->
+                            {% set items = ( items.push({
+                                headingText: 'Note',
+                                html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Literally could not see a thing. I need to check the paper.</p><span class="nhsuk-u-font-size-14">'+yesterday+', 12:55 pm</span>'
+                            }), items ) %}
+
+                            {% set onHoldText = '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Paper form requested by '+processorFullName+'</p>' %}
+                            {% set items = ( items.push({
+                                headingText: 'On hold',
+                                isPastItem: true,
+                                html: onHoldText + '<span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+yesterday+', 12:56 pm</span>'
+                            }), items ) %}
+
+                        {% elif patient.checking === true %}
+
+                            <!-- SELECTED FOR CHECKING -->
+                            {% set checkingText = '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Selected for checking</p>' %}
+                            {% set items = ( items.push({
+                                headingText: 'Checking',
+                                isPastItem: true,
+                                html: checkingText + '<span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+yesterday+', 12:56 pm</span>'
+                            }), items ) %}
+
+
+                        {% endif %}
+
+
+
+                        
+                    {% endif %}
+
 
 
                 {% endif %}
 
+                <!-- ACTIVE -->
+                {% if patient.status === 'active' or patient.status === 'expired' %}
+
+                    {% set items = (items.push({
+                        headingText: 'Active',
+                        isPastItem: true,
+                        html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Certificate is active</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+today+', 7:38 am</span>'
+                    }), items ) %}
+
+                    {% if patient.status === 'expired' %}
+
+                        {% set items = (items.push({
+                            headingText: 'Expired',
+                            isPastItem: true,
+                            html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Certificate has expired</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+today+', 12:45 pm</span>'
+                        }), items ) %}
+
+                    {% endif %}
+
+                {% endif %}
+
+            {% endif %}
 
 
 
 
+
+        {% else %}
+
+            <!-- DIGITAL MATEX -->
+
+            {% set items = [
+                {
+                    headingText: 'Active',
+                    isPastItem: true,
+                    html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Certificate is active</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+( -56 |  alterTodaysDateByNumberOfDays )+', 7:38 am</span>'
+                }
+            ] %}
+
+            {% if 2 | getRandomNumber === 0 %}
+
+                <!-- ALTERED ADDRESS -->
+                {% set items = ( items.push({
+                    headingText: 'Note',
+                    html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Patient rang up to change their address</p><span class="nhsuk-u-font-size-14">'+( - 32 | alterTodaysDateByNumberOfDays)+', 12:55 pm</span>'
+                }), items ) %}
+
+            {% endif %}
+
+            {% if patient.status === 'expired' %}
+                <!-- EXPIRED-->
+                {% set items = ( items.push({
+                        headingText: 'Expired',
+                        isPastItem: true,
+                        html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Certificate has expired</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+( -2 |  alterTodaysDateByNumberOfDays )+', 7:38 am</span>'
+                    }), items ) %}
             {% endif %}
 
 
         {% endif %}
 
-
-
-
+    
     {% else %}
 
 
-        <!-- DIGITAL ROUTE -->
-
+        <!-- HRT PPC -->
         {% set items = [
             {
-                headingText: 'Application scanned',
+                headingText: 'Pending',
                 isPastItem: true,
-                html: '<span class="nhsuk-body-s">'+yesterday+', 8:30 am</span>'
+                html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Application received, awaiting payment</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+( - 64 | alterTodaysDateByNumberOfDays)+', 8:30 am</span>'
+            },
+            {
+                headingText: 'Active',
+                isPastItem: true,
+                html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Certificate active</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+( - 64 | alterTodaysDateByNumberOfDays)+', 8:31 am</span>'
             }
         ] %}
+
+        {% if 2 | getRandomNumber === 0 %}
+
+                <!-- ALTERED LAST NAME -->
+                {% set items = ( items.push({
+                    headingText: 'Note',
+                    html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Patient rang up to change their last name</p><span class="nhsuk-u-font-size-14">'+( -7 | alterTodaysDateByNumberOfDays)+', 8:56 pm</span>'
+                }), items ) %}
+
+            {% endif %}
+            
+            {% if patient.status === 'expired' %}
+                <!-- EXPIRED-->
+                {% set items = ( items.push({
+                        headingText: 'Expired',
+                        isPastItem: true,
+                        html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Certificate has expired</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+( -2 |  alterTodaysDateByNumberOfDays )+', 7:38 am</span>'
+                    }), items ) %}
+            {% endif %}
 
     {% endif %}
 

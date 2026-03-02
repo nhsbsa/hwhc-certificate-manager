@@ -167,8 +167,6 @@
     
     </div>
 
-
-
     <div class="nhsuk-grid-column-one-third">
       {{ summaryList({
         card: {
@@ -247,379 +245,227 @@
       }) }}
     </div>
 
+    <div class="nhsuk-grid-column-one-third sticky-column">
 
-    <div class="nhsuk-grid-column-one-third">
+              {% if data.patientID === '21' or data.patientID === '96' %}
 
-      <h2 class="nhsuk-u-visually-hidden">Certificate timeline</h2>
 
-        <!-- Import from NHS App frontend -->
-        {% from 'nhsapp/components/timeline/macro.njk' import nhsappTimeline %}
+                <!-- THIS IS ACTUALLY ALREADY IN THE NOTES, JUST LEAVING HERE FOR UR -->
+                <script>
 
-        <!-- {{ nhsappTimeline({
-          items: [
-            {
-              headingText: 'Application accepted and awaiting print',
-              html: '<span class="nhsuk-body-s">23 November 2025, 12:32</span>',
-              active: true
-            },
-            {
-              headingText: 'Application scanned',
-              html: '<span class="nhsuk-body-s">23 November 2025, 08:30</span>'
+        const EventLog = (function(){
+
+            //
+            // INIT FUNCTION
+            //
+            function _init(){
+
+                console.log( '_init();' );
+
+                const events = document.querySelectorAll('.nhsapp-timeline__item:not(.nhsapp-timeline__item--past)');
+
+                if( events.length > 0 ){
+
+                    _drawMenu();
+
+                }
+
             }
-          ]
-        }) }} -->
 
-        {% from "tabs/macro.njk" import tabs %}
-        {% from "tables/macro.njk" import table %}
+            //
+            // DRAW MENU FUNCTION
+            //
+            function _drawMenu(){
+
+                console.log('_drawMenu();');
+
+                const menu = document.createElement('div');
+                menu.classList.add('menu-container');
+
+                let html = '';
+                html += '<ul class="nhsuk-list">';
+                html += '<li><button class="nhsuk-u-font-size-16" aria-pressed="true"><span>All</span></button></li>';
+                html += '<li><button class="nhsuk-u-font-size-16" aria-pressed="false"><span>Notes</span></button></li>';
+                html += '<li><button class="nhsuk-u-font-size-16" aria-pressed="false"><span>Events</span></button></li>';
+                html += '</ul>';
+
+                menu.innerHTML = html;
+
+                const eventsLog = document.querySelector('.events-log');
+                eventsLog.insertAdjacentElement('afterbegin',menu);
+
+                document.querySelectorAll('.events-log button').forEach(function(button){
+                    button.addEventListener('click',function(e){
+                        _toggleMenu( e.target );
+                    });
+                });
+
+            }
+
+            //
+            // TOGGLE MENU FUNCTION
+            //
+            function _toggleMenu( button ){
+
+                // Toggle buttons
+                document.querySelectorAll('.events-log button').forEach(function(el){
+                    el.setAttribute('aria-pressed','false');
+                });
+
+                button.setAttribute('aria-pressed','true');
+                button.blur();
+
+                // Toggle menu items
+                const all = document.querySelectorAll('.events-log .nhsapp-timeline__item');
+                const notes = document.querySelectorAll('.events-log .nhsapp-timeline__item:not(.nhsapp-timeline__item--past)');
+                const events = document.querySelectorAll('.events-log .nhsapp-timeline__item--past');
+              
+                switch( button.innerText ){
+
+                    case 'Notes':
+                        all.forEach(function(item){
+                            item.classList.remove('last-of-type');
+                            item.classList.add('hidden');
+                            if( !item.classList.contains('nhsapp-timeline__item--past') ){
+                                item.classList.remove('hidden');
+                            }
+                        });
+                        notes[notes.length-1].classList.add('last-of-type');
+                        break;
+
+                    case 'Events':
+                        all.forEach(function(item){
+                            item.classList.remove('last-of-type');
+                            item.classList.add('hidden');
+                            if( item.classList.contains('nhsapp-timeline__item--past') ){
+                                item.classList.remove('hidden');
+                            }
+                            events[events.length-1].classList.add('last-of-type');
+                        });
+                        break;
+
+                    default: 
+                        all.forEach(function(item){
+                            item.classList.remove('last-of-type');
+                            item.classList.remove('hidden');
+                        });
+                        break;
+                }
+
+                document.querySelector('.events-log .scroll-container').scrollTo(0,0);
+
+            }
 
 
-        {% set NotesContent %}
-        
-          <div class="scroll-container">
-            {{ nhsappTimeline({
-              items: [
+            return {
+                init: _init
+            }
+
+        })();
+
+        document.addEventListener('DOMContentLoaded',function(){
+            EventLog.init();
+        });
+
+    </script>
+
+
+                <!-- RUBY ADAMS -->
+
+                {% from 'nhsapp/components/timeline/macro.njk' import nhsappTimeline %}
+                {% set yesterday = -1 | alterTodaysDateByNumberOfDays %}
+                {% set today = 0 | alterTodaysDateByNumberOfDays %}
+                {% set processorFullName = patient.processorName + ' (' + patient.processor + ')' %}
+
+
+                {% if data.patientID === '21' %}
+
+                {% set items = [
                 {
-                  headingText: 'Note added by [NameOfAgent]',
-                  html: '
-                    <p class="nhsuk-u-margin-bottom-1">"Applicant called to confirm address change."</p>
-                    <p class="nhsuk-body-s nhsuk-u-margin-top-1">16 January 2026 11:37am</p>
-                  ',
-                  active: true
+                    headingText: 'Active',
+                    isPastItem: true,
+                    html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Certificate is active</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+today+', 12:48 pm</span>'
                 },
                 {
-                  headingText: 'Note added by [NameOfAgent]',
-                  html: '
-                    <p class="nhsuk-u-margin-bottom-1">"Applicant wanted their first name changed. I reviewed the scanned image and the evidence presented by the user to ensure compliance."</p>
-                    <p class="nhsuk-body-s nhsuk-u-margin-top-1">3 December 2025 10:03am</p>
-                  '
+                    headingText: 'Accepted',
+                    isPastItem: true,
+                    html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Application accepted by Aisha Collins (AICOL)</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+today+', 12:47 pm</span>'
+                },
+                  {
+                    headingText: 'On hold',
+                    isPastItem: true,
+                    html: '<span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+yesterday+', 2:27 pm</span><p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Further information requested from health care professional by James Smith (JASMI):</p>
+                    <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-4">
+                      <li class="nhsuk-u-font-size-16">date of birth</li>
+                      <li class="nhsuk-u-font-size-16">telephone number</li>
+                      <li class="nhsuk-u-font-size-16">email address</li>
+                      <li class="nhsuk-u-font-size-16">child\'s due or birth date</li>
+                      <li class="nhsuk-u-font-size-16">health professional\'s signature</li>
+                      </ul><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+yesterday+', 2:27 pm</span>'
                 },
                 {
-                  headingText: 'Note added by [NameOfAgent]',
-                  html: '
-                    <p class="nhsuk-u-margin-bottom-1">"Applicant asked about application progress."</p>
-                    <p class="nhsuk-body-s nhsuk-u-margin-top-1">24 November 2025 2:24pm</p>
-                  '
+                    headingText: 'Processing',
+                    isPastItem: true,
+                    html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Application scanned, ready for processing</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+yesterday+', 9:13 am</span>'
                 }
-              ]
-            }) }}
-          </div>
-        
-      {% endset -%}
-      
+                ] %}
 
-        {% set EventsContent %}
-          <div class="scroll-container">
-          {{ nhsappTimeline({
-            items: [
-            {
-              headingText: 'Deleted',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Certificate deleted</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">4 April 2034 9:00am</p>
-              ',
-              active: true
-            },
-            {
-              headingText: 'Expired',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Certificate expired</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">24 November 2026 9:00am</p>
-              '
-            },
-            {
-              headingText: 'Reissued',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Certificate reissued by [NameOfAgent]</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">12 June 2026 9:00am</p>
-              '
-            },
-            {
-              headingText: 'Address updated',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Address changed from [PreviousValue] to [NewValue] by [NameOfAgent]</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">16 January 2026 11:35am</p>
-              '
-            },
-            {
-              headingText: 'First name updated',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">First name changed from [PreviousValue] to [NewValue] by [NameOfAgent]</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">26 November 2025 10:00am</p>
-              '
-            },
-            {
-              headingText: 'Active',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Certificate produced and posted to patient</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">25 November 2025 9:00am</p>
-              '
-            },
-            {
-              headingText: 'Rejected',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Application has been rejected because:</p>
-                <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-                  <li>child has already reached their first birthday</li>
-                  <li>patient is outside England</li>
-                  <li>patient is under 15</li>
-                  <li>patient is over 60</li>
-                  <li>patient already has a valid exemption certificate</li>
-                </ul>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">2 December 2025 9:00am</p>
-              '
-            },
-            {
-              headingText: 'Accepted',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Application processed by [NameOfProcessor] for production overnight</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">2 December 2025 9:00am</p>
-              '
-            },
-            {
-              headingText: 'On hold',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Further information requested from patient:</p>
-                <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-                  <li>health professional\'s name</li>
-                  <li>health professional\'s address</li>
-                  <li>patient\'s date of birth</li>
-                  <li>patient\'s signature</li>
-                  <li>date of patient\'s signature</li>
-                  <li>child\'s due or birth date</li>
-                </ul>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">30 November 2025 3:00pm</p>
-              '
-            },
-            {
-              headingText: 'On hold',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Further information requested from GP:</p>
-                <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-                  <li>patient\'s name</li>
-                  <li>patient\'s address</li>
-                  <li>patient\'s postcode</li>
-                  <li>health professional\'s signature</li>
-                  <li>health professional\'s name</li>
-                  <li>health professional\'s UKCC number</li>
-                  <li>GP or hospital doctor\'s stamp (or service doctor\'s name, rank, and establishment)</li>
-                </ul>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">30 November 2025 3:00pm</p>
-              '
-            },
-            {
-              headingText: 'On hold',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Paper copy of application requested</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">30 November 2025 3:00pm</p>
-              '
-            },
-            {
-              headingText: 'Checking',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Application processed by [NameOfProcessor] and held for supervisor review</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">23 November 2025 1:20pm</p>
-              '
-            },
-            {
-              headingText: 'Processing',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Application viewed by [NameOfProcessor], ready for processing</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">23 November 2025 12:32pm</p>
-              '
-            },
-            {
-              headingText: 'Processing',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Application scanned, ready for processing</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">21 November 2025 8:30am</p>
-                '
-            }
-            ]
-          }) }}
-        </div>
+                {% else %}
 
-        {% endset -%} 
+                  <!-- AMIELE BARBER -->
 
-        {% set FullLogContent %}
-        <div class="scroll-container">
-        {{ nhsappTimeline({
-          items: [
-              {
-                headingText: 'Deleted',
-                html: '
-                  <p class="nhsuk-u-margin-bottom-1">Certificate deleted</p>
-                  <p class="nhsuk-body-s nhsuk-u-margin-top-2">4 April 2034 9:00am</p>
-                ',
-                active: true
-              },
-              {
-                headingText: 'Expired',
-                html: '
-                  <p class="nhsuk-u-margin-bottom-1">Certificate expired</p>
-                  <p class="nhsuk-body-s nhsuk-u-margin-top-2">24 November 2026 9:00am</p>
-                '
-            },
-            {
-              headingText: 'Reissued',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Certificate reissued by [NameOfAgent]</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">12 June 2026 9:00am</p>
-              '
-            },
-            {
-              headingText: 'Note added by [NameOfAgent]',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">"Applicant called to confirm address change."</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-1">16 January 2026 11:37am</p>
-              '
-            },
-            {
-              headingText: 'Address updated',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Address changed from [PreviousValue] to [NewValue] by [NameOfAgent]</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">16 January 2026 11:35am</p>
-              '
-            },
-            {
-              headingText: 'Note added by [NameOfAgent]',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">"Applicant wanted their first name changed. I reviewed the scanned image and the evidence presented by the user to ensure compliance."</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-1">26 November 2025 10:03am</p>
-              '
-            },
-            {
-              headingText: 'First name updated',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">First name changed from [PreviousValue] to [NewValue] by [NameOfAgent]</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">26 November 2025 10:00am</p>
-              '
-            },
-            {
-              headingText: 'Active',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Certificate produced and posted to patient</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">25 November 2025 9:00am</p>
-              '
-            },
-            {
-              headingText: 'Rejected',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Application has been rejected because:</p>
-                <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-                  <li>child has already reached their first birthday</li>
-                  <li>patient is outside England</li>
-                  <li>patient is under 15</li>
-                  <li>patient is over 60</li>
-                  <li>patient already has a valid exemption certificate</li>
-                </ul>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">2 December 2025 9:00am</p>
-              '
-            },
-            {
-              headingText: 'Accepted',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Application processed by [NameOfProcessor] for production overnight</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">2 December 2025 9:00am</p>
-              '
-            },
-            {
-              headingText: 'On hold',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Further information requested from patient:</p>
-                <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-                  <li>health professional\'s name</li>
-                  <li>health professional\'s address</li>
-                  <li>patient\'s date of birth</li>
-                  <li>patient\'s telephone number</li>
-                  <li>patient\'s email address</li>
-                  <li>patient\'s NHS number</li>
-                  <li>patient\'s signature</li>
-                  <li>date of patient\'s signature</li>
-                  <li>child\'s due or birth date</li>
-                </ul>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">30 November 2025 3:00pm</p>
-              '
-            },
-            {
-              headingText: 'On hold',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Further information requested from GP:</p>
-                <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-1">
-                  <li>patient\'s name</li>
-                  <li>patient\'s address</li>
-                  <li>patient\'s postcode</li>
-                  <li>health professional\'s signature</li>
-                  <li>health professional\'s name</li>
-                  <li>health professional\'s UKCC number</li>
-                  <li>GP or hospital doctor\'s stamp (or service doctor\'s name, rank, and establishment)</li>
-                </ul>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">30 November 2025 3:00pm</p>
-              '
-            },
-            {
-              headingText: 'On hold',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Paper copy of application requested</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">30 November 2025 3:00pm</p>
-              '
-            },
-            {
-              headingText: 'Checking',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Application processed by [NameOfProcessor] and held for supervisor review</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">23 November 2025 1:20pm</p>
-              '
-            },
-            {
-              headingText: 'Processing',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Application viewed by [NameOfProcessor], ready for processing</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">23 November 2025 12:32pm</p>
-              '
-            },
-            {
-              headingText: 'Processing',
-              html: '
-                <p class="nhsuk-u-margin-bottom-1">Application scanned, ready for processing</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-2">21 November 2025 8:30am</p>
-                '
-            }
-          ]
-        }) }}
-      </div>
+                  {% set items = [{
+                    headingText: 'Note',
+                    html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Applicant called. Asking what’s happening with their Matex certificate. Advised on hold awaiting signature from GP.</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+yesterday+', 9:13 am</span>'
+                },{
+                    headingText: 'On hold',
+                    isPastItem: true,
+                    html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Further information requested from health care professional by James Smith (JASMI):</p>
+                    <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-4">
+                      <li class="nhsuk-u-font-size-16">health professional\'s signature</li>
+                      </ul><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+( -4 | alterTodaysDateByNumberOfDays )+', 2:27 pm</span>'
+                },{
+                    headingText: 'Processing',
+                    isPastItem: true,
+                    html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Application scanned, ready for processing</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+( -5 | alterTodaysDateByNumberOfDays )+', 10:24 am</span>'
+                }] %}
 
-          {% endset -%} 
+                {% endif %}
+                
+                <div class="nhsuk-card nhsuk-card--grey">
+                  <div class="nhsuk-card__content">
 
+                      <div class="events-log">
 
-        {{ tabs({
-          items: [
-          {
-            label: "Notes",
-            id: "notes",
-            panel: {
-              html: NotesContent
-            }
-          },
-            {
-              label: "Events",
-              id: "events",
-              panel: {
-                html: EventsContent
-              }
-            },
-            {
-              label: "Full log",
-              id: "full-log",
-              panel: {
-                html: FullLogContent
-                }
-              }
-          ]
-        }) }}
+                        <div class="scroll-container">
+                            {{ nhsappTimeline({
+                                id: 'timeline-application',
+                                items: items
+                            }) }}
+                        </div>
 
-      </div>  
+                      </div>
+
+                  </div>
+                </div>
+
+              {% else %}
+
+                {% from '../macros/notes.njk' import notes %}
+                {{ notes( patient ) }}
+
+              {% endif %}
+
     </div>
 
+  </div>
+
+
+
+<div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <div class="nhsuk-button-group">
     
     {% if patient.status == 'expired' or patient.status == 'deleted' %}
       {{ button({
@@ -628,7 +474,7 @@
         href: "add-note"
       }) }}
       {{ button({
-        classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+        classes: "nhsuk-button--secondary",
         html: '<span data-ak="M">Cancel</span>',
         href: "../search"
       }) }}
@@ -638,12 +484,12 @@
         href: "edit-or-reissue"
       }) }}
       {{ button({
-        classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+        classes: "nhsuk-button--secondary",
         html: '<span data-ak="K">Add note</span>',
         href: "add-note"
       }) }}
       {{ button({
-        classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+        classes: "nhsuk-button--secondary",
         html: '<span data-ak="M">Cancel</span>',
         href: "../search"
       }) }}
@@ -655,114 +501,17 @@
         href: "add-note"
       }) }}
       {{ button({
-        classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
+        classes: "nhsuk-button--secondary",
         text: "Cancel",
         href: "../search"
       }) }}
     {% endif %}
 
-    <style>
+    </div>
 
-      .summary-list--single-line {
-        margin-bottom: 0;
-      }
+  </div>
+</div>
 
-      .nhsuk-summary-list .nhsuk-summary-list__key {
-        display: flex;
-        width: 100%;
-      }
-
-
-      @media (max-width: 425px) {
-
-        .summary-list--single-line .nhsuk-summary-list__row {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 0.25rem;
-          padding-bottom: 0.5rem;
-        }
-
-        .summary-list--single-line .nhsuk-summary-list__key {
-          margin: 0;
-        }
-
-        .summary-list--single-line .nhsuk-summary-list__row--no-border {
-          flex-direction: column;
-          align-items: stretch;
-          gap: 0.5rem;
-        }
-      }
-
-
-
-
-      @media (min-width: 1024px) and (max-width: 1024px) {
-
-
-      .nhsuk-tabs__panel {
-        height: 1000px;
-      }
-
-      .scroll-container {
-        min-height: 910px !important;
-        overflow-y: auto;
-        }
-      }
-      
-
-
-      @media (min-width: 1024px) {
-
-        .nhsuk-grid-row {
-          display: flex ;
-          align-items: stretch;
-        }
-
-        .nhsuk-grid-row > .nhsuk-grid-column-one-third {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .nhsuk-grid-column-one-third:nth-child(3) .notes-container {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-        }
-
-        .nhsuk-grid-row .nhsuk-card {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          margin-bottom: 2rem;
-        }
-
-        .nhsuk-grid-row .nhsuk-card__content {
-          flex: 1 1 auto;
-        }
-
-        .nhsuk-grid-row-buttons {
-          display: flex;
-          gap: 1rem;
-        }
-
-        .sticky-add-note {
-          position: sticky;
-          border-bottom: 1px solid #dcdcdc;
-          padding: 0 0 0.5rem;
-          display: flex;
-          justify-content: flex-end;
-        }
-
-      .scroll-container {
-        max-height: calc(101vh - 370px);
-        min-height: 0;
-        overflow-y: auto;
-        padding-top: 1rem;
-      }
-
-      }
-
-
-    </style>
+    
 
 {% endblock %}
