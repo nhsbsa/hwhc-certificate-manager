@@ -505,8 +505,8 @@ req.session.data.addressSearchBuildingNumberOrName =
 
 
 results.push({
-  text: display,   // pretty
-  value: raw       // original OS format — REQUIRED for correct split in POST
+  text: display,
+  value: raw
 });
 });
 }

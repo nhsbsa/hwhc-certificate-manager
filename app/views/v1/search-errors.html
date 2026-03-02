@@ -18,6 +18,15 @@
 
     <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
+          {{ errorSummary({
+            titleText: "There is a problem",
+            errorList: [
+              {
+                text: "Enter at least one field",
+                href: "#searchCertificateReference"
+              }
+            ]
+          }) }}
 
           {{ button({
                 html: '<span data-ak="Y">Start HRT PPC application</span>',
@@ -53,7 +62,9 @@
                     },
                     id: 'searchCertificateReference',
                     name: 'searchCertificateReference',
-                    value: data.searchCertificateReference
+                    value: data.searchCertificateReference,
+                    errorMessage: {
+                    }
                   }) }}
                 </div>
 
@@ -64,7 +75,9 @@
                     },
                     id: 'searchFirstName',
                     name: 'searchFirstName',
-                    value: data.searchFirstName
+                    value: data.searchFirstName,
+                    errorMessage: {
+                    }
                   }) }}
                 </div>
 
@@ -75,7 +88,9 @@
                     },
                     id: 'searchLastName',
                     name: 'searchLastName',
-                    value: data.searchLastName
+                    value: data.searchLastName,
+                    errorMessage: {
+                    }
                   }) }}
                 </div>
 
@@ -85,7 +100,9 @@
 
 
               <div class="nhsuk-grid-row">
-                <div class="nhsuk-grid-column-one-third">              
+
+                <div class="nhsuk-grid-column-one-third">
+
                   {{ dateInput({
                     id: "searchDateOfBirth",
                     namePrefix: "searchDateOfBirth",
@@ -95,13 +112,35 @@
                         classes: "nhsuk-body"
                       }
                     },
+                    errorMessage: {
+                    },
                     items: [
-                      { name: "day",   label: '<span class="nhsuk-u-visually-hidden">Day</span>',   classes: 'nhsuk-input--width-2' },
-                      { name: "month", label: '<span class="nhsuk-u-visually-hidden">Month</span>', classes: 'nhsuk-input--width-2' },
-                      { name: "year",  label: '<span class="nhsuk-u-visually-hidden">Year</span>',  classes: 'nhsuk-input--width-4' }
+                      {
+                        name: "day",
+                        label: '<span class="nhsuk-u-visually-hidden">Day</span>',
+                        classes: "nhsuk-input--width-2 nhsuk-input--error"
+                      },
+                      {
+                        name: "month",
+                        label: '<span class="nhsuk-u-visually-hidden">Month</span>',
+                        classes: "nhsuk-input--width-2 nhsuk-input--error"
+                      },
+                      {
+                        name: "year",
+                        label: '<span class="nhsuk-u-visually-hidden">Year</span>',
+                        classes: "nhsuk-input--width-4 nhsuk-input--error"
+                      }
                     ]
                   }) }}
+                  
                 </div>
+
+                <style>
+                  .nhsuk-date-input {
+                    margin-top: -12px
+                  }
+
+                </style>
 
                 <div class="nhsuk-grid-column-one-third">
                   {{ input({
@@ -110,8 +149,10 @@
                     },
                     id: 'searchPostcode',
                     name: 'searchPostcode',
-                    classes: 'nhsuk-input--width-10',
-                    value: data.searchPostcode
+                    value: data.searchPostcode,
+                    classes: "nhsuk-input--width-10",
+                    errorMessage: {
+                    }
                   }) }}
                 </div>
 
@@ -224,11 +265,5 @@
 
       </div>
   </div>
-
-  <style>
-    .nhsuk-body {
-      margin-bottom: 0px;
-    }
-  </style>
 
 {% endblock %}
