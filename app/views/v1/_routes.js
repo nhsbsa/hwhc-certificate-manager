@@ -54,6 +54,11 @@ router.post(/process-application\/experimental--single/, function (req, res) {
     res.redirect( destination );
 });
 
+router.post(/process-application\/experimental--horizontal-labels/, function (req, res) {
+    const destination = 'review-application--horizontal-labels';
+    res.redirect( destination );
+});
+
 router.post(/process-application\/review-application/, function (req, res) {
     const destination = 'confirmation?confirmationStatus=applicationApproved';
     res.redirect( destination );

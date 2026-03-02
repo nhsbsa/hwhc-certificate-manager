@@ -1,0 +1,195 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'Application' %}
+{% set bannerRole = 'backOffice' %}
+
+{% block beforeContent %}
+ {{ backLink({
+    href: 'experimental--horizontal-labels',
+    text: 'Back'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
+        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+          <div class="nhsuk-grid-row">
+
+            <!-- ONE HALF -->
+            <div class="nhsuk-grid-column-one-half">
+
+              {% from '../macros/image.njk' import image %}
+              {{ image() }}
+
+            </div>
+
+            <!-- ONE HALF -->
+            <div class="nhsuk-grid-column-one-half">
+
+               <div class="nhsuk-card nhsuk-card--grey">
+        <div class="nhsuk-card__content">
+
+              <h2 class="nhsuk-heading-m">Review application</h2>
+
+              <h3 class="nhsuk-heading-s">Personal details</h3>
+
+              {% set firstName = data.imageFirstName or 'Sarah' %}
+              {% set lastName = data.imageLastName or 'Johnson' %}
+
+              {% set houseNumber = data.imageBuildingNumberOrName or '12' %}
+              {% set addressLine1 = data.imageAddressLine1 or 'Crown Passage' %}
+              {% set addressLine2 = data.imageAddressLine2 or '' %}
+              {% set town = data.imageTown or 'Birmingham' %}
+              {% set county = data.imageCounty or '' %}
+              {% set postcode = data.imagePostcode or 'B14 9QX' %}
+
+              {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: 'Name' },
+                      value: { text: firstName | processFullName( lastName ) },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageLastName', text: 'Change', visuallyHiddenText: 'name' }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Date of birth' },
+                      value: { text: data.dateOfBirth | processDate or '2 July 1995' },
+                      actions: {
+                         items: [
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageDateOfBirth', text: 'Change', visuallyHiddenText: 'date of birth' }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'NHS number' },
+                      value: { text: data.imageNHSNumber or '1234 456 678' },
+                      actions: {
+                         items: [
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageNHSNumber', text: 'Change', visuallyHiddenText: 'NHS number' }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Address' },
+                      value: { html: houseNumber | processAddress( addressLine1, addressLine2, town, county, postcode ) },
+                      actions: {
+                         items: [
+                          { href: 'experimental--horizontal-labels?showAllFields=true#postcode', text: 'Change', visuallyHiddenText: 'address' }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+                <h3 class="nhsuk-heading-s">Contact details</h3>
+
+                {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: 'Phone number' },
+                      value: { text: data.imagePhoneNumber or '07911 123456' },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imagePhoneNumber', text: 'Change', visuallyHiddenText: 'phone number' }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Email address' },
+                      value: { text: data.imageEmailAddress },
+                      actions: {
+                         items: [
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageEmailAddress', text: 'Change', visuallyHiddenText: 'email address' }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+
+                <h3 class="nhsuk-heading-s">Baby details</h3>
+
+                {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: "Baby's date of birth" },
+                      value: { text: '10 August 2026' },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageBabyDateOfBirth', text: 'Change', visuallyHiddenText: "baby's date of birth" }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+
+                <h3 class="nhsuk-heading-s">Signatures</h3>
+
+                {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: 'Patient signature' },
+                      value: { text: ( data.imagePatientSignature | capitalize ) or 'Yes' },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imagePatientSignature', text: 'Change', visuallyHiddenText: 'whether patient signature is present' }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Healthcare practitioner signature' },
+                      value: { text: ( data.imageHealthcarePractitionerSignature | capitalize ) or 'Yes' },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageHealthcarePractitionerSignature', text: 'Change', visuallyHiddenText: 'whether healthcare practitioner signature is present' }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+
+
+                <div class="nhsuk-button-group">
+
+                  {{ button({
+                    text : 'Approve application',
+                    href: 'confirmation?certificateStatus=applicationApproved'
+                  }) }}
+
+                  {{ button({
+                    text : 'Cannot process application',
+                    href: 'cannot-process-application--horizontal-labels',
+                    classes: 'nhsuk-button--secondary'
+                  }) }}
+
+                </div>
+
+                </div>
+                </div>
+                
+
+            </div>
+
+          </div>
+
+    </div>
+  </div>
+
+{% endblock %}

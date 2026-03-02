@@ -12792,6 +12792,11 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   margin-top: 1.25rem;
 }
 
+@media (min-width: 40.0625em) {
+  .nhsuk-grid-column-one-third + .nhsuk-grid-column-two-thirds {
+    margin-top: 0;
+  }
+}
 @media (min-width: 48.0625em) {
   .nhsuk-grid-column-one-third,
   .nhsuk-grid-column-two-thirds {
@@ -12805,7 +12810,7 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     width: 300px;
     float: left;
     position: relative;
-    top: 2rem;
+    top: 4rem;
   }
   .horizontal-labels .nhsuk-fieldset:has(.nhsuk-radios) .nhsuk-fieldset__legend {
     width: 250px;

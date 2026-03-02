@@ -30,7 +30,7 @@
           <div class="nhsuk-grid-row">
 
             <!-- ONE THIRD -->
-            <div class="nhsuk-grid-column-one-third">
+            <div class="nhsuk-grid-column-one-half">
 
               {% from '../macros/image.njk' import image %}
               {{ image() }}
@@ -38,7 +38,7 @@
             </div>
 
             <!-- TWO THIRDS -->
-            <div class="nhsuk-grid-column-two-thirds">
+            <div class="nhsuk-grid-column-one-half">
 
                <div class="nhsuk-card nhsuk-card--grey">
 
@@ -52,7 +52,7 @@
                         {{ button({
                           id: 'toggleButton',
                           text: 'Show all fields',
-                          classes: 'nhsuk-button--small',
+                          classes: 'nhsuk-button--small nhsuk-button--secondary',
                           attributes: { 'aria-pressed': 'false' }
                         }) }}
                       </div>
@@ -100,7 +100,11 @@
 
                       };
 
-                      _showHighlightedFields();
+                      if( window.location.href.indexOf('showAllFields=true') > -1 ){
+                        _showAllFields();
+                      } else {
+                        _showHighlightedFields();
+                      }
 
 
                       if( toggleButton ){
@@ -357,7 +361,7 @@
                 {{ radios({
                   idPrefix: 'imagePatientSignature',
                   name: 'imagePatientSignature',
-                  value: data.imagePatientSignature,
+                  value: data.imagePatientSignature or 'yes',
                   classes: 'nhsuk-radios--inline',
                   fieldset: {
                     legend: {
@@ -375,7 +379,7 @@
                  {{ radios({
                   idPrefix: 'imageHealthcarePractitionerSignature',
                   name: 'imageHealthcarePractitionerSignature',
-                  value: data.imageHealthcarePractitionerSignature,
+                  value: data.imageHealthcarePractitionerSignature or 'yes',
                   classes: 'nhsuk-radios--inline',
                   fieldset: {
                     legend: {

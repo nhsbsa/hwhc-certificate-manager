@@ -1,0 +1,156 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'Application 2025 11 18 18 12 16N3000049' %}
+{% set bannerRole = 'backOffice' %}
+
+{% block beforeContent %}
+ {{ backLink({
+    href: 'review-application--horizontal-labels',
+    text: 'Back'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }}
+        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
+
+    </div>
+  </div>
+
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+          <div class="nhsuk-grid-row">
+
+            <!-- ONE THIRD -->
+            <div class="nhsuk-grid-column-one-half">
+
+              {% from '../macros/image.njk' import image %}
+              {{ image() }}
+
+            </div>
+
+            <!-- TWO THIRDS -->
+            <div class="nhsuk-grid-column-one-half">
+
+              <div class="nhsuk-card nhsuk-card--grey">
+                <div class="nhsuk-card__content">
+
+                      <h2 class="nhsuk-heading-m">Cannot process application</h2>
+
+
+                      {% set askForFurtherInformationHTML %}
+
+                        <!-- ASK FOR FURTHER INFORMATION HTML -->
+
+                        {{ radios({
+                          idPrefix: 'furtherInformationRequested',
+                          name: 'furtherInformationRequested',
+                          value: data.furtherInformationRequested,
+                          fieldset: {
+                            legend: {
+                              classes: 'nhsuk-u-visually-hidden',
+                              text: 'What information do you want to request?'
+                            }
+                          },
+                          items: [
+                            { value: 'PE05', html: 'Health care professional’s (Part 3) details incomplete <span class="nhsuk-u-secondary-text-colour">(PE05)</span>' },
+                            { value: 'PE04a', html: 'Patient signature is missing <span class="nhsuk-u-secondary-text-colour">(PE04)</span>' },
+                            { value: 'PE04b', html: 'Ask health care professional for missing information <span class="nhsuk-u-secondary-text-colour">(PE04)</span>' },
+                            { value: 'PE07', html: 'Ask patient for missing information <span class="nhsuk-u-secondary-text-colour">(PE07)</span>' },
+                            { value: 'rescan', html: 'Ask for a rescan' }
+                          ]
+                        }) }}
+
+                        <!-- <span class="nhsuk-u-secondary-text-colour"> -->
+
+
+                      {% endset %}
+
+
+                      {% set rejectApplicationHTML %}
+
+                        <!-- REASON FOR REJECTION -->
+
+                        {{ radios({
+                          idPrefix: 'reasonForRejection',
+                          name: 'reasonForRejection',
+                          value: data.reasonForRejection,
+                          fieldset: {
+                            legend: {
+                              classes: 'nhsuk-u-visually-hidden',
+                              text: 'What is the reason for the rejection?'
+                            }
+                          },
+                          items: [
+                            { value: 'MAT06', html: 'Child has already reached their first birthday <span class="nhsuk-u-secondary-text-colour">(MAT06)</spa>' },
+                            { value: 'PE15', html: 'Patient is outside England <span class="nhsuk-u-secondary-text-colour">(PE15)</span>' },
+                            { value: 'PE12a', html: 'Patient is under 16 <span class="nhsuk-u-secondary-text-colour">(PE12)</span>' },
+                            { value: 'PE12b', html: 'Patient is over 60 <span class="nhsuk-u-secondary-text-colour">(PE12)</span>' },
+                            { value: 'PE17', html: 'Patient already has a valid exemption certificate <span class="nhsuk-u-secondary-text-colour">(PE17)</span>' }
+                          ]
+                        }) }}
+
+                      {% endset %}
+
+                      
+                      <form method="post" novalidate>
+
+                        {{ radios({
+                          idPrefix: 'cannotProcessApplication',
+                          name: 'cannotProcessApplication',
+                          value: data.cannotProcessApplication,
+                          fieldset: {
+                            legend: {
+                              text: 'What would you like to do next?'
+                            }
+                          },
+                          items: [
+                            {
+                              value: 'askForFurtherInformation',
+                              text: 'Ask for further information',
+                              conditional: { html: askForFurtherInformationHTML }
+                            },
+                            {
+                              value: 'rejectApplication',
+                              text: 'Reject application',
+                              conditional: { html: rejectApplicationHTML }
+                            }
+                          ]
+                        }) }}
+
+                        {{ textarea({
+                          name: 'cannotProcessApplicationNotes',
+                          id: 'cannotProcessApplicationNotes',
+                          value: data.cannotProcessApplicationNotes,
+                          label: {
+                            text: 'Notes'
+                          }
+                        }) }}
+
+
+                        {{ button({
+                          text: 'Submit'
+                        }) }}
+
+                      </form>
+
+                      
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+    </div>
+  </div>
+
+{% endblock %}
