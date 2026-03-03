@@ -398,9 +398,33 @@ req.session.data.addressSearchBuildingNumberOrName =
     const results = [];
   
     function toTitleCase(str) {
-      return str.replace(/\w\S*/g, txt =>
-        txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-      );
+      if (!str) return '';
+    
+      // Whitelist of acronyms to keep uppercase
+      const ACRONYMS = new Set([
+        'NHS','HMRC','DVLA','ICB','CCG','PCT','GP','UK','NHSBT',
+        'UHB','UHBW','UCLH','NCA','ONS','CQC','DBS','MOD','DWP','BBC'
+      ]);
+    
+      // Optional: keep roman numerals uppercase
+      const ROMAN = new Set(['I','II','III','IV','V','VI','VII','VIII','IX','X']);
+    
+      return str.replace(/\w\S*/g, (txt) => {
+        const clean = txt.replace(/[^A-Za-z]/g, '');     // strip punctuation for checks
+        const upper = clean.toUpperCase();
+    
+        // Keep acronyms and roman numerals fully uppercase
+        if (ACRONYMS.has(upper) || ROMAN.has(upper)) return upper;
+    
+        // Title-case hyphenated parts properly (e.g., "St. Asaph", "Pont-y-pwl")
+        return txt
+          .split('-')
+          .map(part => part
+            ? part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()
+            : part
+          )
+          .join('-');
+      });
     }
   
 
@@ -541,10 +565,34 @@ router.get(/^\/[^\/]+\/address-lookup-result$/, function (req, res) {
 router.post(/^\/[^\/]+\/address-lookup-result$/, function (req, res) {
 
   function toTitleCase(str) {
-    return str.replace(/\w\S*/g, (txt) =>
-    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-    );
-    }
+    if (!str) return '';
+  
+    // Whitelist of acronyms to keep uppercase
+    const ACRONYMS = new Set([
+      'NHS','HMRC','DVLA','ICB','CCG','PCT','GP','UK','NHSBT',
+      'UHB','UHBW','UCLH','NCA','ONS','CQC','DBS','MOD','DWP','BBC'
+    ]);
+  
+    // Optional: keep roman numerals uppercase
+    const ROMAN = new Set(['I','II','III','IV','V','VI','VII','VIII','IX','X']);
+  
+    return str.replace(/\w\S*/g, (txt) => {
+      const clean = txt.replace(/[^A-Za-z]/g, '');     // strip punctuation for checks
+      const upper = clean.toUpperCase();
+  
+      // Keep acronyms and roman numerals fully uppercase
+      if (ACRONYMS.has(upper) || ROMAN.has(upper)) return upper;
+  
+      // Title-case hyphenated parts properly (e.g., "St. Asaph", "Pont-y-pwl")
+      return txt
+        .split('-')
+        .map(part => part
+          ? part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()
+          : part
+        )
+        .join('-');
+    });
+  }
     
   const selectedAddress = req.body.addressSearchResult;
 
