@@ -12909,6 +12909,10 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     /*background-color: blue;*/
   }
   .sticky-column:has(.menu-container):has(.expandable-image) .nhsuk-card__content .scroll-container {
+    height: calc(100vh - 1.25rem - 300px - 4rem - 2px - 0.5rem - 1.25rem - 4px - 0.625rem);
+    /*background-color: yellow;*/
+  }
+  .sticky-column:has(.menu-container):has(.expandable-image.expandable-image--half) .nhsuk-card__content .scroll-container {
     height: calc(100vh - 1.25rem - 150px - 4rem - 2px - 0.5rem - 1.25rem - 4px - 0.625rem);
     /*background-color: yellow;*/
   }
