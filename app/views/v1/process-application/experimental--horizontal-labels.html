@@ -331,7 +331,7 @@
                   namePrefix: 'imageBabyDateOfBirth',
                   fieldset: {
                     legend: {
-                      html: "Baby's date of birth " + 12 | getConfidenceTag
+                      html: "Child's due or birth date " + 12 | getConfidenceTag
                     }
                   },
                   items: [
@@ -361,7 +361,7 @@
                 {{ radios({
                   idPrefix: 'imagePatientSignature',
                   name: 'imagePatientSignature',
-                  value: data.imagePatientSignature or 'yes',
+                  value: data.imagePatientSignature,
                   classes: 'nhsuk-radios--inline',
                   fieldset: {
                     legend: {
@@ -379,7 +379,7 @@
                  {{ radios({
                   idPrefix: 'imageHealthcarePractitionerSignature',
                   name: 'imageHealthcarePractitionerSignature',
-                  value: data.imageHealthcarePractitionerSignature or 'yes',
+                  value: data.imageHealthcarePractitionerSignature,
                   classes: 'nhsuk-radios--inline',
                   fieldset: {
                     legend: {
@@ -394,19 +394,11 @@
                 }) }}
 
 
-
-
                 <div class="nhsuk-button-group">
 
                   {{ button({
-                    text : 'Continue'
+                    html : '<span data-ak="I">Continue</span>'
                   }) }}
-
-                  {#{ button({
-                    html: '<span data-ak="K">Cannot process application</span>',
-                    href: 'cannot-process-application',
-                    classes: 'nhsuk-button--secondary'
-                  }) }#}
 
                 </div>
 

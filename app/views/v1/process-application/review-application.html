@@ -6,7 +6,7 @@
 {% block beforeContent %}
  {{ backLink({
     href: 'process-application',
-    html: '<span data-ak="B">Back</span>'
+    text: 'Back'
   }) }}
 {% endblock %}
 
@@ -59,7 +59,7 @@
                   rows: [
                     {
                       key: { text: 'Name' },
-                      value: { text: firstName | processFullName( lastName ) },
+                      value: { text: firstName | processFullName( lastName, true ) },
                       actions: {
                         items: [
                           { href: 'index#imageLastName', text: 'Change', visuallyHiddenText: 'name' }
@@ -122,16 +122,16 @@
                 }) }}
 
 
-                <h3 class="nhsuk-heading-s">Baby details</h3>
+                <h3 class="nhsuk-heading-s">Child's details</h3>
 
                 {{ summaryList({
                   rows: [
                     {
-                      key: { text: "Baby's date of birth" },
+                      key: { text: "Child's due or birth date" },
                       value: { text: '10 August 2026' },
                       actions: {
                         items: [
-                          { href: 'other#imageBabyDateOfBirth', text: 'Change', visuallyHiddenText: "baby's date of birth" }
+                          { href: 'other#imageBabyDateOfBirth', text: 'Change', visuallyHiddenText: "Child's due or birth date" }
                         ]
                       }
                     }

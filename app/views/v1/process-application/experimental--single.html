@@ -248,7 +248,7 @@
 
 
                 {% call details({
-                  summaryText: 'Baby details',
+                  summaryText: 'Child's details',
                   classes: 'nhsuk-expander',
                   id: 'babyDetailsExpander'
                 }) %}
@@ -258,7 +258,7 @@
                   namePrefix: 'imageBabyDateOfBirth',
                   fieldset: {
                     legend: {
-                      html: "Baby's date of birth " + 92 | getConfidenceTag
+                      html: "Child's due or birth date " + 92 | getConfidenceTag
                     }
                   },
                   items: [
@@ -338,7 +338,7 @@
                 <div class="nhsuk-button-group">
 
                   {{ button({
-                    text : 'Continue'
+                    html : '<span data-ak="I">Continue</span>'
                   }) }}
 
                   {#{ button({

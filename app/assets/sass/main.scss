@@ -65,6 +65,10 @@
   border-style: dashed;
 }
 
+.nhsuk-radios__input[aria-expanded="true"] + .nhsuk-radios__label {
+  font-weight: 600;
+}
+
 /* ONE FIFTH */
 
 .nhsuk-grid-column-one-fifth {

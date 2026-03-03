@@ -45,15 +45,15 @@
 
               <h3 class="nhsuk-heading-s">Personal details</h3>
 
-              {% set firstName = data.imageFirstName or 'Sarah' %}
-              {% set lastName = data.imageLastName or 'Johnson' %}
+              {% set firstName = data.imageFirstName %}
+              {% set lastName = data.imageLastName %}
 
-              {% set houseNumber = data.imageBuildingNumberOrName or '12' %}
-              {% set addressLine1 = data.imageAddressLine1 or 'Crown Passage' %}
-              {% set addressLine2 = data.imageAddressLine2 or '' %}
-              {% set town = data.imageTown or 'Birmingham' %}
-              {% set county = data.imageCounty or '' %}
-              {% set postcode = data.imagePostcode or 'B14 9QX' %}
+              {% set houseNumber = data.imageBuildingNumberOrName %}
+              {% set addressLine1 = data.imageAddressLine1 %}
+              {% set addressLine2 = data.imageAddressLine2 %}
+              {% set town = data.imageTown %}
+              {% set county = data.imageCounty %}
+              {% set postcode = data.imagePostcode %}
 
               {{ summaryList({
                   rows: [
@@ -68,7 +68,7 @@
                     },
                     {
                       key: { text: 'Date of birth' },
-                      value: { text: data.dateOfBirth | processDate or '2 July 1995' },
+                      value: { text: data.dateOfBirth | processDate },
                       actions: {
                          items: [
                           { href: 'experimental--horizontal-labels?showAllFields=true#imageDateOfBirth', text: 'Change', visuallyHiddenText: 'date of birth' }
@@ -77,7 +77,7 @@
                     },
                     {
                       key: { text: 'NHS number' },
-                      value: { text: data.imageNHSNumber or '1234 456 678' },
+                      value: { text: data.imageNHSNumber },
                       actions: {
                          items: [
                           { href: 'experimental--horizontal-labels?showAllFields=true#imageNHSNumber', text: 'Change', visuallyHiddenText: 'NHS number' }
@@ -102,7 +102,7 @@
                   rows: [
                     {
                       key: { text: 'Phone number' },
-                      value: { text: data.imagePhoneNumber or '07911 123456' },
+                      value: { text: data.imagePhoneNumber },
                       actions: {
                         items: [
                           { href: 'experimental--horizontal-labels?showAllFields=true#imagePhoneNumber', text: 'Change', visuallyHiddenText: 'phone number' }
@@ -122,16 +122,16 @@
                 }) }}
 
 
-                <h3 class="nhsuk-heading-s">Baby details</h3>
+                <h3 class="nhsuk-heading-s">Child's details</h3>
 
                 {{ summaryList({
                   rows: [
                     {
-                      key: { text: "Baby's date of birth" },
+                      key: { text: "Child's due or birth date" },
                       value: { text: '10 August 2026' },
                       actions: {
                         items: [
-                          { href: 'experimental--horizontal-labels?showAllFields=true#imageBabyDateOfBirth', text: 'Change', visuallyHiddenText: "baby's date of birth" }
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageBabyDateOfBirth', text: 'Change', visuallyHiddenText: "Child's due or birth date" }
                         ]
                       }
                     }
@@ -145,7 +145,7 @@
                   rows: [
                     {
                       key: { text: 'Patient signature' },
-                      value: { text: ( data.imagePatientSignature | capitalize ) or 'Yes' },
+                      value: { text: ( data.imagePatientSignature | capitalize ) },
                       actions: {
                         items: [
                           { href: 'experimental--horizontal-labels?showAllFields=true#imagePatientSignature', text: 'Change', visuallyHiddenText: 'whether patient signature is present' }
@@ -163,6 +163,20 @@
                     }
                   ]
                 }) }}
+
+
+
+                {{ warningCallout({
+                  heading: 'Recommendation',
+                  html: '<p class="nhsuk-body">This application is missing the following information:</p>
+                  <ul class="nhsuk-list nhsuk-list--bullet">
+                    <li>Patient\'s full name</li>
+                    <li>Healthcare practitoner\'s signature</li>
+                  </ul>
+                  <p>Send a letter to the healthcare practitioner requesting this information.</p>
+                  <p><a href="---">Follow recommendation</a></p>'
+                }) }}
+
 
 
 

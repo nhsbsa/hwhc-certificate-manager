@@ -45,26 +45,64 @@
                       <h2 class="nhsuk-heading-m">Cannot process application</h2>
 
 
-                      {% set askForFurtherInformationHTML %}
+                      {% set askForFurtherInformationFromPatientHTML %}
 
-                        <!-- ASK FOR FURTHER INFORMATION HTML -->
+                        <!-- ASK FOR FURTHER INFORMATION FROM PATIENT HTML -->
 
-                        {{ radios({
-                          idPrefix: 'furtherInformationRequested',
-                          name: 'furtherInformationRequested',
-                          value: data.furtherInformationRequested,
+                        {{ checkboxes({
+                          idPrefix: 'infoFromPatient',
+                          name: 'infoFromPatient',
+                          value: data.infoFromPatient,
                           fieldset: {
                             legend: {
                               classes: 'nhsuk-u-visually-hidden',
-                              text: 'What information do you want to request?'
+                              text: 'What information is needed from the patient?',
+                              isPageHeading: false
                             }
                           },
+                          classes: 'nhsuk-checkboxes--small',
                           items: [
-                            { value: 'PE05', html: 'Health care professional’s (Part 3) details incomplete <span class="nhsuk-u-secondary-text-colour">(PE05)</span>' },
-                            { value: 'PE04a', html: 'Patient signature is missing <span class="nhsuk-u-secondary-text-colour">(PE04)</span>' },
-                            { value: 'PE04b', html: 'Ask health care professional for missing information <span class="nhsuk-u-secondary-text-colour">(PE04)</span>' },
-                            { value: 'PE07', html: 'Ask patient for missing information <span class="nhsuk-u-secondary-text-colour">(PE07)</span>' },
-                            { value: 'rescan', html: 'Ask for a rescan' }
+                            { value: '', text: "Patient signature" },
+                            { value: '', text: "Date of birth" },
+                            { value: '', text: 'Full address including postcode' },
+                            { value: '', text: 'Email address' },
+                            { value: '', text: 'NHS number' },
+                            { value: '', text: "Child's due or birth date" },
+                            { value: '', text: "Healthcare practitioner's signature" },
+                            { value: '', text: "Healthcare practitioner's contact information" }
+                          ]
+                        }) }}
+
+
+                      {% endset %}
+
+
+
+                      {% set askForFurtherInformationFromHCPHTML %}
+
+                        <!-- ASK FOR FURTHER INFORMATION FROM HCP HTML -->
+
+                        {{ checkboxes({
+                          idPrefix: 'infoFromHCP',
+                          name: 'infoFromHCP',
+                          value: data.infoFromHCP,
+                          fieldset: {
+                            legend: {
+                              classes: 'nhsuk-u-visually-hidden',
+                              text: 'What information is needed from the healthcare practitioner?',
+                              isPageHeading: false
+                            }
+                          },
+                          classes: 'nhsuk-checkboxes--small',
+                          items: [
+                            { value: '', text: "Healthcare practitioner's signature" },
+                            
+                            { value: '', text: "Date of birth" },
+
+                            { value: '', text: 'Full address including postcode' },
+                      
+                            { value: '', text: 'NHS number' },
+                            { value: '', text: "Child's due or birth date" }
                           ]
                         }) }}
 
@@ -88,12 +126,13 @@
                               text: 'What is the reason for the rejection?'
                             }
                           },
+                          classes: 'nhsuk-radios--small',
                           items: [
-                            { value: 'MAT06', html: 'Child has already reached their first birthday <span class="nhsuk-u-secondary-text-colour">(MAT06)</spa>' },
-                            { value: 'PE15', html: 'Patient is outside England <span class="nhsuk-u-secondary-text-colour">(PE15)</span>' },
-                            { value: 'PE12a', html: 'Patient is under 16 <span class="nhsuk-u-secondary-text-colour">(PE12)</span>' },
-                            { value: 'PE12b', html: 'Patient is over 60 <span class="nhsuk-u-secondary-text-colour">(PE12)</span>' },
-                            { value: 'PE17', html: 'Patient already has a valid exemption certificate <span class="nhsuk-u-secondary-text-colour">(PE17)</span>' }
+                            { value: 'MAT06', html: 'Child has already reached their first birthday' },
+                            { value: 'PE15', html: 'Patient is outside England' },
+                            { value: 'PE12a', html: 'Patient is under 16' },
+                            { value: 'PE12b', html: 'Patient is over 60' },
+                            { value: 'PE17', html: 'Patient already has a valid exemption certificate' }
                           ]
                         }) }}
 
@@ -113,9 +152,18 @@
                           },
                           items: [
                             {
-                              value: 'askForFurtherInformation',
-                              text: 'Ask for further information',
-                              conditional: { html: askForFurtherInformationHTML }
+                              value: 'askForFurtherInformationFromPatient',
+                              text: 'Ask the patient for further information',
+                              conditional: { html: askForFurtherInformationFromPatientHTML }
+                            },
+                            {
+                              value: 'askForFurtherInformationFromHCP',
+                              text: 'Ask the healthcare practitioner for further information',
+                              conditional: { html: askForFurtherInformationFromHCPHTML }
+                            },
+                            {
+                              value: 'askForFurtherInformationFromHCP',
+                              text: 'Request a rescan'
                             },
                             {
                               value: 'rejectApplication',
