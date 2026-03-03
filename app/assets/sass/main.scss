@@ -65,6 +65,38 @@
   border-style: dashed;
 }
 
+/* ONE FIFTH */
+
+.nhsuk-grid-column-one-fifth {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 16px;
+}
+
+.id-stats .nhsuk-grid-column-one-fifth {
+  text-align: center;
+  float: left;
+  width: 50%;
+} 
+
+.id-stats .nhsuk-grid-column-one-fifth:last-child {
+  width: 100%;
+}
+
+.id-stats .nhsuk-grid-column-one-fifth:last-child .nhsuk-card{
+  background-color: #f0f4f5;
+}
+
+@include nhsuk-media-query($from: large-desktop) {
+  .nhsuk-grid-column-one-fifth,
+  .id-stats .nhsuk-grid-column-one-fifth,
+  .id-stats .nhsuk-grid-column-one-fifth:last-child {
+    width: 20%;
+    width: auto;
+    float: left;
+  }
+}
+
 /* EXPANDABLE IMAGE */
 
 .expandable-image::details-content {
@@ -81,11 +113,15 @@
   padding-bottom: 100%;
 }
 
-.expandable-image.expandable-image--half {
+.sticky-column .expandable-image {
+  padding-bottom: 298px;
+}
+
+.sticky-column .expandable-image.expandable-image--half {
   padding-bottom: 148px;
 }
 
-.expandable-image + .nhsuk-card {
+.expandable-image+.nhsuk-card {
   margin-top: 1.25rem;
 }
 
@@ -329,7 +365,7 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   margin-top: 1.25rem;
 }
 
-@include nhsuk-media-query($from: tablet){
+@include nhsuk-media-query($from: tablet) {
   .nhsuk-grid-column-one-third+.nhsuk-grid-column-two-thirds {
     margin-top: 0;
   }
@@ -396,8 +432,8 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     height: 100vh;
   }
 
-  .sticky-column .expandable-image--half + .nhsuk-card--grey {
-    height: calc( 100vh - 1.25rem - 150px );
+  .sticky-column .expandable-image--half+.nhsuk-card--grey {
+    height: calc(100vh - 1.25rem - 150px);
     margin-bottom: 0;
   }
 
@@ -408,7 +444,7 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   }
 
   .sticky-column .nhsuk-card__content .scroll-container {
-    height: calc( 100vh - 4rem - 2px );
+    height: calc(100vh - 4rem - 2px);
     padding-right: 0.625rem;
     overflow-y: auto;
     scrollbar-gutter: stable;
@@ -416,18 +452,23 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     /*background-color: red;*/
   }
 
-  .sticky-column:has(.menu-container):has(:not(.expandable-image))  .scroll-container {
-    height: calc( 100vh - 4rem - 2px - 1.25rem - 0.5rem - 4px - 0.625rem );
+  .sticky-column:has(.menu-container):has(:not(.expandable-image)) .scroll-container {
+    height: calc(100vh - 4rem - 2px - 1.25rem - 0.5rem - 4px - 0.625rem);
     /*background-color: green;*/
   }
-  
+
   .sticky-column:has(.expandable-image) .nhsuk-card__content .scroll-container {
-    height: calc( 100vh - 1.25rem - 150px - 4rem - 2px );
+    height: calc(100vh - 1.25rem - 300px - 4rem - 2px);
     /*background-color: blue;*/
   }
 
-  .sticky-column:has(.menu-container):has(.expandable-image)  .nhsuk-card__content .scroll-container {
-    height: calc( 100vh - 1.25rem - 150px - 4rem - 2px - 0.5rem - 1.25rem - 4px - 0.625rem );
+  .sticky-column:has(.expandable-image.expandable-image--half) .nhsuk-card__content .scroll-container {
+    height: calc(100vh - 1.25rem - 150px - 4rem - 2px);
+    /*background-color: blue;*/
+  }
+
+  .sticky-column:has(.menu-container):has(.expandable-image) .nhsuk-card__content .scroll-container {
+    height: calc(100vh - 1.25rem - 150px - 4rem - 2px - 0.5rem - 1.25rem - 4px - 0.625rem);
     /*background-color: yellow;*/
   }
 
@@ -464,8 +505,8 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
 }
 
 .events-log .last-of-type:before {
-    content: none;
-  }
+  content: none;
+}
 
 @include nhsuk-media-query($from: large-desktop) {
 
@@ -474,7 +515,7 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     width: calc(100%/3);
   }
 
- .nhsuk-grid-column-two-thirds {
+  .nhsuk-grid-column-two-thirds {
     margin-top: 0;
     float: left;
     width: calc((100%/3) * 2);
@@ -482,7 +523,7 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
 
   /* STICKY COLUMN */
 
-  .nhsuk-grid-row:has(.sticky-column) .nhsuk-grid-column-one-third:not(.sticky-column){
+  .nhsuk-grid-row:has(.sticky-column) .nhsuk-grid-column-one-third:not(.sticky-column) {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -492,8 +533,9 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     height: 100%;
   }
 
-  .nhsuk-grid-row:has(.sticky-column) .nhsuk-grid-column-one-third .nhsuk-card {
-    margin: 0;
+  .nhsuk-grid-row:has(.sticky-column) .nhsuk-grid-column-one-third .nhsuk-card,
+  .nhsuk-grid-row:has(.sticky-column) .nhsuk-grid-column-two-thirds .nhsuk-card {
+    margin-bottom: 0;
   }
 
   .nhsuk-grid-row:has(.sticky-column) {
@@ -505,62 +547,62 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
 
 
 .menu-container .nhsuk-list {
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    margin: 0 0 0.625rem;
-  }
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  margin: 0 0 0.625rem;
+}
 
-  .menu-container .nhsuk-list li {
-    display: block;
-    margin: 0 0 0 0.5rem;
-  }
+.menu-container .nhsuk-list li {
+  display: block;
+  margin: 0 0 0 0.5rem;
+}
 
-  .menu-container .nhsuk-list li:first-child {
-    margin-left: 0;
-  }
+.menu-container .nhsuk-list li:first-child {
+  margin-left: 0;
+}
 
-  .menu-container .nhsuk-list li button {
-    color: #005eb8;
-    display: block;
-    margin: 0;
-    padding: 0 8px 4px 8px;
-    outline: none;
-    border: none;
-    background: none;
-    border-bottom: 4px solid transparent;
-    cursor: pointer;
-    cursor: hand;
-  }
+.menu-container .nhsuk-list li button {
+  color: #005eb8;
+  display: block;
+  margin: 0;
+  padding: 0 8px 4px 8px;
+  outline: none;
+  border: none;
+  background: none;
+  border-bottom: 4px solid transparent;
+  cursor: pointer;
+  cursor: hand;
+}
 
-  .menu-container .nhsuk-list li button span {
-    pointer-events: none;
-    display: inline-block;
-  }
+.menu-container .nhsuk-list li button span {
+  pointer-events: none;
+  display: inline-block;
+}
 
-  .menu-container .nhsuk-list li button:hover span {
-    text-decoration: underline;
-    line-height: auto;
-  }
+.menu-container .nhsuk-list li button:hover span {
+  text-decoration: underline;
+  line-height: auto;
+}
 
-  .menu-container .nhsuk-list li button:focus span {
-     color: #212b32;
-     background-color: #ffeb3b;
-     box-shadow: 0 -2px #ffeb3b, 0 4px #212b32;
-     outline: 4px solid transparent;
-     text-decoration: none;
-     line-height: 1em;
-  }
+.menu-container .nhsuk-list li button:focus span {
+  color: #212b32;
+  background-color: #ffeb3b;
+  box-shadow: 0 -2px #ffeb3b, 0 4px #212b32;
+  outline: 4px solid transparent;
+  text-decoration: none;
+  line-height: 1em;
+}
 
-  .menu-container .nhsuk-list li button[aria-pressed="true"] {
-    font-weight: 600;
-    border-bottom: 4px solid #005eb8;
-  }
+.menu-container .nhsuk-list li button[aria-pressed="true"] {
+  font-weight: 600;
+  border-bottom: 4px solid #005eb8;
+}
 
 
-  .sticky-column:has(.menu-container) .nhsapp-timeline {
-    margin: 1.25rem 0;
-  }
+.sticky-column:has(.menu-container) .nhsapp-timeline {
+  margin: 1.25rem 0;
+}
 
 
 /* STATS */
@@ -611,7 +653,7 @@ td .nhsuk-icon {
 /* TIMELINE APPLICATION */
 
 #timeline-application .nhsapp-timeline__item:not(:last-child):before {
-    border-left: 2px solid #aeb7bd;
+  border-left: 2px solid #aeb7bd;
 }
 
 #timeline-application .nhsapp-timeline__header {

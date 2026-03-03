@@ -6,7 +6,7 @@
 {% block beforeContent %}
   {{ backLink({
     href: 'javascript:history.go(-1)',
-    text: 'Back'
+    html: '<span data-ak="B">Back</span>'
   }) }}
 {% endblock %}
 
@@ -342,7 +342,7 @@
                   }) }}
 
                   {#{ button({
-                    text : 'Cannot process application',
+                    html: '<span data-ak="K">Cannot process application</span>',
                     href: 'cannot-process-application',
                     classes: 'nhsuk-button--secondary'
                   }) }#}

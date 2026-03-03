@@ -180,6 +180,7 @@ env.addFilter('getSupervisorDashboardRows', function( processors ){
       { text: processor.stats[1] },
       { text: processor.stats[2] },
       { text: processor.stats[3] },
+      { text: processor.stats[4] },
       { html: ( processor.level === 'trainee' ) ? '<strong>10</strong> <span class="nhsuk-u-font-size-14">('+processor.checkingLevel+'%)</span></strong>' : '<strong>0</strong>' },
       { html: '<a href="processor?searchChecking=true&searchProcessor='+p[0]+'">View<span class="nhsuk-u-visually-hidden">'+processor.name+'\'s account</spa></a>' }
     ];
@@ -597,7 +598,7 @@ env.addFilter( 'getCheckingTableRows', function( patientData, count ){
           { html: _getCertificateTypeTextOrTag( patient.certificateType, true ) },
           { html: _getStatusTextOrTag( patient.status, true ) + ' '  + _getStatusTextOrTag( 'checking', true ) },
           { html: ( patient.status === 'processing' ) ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">'+ patient.certificateReference +'</span>' : patient.certificateReference },
-          { html: '<a href="'+ patient.certificateType +'/comparison--correction?patientID=' + patient.id + '">Correct <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag( patient.certificateType ) + '</span></a>' },
+          { html: '<a href="'+ patient.certificateType +'/comparison--correction?patientID=' + patient.id + '">Change <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag( patient.certificateType ) + '</span></a>' },
         ];
 
         rows.push(obj);
@@ -865,23 +866,23 @@ env.addFilter('getConfidenceTag', function( num, showEverything ){
   const showLevels = ( showEverything === true ) ? [ 'empty', 'low', 'medium', 'high' ] : [ 'low','medium' ]; // Add the levels you wish to output here...
 
   let confidenceLevel = 'empty';
-  let tag = '<span class="confidence-level"><span class="nhsuk-tag nhsuk-tag--grey">Empty</span></span>';
+  let tag = '<span class="confidence-level"><span class="nhsuk-tag nhsuk-tag--grey">E</span></span>';
 
   if( num > 0 ) {
     confidenceLevel = 'low';
-    tag =  '<span class="confidence-level confidence-level--'+confidenceLevel+'"><span class="nhsuk-tag nhsuk-tag--red">Low</span>'
+    tag =  '<span class="confidence-level confidence-level--'+confidenceLevel+'"><span class="nhsuk-tag nhsuk-tag--red">L</span>'
     tag += '<span class="nhsuk-tag nhsuk-tag--red confidence-score">'+num+'</span></span>';
   }
   
   if( num > 30 ){
     confidenceLevel = 'medium';
-    tag =  '<span class="confidence-level confidence-level--'+confidenceLevel+'"><span class="nhsuk-tag nhsuk-tag--blue">Medium</span>'
+    tag =  '<span class="confidence-level confidence-level--'+confidenceLevel+'"><span class="nhsuk-tag nhsuk-tag--blue">M</span>'
     tag += '<span class="nhsuk-tag nhsuk-tag--blue confidence-score">'+num+'</span></span>';
   }
 
   if( num > 60 ){
     confidenceLevel = 'high';
-    tag =  '<span class="confidence-level confidence-level--'+confidenceLevel+'"><span class="nhsuk-tag nhsuk-tag--green">High</span>'
+    tag =  '<span class="confidence-level confidence-level--'+confidenceLevel+'"><span class="nhsuk-tag nhsuk-tag--green">H</span>'
     tag += '<span class="nhsuk-tag nhsuk-tag--green confidence-score">'+num+'</span></span>';
   }
 
@@ -970,6 +971,32 @@ env.addFilter('processDate', function(){
 
 });
 
+//
+// IS DATE VALID FILTER
+//
+env.addFilter('isValidDate', function( day, month, year ){
+
+  day = String(day);
+  month = String(month);
+  year = String(year);
+
+  if( day.length === 1 ){
+    day = '0'+day;
+  }
+  if( month.length === 1 ){
+    month = '0'+month;
+  }
+
+  const inputDate = year + '/' + month + '/' + day;
+  let check = false;
+
+  if( inputDate.length === 10 ){
+    check = !isNaN(new Date(dateStr));
+  }
+
+  return check;
+
+});
 
 //
 // GET PATIENT DATA FILTER

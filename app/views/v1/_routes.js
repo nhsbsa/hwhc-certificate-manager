@@ -278,7 +278,7 @@ router.post(/processor-edit/, function (req, res) {
 //
 router.post(/comparison--leave-feedback/, function( req, res ){
 
-  const destination = ( req.session.data.processingApproved === 'no' ) ? 'comparison--failed-check' : 'comparison--passed-check';
+  const destination = ( req.session.data.processingApproved === 'no' ) ? 'comparison--confirmation--failed-check' : 'comparison--confirmation--passed-check';
   res.redirect( destination );
 
 });

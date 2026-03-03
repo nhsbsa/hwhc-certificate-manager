@@ -6,7 +6,7 @@
   {% if data.role === 'backOffice' or data.role === 'backOfficeSupervisor' or data.role === 'qualityControl' %}
     {{ backLink({
       href: 'javascript:history.go(-1)',
-      text: 'Back'
+      html: '<span data-ak="B">Back</span>'
     }) }}
   {% endif %}
 {% endblock %}

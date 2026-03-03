@@ -6,7 +6,7 @@
 {% block beforeContent %}
   {{ backLink({
     href: 'javascript:history.go(-1)',
-    text: 'Back'
+    html: '<span data-ak="B">Back</span>'
   }) }}
 {% endblock %}
 
@@ -86,6 +86,9 @@
                                hr.classList.add('hidden');
                              } );
 
+                             toggleButton.setAttribute('aria-pressed', 'false' );
+                            toggleButton.textContent = 'Show all fields';
+
                       };
 
                        const _showAllFields = function(){
@@ -97,6 +100,9 @@
                             hrs.forEach( function( hr ){
                               hr.classList.remove('hidden');
                             } );
+
+                            toggleButton.setAttribute('aria-pressed', 'true' );
+                            toggleButton.textContent = 'Show highlighted fields';
 
                       };
 
@@ -114,17 +120,11 @@
                           if( toggleButton.getAttribute('aria-pressed') === 'false' ){
                             
                             // SHOWING ALL FIELDS
-                            toggleButton.setAttribute('aria-pressed', 'true' );
-                            toggleButton.textContent = 'Show highlighted fields';
-                            
                             _showAllFields();
 
                           } else {
 
                             // SHOWING HIGHLIGHTED FIELDS
-                            toggleButton.setAttribute('aria-pressed', 'false' );
-                            toggleButton.textContent = 'Show all fields';
-
                             _showHighlightedFields();
 
                           }
@@ -403,7 +403,7 @@
                   }) }}
 
                   {#{ button({
-                    text : 'Cannot process application',
+                    html: '<span data-ak="K">Cannot process application</span>',
                     href: 'cannot-process-application',
                     classes: 'nhsuk-button--secondary'
                   }) }#}

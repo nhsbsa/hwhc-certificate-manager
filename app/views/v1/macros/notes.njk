@@ -50,7 +50,7 @@
                 {% else %}
 
                 <!-- ON HOLD -->
-                {% if patient.status === 'on-hold' or patient.status === 'active' or patient.status === 'expired' %}
+                {% if patient.status === 'on-hold' or patient.status === 'active' or patient.status === 'expired' or patient.status === 'accepted' %}
 
                         {% set num = 2 | getRandomNumber %}
                             
@@ -125,14 +125,23 @@
                                 html: onHoldText + '<span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+yesterday+', 12:56 pm</span>'
                             }), items ) %}
 
-                        {% elif patient.checking === true %}
+                        {% elif patient.status === 'accepted' or patient.checking === true %}
+
+                            {% if patient.status === 'accepted' %}
+                                {% set acceptedText = '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Application accepted by '+processorFullName+'</p>' %}
+                                {% set items = ( items.push({
+                                    headingText: 'Accepted',
+                                    isPastItem: true,
+                                    html: acceptedText + '<span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+today+', 9:43 am</span>'
+                                }), items ) %}
+                            {% endif %}
 
                             <!-- SELECTED FOR CHECKING -->
                             {% set checkingText = '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Selected for checking</p>' %}
                             {% set items = ( items.push({
                                 headingText: 'Checking',
                                 isPastItem: true,
-                                html: checkingText + '<span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+yesterday+', 12:56 pm</span>'
+                                html: checkingText + '<span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+today+', 9:44 am</span>'
                             }), items ) %}
 
 
@@ -153,7 +162,7 @@
                     {% set items = (items.push({
                         headingText: 'Active',
                         isPastItem: true,
-                        html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Certificate is active</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+today+', 7:38 am</span>'
+                        html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Certificate is active</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+today+', 10:38 am</span>'
                     }), items ) %}
 
                     {% if patient.status === 'expired' %}

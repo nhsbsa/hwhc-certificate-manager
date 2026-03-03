@@ -78,14 +78,6 @@
 
           <div class="nhsuk-grid-row">
 
-            <!-- ONE THIRD -->
-            <div class="nhsuk-grid-column-one-third">
-
-              {% from '../macros/image.njk' import image %}
-              {{ image() }}
-
-            </div>
-
             <!-- TWO THIRDS -->
             <div class="nhsuk-grid-column-two-thirds">
 
@@ -170,6 +162,18 @@
                     </div>
                 </div>
                 
+
+            </div>
+
+
+            <!-- ONE THIRD -->
+            <div class="nhsuk-grid-column-one-third sticky-column">
+
+              {% from '../macros/image.njk' import image %}
+              {{ image() }}
+
+              {% from '../macros/notes.njk' import notes %}
+              {{ notes( patient ) }}
 
             </div>
 

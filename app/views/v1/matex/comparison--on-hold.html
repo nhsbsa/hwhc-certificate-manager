@@ -5,7 +5,7 @@
 {% block beforeContent %}
   {{ backLink({
     href: 'javascript:history.go(-1)',
-    text: 'Back'
+    html: '<span data-ak="B">Back</span>'
   }) }}
 {% endblock %}
 
@@ -142,7 +142,7 @@
             <div class="nhsuk-grid-column-one-third sticky-column">
 
               {% from '../macros/image.njk' import image %}
-              {{ image( 'expandable-image--half' ) }}
+              {{ image() }}
 
               {% from '../macros/notes.njk' import notes %}
               {{ notes( patient ) }}
