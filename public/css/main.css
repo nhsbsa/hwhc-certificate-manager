@@ -12630,7 +12630,8 @@ b {
 .expandable-image .expandable-image__inner img {
   display: block;
   width: auto;
-  border: 2rem solid #ffffff;
+  border: 32px solid #ffffff;
+  transition: all ease-out 5s;
 }
 
 .expandable-image[open] .expandable-image__inner {

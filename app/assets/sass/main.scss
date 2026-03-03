@@ -153,7 +153,8 @@
 .expandable-image .expandable-image__inner img {
   display: block;
   width: auto;
-  border: 2rem solid nhsuk-colour("white");
+  border: 32px solid nhsuk-colour("white");
+  transition: all ease-out 5s;
 }
 
 .expandable-image[open] .expandable-image__inner {

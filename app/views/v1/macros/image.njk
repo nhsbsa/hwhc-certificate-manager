@@ -1,17 +1,133 @@
 {% macro image( classes ) %}
 
-    <details class="expandable-image{{ ' ' + classes}}">
+
+    <script>
+
+        'use strict';
+
+        const ExpanderImage = (function(){
+
+            //
+            // SETTINGS
+            // 
+            const _fields = {};
+
+            _fields.firstName = { width: 1012, height: 56, x: 61, y: 883 };
+
+            //
+            // INIT FUNCTION
+            //
+            function _init(){
+
+                console.log('ExpanderImage.init();');
+
+                Object.keys(_fields).forEach(function( key ){
+                    _fields[key].midPointX = Math.round( _fields[key].x + ( _fields[key].width/2 ) );
+                    _fields[key].midPointY = Math.round( _fields[key].y + ( _fields[key].height/2 ) );
+                });
+
+                const expander = document.querySelector( '.expandable-image' );
+                expander.querySelector('.expandable-image__button').addEventListener('click',function(){
+                    _resetImage();
+                });
+
+                _scrollToField( 'firstName' );
+
+            }
+
+            //
+            // RESET IMAGE FUNCTION
+            //
+            function _resetImage(){
+
+                console.log( '_resetImage();' );
+
+                const expander = document.querySelector( '.expandable-image' );
+                const img = expander.querySelector('.expandable-image__image');
+                const viewPane = expander.querySelector('.expandable-image__inner');
+
+                img.removeAttribute( 'style' );
+                viewPane.scrollTop = 0;
+                viewPane.scrollLeft = 0;
+
+            }
+
+            //
+            // SCROLL TO FIELD FUNCTION
+            //
+            function _scrollToField( fieldName ){
+
+                console.log( 'ExpanderImage.scrollToField( '+ fieldName +' );' );
+
+                fieldName = ( fieldName ) ? fieldName : '';
+
+                const expander = document.querySelector( '.expandable-image' );
+                const img = expander.querySelector('.expandable-image__image');
+                const viewPane = expander.querySelector('.expandable-image__inner');
+
+                const intrinsicImgWidth = img.width;
+                const intrinsicImgHeight = img.height;
+
+                if( fieldName ){
+
+                    // Calculate scale of img
+                    const scale = viewPane.offsetWidth / _fields.firstName.width;
+
+                    const scaledImgWidth = Math.round( img.width * scale );
+                    const scaledImgHeight = Math.round( img.height * scale );
+
+                    const scaledMidPointX = Math.round( _fields[fieldName].midPointX * scale );
+                    const scaledMidPointY = Math.round( _fields[fieldName].midPointY * scale );
+
+                    img.setAttribute('style','height:'+scaledImgHeight+'px; width:'+scaledImgWidth+'px' );
+
+                    // Calculate scrollPosition of viewPane
+                    // !important - 32px border
+                    //
+                    viewPane.scrollTop = (32+scaledMidPointY) - Math.round(viewPane.clientHeight/2);
+                    viewPane.scrollLeft = (32+scaledMidPointX) - Math.round(viewPane.clientWidth/2);
+
+                } else {
+
+                    _resetImage();
+
+                }
+
+            }
+
+
+            return {
+                init: _init,
+                scrollToField: _scrollToField
+            }
+
+        })();
+
+        window.addEventListener('load',function(){
+            ExpanderImage.init();
+        });
+
+    </script>
+
+
+
+
+
+    <details class="expandable-image{{ ' ' + ( classes or '' ) }}">
 
         <h2 class="nhsuk-heading-m nhsuk-u-visually-hidden">Scanned application</h2>
         
         <div class="expandable-image__inner">
             <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
         </div>
-        <summary class="expandable-image__button nhsuk-button">
-            <span class="closed" data-ak="A">Expand image</span>
-            <span class="open" data-ak="S">Shrink image</span>
+        <summary class="expandable-image__button nhsuk-button nhsuk-button--small">
+            <span class="closed">Expand image</span>
+            <span class="open">Shrink image</span>
         </summary>
 
     </details>
+
+
+    
 
 {% endmacro %}
