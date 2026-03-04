@@ -700,6 +700,7 @@ router.post(/edit-matex/, function (req, res) {
   const email = req.body['editMATEX.email'];
   const addressLineOne = req.body['editMATEX.addressLineOne'];
   const postcode = req.body['editMATEX.postcode'];
+  const notes = req.body['editMATEX.notes'];
 
   const errors = [];
 
@@ -741,7 +742,8 @@ router.post(/edit-matex/, function (req, res) {
         certificateFulfilment: fulfilment ?? '',
         email: email ?? '',
         addressLineOne: addressLineOne ?? '',
-        postcode: postcode ?? ''
+        postcode: postcode ?? '',
+        notes: notes ?? ''
       }
     };
   
@@ -750,6 +752,7 @@ router.post(/edit-matex/, function (req, res) {
     data['editMATEX.email'] = data.editMATEX.email;
     data['editMATEX.addressLineOne'] = data.editMATEX.addressLineOne;
     data['editMATEX.postcode'] = data.editMATEX.postcode;
+    data['editMATEX.notes'] = data.editMATEX.notes;
   
     // Do NOT update req.session here; just render the error state
     return res.status(400).render('v1/matex/edit-or-reissue', { data });

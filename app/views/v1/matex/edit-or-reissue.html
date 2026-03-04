@@ -17,6 +17,49 @@
 
 {#{ patient | dump }#}
 
+{% if data.errors %}
+  {{ errorSummary({
+      titleText: "There is a problem",
+      errorList: data.errors
+  }) }}
+{% endif %}
+
+{% set emailError = null %}
+{% if data.errors %}
+  {% for err in data.errors %}
+    {% if err.href == "#email" %}
+      {% set emailError = { text: err.text } %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% set addressLineOneError = null %}
+{% if data.errors %}
+  {% for err in data.errors %}
+    {% if err.href == "#address-line-1" %}
+      {% set addressLineOneError = { text: err.text } %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+
+{% set postcodeError = null %}
+{% if data.errors %}
+  {% for err in data.errors %}
+    {% if err.href == "#postcode" %}
+      {% set postcodeError = { text: err.text } %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% if data.editMATEX.postcode %}
+  {% set postcodeValue = data.editMATEX.postcode %}
+  {% elif postcodeError %}
+  {% set postcodeValue = "" %}
+  {% else %}
+  {% set postcodeValue = patient.address.postcode %}
+{% endif %}
+
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
     <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
@@ -109,49 +152,6 @@ Certificate fulfilment
 {% set childDOBYear  = data.childDOBYear  or '2025' %}
 {% set childDOBMonth = data.childDOBMonth or '11'   %}
 {% set childDOBDay   = data.childDOBDay   or '25'   %}
-
-{% if data.errors %}
-  {{ errorSummary({
-      titleText: "There is a problem",
-      errorList: data.errors
-  }) }}
-{% endif %}
-
-{% set emailError = null %}
-{% if data.errors %}
-  {% for err in data.errors %}
-    {% if err.href == "#email" %}
-      {% set emailError = { text: err.text } %}
-    {% endif %}
-  {% endfor %}
-{% endif %}
-
-{% set addressLineOneError = null %}
-{% if data.errors %}
-  {% for err in data.errors %}
-    {% if err.href == "#address-line-1" %}
-      {% set addressLineOneError = { text: err.text } %}
-    {% endif %}
-  {% endfor %}
-{% endif %}
-
-
-{% set postcodeError = null %}
-{% if data.errors %}
-  {% for err in data.errors %}
-    {% if err.href == "#postcode" %}
-      {% set postcodeError = { text: err.text } %}
-    {% endif %}
-  {% endfor %}
-{% endif %}
-
-{% if data.editMATEX.postcode %}
-  {% set postcodeValue = data.editMATEX.postcode %}
-  {% elif postcodeError %}
-  {% set postcodeValue = "" %}
-  {% else %}
-  {% set postcodeValue = patient.address.postcode %}
-{% endif %}
 
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
@@ -389,7 +389,8 @@ Certificate fulfilment
                   { 
                     html: textarea ({
                       id: "notes",
-                      name: "editMATEX.notes"
+                      name: "editMATEX.notes",
+                      value: data.editMATEX.notes
                     })
                   }
                 }
