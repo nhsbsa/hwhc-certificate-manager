@@ -27,9 +27,9 @@
   {% set firstName = data.editHRT.firstName or patient.firstName or 'Jane' %}
   {% set lastName  = data.editHRT.lastName  or patient.lastName  or 'Smith' %}
 
-  {% set fulfilment = (data.editHRT.certificateFulfilment or patient.fulfilment or "post") %}
+  {% set fulfilment = (data.editHRT.certificateFulfilment or patient.fulfilment or "Email") %}
 
-  {% set emailHTML = data.editHRT.email or patient.email %}
+  {% set emailHTML = data.editHRT.email or patient.email or 'janedoe@example.com' %}
 
   {% if data.editHRT.addressLineOne is defined %}
   {% set addressValue1 = data.editHRT.addressLineOne %}
@@ -126,7 +126,7 @@
                 text: "Fulfilment" 
               },
               value: { 
-                text: fulfilment | capitalize
+                text: fulfilment
               }
             },
             {

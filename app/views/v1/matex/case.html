@@ -75,11 +75,9 @@
   {% endif %}
 
 
-  {% set fulfilment = data.editMATEX.certificateFulfilment or patient.fulfilment or "Email" %}
-
-
   {% if patient.channel === 'Paper' %}
   {% set channelHTML = 'Paper' ~ channelLinkHtml %}
+  {% set fulfilment = 'Post' %}
   {% set address %}
   {{ addressValue1 | trim }}<br>
   {% if addressValue2 and addressValue2 | trim %}{{ addressValue2 | trim }}<br>{% endif %}
@@ -91,17 +89,18 @@
     {% set address = '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS' %}
   {% endif %}
 
-  {% if fulfilment == 'email' %}
-    {% set emailHTML = data.editMATEX.email or patient.email or '' %}
-  {% else %}
-    {% set emailHTML = '' %}
-  {% endif %}
-
   {% else %}
 
     {% set channelHTML = 'Digital' %}
     {% set address = '' %}
+    {% set fulfilment = 'Email' %}
 
+  {% endif %}
+
+  {% if fulfilment == 'Email' %}
+  {% set emailHTML = data.editMATEX.email or patient.email or 'janedoe@example.com' %}
+  {% else %}
+    {% set emailHTML = '' %}
   {% endif %}
 
 
@@ -134,7 +133,7 @@
             },
             {
               key: { text: 'Fulfilment' },
-              value: { text: fulfilment | capitalize }
+              value: { text: fulfilment }
             },
             {
               key: {
