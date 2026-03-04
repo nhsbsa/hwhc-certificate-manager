@@ -1,6 +1,6 @@
 {% macro image( classes ) %}
 
-
+    <!-- EXPANDER IMAGE SCRIPT -->
     <script>
 
         'use strict';
@@ -12,7 +12,29 @@
             // 
             const _fields = {};
 
-            _fields.firstName = { width: 1012, height: 56, x: 61, y: 883 };
+            _fields.firstName = { x: 61, y: 935, width: 1012, height: 56 };
+            _fields.lastName = { x: 61, y: 885, width: 1012, height: 56, };
+
+            _fields.dateOfBirth = { x: 567, y: 1138, width: 596, height: 118 };
+            _fields.nhsNumber = { x: 76, y: 1286, width: 1086, height: 106 };
+
+            _fields.houseNumber = { x: 76, y: 958, width: 1086, height: 100 };
+            _fields.street = { x: 76, y: 1008, width: 1086, height: 100 };
+            _fields.town = { x: 76, y: 1098, width: 1086, height: 100 };
+            _fields.postcode = { x: 76, y: 1148, width: 492, height: 100 };
+
+            _fields.address = { x: 76, y: 958, width: 1086, height: 298 };
+
+            _fields.telephoneNumber = { x: 76, y: 1198, width: 1086, height: 100 };
+            _fields.emailAddress = { x: 76, y: 1248, width: 1086, height: 100 };
+            
+            _fields.childsDueOrBirthDate = { x: 566, y: 1448, width: 596, height: 86 };
+
+            _fields.patientSignature = { x: 1164, y: 684, width: 1116, height: 86 };
+            _fields.healthcarePractitionerSignature = { x: 1164, y: 958, width: 1116, height: 86 };
+
+            _fields.healthcarePractitionerDetails = { x: 1164, y: 1044, width: 1116, height: 558 };
+            _fields.healthcarePractitionerStamp = { x: 1916, y: 1044, width: 364, height: 482 };
 
             //
             // INIT FUNCTION
@@ -31,7 +53,33 @@
                     _resetImage();
                 });
 
-                _scrollToField( 'firstName' );
+                window.addEventListener( 'resize', function(){
+                    _resetImage();
+                    _checkForFocusedElements();
+                });
+
+               _checkForFocusedElements();
+
+            }
+
+            //
+            // CHECK FOR FOCUSED ELEMENTS FUNCTION
+            //
+            function _checkForFocusedElements(){
+
+                // Text inputs
+                if( document.activeElement.matches('.nhsuk-input') ){
+                    if( document.activeElement.hasAttribute('data-focus-image') ){
+                        _focusImage( document.activeElement.getAttribute('data-focus-image') );
+                    }
+                }
+
+                // Radios
+                if( document.activeElement.matches('.nhsuk-radios__input') ){
+                    if( document.activeElement.closest('.nhsuk-radios') ){
+                        _focusImage( document.activeElement.closest('.nhsuk-radios').getAttribute('data-focus-image') );
+                    }
+                }
 
             }
 
@@ -46,6 +94,10 @@
                 const img = expander.querySelector('.expandable-image__image');
                 const viewPane = expander.querySelector('.expandable-image__inner');
 
+                viewPane.querySelectorAll('span').forEach(function( el ){
+                    el.remove();
+                });
+
                 img.removeAttribute( 'style' );
                 viewPane.scrollTop = 0;
                 viewPane.scrollLeft = 0;
@@ -53,17 +105,39 @@
             }
 
             //
-            // SCROLL TO FIELD FUNCTION
+            // FOCUS IMAGE FUNCTION
             //
-            function _scrollToField( fieldName ){
+            function _focusImage( fieldName ){
 
-                console.log( 'ExpanderImage.scrollToField( '+ fieldName +' );' );
+                console.log( 'ExpanderImage.focusImage( '+ fieldName +' );' );
 
-                fieldName = ( fieldName ) ? fieldName : '';
+                _resetImage();
+
+                const fieldPositions = [
+                    'lastName',
+                    'firstName',
+                    'dateOfBirth',
+                    'nhsNumber',
+                    'address',
+                    'houseNumber',
+                    'street',
+                    'town',
+                    'postcode',
+                    'emailAddress',
+                    'telephoneNumber',
+                    'childsDueOrBirthDate',
+                    'patientSignature',
+                    'healthcarePractitionerSignature',
+                    'healthcarePractitionerDetails',
+                    'healthcarePractitionerStamp'
+                ];
+
+                fieldName = ( fieldPositions.indexOf( fieldName ) > -1 ) ? fieldName : '';
 
                 const expander = document.querySelector( '.expandable-image' );
                 const img = expander.querySelector('.expandable-image__image');
                 const viewPane = expander.querySelector('.expandable-image__inner');
+                const div = viewPane.querySelector('div');
 
                 const intrinsicImgWidth = img.width;
                 const intrinsicImgHeight = img.height;
@@ -71,7 +145,7 @@
                 if( fieldName ){
 
                     // Calculate scale of img
-                    const scale = viewPane.offsetWidth / _fields.firstName.width;
+                    const scale = viewPane.offsetWidth / _fields[fieldName].width;
 
                     const scaledImgWidth = Math.round( img.width * scale );
                     const scaledImgHeight = Math.round( img.height * scale );
@@ -87,9 +161,15 @@
                     viewPane.scrollTop = (32+scaledMidPointY) - Math.round(viewPane.clientHeight/2);
                     viewPane.scrollLeft = (32+scaledMidPointX) - Math.round(viewPane.clientWidth/2);
 
-                } else {
+                    // Draw a highlight over the image
+                    const highlightX = 32+Math.round(_fields[fieldName].x * scale);
+                    const highlightY = 32+Math.round(_fields[fieldName].y * scale);
+                    const highlightWidth = Math.round(_fields[fieldName].width * scale);
+                    const highlightHeight = Math.round(_fields[fieldName].height * scale);
 
-                    _resetImage();
+                    const span = document.createElement('span');
+                    span.setAttribute( 'style', 'top: '+highlightY+'px; left: '+highlightX+'px; width:'+highlightWidth+'px; height: '+highlightHeight+'px;' );
+                    div.insertAdjacentElement('beforeend',span);
 
                 }
 
@@ -98,13 +178,123 @@
 
             return {
                 init: _init,
-                scrollToField: _scrollToField
+                focusImage: _focusImage
             }
 
         })();
 
         window.addEventListener('load',function(){
             ExpanderImage.init();
+        });
+
+    </script>
+
+
+    <!-- FOCUS FUNCTIONALITY SCRIPT -->
+    <script>
+
+        'use strict';
+
+        const FocusFunctionality = (function(){
+
+            //
+            // INIT FUNCTION
+            //
+            function _init(){
+
+                console.log( 'FocusFunctionality.init();' );
+
+                const focusCues = document.querySelectorAll('[data-focus-image]');
+
+                if( focusCues.length > 0 ){
+
+                    focusCues.forEach(function( el ){
+
+                        // 
+                        // TEXT INPUT
+                        //
+                        if( el.matches('.nhsuk-input') ){
+
+                            // focus
+                            el.addEventListener('focus', function(e){
+                                
+                                const focusTarget = e.target.getAttribute('data-focus-image');
+                                if( focusTarget ){
+                                    ExpanderImage.focusImage(focusTarget);
+                                }
+
+                            });
+
+                            // blur
+                            el.addEventListener('blur',function(){
+                                ExpanderImage.focusImage();
+                            });
+
+                        }
+
+                        //
+                        // RADIOS 
+                        //
+                        if( el.matches('.nhsuk-radios') ){
+
+                            const focusTarget = el.getAttribute('data-focus-image');
+
+                            // Check inputs
+                            el.querySelectorAll('.nhsuk-radios__input').forEach( function( radio ){
+                                radio.addEventListener('focus',function(){
+                                    ExpanderImage.focusImage(focusTarget);
+                                });
+                                radio.addEventListener('blur',function(){
+                                    ExpanderImage.focusImage();
+                                });
+                            });
+
+                        }
+
+                        //
+                        // SUMMARY LIST ROWS
+                        //
+                        if( el.matches('.nhsuk-summary-list .nhsuk-link') ){
+
+                            // Set row
+                            const row = el.parentElement.parentElement;
+
+                            row.classList.add('has-focus-image');
+                            row.addEventListener('mouseover',function(e){
+
+                               if( e.target.closest('.has-focus-image') ){
+                                
+                                    const focusTarget = e.target.closest('.has-focus-image').querySelector('.nhsuk-link[data-focus-image]').getAttribute('data-focus-image');
+                                    if( focusTarget ){
+                                        ExpanderImage.focusImage(focusTarget);
+                                    }
+
+                               }
+
+                            });
+
+                            row.addEventListener('mouseout',function(e){
+                                ExpanderImage.focusImage();
+                            });
+                            
+
+                        }
+
+                    });
+
+                }
+
+            }
+
+            return {
+                init: _init
+            }
+
+        })();
+
+
+        window.addEventListener('load',function(){
+            FocusFunctionality.init();
         });
 
     </script>
@@ -118,7 +308,9 @@
         <h2 class="nhsuk-heading-m nhsuk-u-visually-hidden">Scanned application</h2>
         
         <div class="expandable-image__inner">
-            <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
+            <div>
+                <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
+            </div>
         </div>
         <summary class="expandable-image__button nhsuk-button nhsuk-button--small">
             <span class="closed">Expand image</span>

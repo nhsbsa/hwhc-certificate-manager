@@ -30,7 +30,7 @@
           <div class="nhsuk-grid-row">
 
             <!-- ONE THIRD -->
-            <div class="nhsuk-grid-column-one-half">
+            <div class="nhsuk-grid-column-one-half sticky-column">
 
               {% from '../macros/image.njk' import image %}
               {{ image() }}
@@ -160,6 +160,7 @@
                     },
                     id: 'imageLastName',
                     name: 'imageLastName',
+                    attributes: { 'data-focus-image' : 'lastName' },
                     classes: 'nhsuk-input--width-20',
                     value: data.imageLastName or 'Jaaahnson'
                   }) }}
@@ -170,6 +171,7 @@
                     },
                     id: 'imageFirstName',
                     name: 'imageFirstName',
+                    attributes: { 'data-focus-image' : 'firstName' },
                     value: data.imageFirstName or 'Sorah',
                     classes: 'nhsuk-input--width-20'
                   }) }}
@@ -192,17 +194,20 @@
                     {
                       name: 'day',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageDateOfBirth.day or '2'
+                      value: data.imageDateOfBirth.day or '2',
+                      attributes: { 'data-focus-image' : 'dateOfBirth' }
                     },
                     {
                       name: 'month',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageDateOfBirth.month or '7'
+                      value: data.imageDateOfBirth.month or '7',
+                      attributes: { 'data-focus-image' : 'dateOfBirth' }
                     },
                     {
                       name: 'year',
                       classes: 'nhsuk-input--width-4',
-                      value: data.imageDateOfBirth.year or '1995'
+                      value: data.imageDateOfBirth.year or '1995',
+                      attributes: { 'data-focus-image' : 'dateOfBirth' }
                     }
                   ]
                 }) }}
@@ -214,6 +219,7 @@
                     },
                     id: 'imageNHSNumber',
                     name: 'imageNHSNumber',
+                    attributes: { 'data-focus-image' : 'nhsNumber' },
                     classes: 'nhsuk-input--width-10',
                     value: data.imageNHSNumber or '1252 567 987'
                   }) }}
@@ -235,6 +241,7 @@
                       },
                       id: 'imageBuildingNumberOrName',
                       name: 'imageBuildingNumberOrName',
+                      attributes: { 'data-focus-image' : 'houseNumber' },
                       classes: 'nhsuk-input--width-10',
                       value: data.imageBuildingNumberOrName or '12'
                     }) }}
@@ -246,6 +253,7 @@
                       classes: 'nhsuk-input--width-20',
                       id: 'imageAddressLine1',
                       name: 'imageAddressLine1',
+                      attributes: { 'data-focus-image' : 'street' },
                       value: data.imageAddressLine1 or 'Crown Passage'
                     }) }}
 
@@ -256,6 +264,7 @@
                       classes: 'nhsuk-input--width-20',
                       id: 'imageAddressLine2',
                       name: 'imageAddressLine2',
+                      attributes: { 'data-focus-image' : 'address' },
                       value: data.imageAddress2
                     }) }}
 
@@ -266,6 +275,7 @@
                       classes: 'nhsuk-input--width-20',
                       id: 'imageTown',
                       name: 'imageTown',
+                      attributes: { 'data-focus-image' : 'town' },
                       value: data.imageTown or 'Birmingham'
                     }) }}
 
@@ -276,6 +286,7 @@
                       classes: 'nhsuk-input--width-10',
                       id: 'imageCounty',
                       name: 'imageCounty',
+                      attributes: { 'data-focus-image' : 'address' },
                       value: data.imageCounty
                     }) }}
 
@@ -286,6 +297,7 @@
                       classes: 'nhsuk-input--width-10',
                       id: 'imagePostcode',
                       name: 'imagePostcode',
+                      attributes: { 'data-focus-image' : 'postcode' },
                       value: data.imagePostcode or 'B14 9QX'
                     }) }}
 
@@ -305,6 +317,7 @@
                       classes: 'nhsuk-input--width-10',
                       id: 'imagePhoneNumber',
                       name: 'imagePhoneNumber',
+                      attributes: { 'data-focus-image' : 'telephoneNumber' },
                       value: data.imagePhoneNumber or '07911 123456'
                   }) }}
 
@@ -317,6 +330,7 @@
                       classes: 'nhsuk-input--width-20',
                       id: 'imageEmailAddress',
                       name: 'imageEmailAddress',
+                      attributes: { 'data-focus-image' : 'emailAddress' },
                       value: data.imageEmailAddress
                   }) }}
 
@@ -338,17 +352,20 @@
                     {
                       name: 'day',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageBabyDateOfBirth.day or ''
+                      value: data.imageBabyDateOfBirth.day or '',
+                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
                     },
                     {
                       name: 'month',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageBabyDateOfBirth.month or ''
+                      value: data.imageBabyDateOfBirth.month or '',
+                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
                     },
                     {
                       name: 'year',
                       classes: 'nhsuk-input--width-4',
-                      value: data.imageBabyDateOfBirth.year or ''
+                      value: data.imageBabyDateOfBirth.year or '',
+                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
                     }
                   ]
                 }) }}
@@ -362,6 +379,7 @@
                   idPrefix: 'imagePatientSignature',
                   name: 'imagePatientSignature',
                   value: data.imagePatientSignature,
+                  attributes: { 'data-focus-image' : 'patientSignature' },
                   classes: 'nhsuk-radios--inline',
                   fieldset: {
                     legend: {
@@ -380,6 +398,7 @@
                   idPrefix: 'imageHealthcarePractitionerSignature',
                   name: 'imageHealthcarePractitionerSignature',
                   value: data.imageHealthcarePractitionerSignature,
+                  attributes: { 'data-focus-image' : 'healthcarePractitionerSignature' },
                   classes: 'nhsuk-radios--inline',
                   fieldset: {
                     legend: {

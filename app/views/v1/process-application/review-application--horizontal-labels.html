@@ -28,7 +28,7 @@
           <div class="nhsuk-grid-row">
 
             <!-- ONE HALF -->
-            <div class="nhsuk-grid-column-one-half">
+            <div class="nhsuk-grid-column-one-half sticky-column">
 
               {% from '../macros/image.njk' import image %}
               {{ image() }}
@@ -55,6 +55,7 @@
               {% set county = data.imageCounty %}
               {% set postcode = data.imagePostcode %}
 
+
               {{ summaryList({
                   rows: [
                     {
@@ -62,7 +63,7 @@
                       value: { text: firstName | processFullName( lastName ) },
                       actions: {
                         items: [
-                          { href: 'experimental--horizontal-labels?showAllFields=true#imageLastName', text: 'Change', visuallyHiddenText: 'name' }
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageLastName', text: 'Change', visuallyHiddenText: 'name', attributes: { 'data-focus-image': 'lastName'  } }
                         ]
                       }
                     },
@@ -71,7 +72,7 @@
                       value: { text: data.dateOfBirth | processDate },
                       actions: {
                          items: [
-                          { href: 'experimental--horizontal-labels?showAllFields=true#imageDateOfBirth', text: 'Change', visuallyHiddenText: 'date of birth' }
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageDateOfBirth', text: 'Change', visuallyHiddenText: 'date of birth', attributes: { 'data-focus-image': 'dateOfBirth'  } }
                         ]
                       }
                     },
@@ -80,7 +81,7 @@
                       value: { text: data.imageNHSNumber },
                       actions: {
                          items: [
-                          { href: 'experimental--horizontal-labels?showAllFields=true#imageNHSNumber', text: 'Change', visuallyHiddenText: 'NHS number' }
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageNHSNumber', text: 'Change', visuallyHiddenText: 'NHS number', attributes: { 'data-focus-image': 'nhsNumber' } }
                         ]
                       }
                     },
@@ -89,7 +90,7 @@
                       value: { html: houseNumber | processAddress( addressLine1, addressLine2, town, county, postcode ) },
                       actions: {
                          items: [
-                          { href: 'experimental--horizontal-labels?showAllFields=true#postcode', text: 'Change', visuallyHiddenText: 'address' }
+                          { href: 'experimental--horizontal-labels?showAllFields=true#postcode', text: 'Change', visuallyHiddenText: 'address', attributes: { 'data-focus-image': 'address' } }
                         ]
                       }
                     }
@@ -105,7 +106,7 @@
                       value: { text: data.imagePhoneNumber },
                       actions: {
                         items: [
-                          { href: 'experimental--horizontal-labels?showAllFields=true#imagePhoneNumber', text: 'Change', visuallyHiddenText: 'phone number' }
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imagePhoneNumber', text: 'Change', visuallyHiddenText: 'phone number', attributes: { 'data-focus-image': 'telephoneNumber' } }
                         ]
                       }
                     },
@@ -114,7 +115,7 @@
                       value: { text: data.imageEmailAddress },
                       actions: {
                          items: [
-                          { href: 'experimental--horizontal-labels?showAllFields=true#imageEmailAddress', text: 'Change', visuallyHiddenText: 'email address' }
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageEmailAddress', text: 'Change', visuallyHiddenText: 'email address', attributes: { 'data-focus-image': 'emailAddress' } }
                         ]
                       }
                     }
@@ -131,7 +132,7 @@
                       value: { text: '10 August 2026' },
                       actions: {
                         items: [
-                          { href: 'experimental--horizontal-labels?showAllFields=true#imageBabyDateOfBirth', text: 'Change', visuallyHiddenText: "Child's due or birth date" }
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageBabyDateOfBirth', text: 'Change', visuallyHiddenText: "Child's due or birth date", attributes: { 'data-focus-image': 'childsDueOrBirthDate' } }
                         ]
                       }
                     }
@@ -148,7 +149,7 @@
                       value: { text: ( data.imagePatientSignature | capitalize ) },
                       actions: {
                         items: [
-                          { href: 'experimental--horizontal-labels?showAllFields=true#imagePatientSignature', text: 'Change', visuallyHiddenText: 'whether patient signature is present' }
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imagePatientSignature', text: 'Change', visuallyHiddenText: 'whether patient signature is present', attributes: { 'data-focus-image': 'patientSignature' } }
                         ]
                       }
                     },
@@ -157,7 +158,7 @@
                       value: { text: ( data.imageHealthcarePractitionerSignature | capitalize ) or 'Yes' },
                       actions: {
                         items: [
-                          { href: 'experimental--horizontal-labels?showAllFields=true#imageHealthcarePractitionerSignature', text: 'Change', visuallyHiddenText: 'whether healthcare practitioner signature is present' }
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageHealthcarePractitionerSignature', text: 'Change', visuallyHiddenText: 'whether healthcare practitioner signature is present', attributes: { 'data-focus-image': 'healthcarePractitionerSignature' } }
                         ]
                       }
                     }
