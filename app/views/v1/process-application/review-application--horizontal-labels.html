@@ -167,16 +167,20 @@
 
 
 
-                {{ warningCallout({
-                  heading: 'Recommendation',
-                  html: '<p class="nhsuk-body">This application is missing the following information:</p>
-                  <ul class="nhsuk-list nhsuk-list--bullet">
-                    <li>Patient\'s full name</li>
-                    <li>Healthcare practitoner\'s signature</li>
-                  </ul>
-                  <p>Send a letter to the healthcare practitioner requesting this information.</p>
-                  <p><a href="---">Follow recommendation</a></p>'
-                }) }}
+                {% if data.showRecommendation === 'true' %}
+ 
+                  {{ warningCallout({
+                    heading: 'Recommendation',
+                    html: '<p class="nhsuk-body">This application is missing the following information:</p>
+                    <ul class="nhsuk-list nhsuk-list--bullet">
+                      <li>Healthcare practitoner\'s signature</li>
+                      <li>Child\'s due or birth date</li>
+                    </ul>
+                    <p>Send a letter to the healthcare practitioner requesting this information.</p>
+                    <p><a href="cannot-process-application--horizontal-labels?cannotProcessApplication=askForFurtherInformationFromHCP&infoFromHCP=Healthcare%20practitioner%27s%20signature&infoFromHCP=Child%27s%20due%20or%20birth%20date">Follow recommendation</a></p>'
+                  }) }}
+
+                {% endif %}
 
 
 
