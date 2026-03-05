@@ -1,0 +1,31 @@
+{% macro checking() %}
+
+    {% from "warning-callout/macro.njk" import warningCallout %}
+
+    {% if ((1 | getRandomNumber) === 0) %}
+
+        <!-- SELECTED FOR QUALITY CHECK -->
+
+        {{ warningCallout({
+              heading: 'Selected for checking',
+              text: 'This application will be reviewed by a quality checker'
+          }) }}
+
+        <h2 class="nhsuk-heading-s">What happens next?</h2>
+        <p class="nhsuk-body">This application will be sent to a quality checker. If changes are required, a link to this application will be highlighted on your dashboard.</p>
+
+    {% else %}
+
+        <!-- SELECTED FOR SUPERVISOR CHECK -->
+
+        {{ warningCallout({
+              heading: 'Selected for checking',
+              text: 'This application will be reviewed by your supervisor'
+          }) }}
+
+        <h2 class="nhsuk-heading-s">What happens next?</h2>
+        <p class="nhsuk-body">This application will be reviewed by your supervisor. If changes are required, a link to this application will be highlighted on your dashboard.</p>
+
+    {% endif %}
+
+{% endmacro %}

@@ -64,6 +64,34 @@ router.post(/process-application\/review-application/, function (req, res) {
     res.redirect( destination );
 });
 
+
+
+
+router.post(/process-application\/cannot-process-application--horizontal-labels/, function( req, res){
+
+    const cannotProcessApplication = req.session.data.cannotProcessApplication || 'sendALetter';
+
+    let destination = 'confirmation';
+
+    switch( cannotProcessApplication ){
+        case 'sendALetter':
+            destination = 'send-a-letter';
+            break;
+        case 'requestPaperKeyIn':
+            destination = 'confirmation?confirmationStatus=requestPaperKeyIn';
+            break;
+        case 'unableToProcess':
+            destination = 'confirmation?confirmationStatus=applicationRejected';
+            break;
+    }
+    
+    res.redirect( destination );
+
+});
+
+
+
+
 router.post(/process-application\/cannot-process-application/, function( req, res){
 
     const cannotProcessApplication = req.session.data.cannotProcessApplication || 'sendALetter';

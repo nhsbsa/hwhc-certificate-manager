@@ -1,0 +1,70 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Application processed' %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- APPLICATION PROCESSED - APPROVED -->
+      {{ panel({
+              titleText: pageName,
+              html: '<p>You have approved this application</p>'
+          }) }}
+
+      {% set firstName = data.imageFirstName %}
+      {% set lastName = data.imageLastName %}
+
+      {{ summaryList({
+        rows: [
+          {
+            key: { text: 'Name' },
+            value: { text: firstName | processFullName( lastName ) }
+          },
+          {
+            key: { text: 'Reference' },
+            value: { text: '8436 810 379' }
+          }
+        ]
+      }) }}
+
+
+      {% if ( ( 1 | getRandomNumber ) === 0 ) %}
+
+        <!-- NO CHECK -->
+        <h2 class="nhsuk-heading-s">What happens next?</h2>
+        <p class="nhsuk-body">You do not need to do anything else with this application.</p>
+
+      {% else %}
+
+        {% from '../macros/checking.njk' import checking %}
+        {{ checking() }}
+
+      {% endif %}
+
+
+
+
+
+      <hr class="nhsuk-section-break nhsuk-section-break--m" />
+
+      <div class="nhsuk-button-group">
+
+        {{ button({
+            text : 'Process next application',
+            href: 'index'
+          }) }}
+
+        {{ button({
+            text : 'Finish processing',
+            href: '../dashboard',
+            classes: 'nhsuk-button--secondary'
+          }) }}
+
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}
