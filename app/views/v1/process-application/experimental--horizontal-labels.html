@@ -149,7 +149,30 @@
 
               <form class="horizontal-labels" method="post" novalidate>
 
-               
+                <!-- FORM TYPE -->
+
+                {% set types = [ 'FW81217', 'FW80104', 'FW80110', 'FW80211', 'FW80215', 'FW80406', 'FW80702', 'FW80710', 'FW80803', 'FW81207'] %}
+
+                {{ select({
+                  label: {
+                    text: 'Form type'
+                  },
+                  id: 'formType',
+                  name: 'formType',
+                  value: 'FW81217',
+                  items: [
+                    { value: types[0], text: types[0] },
+                    { value: types[1], text: types[1] },
+                    { value: types[2], text: types[2] },
+                    { value: types[3], text: types[3] },
+                    { value: types[4], text: types[4] },
+                    { value: types[5], text: types[5] },
+                    { value: types[6], text: types[6] },
+                    { value: types[7], text: types[7] },
+                    { value: types[8], text: types[8] },
+                    { value: types[9], text: types[9] }
+                  ]
+                }) }}
 
                 <!-- FULL NAME -->
                 {% call fieldset({
