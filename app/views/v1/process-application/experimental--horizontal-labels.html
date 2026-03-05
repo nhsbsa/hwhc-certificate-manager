@@ -1,7 +1,6 @@
 {% extends 'layout-fullscreen.html' %}
 
 {% set pageName = 'Application 2025 11 18 18 12 16N3000049' %}
-{% set bannerRole = 'backOffice' %}
 
 {% block beforeContent %}
   {{ backLink({
@@ -349,11 +348,10 @@
                       label: {
                         html: 'Phone number ' + 87 | getConfidenceTag + ' (optional)'
                       },
-                      attributes: { type: 'tel', autocomplete: 'off' },
+                      attributes: { type: 'tel', autocomplete: 'off', 'data-focus-image' : 'telephoneNumber' },
                       classes: 'nhsuk-input--width-10',
                       id: 'imagePhoneNumber',
                       name: 'imagePhoneNumber',
-                      attributes: { 'data-focus-image' : 'telephoneNumber' },
                       value: data.imagePhoneNumber or '07911 123456'
                   }) }}
 
@@ -414,7 +412,7 @@
                 {{ radios({
                   idPrefix: 'imagePatientSignature',
                   name: 'imagePatientSignature',
-                  value: data.imagePatientSignature,
+                  value: data.imagePatientSignature or 'yes',
                   attributes: { 'data-focus-image' : 'patientSignature' },
                   classes: 'nhsuk-radios--inline',
                   fieldset: {
@@ -433,12 +431,30 @@
                  {{ radios({
                   idPrefix: 'imageHealthcarePractitionerSignature',
                   name: 'imageHealthcarePractitionerSignature',
-                  value: data.imageHealthcarePractitionerSignature,
+                  value: data.imageHealthcarePractitionerSignature or 'yes',
                   attributes: { 'data-focus-image' : 'healthcarePractitionerSignature' },
                   classes: 'nhsuk-radios--inline',
                   fieldset: {
                     legend: {
                       text: 'Is the healthcare practitioner signature present?',
+                      isPageHeading: false
+                    }
+                  },
+                  items: [
+                    { value: 'yes', text: 'Yes' },
+                    { value: 'no', text: 'No' }
+                  ]
+                }) }}
+
+                {{ radios({
+                  idPrefix: 'imageHealthcarePractitionerDetails',
+                  name: 'imageHealthcarePractitionerDetails',
+                  value: data.imageHealthcarePractitionerDetails or 'yes',
+                  attributes: { 'data-focus-image' : 'healthcarePractitionerDetails' },
+                  classes: 'nhsuk-radios--inline',
+                  fieldset: {
+                    legend: {
+                      text: 'Are the healthcare practitioner\'s details present?',
                       isPageHeading: false
                     }
                   },

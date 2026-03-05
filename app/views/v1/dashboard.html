@@ -1,7 +1,6 @@
 {% extends 'layout-fullscreen.html' %}
 
 {% set pageName = 'Maternity Exemption processing' %}
-{% set bannerRole = 'backOffice' %}
 
 {% set dashboardRows = '' | getPatientData | getDashboardTableRows( 7 ) %}
 {% set checkingRows = '' | getPatientData | getCheckingTableRows %}
@@ -38,7 +37,7 @@
 
               {{ button({
                 html: '<span data-ak="K">Enter application manually</span>',
-                href: 'enter-application-manually',
+                href: 'process-application/new-application',
                 classes: 'nhsuk-button--secondary'
               }) }}
 

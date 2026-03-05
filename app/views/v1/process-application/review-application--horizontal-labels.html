@@ -1,7 +1,6 @@
 {% extends 'layout-fullscreen.html' %}
 
 {% set pageName = 'Application' %}
-{% set bannerRole = 'backOffice' %}
 
 {% block beforeContent %}
  {{ backLink({
@@ -155,15 +154,26 @@
                     },
                     {
                       key: { text: 'Healthcare practitioner signature' },
-                      value: { text: ( data.imageHealthcarePractitionerSignature | capitalize ) or 'Yes' },
+                      value: { text: ( data.imageHealthcarePractitionerSignature | capitalize ) },
                       actions: {
                         items: [
                           { href: 'experimental--horizontal-labels?showAllFields=true#imageHealthcarePractitionerSignature', text: 'Change', visuallyHiddenText: 'whether healthcare practitioner signature is present', attributes: { 'data-focus-image': 'healthcarePractitionerSignature' } }
                         ]
                       }
+                    },
+                    {
+                      key: { text: 'Healthcare practitioner details' },
+                      value: { text: ( data.imageHealthcarePractitionerDetails | capitalize ) },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageHealthcarePractitionerDetails', text: 'Change', visuallyHiddenText: 'whether healthcare practitioner details are present', attributes: { 'data-focus-image': 'healthcarePractitionerDetails' } }
+                        ]
+                      }
                     }
                   ]
                 }) }}
+
+                
 
 
 
