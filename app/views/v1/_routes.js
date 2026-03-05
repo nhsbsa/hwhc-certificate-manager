@@ -69,19 +69,20 @@ router.post(/process-application\/review-application/, function (req, res) {
 
 router.post(/process-application\/cannot-process-application--horizontal-labels/, function( req, res){
 
-    const cannotProcessApplication = req.session.data.cannotProcessApplication || 'sendALetter';
+    const cannotProcessApplication = req.session.data.cannotProcessApplication || 'rejectApplication';
 
-    let destination = 'confirmation';
+    let destination = 'confirmation--on-hold';
 
     switch( cannotProcessApplication ){
-        case 'sendALetter':
-            destination = 'send-a-letter';
+        
+        case 'askForFurtherInformationFromPatient':
+        case 'askForFurtherInformationFromHCP':
+        case 'requestARescan':
+            destination = 'confirmation--on-hold';
             break;
-        case 'requestPaperKeyIn':
-            destination = 'confirmation?confirmationStatus=requestPaperKeyIn';
-            break;
-        case 'unableToProcess':
-            destination = 'confirmation?confirmationStatus=applicationRejected';
+
+        case 'rejectApplication':
+            destination = 'confirmation--rejected';
             break;
     }
     

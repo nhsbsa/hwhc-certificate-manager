@@ -49,6 +49,17 @@
 
                         <!-- ASK FOR FURTHER INFORMATION FROM PATIENT HTML -->
 
+                        {% set values = [
+                            "Patient's signature",
+                            "Healthcare practitioner's signature",
+                            "Healthcare practitioner's contact information",
+                            "Date of birth",
+                            'Full address including postcode',
+                            'Email address',
+                            'NHS number',
+                            "Child's due or birth date"
+                        ] %}
+
                         {{ checkboxes({
                           idPrefix: 'infoFromPatient',
                           name: 'infoFromPatient',
@@ -62,14 +73,14 @@
                           },
                           classes: 'nhsuk-checkboxes--small',
                           items: [
-                            { value: '', text: "Patient's signature" },
-                            { value: '', text: "Healthcare practitioner's signature" },
-                            { value: '', text: "Healthcare practitioner's contact information" },
-                            { value: '', text: "Date of birth" },
-                            { value: '', text: 'Full address including postcode' },
-                            { value: '', text: 'Email address' },
-                            { value: '', text: 'NHS number' },
-                            { value: '', text: "Child's due or birth date" }
+                            { value: values[0], html: values[0] },
+                            { value: values[1], html: values[1] },
+                            { value: values[2], html: values[2] },
+                            { value: values[3], html: values[3] },
+                            { value: values[4], html: values[4] },
+                            { value: values[5], html: values[5] },
+                            { value: values[6], html: values[6] },
+                            { value: values[7], html: values[7] }
                           ]
                         }) }}
 
@@ -81,6 +92,15 @@
                       {% set askForFurtherInformationFromHCPHTML %}
 
                         <!-- ASK FOR FURTHER INFORMATION FROM HCP HTML -->
+
+                        {% set values = [
+                          "Patient's signature",
+                          "Healthcare practitioner's signature",
+                          "Date of birth",
+                          'Full address including postcode',
+                          'NHS number',
+                          "Child's due or birth date"
+                        ] %}
 
                         {{ checkboxes({
                           idPrefix: 'infoFromHCP',
@@ -95,15 +115,12 @@
                           },
                           classes: 'nhsuk-checkboxes--small',
                           items: [
-                            { value: '', text: "Patient's signature" },
-                            { value: '', text: "Healthcare practitioner's signature" },
-
-                            { value: '', text: "Date of birth" },
-
-                            { value: '', text: 'Full address including postcode' },
-                      
-                            { value: '', text: 'NHS number' },
-                            { value: '', text: "Child's due or birth date" }
+                            { value: values[0], html: values[0] },
+                            { value: values[1], html: values[1] },
+                            { value: values[2], html: values[2] },
+                            { value: values[3], html: values[3] },
+                            { value: values[4], html: values[4] },
+                            { value: values[5], html: values[5] }
                           ]
                         }) }}
 
@@ -117,6 +134,15 @@
 
                         <!-- REASON FOR REJECTION -->
 
+                        {% set values = [
+                          'Child has already reached their first birthday',
+                          'Patient is outside England',
+                          'Patient is under 16',
+                          'Patient is over 60',
+                          'Patient already has a valid exemption certificate',
+                          'Application is not on a Matex form'
+                        ] %}
+
                         {{ radios({
                           idPrefix: 'reasonForRejection',
                           name: 'reasonForRejection',
@@ -129,11 +155,12 @@
                           },
                           classes: 'nhsuk-radios--small',
                           items: [
-                            { value: 'MAT06', html: 'Child has already reached their first birthday' },
-                            { value: 'PE15', html: 'Patient is outside England' },
-                            { value: 'PE12a', html: 'Patient is under 16' },
-                            { value: 'PE12b', html: 'Patient is over 60' },
-                            { value: 'PE17', html: 'Patient already has a valid exemption certificate' }
+                            { value: values[0], html: values[0] },
+                            { value: values[1], html: values[1] },
+                            { value: values[2], html: values[2] },
+                            { value: values[3], html: values[3] },
+                            { value: values[4], html: values[4] },
+                            { value: values[5], html: values[5] }
                           ]
                         }) }}
 
@@ -163,7 +190,7 @@
                               conditional: { html: askForFurtherInformationFromHCPHTML }
                             },
                             {
-                              value: 'askForFurtherInformationFromHCP',
+                              value: 'requestARescan',
                               text: 'Request a rescan'
                             },
                             {

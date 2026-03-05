@@ -10,7 +10,7 @@
       <!-- APPLICATION PROCESSED - REJECTED -->
       {{ panel({
               titleText: pageName,
-              html: '<p>You have rejected this application</p>'
+              html: '<p>You have <strong>rejected</strong> this application</p>'
           }) }}
 
       {% set firstName = data.imageFirstName or 'Sarah' %}
@@ -28,7 +28,7 @@
           },
           {
             key: { text: 'Reason' },
-            value: { text: 'Patient is outside England' }
+            value: { text: data.reasonForRejection or 'Patient is outside England' }
           }
         ]
       }) }}
@@ -57,7 +57,7 @@
 
         {{ button({
             text : 'Process next application',
-            href: 'index'
+            href: 'experimental--horizontal-labels'
           }) }}
 
         {{ button({

@@ -7,14 +7,38 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <!-- APPLICATION PROCESSED - APPROVED -->
+      <!-- APPLICATION PROCESSED - ON HOLD -->
       {{ panel({
-              titleText: pageName,
-              html: '<p>You have <strong>approved</strong> this application</p>'
-          }) }}
+        titleText: pageName,
+        html: '<p>You have placed this application <strong>on hold</strong></p>'
+      }) }}
 
       {% set firstName = data.imageFirstName or 'Sarah' %}
       {% set lastName = data.imageLastName or 'Johnson' %}
+
+
+      {% set reason = 'Rescan requested' %}
+
+      {% if data.cannotProcessApplication === 'askForFurtherInformationFromPatient' %}
+
+        {% set reason %}
+          <p>Further information requested from the patient</p>
+          <ul>
+            {% for info in data.infoFromPatient %}<li>{{ info }}</li>{% endfor %}
+          </ul>
+        {% endset %}
+
+      {% elif data.cannotProcessApplication === 'askForFurtherInformationFromHCP' %}
+
+        {% set reason %}
+          <p>Further information requested from the healthcare practitioner</p>
+          <ul>
+            {% for info in data.infoFromHCP %}<li>{{ info }}</li>{% endfor %}
+          </ul>
+        {% endset %}
+
+      {% endif %}
+
 
       {{ summaryList({
         rows: [
@@ -25,6 +49,10 @@
           {
             key: { text: 'Reference' },
             value: { text: '8436 810 379' }
+          },
+          {
+            key: { text: 'Reason' },
+            value: { html: reason }
           }
         ]
       }) }}
