@@ -69,8 +69,9 @@
 
                       const highlightedFields = document.querySelectorAll('.horizontal-labels .nhsuk-label:not(.nhsuk-date-input__label):has(.confidence-level), .horizontal-labels .nhsuk-fieldset__legend:not(.nhsuk-u-visually-hidden):has(.confidence-level)');
                       const allFields = document.querySelectorAll( '.horizontal-labels .nhsuk-label:not(.nhsuk-date-input__label), .horizontal-labels .nhsuk-fieldset__legend:not(.nhsuk-u-visually-hidden)' );
+                      
                       const hrs = document.querySelectorAll('.horizontal-labels hr');
-
+                      const addressButton = document.querySelector('.address-button');
 
                       const _showHighlightedFields = function(){
 
@@ -86,7 +87,9 @@
                                hr.classList.add('hidden');
                              } );
 
-                             toggleButton.setAttribute('aria-pressed', 'false' );
+                             addressButton.classList.add('hidden');
+
+                            toggleButton.setAttribute('aria-pressed', 'false' );
                             toggleButton.textContent = 'Show all fields';
 
                       };
@@ -103,6 +106,8 @@
 
                             toggleButton.setAttribute('aria-pressed', 'true' );
                             toggleButton.textContent = 'Show highlighted fields';
+
+                            addressButton.classList.remove('hidden');
 
                       };
 
@@ -302,6 +307,14 @@
                     }) }}
 
                   {% endcall %}
+
+                  <div class="nhsuk-button-group address-button">
+                    {{ button({
+                      html: '<span data-ak="G">Populate address fields using address lookup</span>',
+                      classes: "nhsuk-button--secondary nhsuk-button--small",
+                      href: "/v1/hrtppc/address-lookup?source=newHRT&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dtrue%23postcode"
+                    }) }}
+                  </div>
 
                 <hr />
 
