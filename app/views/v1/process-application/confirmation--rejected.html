@@ -13,8 +13,8 @@
               html: '<p>You have rejected this application</p>'
           }) }}
 
-      {% set firstName = data.imageFirstName %}
-      {% set lastName = data.imageLastName %}
+      {% set firstName = data.imageFirstName or 'Sarah' %}
+      {% set lastName = data.imageLastName or 'Johnson' %}
 
       {{ summaryList({
         rows: [
