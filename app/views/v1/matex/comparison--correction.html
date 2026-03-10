@@ -126,7 +126,14 @@
                                     { html: 'No' },
                                     { html: 'Yes' },
                                     { html: 'Yes' },
-                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imagePatientSignature">Change<span class="nhsuk-u-visually-hidden"> whether healthcare practitioner signature is present</span></a>' }
+                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imageHealthcarePractitionerSignature">Change<span class="nhsuk-u-visually-hidden"> whether healthcare practitioner signature is present</span></a>' }
+                                ],
+                                [
+                                    { text: 'Healthcare practitioner details' },
+                                    { html: 'No' },
+                                    { html: 'Yes' },
+                                    { html: 'Yes' },
+                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imageHealthcarePractitionerDetails">Change<span class="nhsuk-u-visually-hidden"> whether the healthcare practitioner\'s details are present</span></a>' }
                                 ]
                             ]
                             }) }}
@@ -146,12 +153,12 @@
 
                               {{ button({
                                 html: '<span data-ak="I">Approve application</span>',
-                                href: '../process-application/confirmation?certificateStatus=applicationApproved'
+                                href: '../process-application/confirmation--approved'
                               }) }}
 
                               {{ button({
                                 html: '<span data-ak="K">Cannot process application</span>',
-                                href: '../process-application/cannot-process-application',
+                                href: '../process-application/cannot-process-application--horizontal-labels',
                                 classes: 'nhsuk-button--secondary'
                               }) }}
 
