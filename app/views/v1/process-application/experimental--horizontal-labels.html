@@ -150,26 +150,26 @@
 
                 <!-- FORM TYPE -->
 
-                {% set types = [ 'FW81217', 'FW80104', 'FW80110', 'FW80211', 'FW80215', 'FW80406', 'FW80702', 'FW80710', 'FW80803', 'FW81207'] %}
+                {% set versions = [ 'FW81217', 'FW80104', 'FW80110', 'FW80211', 'FW80215', 'FW80406', 'FW80702', 'FW80710', 'FW80803', 'FW81207'] %}
 
                 {{ select({
                   label: {
-                    text: 'Form type'
+                    text: 'Form version'
                   },
-                  id: 'formType',
-                  name: 'formType',
+                  id: 'formVersion',
+                  name: 'formVersion',
                   value: 'FW81217',
                   items: [
-                    { value: types[0], text: types[0] },
-                    { value: types[1], text: types[1] },
-                    { value: types[2], text: types[2] },
-                    { value: types[3], text: types[3] },
-                    { value: types[4], text: types[4] },
-                    { value: types[5], text: types[5] },
-                    { value: types[6], text: types[6] },
-                    { value: types[7], text: types[7] },
-                    { value: types[8], text: types[8] },
-                    { value: types[9], text: types[9] }
+                    { value: versions[0], text: versions[0] },
+                    { value: versions[1], text: versions[1] },
+                    { value: versions[2], text: versions[2] },
+                    { value: versions[3], text: versions[3] },
+                    { value: versions[4], text: versions[4] },
+                    { value: versions[5], text: versions[5] },
+                    { value: versions[6], text: versions[6] },
+                    { value: versions[7], text: versions[7] },
+                    { value: versions[8], text: versions[8] },
+                    { value: versions[9], text: versions[9] }
                   ]
                 }) }}
 

@@ -19,7 +19,7 @@ router.post('/v1/data.json', function(req, res){
 router.use((req, res, next) => {
 
   console.log('-----------------------------------');
-  console.log(req.originalUrl);
+  console.log(req.method + ': ' + req.originalUrl);
 
   // Versions
   const versions = ['v1','v2'];
@@ -44,54 +44,10 @@ router.use((req, res, next) => {
     console.log('Loading routes for ' + version);
     router.use('/' + version, require('./views/' + version + '/_routes'));
   }
-
-  // Update the required filters
-  if (version) {
-    console.log('Loading filters for ' + version);
-    const env = req.app.locals.env; // Remember to add to app.js - app.locals.env = nunjucksAppEnv;
-    const filtersPath = './views/' + version + '/_filters.js';
-    require(filtersPath)( env );
-  }
-
-
+  
   next();
 
 
-});
-
-
-//Editable certificate start date fields
-function getCertificateViewData(req) {
-  const applicationDate = new Date('2025-11-25');
-
-  const formattedApplicationDate = applicationDate.toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  });
-
-  const editableUntil = new Date(applicationDate);
-  editableUntil.setDate(editableUntil.getDate() + 30);
-
-  const today = req.query.today
-    ? (() => {
-        const parts = req.query.today.split('/');
-        return new Date(parts[2], parts[1] - 1, parts[0]);
-      })()
-    : new Date();
-
-  return {
-    canEditCertificateStart: today <= editableUntil,
-    today,
-    formattedApplicationDate
-  };
-}
-
-router.get('/v1/hrtppc/edit-or-reissue', (req, res) => {
-  res.render(
-    'v1/hrtppc/edit-or-reissue',
-    getCertificateViewData(req)
-  );
 });
 
 

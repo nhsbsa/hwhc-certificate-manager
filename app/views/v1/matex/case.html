@@ -76,8 +76,10 @@
 
 
   {% if patient.channel === 'Paper' %}
+
   {% set channelHTML = 'Paper' ~ channelLinkHtml %}
   {% set fulfilment = 'Post' %}
+
   {% set address %}
   {{ addressValue1 | trim }}<br>
   {% if addressValue2 and addressValue2 | trim %}{{ addressValue2 | trim }}<br>{% endif %}
@@ -98,7 +100,7 @@
   {% endif %}
 
   {% if fulfilment == 'Email' %}
-  {% set emailHTML = data.editMATEX.email or patient.email or 'janedoe@example.com' %}
+    {% set emailHTML = data.editMATEX.email or patient.email or 'janedoe@example.com' %}
   {% else %}
     {% set emailHTML = '' %}
   {% endif %}

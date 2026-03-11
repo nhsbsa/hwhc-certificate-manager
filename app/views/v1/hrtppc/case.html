@@ -32,7 +32,7 @@
   {% set emailHTML = data.editHRT.email or patient.email or 'janedoe@example.com' %}
 
   {% if data.editHRT.addressLineOne is defined %}
-  {% set addressValue1 = data.editHRT.addressLineOne %}
+    {% set addressValue1 = data.editHRT.addressLineOne %}
   {% else %}
     {% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
   {% endif %}
@@ -61,22 +61,19 @@
     {% set postcodeValue = patient.address.postcode %}
   {% endif %}
 
-  {% set addressHTML %}
 
-  {{ addressValue1 | trim }}<br>
-  {% if addressValue2 and addressValue2 | trim %}{{ addressValue2 | trim }}<br>{% endif %}
-  {{ townValue | trim }}<br>
-  {% if countyValue and countyValue | trim %}
-  {{ countyValue | trim }}<br>
-  {% endif %}
+
+  {{ addressLine1 }}
+  {{ addressLine2 }}
+  {{ townValue }}
+  {{ countyValue }}
   {{ postcodeValue }}
 
-  {% endset %}
-  
-  {% if addressHTML | trim == '' %}
+
+  {% set addressHTML =  '' | processAddress( addressValue1, addressValue2, townValue, countyValue, postcodeValue ) %}
+  {% if addressHTML | trim === '' %}
     {% set addressHTML = '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS' %}
   {% endif %}
-
 
   <div class="nhsuk-grid-row">
 

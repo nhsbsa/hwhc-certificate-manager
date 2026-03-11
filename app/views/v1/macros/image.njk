@@ -43,6 +43,8 @@
 
                 console.log('ExpanderImage.init();');
 
+                _initFocusElements();
+
                 Object.keys(_fields).forEach(function( key ){
                     _fields[key].midPointX = Math.round( _fields[key].x + ( _fields[key].width/2 ) );
                     _fields[key].midPointY = Math.round( _fields[key].y + ( _fields[key].height/2 ) );
@@ -61,6 +63,129 @@
                _checkForFocusedElements();
 
             }
+
+            //
+            // INIT FOCUS ELEMENTS FUNCTION
+            //
+            function _initFocusElements(){
+
+                const focusCues = document.querySelectorAll('[data-focus-image]');
+
+                const blursActive = true;
+                const mouseOutsActive = false;
+
+                if( focusCues.length > 0 ){
+
+                    focusCues.forEach(function( el ){
+
+                        // 
+                        // TEXT INPUT
+                        //
+                        if( el.matches('.nhsuk-input') ){
+
+                            // focus
+                            el.addEventListener('focus', function(e){
+                                
+                                const focusTarget = e.target.getAttribute('data-focus-image');
+                                if( focusTarget ){
+                                    _focusImage(focusTarget);
+                                }
+
+                            });
+
+                            
+                            if(blursActive){
+
+                                // blur
+                                el.addEventListener('blur',function(){
+                                    _focusImage();
+                                });
+
+                            }
+
+                        }
+
+                        //
+                        // RADIO INPUT
+                        //
+                        if( el.matches('.nhsuk-radios') ){
+
+                            const focusTarget = el.getAttribute('data-focus-image');
+
+                            // Check inputs
+                            el.querySelectorAll('.nhsuk-radios__input').forEach( function( radio ){
+
+
+                                radio.addEventListener('focus',function(){
+                                    _focusImage(focusTarget);
+                                });
+
+                                if(blursActive){
+                                    radio.addEventListener('blur',function(){
+                                        _focusImage();
+                                    });
+                                }
+
+
+                            });
+
+                        }
+
+                        //
+                        // TINY CHECKBOXES
+                        // These appear on the Cannot process application page
+                        //
+                        if( el.matches('.nhsuk-radios .nhsuk-checkboxes--small .nhsuk-checkboxes__input') ){
+
+                            const focusTarget = el.getAttribute('data-focus-image');
+
+                            el.parentElement.addEventListener('mouseover',function(){
+                                _focusImage(focusTarget);
+                            });
+
+                            el.parentElement.addEventListener('mouseout',function(){
+                                _focusImage();
+                            });
+
+                        }
+
+                        //
+                        // SUMMARY LIST ROWS
+                        //
+                        if( el.matches('.nhsuk-summary-list .nhsuk-link') ){
+
+                            // Set row
+                            const row = el.parentElement.parentElement;
+
+                            row.classList.add('has-focus-image');
+                            row.addEventListener('mouseover',function(e){
+
+                               if( e.target.closest('.has-focus-image') ){
+                                
+                                    const focusTarget = e.target.closest('.has-focus-image').querySelector('.nhsuk-link[data-focus-image]').getAttribute('data-focus-image');
+                                    if( focusTarget ){
+                                        _focusImage(focusTarget);
+                                    }
+
+                               }
+
+                            });
+
+                            if(mouseOutsActive){
+                                row.addEventListener('mouseout',function(e){
+                                    _focusImage();
+                                });
+                            }
+                            
+
+                        }
+
+                    });
+
+                }
+
+            }
+            
 
             //
             // CHECK FOR FOCUSED ELEMENTS FUNCTION
@@ -190,115 +315,6 @@
     </script>
 
 
-    <!-- FOCUS FUNCTIONALITY SCRIPT -->
-    <script>
-
-        'use strict';
-
-        const FocusFunctionality = (function(){
-
-            //
-            // INIT FUNCTION
-            //
-            function _init(){
-
-                console.log( 'FocusFunctionality.init();' );
-
-                const focusCues = document.querySelectorAll('[data-focus-image]');
-
-                if( focusCues.length > 0 ){
-
-                    focusCues.forEach(function( el ){
-
-                        // 
-                        // TEXT INPUT
-                        //
-                        if( el.matches('.nhsuk-input') ){
-
-                            // focus
-                            el.addEventListener('focus', function(e){
-                                
-                                const focusTarget = e.target.getAttribute('data-focus-image');
-                                if( focusTarget ){
-                                    ExpanderImage.focusImage(focusTarget);
-                                }
-
-                            });
-
-                            // blur
-                            el.addEventListener('blur',function(){
-                                ExpanderImage.focusImage();
-                            });
-
-                        }
-
-                        //
-                        // RADIOS 
-                        //
-                        if( el.matches('.nhsuk-radios') ){
-
-                            const focusTarget = el.getAttribute('data-focus-image');
-
-                            // Check inputs
-                            el.querySelectorAll('.nhsuk-radios__input').forEach( function( radio ){
-                                radio.addEventListener('focus',function(){
-                                    ExpanderImage.focusImage(focusTarget);
-                                });
-                                radio.addEventListener('blur',function(){
-                                    ExpanderImage.focusImage();
-                                });
-                            });
-
-                        }
-
-                        //
-                        // SUMMARY LIST ROWS
-                        //
-                        if( el.matches('.nhsuk-summary-list .nhsuk-link') ){
-
-                            // Set row
-                            const row = el.parentElement.parentElement;
-
-                            row.classList.add('has-focus-image');
-                            row.addEventListener('mouseover',function(e){
-
-                               if( e.target.closest('.has-focus-image') ){
-                                
-                                    const focusTarget = e.target.closest('.has-focus-image').querySelector('.nhsuk-link[data-focus-image]').getAttribute('data-focus-image');
-                                    if( focusTarget ){
-                                        ExpanderImage.focusImage(focusTarget);
-                                    }
-
-                               }
-
-                            });
-
-                            row.addEventListener('mouseout',function(e){
-                                ExpanderImage.focusImage();
-                            });
-                            
-
-                        }
-
-                    });
-
-                }
-
-            }
-
-            return {
-                init: _init
-            }
-
-        })();
-
-
-        window.addEventListener('load',function(){
-            FocusFunctionality.init();
-        });
-
-    </script>
-
 
 
 
@@ -309,7 +325,7 @@
         
         <div class="expandable-image__inner">
             <div>
-                <img class="expandable-image__image" src="/images/FW8-MATEX-scan.png" alt=""/>
+                <img class="expandable-image__image" src="/assets/images/FW8-MATEX-scan.png" alt=""/>
             </div>
         </div>
         <summary class="expandable-image__button nhsuk-button nhsuk-button--small">

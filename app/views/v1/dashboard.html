@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'Maternity Exemption processing' %}
+{% set pageName = 'Maternity exemption processing' %}
 
 {% set dashboardRows = '' | getPatientData | getDashboardTableRows( 7 ) %}
 {% set checkingRows = '' | getPatientData | getCheckingTableRows %}
@@ -52,7 +52,7 @@
 
             {{ table({
                 panel: false,
-                caption: "Certificates you need to correct",
+                caption: "Certificates you need to change",
                 firstCellIsHeader: false,
                 responsive: true,
                 tableClasses: 'patient-table',

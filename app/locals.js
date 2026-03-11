@@ -1,19 +1,10 @@
-/**
- * @param {typeof config} config
- */
-module.exports =
-  (config) =>
-  /**
-   * @param {Request} req
-   * @param {Response} res
-   * @param {NextFunction} next
-   */
-  (req, res, next) => {
-    res.locals.serviceName = config.serviceName
-    next()
-  }
+const csrf = require('@dr.pogodin/csurf');
+const csrfProtection = csrf({ cookie: true, httpOnly: true, sameSite: 'strict' });
 
-/**
- * @import { NextFunction, Request, Response } from 'express'
- * @import config from './config.js'
- */
+module.exports = function(req, res, next) {
+  csrfProtection(req, res, function() {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+  })
+
+}

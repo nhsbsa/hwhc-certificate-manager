@@ -28,7 +28,7 @@
           <div class="nhsuk-grid-row">
 
             <!-- ONE THIRD -->
-            <div class="nhsuk-grid-column-one-half">
+            <div class="nhsuk-grid-column-one-half sticky-column">
 
               {% from '../macros/image.njk' import image %}
               {{ image() }}
@@ -72,14 +72,14 @@
                           },
                           classes: 'nhsuk-checkboxes--small',
                           items: [
-                            { value: values[0], html: values[0] },
-                            { value: values[1], html: values[1] },
-                            { value: values[2], html: values[2] },
-                            { value: values[3], html: values[3] },
-                            { value: values[4], html: values[4] },
-                            { value: values[5], html: values[5] },
-                            { value: values[6], html: values[6] },
-                            { value: values[7], html: values[7] }
+                            { value: values[0], html: values[0], attributes: { 'data-focus-image' : 'patientSignature' } },
+                            { value: values[1], html: values[1], attributes: { 'data-focus-image' : 'healthcarePractitionerSignature' } },
+                            { value: values[2], html: values[2], attributes: { 'data-focus-image' : 'healthcarePractitionerDetails' } },
+                            { value: values[3], html: values[3], attributes: { 'data-focus-image' : 'dateOfBirth' } },
+                            { value: values[4], html: values[4], attributes: { 'data-focus-image' : 'address' } },
+                            { value: values[5], html: values[5], attributes: { 'data-focus-image' : 'emailAddress' } },
+                            { value: values[6], html: values[6], attributes: { 'data-focus-image' : 'nhsNumber' } },
+                            { value: values[7], html: values[7], attributes: { 'data-focus-image' : 'childsDueOrBirthDate' } }
                           ]
                         }) }}
 
@@ -114,12 +114,12 @@
                           },
                           classes: 'nhsuk-checkboxes--small',
                           items: [
-                            { value: values[0], html: values[0] },
-                            { value: values[1], html: values[1] },
-                            { value: values[2], html: values[2] },
-                            { value: values[3], html: values[3] },
-                            { value: values[4], html: values[4] },
-                            { value: values[5], html: values[5] }
+                            { value: values[0], html: values[0], attributes: { 'data-focus-image' : 'patientSignature' } },
+                            { value: values[1], html: values[1], attributes: { 'data-focus-image' : 'healthcarePractitionerSignature' } },
+                            { value: values[2], html: values[2], attributes: { 'data-focus-image' : 'dateOfBirth' } },
+                            { value: values[3], html: values[3], attributes: { 'data-focus-image' : 'address' } },
+                            { value: values[4], html: values[4], attributes: { 'data-focus-image' : 'nhsNumber' } },
+                            { value: values[5], html: values[5], attributes: { 'data-focus-image' : 'childsDueOrBirthDate' } }
                           ]
                         }) }}
 

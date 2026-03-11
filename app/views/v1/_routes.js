@@ -159,6 +159,8 @@ router.post(/process-application/, function (req, res) {
 //
 router.get(/postcode-handler/, function (req, res) {
 
+  console.log( 'POSTCODE HANDLER' );
+
   // Prep the variables
   let addressSearchPostcode = req.session.data.addressSearchPostcode.split(' ').join('').toUpperCase();
   const addressSearchBuildingNumberOrName = req.session.data.addressSearchBuildingNumberOrName || '';
@@ -199,6 +201,9 @@ router.get(/postcode-handler/, function (req, res) {
   if( addressSearchPostcode ){
     baseURL = 'https://api.os.uk/search/places/v1/postcode?postcode=' + encodeURI(addressSearchPostcode);
   }
+
+  console.log( baseURL );
+  console.log( apiKey );
 
   // Make the call
   if( baseURL && apiKey ){
@@ -340,6 +345,10 @@ router.get(/reset-search/,function( req, res ){
 
 // ADDRESS LOOKUP 
 router.get(/^\/[^\/]+\/address-lookup$/, function (req, res) {
+
+
+  console.log('LOOKING UP ADDRESS');
+
   function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
   function normPostcode(s) { return (s || '').replace(/\s+/g, '').toUpperCase(); }
 
@@ -409,8 +418,6 @@ req.session.data.addressSearchBuildingNumberOrName =
   // Only fall back to find?query=... when there is no postcode at all
   baseURL = 'https://api.os.uk/search/places/v1/find?query=' + encodeURI(addressSearchBuildingNumberOrName);
   }
-  
-
 
   if (!baseURL || !apiKey) {
     req.session.data.addressSearchResults = [];
@@ -422,7 +429,11 @@ req.session.data.addressSearchBuildingNumberOrName =
 
   const url = baseURL + '&key=' + apiKey;
 
+  console.log( url );
+
   axios.get(url).then(response => {
+
+    console.log( response );
 
     const results = [];
   
@@ -722,6 +733,10 @@ const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJ
   return res.redirect(returnTo);
 });
 
+
+
+
+
 // Pass edit inputs to case screen
 router.post(/edit-matex/, function (req, res) {
 
@@ -875,6 +890,10 @@ router.post(/edit-matex/, function (req, res) {
 });
 
 
+
+
+
+
 router.post(/edit-hrt/, function (req, res) {
   const data = req.session.data || {};
   data.editHRT = data.editHRT || {}; 
@@ -920,6 +939,55 @@ router.post(/edit-hrt/, function (req, res) {
   return res.redirect('/v1/hrtppc/case');
 });
 
+
+
+
+
+
+
+//Editable certificate start date fields
+function getCertificateViewData(req) {
+
+  console.log('HRRRRRGH');
+
+  const applicationDate = new Date('2025-11-25');
+
+  const formattedApplicationDate = applicationDate.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+
+  const editableUntil = new Date(applicationDate);
+  editableUntil.setDate(editableUntil.getDate() + 30);
+
+  const today = req.query.today
+    ? (() => {
+        const parts = req.query.today.split('/');
+        return new Date(parts[2], parts[1] - 1, parts[0]);
+      })()
+    : new Date();
+
+  return {
+    canEditCertificateStart: today <= editableUntil,
+    today,
+    formattedApplicationDate
+  };
+}
+
+router.get('/v1/hrtppc/edit-or-reissue', (req, res) => {
+
+  console.log( req );
+
+  res.render(
+    'v1/hrtppc/edit-or-reissue',
+    getCertificateViewData(req)
+  );
+});
+
+
+
+
 router.get(/edit-or-reissue/, function (req, res) {
   const iso = req.session.data?.editMATEX?.childDOBISO; // e.g. "2025-12-05"
   if (iso && /^\d{4}-\d{2}-\d{2}$/.test(iso)) {
@@ -934,5 +1002,8 @@ router.get(/edit-or-reissue/, function (req, res) {
   }
   return res.render('v1/matex/edit-or-reissue');
 });
+
+
+
 
 module.exports = router;
