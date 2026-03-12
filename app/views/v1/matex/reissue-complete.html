@@ -56,7 +56,7 @@
 
   {% set fulfilment = data.editMATEX.certificateFulfilment or patient.fulfilment or "Email" %}
 
-  {% if fulfilment == 'email' %}
+  {% if fulfilment == 'Email' %}
   {% set titleText %}
   The certificate has been reissued by email
   {% endset %}
@@ -64,7 +64,7 @@
   {% set sentAddressHtml %}
     We have sent the maternity exemption (MATEX) certificate to:<br>
     <strong>{{ data.editMATEX.email or patient.email or 'jane.doe@example.com' }}</strong>.
-    <p>The certificate holder will get their digital certificate in the next few minutes.</p>
+    <p>The certificate holder will get their digital certificate in the next few minutes. But it could take up to 24 hours for the email to arrive. And they might need to check their junk or spam folder.</p>
   {% endset %}
 
   {% else %}
@@ -155,6 +155,7 @@
         </div>
       </div>
 
+      <div class="nhsuk-button-group">
       {{ button({
         html: '<span data-ak="S">New search</span>',
         href: "../search"
@@ -162,15 +163,12 @@
 
       {{ button({
         html: buttonText,
-        classes: "nhsuk-button--secondary nhsuk-u-margin-left-2",
+        classes: "nhsuk-button--secondary",
         href: "case"
       }) }}
+      </div>
 
     </div>
   </div>
-
-  <style>
-
-
-  </style>
+  
 {% endblock %}

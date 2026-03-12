@@ -636,13 +636,18 @@ module.exports = function (env) {
 
 
       let obj = [
-        { html: '<strong>' + patient.lastName + ', ' + patient.firstName + '</strong><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
+        { html:
+          '<a class="nhsuk-link nhsuk-link--no-visited-state" href="'+ link + '">' +
+            '<strong>' + patient.lastName + ', ' + patient.firstName + '</strong>' +
+            '<span class="nhsuk-u-visually-hidden">: Open ' + patient.lastName + ', ' + patient.firstName + '\'s certificate record</span>' +
+          '</a>' +
+          '<br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
         { html: patient.address.postcode },
         { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
         { html: (patient.checking === true) ? _getStatusTextOrTag(patient.status, true) + ' ' + _getStatusTextOrTag('checking', true) : _getStatusTextOrTag(patient.status, true) },
         { html: (patient.status === 'processing') ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' + patient.certificateReference + '</span>' : patient.certificateReference },
-        { text: penultimate },
-        { html: '<a href="' + link + '">' + action + '<span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag(patient.certificateType) + '</span></a>' },
+        { text: penultimate }
+        // { html: '<a href="' + link + '">' + action + '<span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag(patient.certificateType) + '</span></a>' },
       ];
 
       rows.push(obj);

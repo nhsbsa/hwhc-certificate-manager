@@ -392,7 +392,9 @@ req.session.lookupJourney = normalisedJourney;
 
 req.session.data.lookupJourney = req.session.lookupJourney;
 
-req.session.returnTo = parsed.returnTo || req.session.returnTo;
+if (parsed.returnTo) {
+  req.session.returnTo = parsed.returnTo;
+}
 
 req.session.data.addressSearchPostcode = parsed.addressSearchPostcode || '';
 
@@ -727,7 +729,10 @@ const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJ
   if (newAddress.county)
     newAddress.county = toTitleCase(newAddress.county);
 
-  req.session.data[ns] = newAddress;
+  req.session.data[ns] = {
+    ...(req.session.data[ns] || {}),
+    ...newAddress
+  };
 
   const returnTo = req.session.returnTo;
   return res.redirect(returnTo);
@@ -871,7 +876,7 @@ router.post(/edit-matex/, function (req, res) {
 
   if ('editMATEX.firstName' in req.body) data.editMATEX.firstName = req.body['editMATEX.firstName'];
   if ('editMATEX.lastName'  in req.body) data.editMATEX.lastName  = req.body['editMATEX.lastName'];
-  if ('editMATEX.email'     in req.body) data.editMATEX.email     = req.body['editMATEX.email'];
+  if ('editMATEX.email' in req.body) data.editMATEX.email = req.body['editMATEX.email'];
   if ('editMATEX.certificateFulfilment' in req.body) data.editMATEX.certificateFulfilment = req.body['editMATEX.certificateFulfilment'];
   if ('editMATEX.addressLineOne' in req.body) data.editMATEX.addressLineOne = req.body['editMATEX.addressLineOne'];
   if ('editMATEX.addressLineTwo' in req.body) data.editMATEX.addressLineTwo = req.body['editMATEX.addressLineTwo'];
@@ -879,7 +884,6 @@ router.post(/edit-matex/, function (req, res) {
   if ('editMATEX.county' in req.body)        data.editMATEX.county = req.body['editMATEX.county'];
   if ('editMATEX.postcode' in req.body)      data.editMATEX.postcode = req.body['editMATEX.postcode'];
   if ('editMATEX.telephoneNumber' in req.body) data.editMATEX.telephoneNumber = req.body['editMATEX.telephoneNumber'];
-  if ('editMATEX.notes' in req.body) data.editMATEX.notes = req.body['editMATEX.notes'];
 
   req.session.data = data;
 
@@ -988,7 +992,7 @@ router.get('/v1/hrtppc/edit-or-reissue', (req, res) => {
 
 
 
-router.get(/edit-or-reissue/, function (req, res) {
+router.get(/^\/v1\/matex\/edit-or-reissue$/, function (req, res) {
   const iso = req.session.data?.editMATEX?.childDOBISO; // e.g. "2025-12-05"
   if (iso && /^\d{4}-\d{2}-\d{2}$/.test(iso)) {
     req.session.data.childDOBYear  = iso.substring(0, 4);
