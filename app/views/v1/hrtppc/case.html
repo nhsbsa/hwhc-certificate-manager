@@ -63,14 +63,7 @@
 
 
 
-  {{ addressLine1 }}
-  {{ addressLine2 }}
-  {{ townValue }}
-  {{ countyValue }}
-  {{ postcodeValue }}
-
-
-  {% set addressHTML =  '' | processAddress( addressValue1, addressValue2, townValue, countyValue, postcodeValue ) %}
+  {% set addressHTML =  addressValue1 + '<br>' + addressValue2 + '<br>' + townValue + '<br>' + countyValue + '<br>' + postcodeValue %}
   {% if addressHTML | trim === '' %}
     {% set addressHTML = '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS' %}
   {% endif %}
