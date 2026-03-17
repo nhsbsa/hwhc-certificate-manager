@@ -663,7 +663,7 @@ module.exports = function (env) {
         { html: patient.address.postcode },
         { html: patient.dateofBirth },
         { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
-        { html: (patient.checking === true) ? _getStatusTextOrTag(patient.status, true) + ' ' + _getStatusTextOrTag('checking', true) : _getStatusTextOrTag(patient.status, true) },
+        { html: (patient.checking === true) ? _getStatusTextOrTag('checking', true) : _getStatusTextOrTag(patient.status, true) },
         { html: (patient.status === 'processing') ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' + patient.certificateReference + '</span>' : patient.certificateReference },
         { text: penultimate }
       ];
