@@ -559,6 +559,10 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     width: calc((100%/3) * 2);
   }
 
+  .events-log:has(.menu-container):has(.scroll-container) .scroll-container .nhsuk-heading-s {
+    margin-top: 0.625rem;
+  }
+
   /* STICKY COLUMN */
 
   .nhsuk-grid-row:has(.sticky-column) .nhsuk-grid-column-one-third:not(.sticky-column) {

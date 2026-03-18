@@ -1010,4 +1010,16 @@ router.get(/^\/v1\/matex\/edit-or-reissue$/, function (req, res) {
 
 
 
+
+
+//
+// CASE EDIT SCREEN
+//
+router.post(/case--edit/, function( req, res ){
+  const destination = 'case--view--can-edit';
+  return res.redirect( destination );
+});
+
+
+
 module.exports = router;

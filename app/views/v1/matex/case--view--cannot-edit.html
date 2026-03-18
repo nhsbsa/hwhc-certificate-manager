@@ -1,6 +1,10 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'Application' %}
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
 
 {% block beforeContent %}
   {{ backLink({
@@ -11,16 +15,12 @@
 
 {% block content %}
 
-  {% if data.patientID %}
-    {% set patient = data.patientID | getPatientData %}
-  {% endif %}
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
-        {{ 'processing' | getStatusTextOrTag( true ) | safe }}
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
       </h1>
 
     </div>
@@ -43,6 +43,7 @@
                             caption: 'Proposed values',
                             classes: 'table-head-visually-hidden',
                             captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
+                            attributes: { 'data-focus-image': 'firstName,lastName,dateOfBirth,nhsNumber,address,emailAddress,telephoneNumber,childsDueOrBirthDate,patientSignature,healthcarePractitionerSignature,healthcarePractitionerDetails' },
                             firstCellIsHeader: true,
                             head: [
                                 { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
@@ -88,29 +89,35 @@
                                 [
                                     { text: 'Healthcare practitioner signature' },
                                     { html: 'Yes' }
+                                ],
+                                [
+                                    { text: 'Healthcare practitioner\'s details' },
+                                    { html: 'Yes' }
                                 ]
                             ]
                             }) }}
 
 
-                            {% if data.role === 'callCentre' %}
+                            {{ textarea({
+                                  name: 'notes',
+                                  id: 'notes',
+                                  classes: 'nhsuk-u-width-two-thirds',
+                                  label: {
+                                      text: 'Note',
+                                      isPageHeading: false
+                                  }
+                            }) }}
 
-                                  {{ textarea({
-                                        name: 'notes',
-                                        id: 'notes',
-                                        classes: 'nhsuk-u-width-two-thirds',
-                                        label: {
-                                            text: 'Note',
-                                            isPageHeading: false
-                                        }
-                                  }) }}
 
-                                  {{ button({
-                                    href: '#',
-                                    text: 'Add note'
-                                }) }}
+                            <div class="nhsuk-button-group">
 
-                            {% endif %}
+                              {{ button({
+                                href: 'case--edit--confirmation--note-added',
+                                html: '<span data-ak="K">Add note<span>'
+                            }) }}
+
+                            </div>
+
 
                     </div>
                 </div>
@@ -124,10 +131,10 @@
 
               
               {% from '../macros/image.njk' import image %}
-              {{ image( 'expandable-image--half' ) }}
+              {{ image() }}
 
               {% from '../macros/notes.njk' import notes %}
-              {{ notes( 'processing' ) }}
+              {{ notes( patient ) }}
 
 
             </div>

@@ -78,6 +78,32 @@
 
                     focusCues.forEach(function( el ){
 
+
+                        //
+                        // TABLE ROWS
+                        //
+                        if( el.matches('.nhsuk-table') ){
+
+                            const focusFields = ( el.getAttribute('data-focus-image') ) ? el.getAttribute('data-focus-image').split(',') : [];
+                            const focusRows = el.querySelectorAll('tbody tr');
+
+                            if( focusFields.length === focusRows.length ){
+
+                                focusRows.forEach(function( row, i ){
+
+                                    // mouseover
+                                    row.addEventListener('mouseover',function(e){
+                                        _focusImage( focusFields[i] );
+                                    });
+
+                                });
+
+                            } else {
+                                alert( 'table cannot be set up correctly - missing element on comma separated data-focus-image' );
+                            }
+
+                        }
+
                         // 
                         // TEXT INPUT
                         //

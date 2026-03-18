@@ -308,15 +308,14 @@ module.exports = function (env) {
       const processor = p[1]; // Weird quirk in how Object.entries works...
 
       const arr = [
-        { text: processor.name },
+        { html: '<a class="nhsuk-link nhsuk-link--no-visited-state" href="processor?searchChecking=true&searchProcessor=' + p[0] + '">' + processor.name + '</a>' },
         { text: p[0] },
         { text: processor.stats[0] },
         { text: processor.stats[1] },
         { text: processor.stats[2] },
         { text: processor.stats[3] },
         { text: processor.stats[4] },
-        { html: (processor.level === 'trainee') ? '<strong>10</strong> <span class="nhsuk-u-font-size-14">(' + processor.checkingLevel + '%)</span></strong>' : '<strong>0</strong>' },
-        { html: '<a href="processor?searchChecking=true&searchProcessor=' + p[0] + '">View<span class="nhsuk-u-visually-hidden">' + processor.name + '\'s account</spa></a>' }
+        { html: (processor.level === 'trainee') ? '<strong>10</strong> <span class="nhsuk-u-font-size-14">(' + processor.checkingLevel + '%)</span></strong>' : '<strong>0</strong>' }
       ];
 
       rows.push(arr);
@@ -591,17 +590,35 @@ module.exports = function (env) {
     }
   };
 
-  const rows = [
-    firstNameObj,
-    { text: 'Address' },
-    { text: 'Postcode' },
-    { text: 'Date of birth' },
-    { text: 'Type' },
-    { text: 'Status' },
-    { text: 'Reference' },
-    { text: (processorTable) ? 'Being checked by' : 'End date' },
-    { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
-  ];
+  let rows;
+
+  if( processorTable ){
+
+    // Processor page view
+    rows = [
+      firstNameObj,
+      { text: 'Postcode' },
+      { text: 'Type' },
+      { text: 'Status' },
+      { text: 'Reference' },
+      { text: 'Check type' }
+    ];
+
+  } else {
+
+    // Standard search results view
+    rows = [
+      firstNameObj,
+      { text: 'Address' },
+      { text: 'Postcode' },
+      { text: 'Date of birth' },
+      { text: 'Type' },
+      { text: 'Status' },
+      { text: 'Reference' },
+      { text: 'End date' }
+    ];
+
+  }
 
     return rows;
 
@@ -637,7 +654,6 @@ module.exports = function (env) {
       }
 
       const checkedBy = (processor.level === 'trainee') ? 'Supervisor' : 'Quality checker';
-      const penultimate = (processorTable) ? checkedBy : patient.endDate;
 
       // Hide address for DIGITAL MATEX
       let addressHtml = '';
@@ -651,22 +667,42 @@ module.exports = function (env) {
           : fullAddressLine1;
       }
 
-      
-      let obj = [
-        { html:
-          '<a class="nhsuk-link nhsuk-link--no-visited-state" href="'+ link + '">' +
+      const nameHTML = '<a class="nhsuk-link nhsuk-link--no-visited-state" href="'+ link + '">' +
             '<strong>' + patient.firstName + ' ' + patient.lastName + '</strong>' +
             '<span class="nhsuk-u-visually-hidden">: Open ' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag(patient.certificateType) + ' certificate record </span>' +
           '</a>' +
-          '<br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
+          '<br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>';
+      
+      
+      let obj;
+
+      if( processorTable ){
+
+        obj = [
+        { html: nameHTML },
+        { html: patient.address.postcode },
+        { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
+        { html: (patient.checking === true) ? _getStatusTextOrTag(patient.status, true) + ' ' + _getStatusTextOrTag('checking', true) : _getStatusTextOrTag(patient.status, true) },
+        { html: (patient.status === 'processing') ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' + patient.certificateReference + '</span>' : patient.certificateReference },
+        { text: checkedBy }
+      ];
+
+      } else {
+
+      obj = [
+        { html: nameHTML },
         { html: addressHtml },
         { html: patient.address.postcode },
         { html: patient.dateofBirth },
         { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
         { html: (patient.checking === true) ? _getStatusTextOrTag('checking', true) : _getStatusTextOrTag(patient.status, true) },
         { html: (patient.status === 'processing') ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' + patient.certificateReference + '</span>' : patient.certificateReference },
-        { text: penultimate }
+        { text: patient.endDate }
       ];
+
+      }
+
+      
 
       rows.push(obj);
 
@@ -675,55 +711,6 @@ module.exports = function (env) {
     return rows;
 
   };
-
-
-  //
-  // GET DASHBOARD TABLE ROWS FILTER
-  // Gets five certificates with status either 'On hold' or 'Accepted'
-  //
-  filters.getDashboardTableRows = function (patientData, count) {
-
-    if (typeof patientData === 'string') {
-      patientData = JSON.parse(patientData);
-    }
-
-    count = (!Number.isNaN(parseInt(count))) ? parseInt(count) : 5;
-
-    const loop = (Array.isArray(patientData)) ? patientData.length : 0;
-    const rows = [];
-
-    for (let i = 0; i < loop; i++) {
-
-      if (rows.length < count) {
-
-        const patient = patientData[i];
-
-        if (patient.status === 'on-hold' || patient.status === 'accepted') {
-
-          const obj = [
-            { html: '<strong>' + patient.lastName + ', ' + patient.firstName + '</strong><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
-            { html: patient.address.postcode },
-            { html: _getStatusTextOrTag(patient.status, true) },
-            { html: (patient.status === 'processing') ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' + patient.certificateReference + '</span>' : patient.certificateReference },
-            { html: '<a href="' + patient.certificateType + '/case?patientID=' + patient.id + '">View <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag(patient.certificateType) + '</span></a>' },
-          ];
-
-          rows.push(obj);
-
-        }
-
-      } else {
-
-        break;
-
-      }
-
-    }
-
-    return rows;
-
-  };
-
 
   //
   // GET CHECKING TABLE ROWS
@@ -748,12 +735,11 @@ module.exports = function (env) {
         if (patient.checking === true) {
 
           const obj = [
-            { html: '<strong>' + patient.lastName + ', ' + patient.firstName + '</strong><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
+            { html: '<a class="nhsuk-link nhsuk-link--no-visited-state" href="' + patient.certificateType + '/comparison--correction?patientID=' + patient.id + '"><strong>' + patient.firstName + ' ' + patient.lastName + '</strong></a><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
             { html: patient.address.postcode },
             { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
             { html: _getStatusTextOrTag(patient.status, true) + ' ' + _getStatusTextOrTag('checking', true) },
-            { html: (patient.status === 'processing') ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' + patient.certificateReference + '</span>' : patient.certificateReference },
-            { html: '<a href="' + patient.certificateType + '/comparison--correction?patientID=' + patient.id + '">Change <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag(patient.certificateType) + '</span></a>' },
+            { html: (patient.status === 'processing') ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' + patient.certificateReference + '</span>' : patient.certificateReference }
           ];
 
           rows.push(obj);
@@ -845,13 +831,11 @@ module.exports = function (env) {
           const url = (checked) ? patient.certificateType + '/comparison--has-feedback?patientID=' + patient.id : patient.certificateType + '/comparison--leave-feedback?patientID=' + patient.id;
 
           const obj = [
-            { html: '<strong>' + patient.lastName + ', ' + patient.firstName + '</strong><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
+            { html: '<a class="nhsuk-link nhsuk-link--no-visited-state" href="' + url + '"><strong>' + patient.firstName + ' ' + patient.lastName + '</strong></a><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
             { html: patient.address.postcode },
             { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
             { html: _getStatusTextOrTag(patient.status, true) + ' ' + _getStatusTextOrTag('checking', true) },
-            { html: (patient.status === 'processing') ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' + patient.certificateReference + '</span>' : patient.certificateReference },
-
-            { html: '<a href="' + url + '">Check <span class="nhsuk-u-visually-hidden">' + patient.firstName + ' ' + patient.lastName + '\'s ' + _getCertificateTypeTextOrTag(patient.certificateType) + '</span></a>' },
+            { html: (patient.status === 'processing') ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' + patient.certificateReference + '</span>' : patient.certificateReference }
           ];
 
           rows.push(obj);
@@ -1228,6 +1212,23 @@ module.exports = function (env) {
   };
 
 
+
+  //
+  // IS APPLICATION OR CERTIFICATE FILTER
+  //
+  filters.isApplicationOrCertificate = function( status ){
+
+    let document = 'application';
+
+    if( status ){
+      if( status === 'active' || status === 'expired' || status === 'deleted' ){
+        document = 'certificate';
+      }
+    }
+
+    return document;
+
+  }
 
 
 

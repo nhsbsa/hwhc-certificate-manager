@@ -2,8 +2,6 @@
 
 {% set pageName = 'MATEX processing' %}
 
-{% set dashboardRows = '' | getPatientData | getDashboardTableRows( 7 ) %}
-
 {% block content %}
 
   <div class="nhsuk-grid-row">
@@ -60,8 +58,7 @@
                         { text: 'On hold' },
                         { text: 'Rescan' },
                         { text: 'Total' },
-                        { text: 'For you to check' },
-                        { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
+                        { text: 'For you to check' }
                       ],
                 rows: data.processors | getSupervisorDashboardRows
               }) }}

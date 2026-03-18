@@ -280,6 +280,13 @@
                 -->
                 
                 <div class="scroll-container">
+
+                    {% if patient.status === 'active' or patient.status === 'expired' or patient.status === 'deleted' %}
+                        <h2 class="nhsuk-heading-s">Certificate history</h2>
+                    {% else %}
+                        <h2 class="nhsuk-heading-s">Application history</h2>
+                    {% endif %}
+
                     {{ nhsappTimeline({
                         id: 'timeline-application',
                         items: items | reverse

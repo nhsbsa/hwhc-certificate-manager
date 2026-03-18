@@ -1,6 +1,10 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'Application' %}
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
 
 {% block beforeContent %}
   {{ backLink({
@@ -11,28 +15,18 @@
 
 {% block content %}
 
-  {% if data.patientID %}
-    {% set patient = data.patientID | getPatientData %}
-  {% endif %}
-
-  <div class="nhsuk-grid-row to-keep">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }} 
-        
-        {% if data.patientID %}
-          {{ patient.status | getStatusTextOrTag( true ) | safe }} {% if patient.checking === true %}{{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
-        {% else %}
-          {{ 'accepted' | getStatusTextOrTag( true ) | safe }} {{ 'checking' | getStatusTextOrTag( true ) | safe }}
-        {% endif %}
-
-        </h1>
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+      </h1>
 
     </div>
   </div>
 
-  <div class="nhsuk-grid-row to-keep">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
           <div class="nhsuk-grid-row">
@@ -46,7 +40,7 @@
 
                         {{ table({
                             panel: false,
-                            caption: 'Application processing comparison',
+                            caption: 'Processing comparison',
                             captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
                             tableClasses: 'has-error',
                             firstCellIsHeader: true,

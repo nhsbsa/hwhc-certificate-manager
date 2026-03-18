@@ -1,0 +1,53 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Note added' %}
+
+{% block content %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+            <div class="nhsuk-grid-column-two-thirds">
+
+
+                       <!-- APPLICATION EDITED -->
+                      {% set panelHTML %}
+
+                        <p>Your changes have been saved</p>
+
+                      {% endset %}
+
+                      {{ panel({
+                          titleText: pageName,
+                          html: panelHTML
+                      }) }}
+
+
+                      <h2 class="nhsuk-heading-s">What happens next?</h2>
+                      <p class="nhsuk-body">You do not need to do anything else with this application.</p>
+
+                      <div class="nhsuk-button-group">
+
+                        {{ button({
+                          html: '<span data-ak="B">Back to application</span>',
+                          href: 'case--view--cannot-edit'
+                        }) }}
+
+                      </div>
+
+
+
+                
+
+            </div>
+
+          </div>
+
+    </div>
+  </div>
+
+{% endblock %}

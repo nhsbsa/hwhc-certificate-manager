@@ -2,7 +2,6 @@
 
 {% set pageName = 'Maternity exemption processing' %}
 
-{% set dashboardRows = '' | getPatientData | getDashboardTableRows( 7 ) %}
 {% set checkingRows = '' | getPatientData | getCheckingTableRows %}
 
 {% block content %}
@@ -61,33 +60,10 @@
                         { text: 'Postcode' },
                         { text: 'Certificate type' },
                         { text: 'Status' },
-                        { text: 'Reference' },
-                        { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
+                        { text: 'Reference' }
                       ],
                 rows: checkingRows
               }) }}
-
-
-
-              
-
-
-
-            {#{ table({
-                panel: false,
-                caption: "Certificates you've processed this session",
-                firstCellIsHeader: false,
-                responsive: true,
-                tableClasses: 'patient-table',
-                head: [
-                        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' },
-                        { text: 'Postcode' },
-                        { text: 'Status' },
-                        { text: 'Reference' },
-                        { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
-                      ],
-                rows: dashboardRows
-              }) }#}
 
 
             

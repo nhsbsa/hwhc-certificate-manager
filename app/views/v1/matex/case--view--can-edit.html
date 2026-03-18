@@ -1,0 +1,203 @@
+{% extends 'layout-fullscreen.html' %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+      </h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <div class="nhsuk-grid-row">
+
+
+        <!-- TWO THIRDS -->
+         <div class="nhsuk-grid-column-two-thirds">
+
+          <div class="nhsuk-card nhsuk-card--grey">
+            <div class="nhsuk-card__content">
+
+
+              {% set fields = 'firstName,lastName,dateOfBirth,nhsNumber,address,emailAddress,telephoneNumber,childsDueOrBirthDate' %}
+              {% set rows = [
+                                [
+                                    { text: 'First name' },
+                                    { text: patient.firstName or 'Sarah' },
+                                    { html: '<a href="case--edit#imageFirstName">Change<span class="nhsuk-u-visually-hidden"> first name</span></a>' }
+                                ],
+                                [
+                                    { text: 'Last name' },
+                                    { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' },
+                                    { html: '<a href="case--edit#imageLastName">Change<span class="nhsuk-u-visually-hidden"> last name</span></a>' }
+                                ],
+                                [
+                                    { text: 'Date of birth' },
+                                    { text: '2 July 1995' },
+                                    { html: '<a href="case--edit#imageDateOfBirth-day">Change<span class="nhsuk-u-visually-hidden"> date of birth</span></a>' }
+                                ],
+                                [
+                                    { text: 'NHS number' },
+                                    { text: '1252 567 987' },
+                                    { html: '<a href="case--edit#imageNHSNumber">Change<span class="nhsuk-u-visually-hidden"> NHS number</span></a>' }
+                                ],
+                                [
+                                    { text: 'Address' },
+                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
+                                    { html: '<a href="case--edit/postcode">Change<span class="nhsuk-u-visually-hidden"> address</span></a>' }
+                                ],
+                                [
+                                    { text: 'Phone number' },
+                                    { html: '07911 123456' },
+                                    { html: '<a href="case--edit#imagePhoneNumber">Change<span class="nhsuk-u-visually-hidden"> phone number</span></a>' }
+                                ],
+                                [
+                                    { text: 'Email address' },
+                                    { html: '' },
+                                    { html: '<a href="case--edit#imageEmailAddress">Change<span class="nhsuk-u-visually-hidden"> email address</span></a>' }
+                                ],
+                                [
+                                    { text: "Child's due or birth date" },
+                                    { html: '10 January 2026' },
+                                    { html: '<a href="case--edit#imageBabyDateOfBirth">Change<span class="nhsuk-u-visually-hidden"> baby\'s birth date</span></a>' }
+                                ]
+                            ] %}
+
+
+              {% if data.role === 'backOffice' or data.role === 'backOfficeSupervisor' %}
+
+                  <!-- ADD BACK OFFICE EDITABLE FIELDS -->
+
+                  {% set fields = 'firstName,lastName,dateOfBirth,nhsNumber,address,emailAddress,telephoneNumber,childsDueOrBirthDate,patientSignature,healthcarePractitionerSignature,healthcarePractitionerDetails' %}
+
+
+                  {% set rows = ( rows.push([
+                                    { text: 'Patient signature' },
+                                    { html: 'Yes' },
+                                    { html: '<a href="case--edit#imagePatientSignature">Change<span class="nhsuk-u-visually-hidden"> whether patient signature is present</span></a>' }
+                                ]), rows ) %}
+
+                  {% set rows = ( rows.push([
+                                    { text: 'Healthcare practitioner signature' },
+                                    { html: 'Yes' },
+                                    { html: '<a href="case--edit#imagePatientSignature">Change<span class="nhsuk-u-visually-hidden"> whether healthcare practitioner signature is present</span></a>' }
+                                ]), rows ) %}
+                                
+                  {% set rows = ( rows.push([
+                                    { text: 'Healthcare practitioner details' },
+                                    { html: 'Yes' },
+                                    { html: '<a href="case--edit#imagePatientDetails">Change<span class="nhsuk-u-visually-hidden"> whether healthcare practitioner signature is present</span></a>' }
+                                ]), rows ) %}
+                  
+
+              {% endif %}
+
+
+
+
+              {{ table({
+                            panel: false,
+                            caption: 'Proposed values',
+                            classes: 'table-head-visually-hidden',
+                            captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
+                            attributes: { 'data-focus-image': fields },
+                            firstCellIsHeader: true,
+                            head: [
+                                { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
+                                { text: 'Accepted value' },
+                                { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
+                            ],
+                            rows: rows
+                            }) }}
+
+
+
+
+                            {{ textarea({
+                              name: 'notes',
+                              id: 'notes',
+                              classes: 'nhsuk-u-width-two-thirds',
+                              label: {
+                                  text: 'Note',
+                                  isPageHeading: false
+                              }
+                            }) }}
+
+
+                            <div class="nhsuk-button-group">
+
+                              {% if patient.status === 'on-hold' and patient.checking === false %}
+
+                                {{ button({
+                                    href: 'case--edit--confirmation',
+                                    html: '<span data-ak="I">Issue certificate</span>'
+                                }) }}
+
+                                {{ button({
+                                    classes: 'nhsuk-button--secondary',
+                                    href: 'case--edit--confirmation',
+                                    html: '<span data-ak="K">Save changes<span>'
+                                }) }}
+
+                              {% else %}
+
+                                 {{ button({
+                                    href: 'case--edit--confirmation',
+                                    html: '<span data-ak="K">Save changes<span>'
+                                }) }}
+
+                              {% endif %}
+
+                            </div>
+
+          
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <!-- ONE THIRD -->
+            <div class="nhsuk-grid-column-one-third sticky-column">
+
+              {% from '../macros/image.njk' import image %}
+              {{ image() }}
+
+              {% from '../macros/notes.njk' import notes %}
+              {{ notes( patient ) }}
+
+            </div>
+
+        </div>
+
+       
+
+      </div>
+    </div>
+
+  {% endblock %}

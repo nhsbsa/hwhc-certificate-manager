@@ -1,0 +1,415 @@
+{% extends 'layout-fullscreen.html' %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+      </h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+     
+
+          <div class="nhsuk-grid-row">
+
+            <!-- ONE THIRD -->
+            <div class="nhsuk-grid-column-one-half sticky-column">
+
+              {% from '../macros/image.njk' import image %}
+              {{ image() }}
+
+            </div>
+
+            <!-- TWO THIRDS -->
+            <div class="nhsuk-grid-column-one-half">
+
+               <div class="nhsuk-card nhsuk-card--grey">
+
+                <!-- HEADER LOCK-UP -->
+                  <div class="nhsuk-card__content">
+
+                    <div class="nhsuk-card__heading-container">
+                      <h2 class="nhsuk-card__heading nhsuk-heading-m">Edit application details</h2>
+                    </div>
+
+
+              <form class="horizontal-labels" method="post" novalidate>
+
+                <!-- FORM TYPE -->
+
+                {% if data.role === 'backOffice' or data.role === 'backOfficeSupervisor' %}
+
+                  {% set versions = [ 'FW81217', 'FW80104', 'FW80110', 'FW80211', 'FW80215', 'FW80406', 'FW80702', 'FW80710', 'FW80803', 'FW81207'] %}
+
+                  {{ select({
+                    label: {
+                      text: 'Form version'
+                    },
+                    id: 'formVersion',
+                    name: 'formVersion',
+                    value: 'FW81217',
+                    items: [
+                      { value: versions[0], text: versions[0] },
+                      { value: versions[1], text: versions[1] },
+                      { value: versions[2], text: versions[2] },
+                      { value: versions[3], text: versions[3] },
+                      { value: versions[4], text: versions[4] },
+                      { value: versions[5], text: versions[5] },
+                      { value: versions[6], text: versions[6] },
+                      { value: versions[7], text: versions[7] },
+                      { value: versions[8], text: versions[8] },
+                      { value: versions[9], text: versions[9] }
+                    ]
+                  }) }}
+
+                {% endif %}
+
+
+                <!-- FULL NAME -->
+                {% call fieldset({
+                  legend: {
+                    text: 'Name',
+                    classes: 'nhsuk-u-visually-hidden'
+                  }
+                }) %}
+
+                {{ input({
+                    label: {
+                      html: 'Last name'
+                    },
+                    id: 'imageLastName',
+                    name: 'imageLastName',
+                    attributes: { 'data-focus-image' : 'lastName' },
+                    classes: 'nhsuk-input--width-20',
+                    value: data.imageLastName or 'Jaaahnson'
+                  }) }}
+
+                  {{ input({
+                    label: {
+                      html: 'First name'
+                    },
+                    id: 'imageFirstName',
+                    name: 'imageFirstName',
+                    attributes: { 'data-focus-image' : 'firstName' },
+                    value: data.imageFirstName or 'Sorah',
+                    classes: 'nhsuk-input--width-20'
+                  }) }}
+
+                  
+
+                {% endcall %}
+
+
+
+                {{ dateInput({
+                  id: 'imageDateOfBirth',
+                  namePrefix: 'imageDateOfBirth',
+                  fieldset: {
+                    legend: {
+                      html: 'Date of birth'
+                    }
+                  },
+                  items: [
+                    {
+                      name: 'day',
+                      classes: 'nhsuk-input--width-2',
+                      value: data.imageDateOfBirth.day or '2',
+                      attributes: { 'data-focus-image' : 'dateOfBirth' }
+                    },
+                    {
+                      name: 'month',
+                      classes: 'nhsuk-input--width-2',
+                      value: data.imageDateOfBirth.month or '7',
+                      attributes: { 'data-focus-image' : 'dateOfBirth' }
+                    },
+                    {
+                      name: 'year',
+                      classes: 'nhsuk-input--width-4',
+                      value: data.imageDateOfBirth.year or '1995',
+                      attributes: { 'data-focus-image' : 'dateOfBirth' }
+                    }
+                  ]
+                }) }}
+
+
+                {{ input({
+                    label: {
+                      html: 'NHS number'
+                    },
+                    id: 'imageNHSNumber',
+                    name: 'imageNHSNumber',
+                    attributes: { 'data-focus-image' : 'nhsNumber' },
+                    classes: 'nhsuk-input--width-10',
+                    value: data.imageNHSNumber or '1252 567 987'
+                  }) }}
+
+
+                <hr />
+
+                <!-- ADDRESS -->
+                {% call fieldset({
+                  legend: {
+                    html: 'Address',
+                    classes: 'nhsuk-u-visually-hidden'
+                  }
+                }) %}
+
+                    {{ input({
+                      label: {
+                        html: 'House number or name'
+                      },
+                      id: 'imageBuildingNumberOrName',
+                      name: 'imageBuildingNumberOrName',
+                      attributes: { 'data-focus-image' : 'houseNumber' },
+                      classes: 'nhsuk-input--width-10',
+                      value: data.imageBuildingNumberOrName or '12'
+                    }) }}
+
+                    {{ input({
+                      label: {
+                        html: 'Address line 1'
+                      },
+                      classes: 'nhsuk-input--width-20',
+                      id: 'imageAddressLine1',
+                      name: 'imageAddressLine1',
+                      attributes: { 'data-focus-image' : 'street' },
+                      value: data.imageAddressLine1 or 'Crown Passage'
+                    }) }}
+
+                    {{ input({
+                      label: {
+                        html: 'Address line 2 (optional)'
+                      },
+                      classes: 'nhsuk-input--width-20',
+                      id: 'imageAddressLine2',
+                      name: 'imageAddressLine2',
+                      attributes: { 'data-focus-image' : 'address' },
+                      value: data.imageAddress2
+                    }) }}
+
+                    {{ input({
+                      label: {
+                        html: 'Town or city'
+                      },
+                      classes: 'nhsuk-input--width-20',
+                      id: 'imageTown',
+                      name: 'imageTown',
+                      attributes: { 'data-focus-image' : 'town' },
+                      value: data.imageTown or 'Birmingham'
+                    }) }}
+
+                    {{ input({
+                      label: {
+                        html: 'County (optional)'
+                      },
+                      classes: 'nhsuk-input--width-10',
+                      id: 'imageCounty',
+                      name: 'imageCounty',
+                      attributes: { 'data-focus-image' : 'address' },
+                      value: data.imageCounty
+                    }) }}
+
+                    {{ input({
+                      label: {
+                        html: 'Postcode'
+                      },
+                      classes: 'nhsuk-input--width-10',
+                      id: 'imagePostcode',
+                      name: 'imagePostcode',
+                      attributes: { 'data-focus-image' : 'postcode' },
+                      value: data.imagePostcode or 'B14 9QX'
+                    }) }}
+
+                  {% endcall %}
+
+                  <div class="nhsuk-button-group address-button">
+                    {{ button({
+                      html: '<span data-ak="G">Populate address fields using address lookup</span>',
+                      classes: "nhsuk-button--secondary nhsuk-button--small",
+                      href: "/v1/hrtppc/address-lookup?source=newHRT&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dtrue%23postcode"
+                    }) }}
+                  </div>
+
+                <hr />
+
+
+              <!-- CONTACT DETAILS -->
+              
+
+                {{ input({
+                      label: {
+                        html: 'Phone number (optional)'
+                      },
+                      attributes: { type: 'tel', autocomplete: 'off', 'data-focus-image' : 'telephoneNumber' },
+                      classes: 'nhsuk-input--width-10',
+                      id: 'imagePhoneNumber',
+                      name: 'imagePhoneNumber',
+                      value: data.imagePhoneNumber or '07911 123456'
+                  }) }}
+
+
+                   {{ input({
+                      label: {
+                        html: 'Email address (optional)'
+                      },
+                      attributes: { type: 'email', autocomplete: 'off' },
+                      classes: 'nhsuk-input--width-20',
+                      id: 'imageEmailAddress',
+                      name: 'imageEmailAddress',
+                      attributes: { 'data-focus-image' : 'emailAddress' },
+                      value: data.imageEmailAddress
+                  }) }}
+
+
+
+
+
+              
+
+                {{ dateInput({
+                  id: 'imageBabyDateOfBirth',
+                  namePrefix: 'imageBabyDateOfBirth',
+                  fieldset: {
+                    legend: {
+                      html: "Child's due or birth date"
+                    }
+                  },
+                  items: [
+                    {
+                      name: 'day',
+                      classes: 'nhsuk-input--width-2',
+                      value: data.imageBabyDateOfBirth.day or '',
+                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
+                    },
+                    {
+                      name: 'month',
+                      classes: 'nhsuk-input--width-2',
+                      value: data.imageBabyDateOfBirth.month or '',
+                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
+                    },
+                    {
+                      name: 'year',
+                      classes: 'nhsuk-input--width-4',
+                      value: data.imageBabyDateOfBirth.year or '',
+                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
+                    }
+                  ]
+                }) }}
+
+
+
+
+                {% if data.role === 'backOffice' or data.role === 'backOfficeSupervisor' %}
+
+                  <hr />
+
+
+                  <!-- SIGNATURES -->
+                  {{ radios({
+                    idPrefix: 'imagePatientSignature',
+                    name: 'imagePatientSignature',
+                    value: data.imagePatientSignature or 'yes',
+                    attributes: { 'data-focus-image' : 'patientSignature' },
+                    classes: 'nhsuk-radios--inline',
+                    fieldset: {
+                      legend: {
+                        text: 'Is the patient signature present?',
+                        isPageHeading: false
+                      }
+                    },
+                    items: [
+                      { value: 'yes', text: 'Yes' },
+                      { value: 'no', text: 'No' }
+                    ]
+                  }) }}
+
+
+                  {{ radios({
+                    idPrefix: 'imageHealthcarePractitionerSignature',
+                    name: 'imageHealthcarePractitionerSignature',
+                    value: data.imageHealthcarePractitionerSignature or 'yes',
+                    attributes: { 'data-focus-image' : 'healthcarePractitionerSignature' },
+                    classes: 'nhsuk-radios--inline',
+                    fieldset: {
+                      legend: {
+                        text: 'Is the healthcare practitioner signature present?',
+                        isPageHeading: false
+                      }
+                    },
+                    items: [
+                      { value: 'yes', text: 'Yes' },
+                      { value: 'no', text: 'No' }
+                    ]
+                  }) }}
+
+                  {{ radios({
+                    idPrefix: 'imageHealthcarePractitionerDetails',
+                    name: 'imageHealthcarePractitionerDetails',
+                    value: data.imageHealthcarePractitionerDetails or 'yes',
+                    attributes: { 'data-focus-image' : 'healthcarePractitionerDetails' },
+                    classes: 'nhsuk-radios--inline',
+                    fieldset: {
+                      legend: {
+                        text: 'Are the healthcare practitioner\'s details present?',
+                        isPageHeading: false
+                      }
+                    },
+                    items: [
+                      { value: 'yes', text: 'Yes' },
+                      { value: 'no', text: 'No' }
+                    ]
+                  }) }}
+
+                {% endif %}
+
+
+
+                <div class="nhsuk-button-group">
+
+                  {{ button({
+                    html : '<span data-ak="I">Continue</span>'
+                  }) }}
+
+                </div>
+
+              </form>
+
+                
+
+
+              </div>
+              </div>
+
+
+
+            </div>
+
+          </div>
+
+     
+
+    </div>
+  </div>
+
+{% endblock %}

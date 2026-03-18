@@ -1,6 +1,10 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'Application' %}
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
 
 {% block beforeContent %}
   {{ backLink({
@@ -13,32 +17,14 @@
 
   {% if data.patientID %}
     {% set patient = data.patientID | getPatientData %}
-  {% else %}
-    {% set patient = {
-      certificateType: 'matex',
-      channel: 'Paper',
-      status: 'rejected',
-      checking: false,
-      processor: 'JASMI',
-      processorName: 'James Smith'
-    } %}
   {% endif %}
-
-  {% set patient = {
-      certificateType: 'matex',
-      channel: 'Paper',
-      status: 'rejected',
-      checking: false,
-      processor: 'JASMI',
-      processorName: 'James Smith'
-    } %}
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
-        {{ 'rejected' | getStatusTextOrTag( true ) | safe }}
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
       </h1>
 
     </div>
@@ -48,100 +34,92 @@
     <div class="nhsuk-grid-column-full">
 
           <div class="nhsuk-grid-row">
-         
 
+            
             <!-- TWO THIRDS -->
             <div class="nhsuk-grid-column-two-thirds">
 
                <div class="nhsuk-card nhsuk-card--grey">
                     <div class="nhsuk-card__content">
 
-
-                    {% if data.role === 'callCentre' %}
-
-                        {{ warningCallout({
-                            heading: 'This application has been rejected',
-                            text: 'Let the patient know that their certificate will not be issued.'
-                          }) }}
-
-                        {% endif %}
-
-
-
-
                         {{ table({
                             panel: false,
-                            caption: 'Rejected values',
-                            classes: 'table-head-visually-hidden',
+                            caption: 'Processing comparison',
                             captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
                             firstCellIsHeader: true,
                             head: [
                                 { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
+                                { text: 'Shown' },
+                                { text: 'Proposed value' },
                                 { text: 'Accepted value' }
                             ],
                             rows: [
                                 [
                                     { text: 'First name' },
-                                    { text: ( patient.firstName | changeOneLetter ) or 'Sorah' }
+                                    { html: 'Yes' },
+                                    { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
+                                    { text: patient.firstName or 'Sarah' }
                                 ],
                                 [
                                     { text: 'Last name' },
-                                    { text: '' }
+                                    { html: 'Yes' },
+                                    { text: '' },
+                                    { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' }
                                 ],
                                 [
                                     { text: 'Date of birth' },
+                                    { html: 'No' },
+                                    { text: '2 July 1995' },
                                     { text: '2 July 1995' }
-                                ],
+                                  ],
                                 [
                                     { text: 'NHS number' },
+                                    { html: 'No' },
+                                    { text: '1252 567 987' },
                                     { text: '1252 567 987' }
                                 ],
                                 [
                                     { text: 'Address' },
+                                    { html: 'No' },
+                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
                                 ],
                                 [
                                     { text: 'Phone number' },
+                                    { html: 'No' },
+                                    { html: '07911 123456' },
                                     { html: '07911 123456' }
                                 ],
                                 [
                                     { text: 'Email address' },
+                                    { html: 'Empty' },
+                                    { html: '' },
                                     { html: '' }
                                 ],
                                 [
                                     { text: "Child's due or birth date" },
+                                    { html: 'No' },
+                                    { html: '10 January 2026' },
                                     { html: '10 January 2026' }
                                 ],
                                 [
                                     { text: 'Patient signature' },
+                                    { html: 'No' },
+                                    { html: 'Yes' },
                                     { html: 'Yes' }
                                 ],
                                 [
                                     { text: 'Healthcare practitioner signature' },
+                                    { html: 'No' },
+                                    { html: 'Yes' },
                                     { html: 'Yes' }
                                 ]
                             ]
                             }) }}
 
 
-                            {% if data.role === 'callCentre' %}
-
-                                  {{ textarea({
-                                        name: 'notes',
-                                        id: 'notes',
-                                        classes: 'nhsuk-u-width-two-thirds',
-                                        label: {
-                                            text: 'Note',
-                                            isPageHeading: false
-                                        }
-                                  }) }}
-
-                                  {{ button({
-                                    href: '#',
-                                    text: 'Add note'
-                                }) }}
-
-                            {% endif %}
+                            
+                            
 
                     </div>
                 </div>
@@ -151,19 +129,15 @@
 
 
             <!-- ONE THIRD -->
-            <div class="nhsuk-grid-column-one-third">
+            <div class="nhsuk-grid-column-one-third sticky-column">
 
               {% from '../macros/image.njk' import image %}
-              {{ image( 'expandable-image--half' ) }}
+              {{ image() }}
 
               {% from '../macros/notes.njk' import notes %}
               {{ notes( patient ) }}
 
             </div>
-
-
-
-
 
           </div>
 
