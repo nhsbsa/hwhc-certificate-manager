@@ -112,6 +112,33 @@
                                     { html: 'Yes' },
                                     { html: '<a href="case--edit#imagePatientDetails">Change<span class="nhsuk-u-visually-hidden"> whether healthcare practitioner signature is present</span></a>' }
                                 ]), rows ) %}
+
+              {% else %}
+
+
+
+                  <!-- NON EDITABLE -->
+                  {% set fields = 'firstName,lastName,dateOfBirth,nhsNumber,address,emailAddress,telephoneNumber,childsDueOrBirthDate,patientSignature,healthcarePractitionerSignature,healthcarePractitionerDetails' %}
+
+
+                  {% set rows = ( rows.push([
+                                    { text: 'Patient signature' },
+                                    { html: 'Yes' },
+                                    { html: '' }
+                                ]), rows ) %}
+
+                  {% set rows = ( rows.push([
+                                    { text: 'Healthcare practitioner signature' },
+                                    { html: 'Yes' },
+                                    { html: '' }
+                                ]), rows ) %}
+                                
+                  {% set rows = ( rows.push([
+                                    { text: 'Healthcare practitioner details' },
+                                    { html: 'Yes' },
+                                    { html: '' }
+                                ]), rows ) %}
+
                   
 
               {% endif %}

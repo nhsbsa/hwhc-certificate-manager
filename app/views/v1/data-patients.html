@@ -405,7 +405,7 @@
 
                   case 'matex':
 
-                    if( ['processing','on-hold','accepted','checking'].indexOf(certificateStatus) > -1 ){
+                    if( ['processing','on-hold','accepted','rejected'].indexOf(certificateStatus) > -1 ){
                       channel = 'Paper';
                     } else {
                       const rand = Math.round(Math.random()*100);
