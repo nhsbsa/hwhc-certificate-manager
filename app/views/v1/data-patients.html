@@ -458,7 +458,7 @@
                   
                   case 'matex':
 
-                    loop = (12 + 3) - 1; // 12 digits and 3 spaces
+                    loop = (12 + 3)-1; // 12 digits and 3 spaces
                     spaces = [2,6,10];
 
                     for( let i = 0; i < loop; i++ ){  
@@ -487,11 +487,6 @@
                 }
 
                 let ref = chars.join('');
-
-                // Override for processing status
-                if( certificateType === 'matex' && certificateStatus === 'processing' ){
-                  ref = _generateImageReference();
-                }
               
                return ref;
 
@@ -504,7 +499,7 @@
 
                 // Format 000 000 0000
                 const digits = [];
-                const loop = (10 + 2) - 1; // 10 digits and 2 spaces
+                const loop = (10 + 2); // 10 digits and 2 spaces
 
                 for( let i = 0; i < loop; i++ ){
                   
@@ -568,6 +563,40 @@
               };
 
 
+              //
+              // GENERATE DATE OF BIRTH FUNCTION
+              //
+              function _generateDateOfBirth( certificateType ){
+
+                const dateOfBirth = new Date();
+                dateOfBirth.setDate( Math.round(Math.random()*27 )+1 );
+                dateOfBirth.setMonth( Math.round(Math.random()*12) );
+
+                if( certificateType === 'matex' ){
+                  dateOfBirth.setYear( dateOfBirth.getFullYear()-18-( Math.round( Math.random()*20 ) ) );
+                } else {
+                  dateOfBirth.setYear( dateOfBirth.getFullYear()-30-( Math.round( Math.random()*30 ) ) );
+                }
+                
+                dateOfBirth.setHours(0, 0, 0, 0);
+
+                const day = dateOfBirth.getDate();
+                const month = dateOfBirth.toLocaleString('en-GB', { month: 'long' });
+                const year = dateOfBirth.getFullYear();
+
+
+                const obj = {
+                  display: day + ' ' + month + ' ' + year,
+                  day: day,
+                  month: dateOfBirth.getMonth(),
+                  year: year
+                }
+
+                return obj;
+
+              };
+
+
 
 
 
@@ -590,7 +619,8 @@
                 const patients = [];
 
                 const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',');
-                const statuses = ['processing','on-hold','accepted','active','expired'];
+                const statusesMatex = ['processing','on-hold','accepted','rejected','active','deleted','expired'];
+                const statusesHRTPPC = ['active','deleted','expired'];
                 
                 const processors = [];
                 /* Now generated from session data
@@ -626,28 +656,42 @@
                     obj.processorName = processor.name;
                     
                     obj.certificateType = certificateTypes[Math.round(Math.random())*(certificateTypes.length-1)];
-                    obj.status = ( obj.certificateType === 'hrtppc' ) ? 'active' : statuses[Math.round(Math.random()*(statuses.length-1))];
+                    obj.status = ( obj.certificateType === 'hrtppc' ) ? statusesHRTPPC[Math.round(Math.random()*(statusesHRTPPC.length-1))] : statusesMatex[Math.round(Math.random()*(statusesMatex.length-1))];
                     
+                    obj.dateOfBirth = _generateDateOfBirth();
 
                     obj.checking = false;
 
                     if( obj.processor === 'JASMI' ){
+
+                      // Checking all of this guy's applications...
                       obj.checking = true;
                       obj.certificateType = 'matex';
-                      obj.status = ( Math.round(Math.random()) === 1 ) ? 'on-hold' : 'accepted';
+
+                      
+                      const checkingStatuses = ['on-hold','accepted','rejected'];
+                      obj.status = checkingStatuses[Math.round(Math.random()*(checkingStatuses.length-1))];
+
                     } else {
-                      if( obj.certificateType === 'matex' && ['accepted','on-hold'].indexOf( obj.status ) > -1 && !processors[obj.processor] ){
+
+                      // Only checking one of these...
+                      if( obj.certificateType === 'matex' && ['accepted','on-hold','rejected'].indexOf( obj.status ) > -1 && !processors[obj.processor] ){
                         console.log('FOUND ONE ' + obj.status + ' FOR '+ obj.processor);
 
                         obj.checking = true;
                         processors[obj.processor] = true;
                       }
+
                     }
                     
                     
                     obj.certificateReference = _generateCertificateReference( obj.certificateType, obj.status );
-                    obj.channel = _generateChannel( obj.certificateType, obj.status );
                     
+                    obj.channel = _generateChannel( obj.certificateType, obj.status );
+                    if( obj.certificateType === 'matex' && obj.channel === 'Paper' ){
+                      obj.imageReference = _generateImageReference();
+                    }
+
 
                     if( obj.status === 'matex' ){
                       obj.dueDate = _generateStartDate();
@@ -658,6 +702,7 @@
                     }
                     
                     obj.address = ( addresses.length > i ) ? addresses[i] : addresses[Math.round(Math.random()*(addresses.length-1))];
+                    obj.dateOfBirth = _generateDateOfBirth( obj.certificateType );
 
 
                     patients.push(obj);
