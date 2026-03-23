@@ -50,7 +50,7 @@
                 {% else %}
 
                 <!-- ON HOLD -->
-                {% if patient.status === 'on-hold' or patient.status === 'active' or patient.status === 'expired' or patient.status === 'accepted' %}
+                {% if patient.status === 'on-hold' or patient.status === 'active' or patient.status === 'expired' or patient.status === 'accepted' or patient.status === 'deleted' %}
 
                         {% set num = 2 | getRandomNumber %}
                             
@@ -157,7 +157,7 @@
                 {% endif %}
 
                 <!-- ACTIVE -->
-                {% if patient.status === 'active' or patient.status === 'expired' %}
+                {% if patient.status === 'active' or patient.status === 'expired' or patient.status === 'deleted' %}
 
                     {% set items = (items.push({
                         headingText: 'Active',
@@ -171,6 +171,14 @@
                             headingText: 'Expired',
                             isPastItem: true,
                             html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Certificate has expired</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+today+', 12:45 pm</span>'
+                        }), items ) %}
+
+                    {% else %}
+
+                        {% set items = (items.push({
+                            headingText: 'Deleted',
+                            isPastItem: true,
+                            html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Certificate has been deleted</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+today+', 12:45 pm</span>'
                         }), items ) %}
 
                     {% endif %}

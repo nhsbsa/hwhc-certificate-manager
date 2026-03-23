@@ -32,10 +32,17 @@
 
                       <div class="nhsuk-button-group">
 
+                        {% set url = 'case--view--cannot-edit?backTo=' %}
+                        {% if data.backTo === 'canEdit' %}
+                          {% set url = 'case--view--can-edit?backTo=' %}
+                        {% endif %}
+
                         {{ button({
                           html: '<span data-ak="B">Back to application</span>',
-                          href: 'case--view--cannot-edit'
+                          href: url
                         }) }}
+
+
 
                       </div>
 

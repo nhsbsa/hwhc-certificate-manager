@@ -46,6 +46,7 @@
                             panel: false,
                             caption: 'Processing comparison',
                             captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
+                            attributes: { 'data-focus-image': 'firstName,lastName,dateOfBirth,nhsNumber,address,emailAddress,telephoneNumber,childsDueOrBirthDate,patientSignature,healthcarePractitionerSignature,healthcarePractitionerDetails' },
                             firstCellIsHeader: true,
                             head: [
                                 { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
@@ -110,6 +111,12 @@
                                 ],
                                 [
                                     { text: 'Healthcare practitioner signature' },
+                                    { html: 'No' },
+                                    { html: 'Yes' },
+                                    { html: 'Yes' }
+                                ],
+                                [
+                                    { text: 'Healthcare practitioner details' },
                                     { html: 'No' },
                                     { html: 'Yes' },
                                     { html: 'Yes' }

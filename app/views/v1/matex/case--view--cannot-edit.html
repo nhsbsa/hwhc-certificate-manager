@@ -121,7 +121,7 @@
                                   html: '<span data-ak="K">Add note<span>'
                               }) }}
 
-                              {% if patient.status === 'rejected' and patient.checking !== true %}
+                              {% if patient.status === 'rejected' and patient.checking !== true and data.role !== 'qualityControl' %}
 
                                 {{ button({
                                     classes: 'nhsuk-button--secondary',

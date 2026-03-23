@@ -619,7 +619,7 @@
                 const patients = [];
 
                 const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',');
-                const statusesMatex = ['processing','on-hold','accepted','rejected','active','deleted','expired'];
+                const statusesMatex = ['processing','on-hold','rejected','active','deleted','expired'];
                 const statusesHRTPPC = ['active','deleted','expired'];
                 
                 const processors = [];
@@ -662,10 +662,15 @@
 
                     obj.checking = false;
 
+                    //
+                    // This bit of code overwrites the random values for JASMI (the trainee)
+                    // The part in the else statement selects just one record for a quality check...
+                    //
                     if( obj.processor === 'JASMI' ){
 
                       // Checking all of this guy's applications...
                       obj.checking = true;
+                      obj.checkType = 'supervisor';
                       obj.certificateType = 'matex';
 
                       
@@ -679,6 +684,7 @@
                         console.log('FOUND ONE ' + obj.status + ' FOR '+ obj.processor);
 
                         obj.checking = true;
+                        obj.checkType = 'quality';
                         processors[obj.processor] = true;
                       }
 

@@ -1020,6 +1020,14 @@ router.post(/case--edit/, function( req, res ){
   return res.redirect( destination );
 });
 
+//
+// CASE EDIT SCREEN
+//
+router.post(/comparison--edit/, function( req, res ){
+  const destination = 'comparison--correction';
+  return res.redirect( destination );
+});
+
 
 
 module.exports = router;

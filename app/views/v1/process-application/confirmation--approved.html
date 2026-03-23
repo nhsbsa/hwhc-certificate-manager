@@ -51,16 +51,40 @@
 
       <div class="nhsuk-button-group">
 
-        {{ button({
-            text : 'Process next application',
-            href: 'experimental--horizontal-labels'
+
+        {% set dashboardURL = '../dashboard?backTo=' %}
+
+        {% if data.role === 'qualityControl' %}
+          {% set dashboardURL = '../dashboard--quality-control?backTo=' %}
+        {% elif data.role === 'backOfficeSupervisor' %}
+          {% set dashboardURL = '../dashboard--supervisor?backTo=' %}
+        {% endif %}
+
+        {% if data.backTo === 'checking' %}
+
+          {{ button({
+            text : 'Back to dashboard',
+            href: dashboardURL
           }) }}
 
-        {{ button({
+        {% else %}
+
+          {{ button({
+            text : 'Process next application',
+            href: 'experimental--horizontal-labels?backTo='
+          }) }}
+
+          {{ button({
             text : 'Finish processing',
-            href: '../dashboard',
+            href: dashboardURL,
             classes: 'nhsuk-button--secondary'
           }) }}
+
+        {% endif %}
+
+
+
+       
 
       </div>
 

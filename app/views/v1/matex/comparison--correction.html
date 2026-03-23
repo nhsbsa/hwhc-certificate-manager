@@ -42,6 +42,7 @@
                             panel: false,
                             caption: 'Processing comparison',
                             captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
+                            attributes: { 'data-focus-image': 'firstName,lastName,dateOfBirth,nhsNumber,address,emailAddress,telephoneNumber,childsDueOrBirthDate,patientSignature,healthcarePractitionerSignature,healthcarePractitionerDetails' },
                             tableClasses: 'has-error',
                             firstCellIsHeader: true,
                             head: [
@@ -57,77 +58,77 @@
                                     { html: 'Yes' },
                                     { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
                                     { text: patient.firstName or 'Sarah' },
-                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imageFirstName">Change<span class="nhsuk-u-visually-hidden"> first name</span></a>' }
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageFirstName">Change<span class="nhsuk-u-visually-hidden"> first name</span></a>' }
                                 ],
                                 [
                                     { text: 'Last name', classes: 'error' },
                                     { html: 'Yes' },
                                     { text: '' },
                                     { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' },
-                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imageLastName">Change<span class="nhsuk-u-visually-hidden"> last name</span></a>' }
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageLastName">Change<span class="nhsuk-u-visually-hidden"> last name</span></a>' }
                                 ],
                                 [
                                     { text: 'Date of birth' },
                                     { html: 'No' },
                                     { text: '2 July 1995' },
                                     { text: '2 July 1995' },
-                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imageDateOfBirth-day">Change<span class="nhsuk-u-visually-hidden"> date of birth</span></a>' }
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageDateOfBirth-day">Change<span class="nhsuk-u-visually-hidden"> date of birth</span></a>' }
                                 ],
                                 [
                                     { text: 'NHS number' },
                                     { html: 'No' },
                                     { text: '1252 567 987' },
                                     { text: '1252 567 987' },
-                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imageNHSNumber">Change<span class="nhsuk-u-visually-hidden"> NHS number</span></a>' }
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageNHSNumber">Change<span class="nhsuk-u-visually-hidden"> NHS number</span></a>' }
                                 ],
                                 [
                                     { text: 'Address' },
                                     { html: 'No' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
-                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imagePostcode">Change<span class="nhsuk-u-visually-hidden"> address</span></a>' }
+                                    { html: '<a href="comparison--edit?showAllFields=true#imagePostcode">Change<span class="nhsuk-u-visually-hidden"> address</span></a>' }
                                 ],
                                 [
                                     { text: 'Phone number' },
                                     { html: 'No' },
                                     { html: '07911 123456' },
                                     { html: '07911 123456' },
-                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imagePhoneNumber">Change<span class="nhsuk-u-visually-hidden"> phone number</span></a>' }
+                                    { html: '<a href="comparison--edit?showAllFields=true#imagePhoneNumber">Change<span class="nhsuk-u-visually-hidden"> phone number</span></a>' }
                                 ],
                                 [
                                     { text: 'Email address' },
                                     { html: 'Empty' },
                                     { html: '' },
                                     { html: '' },
-                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imageEmailAddress">Change<span class="nhsuk-u-visually-hidden"> email address</span></a>' }
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageEmailAddress">Change<span class="nhsuk-u-visually-hidden"> email address</span></a>' }
                                 ],
                                 [
                                     { text: "Child's due or birth date" },
                                     { html: 'No' },
                                     { html: '10 January 2026' },
                                     { html: '10 January 2026' },
-                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imageBabyDateOfBirth">Change<span class="nhsuk-u-visually-hidden"> baby\'s birth date</span></a>' }
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageBabyDateOfBirth">Change<span class="nhsuk-u-visually-hidden"> baby\'s birth date</span></a>' }
                                 ],
                                 [
                                     { text: 'Patient signature' },
                                     { html: 'No' },
                                     { html: 'Yes' },
                                     { html: 'Yes' },
-                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imagePatientSignature">Change<span class="nhsuk-u-visually-hidden"> whether patient signature is present</span></a>' }
+                                    { html: '<a href="comparison--edit?showAllFields=true#imagePatientSignature">Change<span class="nhsuk-u-visually-hidden"> whether patient signature is present</span></a>' }
                                 ],
                                 [
                                     { text: 'Healthcare practitioner signature' },
                                     { html: 'No' },
                                     { html: 'Yes' },
                                     { html: 'Yes' },
-                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imageHealthcarePractitionerSignature">Change<span class="nhsuk-u-visually-hidden"> whether healthcare practitioner signature is present</span></a>' }
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageHealthcarePractitionerSignature">Change<span class="nhsuk-u-visually-hidden"> whether healthcare practitioner signature is present</span></a>' }
                                 ],
                                 [
                                     { text: 'Healthcare practitioner details' },
                                     { html: 'No' },
                                     { html: 'Yes' },
                                     { html: 'Yes' },
-                                    { html: '<a href="../process-application/experimental--horizontal-labels?showAllFields=true#imageHealthcarePractitionerDetails">Change<span class="nhsuk-u-visually-hidden"> whether the healthcare practitioner\'s details are present</span></a>' }
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageHealthcarePractitionerDetails">Change<span class="nhsuk-u-visually-hidden"> whether the healthcare practitioner\'s details are present</span></a>' }
                                 ]
                             ]
                             }) }}
@@ -147,12 +148,12 @@
 
                               {{ button({
                                 html: '<span data-ak="I">Approve application</span>',
-                                href: '../process-application/confirmation--approved'
+                                href: '../process-application/confirmation--approved?backTo=checking'
                               }) }}
 
                               {{ button({
                                 html: '<span data-ak="K">Cannot process application</span>',
-                                href: '../process-application/cannot-process-application--horizontal-labels',
+                                href: '../process-application/cannot-process-application--horizontal-labels?backTo=checking',
                                 classes: 'nhsuk-button--secondary'
                               }) }}
 

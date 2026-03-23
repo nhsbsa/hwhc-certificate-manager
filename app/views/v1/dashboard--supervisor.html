@@ -1,6 +1,8 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'MATEX processing' %}
+{% set pageName = 'Maternity exemption processing' %}
+
+{% set checkingRows = '' | getPatientData | getCheckingTableRows %}
 
 {% block content %}
 
@@ -40,6 +42,25 @@
               }) }}
 
             </div>
+
+
+
+
+            {{ table({
+                panel: false,
+                caption: "Certificates you need to change",
+                firstCellIsHeader: false,
+                responsive: true,
+                tableClasses: 'patient-table',
+                head: [
+                        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' },
+                        { text: 'Postcode' },
+                        { text: 'Certificate type' },
+                        { text: 'Status' },
+                        { text: 'Reference' }
+                      ],
+                rows: checkingRows
+              }) }}
   
 
 
