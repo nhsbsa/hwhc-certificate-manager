@@ -736,6 +736,12 @@
                     obj.certificateType = certificateTypes[Math.round(Math.random())*(certificateTypes.length-1)];
                     obj.status = ( obj.certificateType === 'hrtppc' ) ? statusesHRTPPC[Math.round(Math.random()*(statusesHRTPPC.length-1))] : statusesMatex[Math.round(Math.random()*(statusesMatex.length-1))];
                     
+                    // Generate more active results for Matex
+                    if( obj.certificateType === 'matex' && obj.status !== 'active' ){
+                      obj.status = ( Math.round(Math.random()*2) === 2 ) ? 'active' : obj.status;
+                    }
+
+
                     obj.dateOfBirth = _generateDateOfBirth();
 
                     obj.checking = false;
