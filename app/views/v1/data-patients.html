@@ -358,6 +358,32 @@
               ];
 
               //
+              // PHONE NUMBERS
+              //
+              const phoneNumbers = [
+                "07031 284 591","07049 823 716","07062 395 184","07071 528 439","07083 916 275",
+                "07092 475 318","07015 648 293","07028 751 964","07036 592 817","07047 813 256",
+                "07051 294 783","07063 418 592","07075 928 341","07084 372 659","07091 837 426",
+                "07014 385 927","07027 639 485","07035 821 749","07048 952 613","07052 719 384",
+                "07064 837 295","07073 491 826","07085 623 941","07096 718 235","07018 273 945",
+                "07029 384 756","07031 572 948","07042 619 583","07053 847 261","07064 928 137",
+                "07075 283 916","07086 419 375","07097 531 284","07018 642 597","07029 753 861",
+                "07031 864 729","07042 987 513","07054 129 876","07065 238 741","07076 391 825",
+                "07087 512 936","07098 631 427","07019 742 835","07020 853 749","07031 984 625",
+                "07042 195 783","07053 268 917","07064 371 528","07075 482 936","07086 593 147",
+                "07097 614 258","07018 725 369","07029 836 471","07030 947 582","07042 058 693",
+                "07053 169 784","07064 271 895","07075 382 916","07086 493 127","07097 514 238",
+                "07018 625 349","07029 736 458","07030 847 569","07041 958 672","07052 069 783",
+                "07063 171 894","07074 282 915","07085 393 126","07096 414 237","07017 525 348",
+                "07028 636 459","07039 747 561","07040 858 673","07051 969 782","07062 071 893",
+                "07073 182 914","07084 293 125","07095 314 236","07016 425 347","07027 536 458",
+                "07038 647 569","07049 758 671","07050 869 782","07061 971 893","07072 082 914",
+                "07083 193 125","07094 214 236","07015 325 347","07026 436 458","07037 547 569",
+                "07048 658 671","07059 769 782","07060 871 893","07071 982 914","07082 093 125",
+                "07093 114 236","07014 225 347","07025 336 458","07036 447 569","07047 558 671"
+              ];
+
+              //
               // INIT FUNCTION
               //
               function _init(){
@@ -598,6 +624,58 @@
 
 
 
+              //
+              // GENERATE EMAIL ADDRESS FUNCTION
+              //
+              function _generateEmailAddress( obj ){
+
+                let emailAddress;
+                let numbers;
+
+                const providers = ['outlook.com','googlemail.com','gmail.com','hotmail.com','blueyonder.co.uk','aol.com'];
+                const provider = providers[Math.round(Math.random()*(providers.length-1))];
+
+                let check = true;
+                if( obj.channel === 'Paper' && ( Math.round(Math.random()*2) === 2 ) ){
+                  check = false;
+                }
+
+                if( check ){
+
+                  switch( Math.round( Math.random()*3 ) ) {
+
+                    case 0: 
+                      // lattimore943@outlook.com
+                      emailAddress = obj.lastName + ( Math.floor(Math.random() * 900) + 100 ) + '@' + provider;
+                      break;
+                    
+                    case 1:
+                      // james.lattimore@gmail.com
+                      numbers = ( Math.round(Math.random()*3) === 0 ) ? Math.floor(Math.random() * 900) + 100 + '' : '';
+                      emailAddress = obj.firstName.toLowerCase() + '.' + obj.lastName.toLowerCase() + numbers + '@' + provider;
+                      break;
+
+                    case 2:
+                      // j.lattimore@googlemail.com
+                      numbers = ( Math.round(Math.random()*3) === 0 ) ? Math.floor(Math.random() * 900) + 100 + '' : '';
+                      emailAddress = obj.firstName.charAt(0).toLowerCase() + '.' + obj.lastName.toLowerCase() + numbers + '@' + provider;
+                      break;
+                    
+                    case 3:
+                      // lattimore.j@googlemail.com
+                      emailAddress = obj.lastName.toLowerCase() + '.' + obj.firstName.charAt(0).toLowerCase() + '@' + provider;
+                      break;
+
+                  }
+
+                }
+
+                return emailAddress;
+
+              }
+
+
+
 
 
 
@@ -710,6 +788,8 @@
                     obj.address = ( addresses.length > i ) ? addresses[i] : addresses[Math.round(Math.random()*(addresses.length-1))];
                     obj.dateOfBirth = _generateDateOfBirth( obj.certificateType );
 
+                    obj.phoneNumber = ( phoneNumbers.length > i ) ? phoneNumbers[i] : phoneNumbers[Math.round(Math.random()*(phoneNumbers.length-1))];
+                    obj.emailAddress = _generateEmailAddress( obj );
 
                     patients.push(obj);
 

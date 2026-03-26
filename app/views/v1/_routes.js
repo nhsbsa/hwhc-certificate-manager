@@ -55,7 +55,10 @@ router.post(/process-application\/experimental--single/, function (req, res) {
 });
 
 router.post(/process-application\/experimental--horizontal-labels/, function (req, res) {
-    const destination = 'review-application--horizontal-labels';
+    let destination = 'review-application--horizontal-labels';
+    if( req.session.data.backTo === 'onhold' ){
+      destination = 'review-application--horizontal-labels--on-hold?backTo=';
+    }
     res.redirect( destination );
 });
 

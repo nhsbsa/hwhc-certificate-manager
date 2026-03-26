@@ -1,0 +1,246 @@
+{% extends 'layout-fullscreen.html' %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
+
+{% block beforeContent %}
+ {{ backLink({
+    href: 'experimental--horizontal-labels',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+      </h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+          <div class="nhsuk-grid-row">
+
+           
+
+            <!-- TWO THIRDS -->
+            <div class="nhsuk-grid-column-two-thirds">
+
+               <div class="nhsuk-card nhsuk-card--grey">
+              <div class="nhsuk-card__content">
+
+              <h2 class="nhsuk-heading-m">Review application</h2>
+
+              <h3 class="nhsuk-heading-s">Personal details</h3>
+
+              {% set firstName = data.imageFirstName or patient.firstName %}
+              {% set lastName = data.imageLastName or patient.lastName %}
+              {% set nhsNumber = data.imageNHSNumber or patient.nhsNumber %}
+              {% set dateOfBirth = data.imageDateOfBirth or patient.dateOfBirth %}
+
+
+              {% set houseNumber = data.imageBuildingNumberOrName or patient.address.buildingNumber %}
+              {% set addressLine1 = data.imageAddressLine1 or patient.address.streetName %}
+              {% set addressLine2 = data.imageAddressLine2 or patient.address.locality %}
+              {% set town = data.imageTown or patient.address.postTown %}
+              {% set county = data.imageCounty or patient.address.county %}
+              {% set postcode = data.imagePostcode or patient.address.postcode %}
+
+              {% set emailAddress = data.imageEmailAddress or patient.emailAddress %}
+              {% set phoneNumber = data.imagePhoneNumber or patient.phoneNumber %}
+
+              
+
+
+              {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: 'Name' },
+                      value: { text: ( firstName | processFullName( lastName ) ) },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?backTo=onhold&showAllFields=true#imageLastName', text: 'Change', visuallyHiddenText: 'name', attributes: { 'data-focus-image': 'lastName'  } }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Date of birth' },
+                      value: { text: ( dateOfBirth | processDate ) },
+                      actions: {
+                         items: [
+                          { href: 'experimental--horizontal-labels?backTo=onhold&showAllFields=true#imageDateOfBirth', text: 'Change', visuallyHiddenText: 'date of birth', attributes: { 'data-focus-image': 'dateOfBirth'  } }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'NHS number' },
+                      value: { text: nhsNumber },
+                      actions: {
+                         items: [
+                          { href: 'experimental--horizontal-labels?backTo=onhold&showAllFields=true#imageNHSNumber', text: 'Change', visuallyHiddenText: 'NHS number', attributes: { 'data-focus-image': 'nhsNumber' } }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Address' },
+                      value: { html: houseNumber | processAddress( addressLine1, addressLine2, town, county, postcode ) },
+                      actions: {
+                         items: [
+                          { href: 'experimental--horizontal-labels?backTo=onhold&showAllFields=true#postcode', text: 'Change', visuallyHiddenText: 'address', attributes: { 'data-focus-image': 'address' } }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+                <h3 class="nhsuk-heading-s">Contact details</h3>
+
+                {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: 'Phone number' },
+                      value: { text: phoneNumber },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?backTo=onhold&showAllFields=true#imagePhoneNumber', text: 'Change', visuallyHiddenText: 'phone number', attributes: { 'data-focus-image': 'telephoneNumber' } }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Email address' },
+                      value: { text: emailAddress },
+                      actions: {
+                         items: [
+                          { href: 'experimental--horizontal-labels?backTo=onhold&showAllFields=true#imageEmailAddress', text: 'Change', visuallyHiddenText: 'email address', attributes: { 'data-focus-image': 'emailAddress' } }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+
+                <h3 class="nhsuk-heading-s">Child's details</h3>
+
+                {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: "Child's due or birth date" },
+                      value: { text: '10 August 2026' },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?backTo=onhold&showAllFields=true#imageBabyDateOfBirth', text: 'Change', visuallyHiddenText: "Child's due or birth date", attributes: { 'data-focus-image': 'childsDueOrBirthDate' } }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+
+                <h3 class="nhsuk-heading-s">Signatures</h3>
+
+                {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: 'Patient signature' },
+                      value: { text: ( data.imagePatientSignature | capitalize ) or 'Yes' },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?backTo=onhold&showAllFields=true#imagePatientSignature', text: 'Change', visuallyHiddenText: 'whether patient signature is present', attributes: { 'data-focus-image': 'patientSignature' } }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Healthcare practitioner signature' },
+                      value: { text: ( data.imageHealthcarePractitionerSignature | capitalize ) or 'Yes' },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?backTo=onhold&showAllFields=true#imageHealthcarePractitionerSignature', text: 'Change', visuallyHiddenText: 'whether healthcare practitioner signature is present', attributes: { 'data-focus-image': 'healthcarePractitionerSignature' } }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Healthcare practitioner details' },
+                      value: { text: ( data.imageHealthcarePractitionerDetails | capitalize ) or 'No' },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?backTo=onhold&showAllFields=true#imageHealthcarePractitionerDetails', text: 'Change', visuallyHiddenText: 'whether healthcare practitioner details are present', attributes: { 'data-focus-image': 'healthcarePractitionerDetails' } }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+                
+
+
+
+                {% if data.showRecommendation === 'true' %}
+ 
+                  {{ warningCallout({
+                    heading: 'Recommendation',
+                    html: '<p class="nhsuk-body">This application is missing the following information:</p>
+                    <ul class="nhsuk-list nhsuk-list--bullet">
+                      <li>Healthcare practitoner\'s signature</li>
+                      <li>Child\'s due or birth date</li>
+                    </ul>
+                    <p>Send a letter to the healthcare practitioner requesting this information.</p>
+                    <p><a href="cannot-process-application--horizontal-labels?cannotProcessApplication=askForFurtherInformationFromHCP&infoFromHCP=Healthcare%20practitioner%27s%20signature&infoFromHCP=Child%27s%20due%20or%20birth%20date">Follow recommendation</a></p>'
+                  }) }}
+
+                {% endif %}
+
+
+
+
+                <div class="nhsuk-button-group">
+
+                  {{ button({
+                    html: '<span data-ak="I">Approve application</span>',
+                    href: 'confirmation--approved'
+                  }) }}
+
+                  {{ button({
+                    html: '<span data-ak="K">Cannot process application</span>',
+                    href: 'cannot-process-application--horizontal-labels',
+                    classes: 'nhsuk-button--secondary'
+                  }) }}
+
+                </div>
+
+                </div>
+                </div>
+                
+
+            </div>
+
+
+
+
+            <!-- ONE THIRD -->
+            <div class="nhsuk-grid-column-one-third sticky-column">
+
+              {% from '../macros/image.njk' import image %}
+              {{ image() }}
+
+              {% from '../macros/notes.njk' import notes %}
+              {{ notes( patient ) }}
+
+            </div>
+
+
+          </div>
+
+    </div>
+  </div>
+
+{% endblock %}
