@@ -1,10 +1,33 @@
 {% extends 'layout-fullscreen.html' %}
 
-  {% if data.patientID %}
-    {% set patient = data.patientID | getPatientData %}
-  {% endif %}
+{% if data.patientID %}
+  {% set patient = data.patientID | getPatientData %}
+{% endif %}
 
-  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
+{% set forceCertificateMode = (data.certMode == "yes") %}
+
+{% if forceCertificateMode %}
+  {% set rawStatus = "active" %}
+{% else %}
+  {% set rawStatus = patient.status %}
+{% endif %}
+
+{% set statusForDisplay = rawStatus | getStatusTextOrTag(true) | safe %}
+
+{% set pageName = rawStatus | isApplicationOrCertificate | capitalize %}
+
+{% if data.certMode == "yes" %}
+  {% set statusForNotes = "active" %}
+
+{% endif %}
+
+{% set patientForNotes = {
+  status: statusForNotes,
+  certificateType: patient.certificateType,
+  channel: patient.channel,
+  processorName: patient.processorName,
+  processor: patient.processor
+} %}
 
 {% block beforeContent %}
   {{ backLink({
@@ -18,9 +41,10 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
-        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
-        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+      <h1 class="nhsuk-heading-m">
+        {{ pageName }} {{ patient.certificateReference }}
+        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag(true) | safe }}
+        {{ statusForDisplay }}
       </h1>
 
     </div>
@@ -118,7 +142,7 @@
             },
             {
               key: { text: 'Status' },
-              value: { html: ( patient.status or 'active' ) | getStatusTextOrTag( true ) }
+              value: { html: ( statusForDisplay or 'active' ) | getStatusTextOrTag( true ) }
             },
             {
               key: { text: 'Channel' },
@@ -240,8 +264,8 @@
     <div class="nhsuk-grid-column-one-third sticky-column">
 
       {% from '../macros/notes.njk' import notes %}
-      {{ notes( patient ) }}
-
+      {{ notes(patientForNotes) }}
+      
     </div>
 
   </div>
@@ -253,7 +277,7 @@
 
       <div class="nhsuk-button-group">
     
-    {% if patient.status == 'expired' or patient.status == 'deleted' %}
+    {% if patient.status == 'deleted' %}
       {{ button({
         classes: "nhsuk-button--secondary",
         html: '<span data-ak="K">Add note</span>',
@@ -264,7 +288,7 @@
         html: '<span data-ak="M">Cancel</span>',
         href: "../search"
       }) }}
-    {% elif patient.status == 'active' %}
+    {% elif rawStatus == 'active' %}
       {{ button({
         html: '<span data-ak="I">Edit or reissue</span>',
         href: "edit-or-reissue"
@@ -279,18 +303,7 @@
         html: '<span data-ak="M">Cancel</span>',
         href: "../search"
       }) }}
-    {% else %}
-    
-      {{ button({
-        classes: "nhsuk-button--secondary",
-        text: "Add note",
-        href: "add-note"
-      }) }}
-      {{ button({
-        classes: "nhsuk-button--secondary",
-        text: "Cancel",
-        href: "../search"
-      }) }}
+
     {% endif %}
 
     </div>

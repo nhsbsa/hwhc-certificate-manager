@@ -1,0 +1,61 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% if data.patientID %}
+{% set patient = data.patientID | getPatientData %}
+{% endif %}
+
+{% set pageName = 'Application processed' %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- APPLICATION PROCESSED - APPROVED -->        
+      {{ panel({
+        titleText: pageName,
+        html: '<p>You have approved this application</p>'
+      }) }}
+
+      {% set firstName = data.editMATEX.firstName or patient.firstName or 'Jane' %}
+      {% set lastName  = data.editMATEX.lastName  or patient.lastName  or 'Smith' %}
+
+      {% set buttonText = "<span data-ak='V'>View " ~ firstName + ' ' + lastName ~ "'s certificate</span>" %}
+
+      {{ summaryList({
+        rows: [
+          {
+            key: { text: 'Name' },
+            value: { text: firstName + ' ' + lastName }
+          },
+          {
+            key: { text: 'Reference' },
+            value: { text: '8436 810 379' }
+          }
+        ]
+      }) }}
+
+
+        <!-- NO CHECK -->
+        <h2 class="nhsuk-heading-s">What happens next?</h2>
+        <p class="nhsuk-body">You do not need to do anything else with this application.</p>
+
+
+          <div class="nhsuk-button-group">
+            {{ button({
+              html: '<span data-ak="S">New search</span>',
+              href: "../search"
+            }) }}
+
+            {{ button({
+              html: buttonText,
+              classes: "nhsuk-button--secondary",
+              href: "case?patientID=" + patient.id + "&certMode=yes"
+            }) }}
+
+            </div>
+
+    </div>
+  </div>
+
+{% endblock %}

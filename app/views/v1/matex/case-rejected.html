@@ -1,0 +1,286 @@
+{% extends 'layout-fullscreen.html' %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+      </h1>
+
+    </div>
+  </div>
+
+
+  {% set channelLinkHtml %}
+ 
+{% endset %}
+
+
+{% set firstName = data.editMATEX.firstName or patient.firstName or 'Jane' %}
+{% set lastName  = data.editMATEX.lastName  or patient.lastName  or 'Smith' %}
+
+{% if data.editMATEX.addressLineOne is defined %}
+  {% set addressValue1 = data.editMATEX.addressLineOne %}
+{% else %}
+  {% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
+{% endif %}
+
+{% if data.editMATEX.addressLineTwo is defined %}
+  {% set addressValue2 = data.editMATEX.addressLineTwo %}
+{% else %}
+  {% set addressValue2 = patient.address.locality %}
+{% endif %}
+
+{% if data.editMATEX.town is defined %}
+  {% set townValue = data.editMATEX.town %}
+{% else %}
+  {% set townValue = patient.address.postTown %}
+{% endif %}
+
+{% if data.editMATEX.county is defined %}
+  {% set countyValue = data.editMATEX.county %}
+{% else %}
+  {% set countyValue = patient.address.county %}
+{% endif %}
+
+{% if data.editMATEX.postcode is defined %}
+{% set postcodeValue = data.editMATEX.postcode %}
+{% else %}
+  {% set postcodeValue = patient.address.postcode %}
+{% endif %}
+
+
+{% if patient.channel === 'Paper' %}
+
+{% set channelHTML = 'Paper' ~ channelLinkHtml %}
+{% set fulfilment = 'Post' %}
+
+{% set address %}
+{{ addressValue1 | trim }}<br>
+{% if addressValue2 and addressValue2 | trim %}{{ addressValue2 | trim }}<br>{% endif %}
+{{ townValue | trim }}<br>
+{% if countyValue and countyValue | trim %}{{ countyValue | trim }}{% endif %}
+{% endset %}
+
+{% if address | trim == '' %}
+  {% set address = '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS' %}
+{% endif %}
+
+{% else %}
+
+  {% set channelHTML = 'Digital' %}
+  {% set address = '' %}
+  {% set fulfilment = 'Email' %}
+
+{% endif %}
+
+{% if fulfilment == 'Email' %}
+  {% set emailHTML = data.editMATEX.email or patient.email or 'janedoe@example.com' %}
+{% else %}
+  {% set emailHTML = '' %}
+{% endif %}
+
+
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+    <div class="nhsuk-grid-column-one-third">
+
+      {{ summaryList({
+        card: {
+          heading: "Application details",
+          headingSize: "s",
+          classes: "summary-list--single-line"
+        },
+          rows: [
+            {
+              key: { text: 'Reference' },
+              value: { text: patient.certificateReference or '56 913 186 386' }
+            },
+            {
+              key: { text: 'Type' },
+              value: { html: ( patient.certificateType or 'matex' ) | getCertificateTypeTextOrTag( true ) }
+            },
+            {
+              key: { text: 'Status' },
+              value: { html: ( patient.status or 'active' ) | getStatusTextOrTag( true ) }
+            },
+            {
+              key: { text: 'Channel' },
+              value: { text: channelHTML | safe }
+            },
+            {
+              key: { text: 'Fulfilment' },
+              value: { text: fulfilment }
+            },
+            {
+              key: {
+                text: "Patient signature"
+              },
+              value: { text: "Yes" }
+            },
+            {
+              key: {
+                text: "Health practitioner signature"
+              },
+              value: { text: "Yes" }
+            },
+            {
+              key: {
+                text: "Health practitioner details"
+              },
+              value: { text: "Yes" }
+            },
+            {
+              classes: "nhsuk-summary-list__row--no-border",
+              key: {
+                text: "Application date"
+              },
+              value: {
+                html: "25 November 2025"
+              }
+            }
+          ]
+
+      }) }}
+    
+    </div>
+
+    <div class="nhsuk-grid-column-one-third">
+      {{ summaryList({
+        card: {
+          heading: "Personal details",
+          headingSize: "s",
+          classes: "summary-list--single-line"
+        },
+          rows: [
+            {
+              key: { text: 'First name' },
+              value: { text: firstName }
+            },
+            {
+              key: { text: 'Last name' },
+              value: { text: lastName }
+            },
+            {
+              key: {
+                text: "Address"
+              },
+              value: { text: address | safe }
+            },
+            {
+              key: {
+                text: "Postcode"
+              },
+              value: {
+                text: postcodeValue or "TR1 10TS"
+              }
+            },
+            {
+              key: {
+                text: "Date of birth"
+              },
+              value: {
+                html: "24 July 1997"
+              }
+            },
+            {
+              key: {
+                text: "NHS number"
+              },
+              value: {
+                html: data.editMATEX.nhsNumber or patient.nhsNumber or "123 456 7890"
+              }
+            },
+            {
+              key: {
+                text: "Telephone number"
+              },
+              value: {
+                html: data.editMATEX.telephoneNumber or "07700 123 456"
+              }
+            },
+            {
+              key: {
+                text: "Email address"
+              },
+              value: {
+                html: emailHTML
+              }
+            },
+            {
+              classes: "nhsuk-summary-list__row--no-border",
+              key: {
+                text: "Child's due or birth date"
+              },
+              value: {                
+                html: (
+                  data.editMATEX.childDOBDisplay or "25 November 2025"
+                )
+              }
+            }
+          ]
+
+      }) }}
+    </div>
+
+
+
+            <!-- ONE THIRD -->
+            <div class="nhsuk-grid-column-one-third sticky-column">
+
+              
+              {% from '../macros/image.njk' import image %}
+              {{ image() }}
+
+              {% from '../macros/notes.njk' import notes %}
+              {{ notes( patient ) }}
+
+
+            </div>
+                
+    </div>
+  </div>
+
+  <div class="nhsuk-button-group">
+    {{ button({
+      html: '<span data-ak="I">Review application</span>',
+      href: "review-application"
+    }) }}
+    {{ button({
+      classes: "nhsuk-button--secondary",
+      html: '<span data-ak="K">Add note</span>',
+      href: "add-note"
+    }) }}
+    {{ button({
+      classes: "nhsuk-button--secondary",
+      html: '<span data-ak="M">Cancel</span>',
+      href: "../search"
+    }) }}
+  </div>
+
+  <style>
+    .nhsuk-grid-column-one-third {
+      height: 100%;
+    }
+  </style>
+
+
+{% endblock %}

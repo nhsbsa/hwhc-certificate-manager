@@ -705,7 +705,7 @@ module.exports = function (env) {
 
           case 'rejected':
 
-            link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
+            link = patient.certificateType + '/case-rejected?patientID=' + patient.id;
             break;
             
 
