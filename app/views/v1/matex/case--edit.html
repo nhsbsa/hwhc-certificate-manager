@@ -4,7 +4,16 @@
     {% set patient = data.patientID | getPatientData %}
   {% endif %}
 
-  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
+  {% if patient.status == "rejected" %}
+  {% set rawStatus = "on-hold" %}
+  {% else %}
+    {% set rawStatus = patient.status %}
+  {% endif %}
+
+  {% set statusForDisplay = rawStatus | getStatusTextOrTag(true) | safe %}
+
+  {% set pageName = rawStatus | isApplicationOrCertificate | capitalize %}
+
 
 {% block beforeContent %}
   {{ backLink({
@@ -20,7 +29,7 @@
 
       <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
         {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
-        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+        {{ statusForDisplay }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
       </h1>
 
     </div>
@@ -29,6 +38,17 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
+     
+      {% set firstName = data.editMATEX.firstName or patient.firstName or 'Jane' %}
+      {% set lastName  = data.editMATEX.lastName  or patient.lastName  or 'Smith' %}
+
+      {% if patient.channel === 'Paper' %}
+      {% set fulfilment = data['editMATEX.certificateFulfilment'] or data.editMATEX.certificateFulfilment or patient.fulfilment or "post" %}
+      {% endif %}
+
+      {% set childDOBYear  = data.childDOBYear  or '2025' %}
+      {% set childDOBMonth = data.childDOBMonth or '11'   %}
+      {% set childDOBDay   = data.childDOBDay   or '25'   %}
      
 
           <div class="nhsuk-grid-row">
@@ -56,35 +76,6 @@
 
               <form class="horizontal-labels" method="post" novalidate>
 
-                <!-- FORM TYPE -->
-
-                {% if data.role === 'backOffice' or data.role === 'backOfficeSupervisor' %}
-
-                  {% set versions = [ 'FW81217', 'FW80104', 'FW80110', 'FW80211', 'FW80215', 'FW80406', 'FW80702', 'FW80710', 'FW80803', 'FW81207'] %}
-
-                  {{ select({
-                    label: {
-                      text: 'Form version'
-                    },
-                    id: 'formVersion',
-                    name: 'formVersion',
-                    value: 'FW81217',
-                    items: [
-                      { value: versions[0], text: versions[0] },
-                      { value: versions[1], text: versions[1] },
-                      { value: versions[2], text: versions[2] },
-                      { value: versions[3], text: versions[3] },
-                      { value: versions[4], text: versions[4] },
-                      { value: versions[5], text: versions[5] },
-                      { value: versions[6], text: versions[6] },
-                      { value: versions[7], text: versions[7] },
-                      { value: versions[8], text: versions[8] },
-                      { value: versions[9], text: versions[9] }
-                    ]
-                  }) }}
-
-                {% endif %}
-
 
                 <!-- FULL NAME -->
                 {% call fieldset({
@@ -95,39 +86,37 @@
                 }) %}
 
                 {{ input({
+                  label: {
+                    html: '<span data-ak="S">First name</span>'
+                  },
+                  id: 'imageFirstName',
+                  name: 'imageFirstName',
+                  attributes: { 'data-focus-image' : 'firstName' },
+                  value: firstName,
+                  classes: 'nhsuk-input--width-20'
+                }) }}
+
+                {{ input({
                     label: {
-                      html: 'Last name'
+                      html: '<span data-ak="A">Last name</span>'
                     },
                     id: 'imageLastName',
                     name: 'imageLastName',
                     attributes: { 'data-focus-image' : 'lastName' },
                     classes: 'nhsuk-input--width-20',
-                    value: data.imageLastName or 'Jaaahnson'
-                  }) }}
-
-                  {{ input({
-                    label: {
-                      html: 'First name'
-                    },
-                    id: 'imageFirstName',
-                    name: 'imageFirstName',
-                    attributes: { 'data-focus-image' : 'firstName' },
-                    value: data.imageFirstName or 'Sorah',
-                    classes: 'nhsuk-input--width-20'
+                    value: lastName
                   }) }}
 
                   
 
                 {% endcall %}
 
-
-
                 {{ dateInput({
                   id: 'imageDateOfBirth',
                   namePrefix: 'imageDateOfBirth',
                   fieldset: {
                     legend: {
-                      html: 'Date of birth'
+                      html: '<span data-ak="X">Date of birth</span>'
                     }
                   },
                   items: [
@@ -155,7 +144,7 @@
 
                 {{ input({
                     label: {
-                      html: 'NHS number'
+                      html: '<span data-ak="V">NHS number</span>'
                     },
                     id: 'imageNHSNumber',
                     name: 'imageNHSNumber',
@@ -163,7 +152,6 @@
                     classes: 'nhsuk-input--width-10',
                     value: data.imageNHSNumber or '1252 567 987'
                   }) }}
-
 
                 <hr />
 
@@ -175,70 +163,71 @@
                   }
                 }) %}
 
+
                     {{ input({
                       label: {
-                        html: 'House number or name'
+                        html: '<span data-ak="H">House number or name</span>' 
                       },
                       id: 'imageBuildingNumberOrName',
                       name: 'imageBuildingNumberOrName',
                       attributes: { 'data-focus-image' : 'houseNumber' },
                       classes: 'nhsuk-input--width-10',
-                      value: data.imageBuildingNumberOrName or '12'
+                      value: patient.address.buildingNumber or '12'
                     }) }}
 
                     {{ input({
                       label: {
-                        html: 'Address line 1'
+                        html: '<span data-ak="1">Address line 1</span>'
                       },
                       classes: 'nhsuk-input--width-20',
                       id: 'imageAddressLine1',
                       name: 'imageAddressLine1',
                       attributes: { 'data-focus-image' : 'street' },
-                      value: data.imageAddressLine1 or 'Crown Passage'
+                      value: patient.address.streetName or 'Crown Passage'
                     }) }}
 
                     {{ input({
                       label: {
-                        html: 'Address line 2 (optional)'
+                        html: '<span data-ak="2">Address line 2 (optional)</span>'
                       },
                       classes: 'nhsuk-input--width-20',
                       id: 'imageAddressLine2',
                       name: 'imageAddressLine2',
                       attributes: { 'data-focus-image' : 'address' },
-                      value: data.imageAddress2
+                      value: patient.address.locality
                     }) }}
 
                     {{ input({
                       label: {
-                        html: 'Town or city'
+                        html: '<span data-ak="U">Town or city</span>' 
                       },
                       classes: 'nhsuk-input--width-20',
                       id: 'imageTown',
                       name: 'imageTown',
                       attributes: { 'data-focus-image' : 'town' },
-                      value: data.imageTown or 'Birmingham'
+                      value: patient.address.postTown or 'Birmingham'
                     }) }}
 
                     {{ input({
                       label: {
-                        html: 'County (optional)'
+                        html: '<span data-ak="R">County (optional)</span>' 
                       },
                       classes: 'nhsuk-input--width-10',
                       id: 'imageCounty',
                       name: 'imageCounty',
                       attributes: { 'data-focus-image' : 'address' },
-                      value: data.imageCounty
+                      value: patient.address.county
                     }) }}
 
                     {{ input({
                       label: {
-                        html: 'Postcode'
+                        html: '<span data-ak="Z">Postcode</span>' 
                       },
                       classes: 'nhsuk-input--width-10',
                       id: 'imagePostcode',
                       name: 'imagePostcode',
                       attributes: { 'data-focus-image' : 'postcode' },
-                      value: data.imagePostcode or 'B14 9QX'
+                      value: patient.address.postcode or 'B14 9QX'
                     }) }}
 
                   {% endcall %}
@@ -246,20 +235,20 @@
                   <div class="nhsuk-button-group address-button">
                     {{ button({
                       html: '<span data-ak="G">Populate address fields using address lookup</span>',
-                      classes: "nhsuk-button--secondary nhsuk-button--small",
+                      classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-top-3",
                       href: "/v1/hrtppc/address-lookup?source=newHRT&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dtrue%23postcode"
                     }) }}
                   </div>
 
-                <hr />
+                <hr/>
 
-
+                  
               <!-- CONTACT DETAILS -->
               
 
                 {{ input({
                       label: {
-                        html: 'Phone number (optional)'
+                        html: '<span data-ak="Q">Telephone number</span>'
                       },
                       attributes: { type: 'tel', autocomplete: 'off', 'data-focus-image' : 'telephoneNumber' },
                       classes: 'nhsuk-input--width-10',
@@ -271,7 +260,7 @@
 
                    {{ input({
                       label: {
-                        html: 'Email address (optional)'
+                        html: '<span data-ak="J">Email address</span>' 
                       },
                       attributes: { type: 'email', autocomplete: 'off' },
                       classes: 'nhsuk-input--width-20',
@@ -282,9 +271,6 @@
                   }) }}
 
 
-
-
-
               
 
                 {{ dateInput({
@@ -292,26 +278,26 @@
                   namePrefix: 'imageBabyDateOfBirth',
                   fieldset: {
                     legend: {
-                      html: "Child's due or birth date"
+                      html: '<span data-ak="Y">Child\'s due or birth date</span>'
                     }
                   },
                   items: [
                     {
                       name: 'day',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageBabyDateOfBirth.day or '',
+                      value: childDOBDay,
                       attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
                     },
                     {
                       name: 'month',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageBabyDateOfBirth.month or '',
+                      value: childDOBMonth,
                       attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
                     },
                     {
                       name: 'year',
                       classes: 'nhsuk-input--width-4',
-                      value: data.imageBabyDateOfBirth.year or '',
+                      value: childDOBYear,
                       attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
                     }
                   ]
@@ -384,14 +370,33 @@
                 {% endif %}
 
 
+                {{ textarea({
+                  id: "imageNotes",
+                  name: "imageNotes",
+                  value: patient.notes,
+                  label: {
+                    html: '<span data-ak="C">Notes</span>' 
+                  }
+                }) }}
+
+
 
                 <div class="nhsuk-button-group">
 
                   {{ button({
-                    html : '<span data-ak="I">Continue</span>'
+                    html : '<span data-ak="I">Issue certificate</span>',
+                    href: 'confirmation--approved'
                   }) }}
 
+                  {{ button
+                    ({ classes: "nhsuk-button--secondary", 
+                    html: '<span data-ak="M">Cancel</span>',
+                    href: "../search"
+                    }) 
+                  }}
+
                 </div>
+
 
               </form>
 

@@ -15,10 +15,6 @@
 
 {% block content %}
 
-  {% if data.patientID %}
-    {% set patient = data.patientID | getPatientData %}
-  {% endif %}
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
@@ -30,10 +26,12 @@
     </div>
   </div>
 
+
   {% set channelLinkHtml %}
  
-  {% endset %}
-  
+{% endset %}
+
+
 {% set firstName = data.editMATEX.firstName or patient.firstName or 'Jane' %}
 {% set lastName  = data.editMATEX.lastName  or patient.lastName  or 'Smith' %}
 
@@ -243,62 +241,33 @@
 
 
 
-        <!-- ONE THIRD -->
+            <!-- ONE THIRD -->
             <div class="nhsuk-grid-column-one-third sticky-column">
 
+              
               {% from '../macros/image.njk' import image %}
               {{ image() }}
 
               {% from '../macros/notes.njk' import notes %}
               {{ notes( patient ) }}
 
+
             </div>
-
-        </div>
-
-        <div class="nhsuk-button-group">
-
-        {% if patient.status in ['on-hold', 'rejected'] and patient.checking == false %}
-        
-            {{ button({
-                href: 'case--edit',
-                html: '<span data-ak="I">Edit application</span>'
-            }) }}
-        
-            {{ button({
-              classes: "nhsuk-button--secondary",
-              html: '<span data-ak="K">Add note</span>',
-              href: "add-note"
-            }) }}
-        
-            {{ button({
-              classes: "nhsuk-button--secondary",
-              html: '<span data-ak="M">Cancel</span>',
-              href: "../search"
-            }) }}
-        
-          {% else %}
-        
-            {{ button({
-              classes: "nhsuk-button--secondary",
-              html: '<span data-ak="K">Add note</span>',
-              href: "add-note"
-            }) }}
-        
-            {{ button({
-              classes: "nhsuk-button--secondary",
-              html: '<span data-ak="M">Cancel</span>',
-              href: "../search"
-            }) }}
-        
-          {% endif %}
-        
-        </div>
-
-
-       
-
-      </div>
+                
     </div>
 
-  {% endblock %}
+  <div class="nhsuk-button-group">
+    {{ button({
+      classes: "nhsuk-button--secondary",
+      html: '<span data-ak="K">Add note</span>',
+      href: "add-note"
+    }) }}
+    {{ button({
+      classes: "nhsuk-button--secondary",
+      html: '<span data-ak="M">Cancel</span>',
+      href: "../search"
+    }) }}
+  </div>
+
+
+{% endblock %}

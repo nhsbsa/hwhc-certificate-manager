@@ -263,9 +263,18 @@
 
     <div class="nhsuk-grid-column-one-third sticky-column">
 
+      {% if data.certMode == 'yes' %}
+
       {% from '../macros/notes.njk' import notes %}
       {{ notes(patientForNotes) }}
-      
+
+      {% else %}
+
+      {% from '../macros/notes.njk' import notes %}
+      {{ notes(patient) }}
+
+      {% endif %}
+
     </div>
 
   </div>
@@ -276,37 +285,44 @@
     <div class="nhsuk-grid-column-full">
 
       <div class="nhsuk-button-group">
-    
-    {% if patient.status == 'deleted' %}
-      {{ button({
-        classes: "nhsuk-button--secondary",
-        html: '<span data-ak="K">Add note</span>',
-        href: "add-note"
-      }) }}
-      {{ button({
-        classes: "nhsuk-button--secondary",
-        html: '<span data-ak="M">Cancel</span>',
-        href: "../search"
-      }) }}
-    {% elif rawStatus == 'active' %}
-      {{ button({
-        html: '<span data-ak="I">Edit or reissue</span>',
-        href: "edit-or-reissue"
-      }) }}
-      {{ button({
-        classes: "nhsuk-button--secondary",
-        html: '<span data-ak="K">Add note</span>',
-        href: "add-note"
-      }) }}
-      {{ button({
-        classes: "nhsuk-button--secondary",
-        html: '<span data-ak="M">Cancel</span>',
-        href: "../search"
-      }) }}
 
-    {% endif %}
-
-    </div>
+        {% macro addNoteButton() %}
+          {{ button({
+            classes: "nhsuk-button--secondary",
+            html: "<span data-ak='K'>Add note</span>",
+            href: "add-note"
+          }) }}
+        {% endmacro %}
+      
+        {% macro cancelButton() %}
+          {{ button({
+            classes: "nhsuk-button--secondary",
+            html: "<span data-ak='M'>Cancel</span>",
+            href: "../search"
+          }) }}
+        {% endmacro %}
+            
+        {% if patient.status == 'expired' or patient.status == 'deleted' %}
+      
+            {{ addNoteButton() }}
+            {{ cancelButton() }}
+      
+        {% else %}
+      
+        {% if patient.status not in ['expired', 'deleted', 'processing'] %}
+        
+        {{ button({
+          html: "<span data-ak='I'>Edit or reissue</span>",
+          href: "edit-or-reissue"
+        }) }}
+        {% endif %}
+      
+        {{ addNoteButton() }}
+        {{ cancelButton() }}
+      
+        {% endif %}
+      
+      </div>
 
   </div>
 </div>
