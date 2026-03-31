@@ -50,6 +50,43 @@
       {% set childDOBMonth = data.childDOBMonth or '11'   %}
       {% set childDOBDay   = data.childDOBDay   or '25'   %}
      
+      {% set lookup = data.lookupAddress or {} %}
+
+      {% if lookup.buildingNumber is defined %}
+      {% set buildingNumberValue = lookup.buildingNumber %}
+      {% else %}
+        {% set buildingNumberValue = data.imageBuildingNumberOrName or patient.address.buildingNumber or '12' %}
+      {% endif %}
+
+      {% if lookup.addressLineOne is defined %}
+      {% set addressValue1 = lookup.streetName %}
+      {% else %}
+        {% set addressValue1 = data.imageAddressLine1 or patient.address.streetName or 'Crown Passage' %}
+      {% endif %}
+
+      {% if lookup.addressLineTwo is defined %}
+        {% set addressValue2 = lookup.addressLineTwo %}
+      {% else %}
+        {% set addressValue2 = data.imageAddressLine2 or patient.address.locality %}
+      {% endif %}
+
+      {% if lookup.town is defined %}
+        {% set townValue = lookup.town %}
+      {% else %}
+        {% set townValue = data.imageTown or patient.address.postTown or 'Birmingham' %}
+      {% endif %}
+
+      {% if lookup.county is defined %}
+        {% set countyValue = lookup.county %}
+      {% else %}
+        {% set countyValue = data.imageCounty or patient.address.county %}
+      {% endif %}
+
+      {% if lookup.postcode is defined %}
+      {% set postcodeValue = lookup.postcode %}
+      {% else %}
+        {% set postcodeValue = data.imagePostcode or patient.address.postcode %}
+      {% endif %}
 
           <div class="nhsuk-grid-row">
 
@@ -172,7 +209,7 @@
                       name: 'imageBuildingNumberOrName',
                       attributes: { 'data-focus-image' : 'houseNumber' },
                       classes: 'nhsuk-input--width-10',
-                      value: patient.address.buildingNumber or '12'
+                      value: buildingNumberValue
                     }) }}
 
                     {{ input({
@@ -183,7 +220,7 @@
                       id: 'imageAddressLine1',
                       name: 'imageAddressLine1',
                       attributes: { 'data-focus-image' : 'street' },
-                      value: patient.address.streetName or 'Crown Passage'
+                      value: addressValue1
                     }) }}
 
                     {{ input({
@@ -194,7 +231,7 @@
                       id: 'imageAddressLine2',
                       name: 'imageAddressLine2',
                       attributes: { 'data-focus-image' : 'address' },
-                      value: patient.address.locality
+                      value: addressValue2
                     }) }}
 
                     {{ input({
@@ -205,7 +242,7 @@
                       id: 'imageTown',
                       name: 'imageTown',
                       attributes: { 'data-focus-image' : 'town' },
-                      value: patient.address.postTown or 'Birmingham'
+                      value: townValue
                     }) }}
 
                     {{ input({
@@ -216,7 +253,7 @@
                       id: 'imageCounty',
                       name: 'imageCounty',
                       attributes: { 'data-focus-image' : 'address' },
-                      value: patient.address.county
+                      value: countyValue
                     }) }}
 
                     {{ input({
@@ -227,7 +264,7 @@
                       id: 'imagePostcode',
                       name: 'imagePostcode',
                       attributes: { 'data-focus-image' : 'postcode' },
-                      value: patient.address.postcode or 'B14 9QX'
+                      value: postcodeValue
                     }) }}
 
                   {% endcall %}
@@ -236,8 +273,7 @@
                     {{ button({
                       html: '<span data-ak="G">Populate address fields using address lookup</span>',
                       classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-top-3",
-                      href: "/v1/hrtppc/address-lookup?source=newHRT&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dtrue%23postcode"
-                    }) }}
+                      href: "/v1/matex/address-lookup?source=matex&returnTo=/v1/matex/case--edit"                    }) }}
                   </div>
 
                 <hr/>

@@ -676,24 +676,22 @@ if (knownCounties.includes(lastPart)) {
 
 // FLATS / APARTMENTS CASE
 // ------------------------------
+// FLATS / APARTMENTS CASE
 if (/^(flat|apartment)/i.test(parts[0]) && parts.length >= 2) {
 
   const flatAndBuilding = parts.shift();     // "APARTMENT 4 ST. JAMES HOUSE"
   const rangeAndStreet  = parts.shift();     // "3-6 PORTLAND TERRACE"
 
-  // Detect pattern: "<range> <street>"
-  // Example: "3-6 PORTLAND TERRACE"
   const rangeMatch = rangeAndStreet.match(/^(\d+(-\d+)?)\s+(.+)$/);
 
   if (rangeMatch) {
-    const range = rangeMatch[1];             // "3-6"
-    const street = rangeMatch[3];            // "PORTLAND TERRACE"
+    const range = rangeMatch[1];
+    const street = rangeMatch[3];
 
     newAddress.addressLineOne = toTitleCase(flatAndBuilding);
     newAddress.addressLineTwo = toTitleCase(`${range} ${street}`);
 
   } else {
-    // Fallback if pattern unexpected
     newAddress.addressLineOne = toTitleCase(flatAndBuilding);
     newAddress.addressLineTwo = toTitleCase(rangeAndStreet);
   }
@@ -701,10 +699,15 @@ if (/^(flat|apartment)/i.test(parts[0]) && parts.length >= 2) {
 } else {
   // STANDARD HOUSE
   if (parts.length > 0) {
-    newAddress.addressLineOne = parts.shift();     // ← THIS fixes "10 Portland Terrace"
-    newAddress.addressLineTwo = parts.join(', ') || '';
+    newAddress.addressLineOne = toTitleCase(parts.shift());   // ✅ title-case here
+    newAddress.addressLineTwo = toTitleCase(parts.join(', ') || '');
   }
 }
+
+// ✅ ✅ NOW — RIGHT HERE — split building/house number from addressLineOne
+const [buildingNumberOrName, ...streetParts] = newAddress.addressLineOne.split(' ');
+newAddress.buildingNumber = buildingNumberOrName;
+newAddress.streetName = streetParts.join(' ').trim();
 
 
 // Map which namespace to use based on source (page that opened lookup)
@@ -735,6 +738,21 @@ const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJ
   req.session.data[ns] = {
     ...(req.session.data[ns] || {}),
     ...newAddress
+  };
+
+  // Extract building/house number from addressLineOne for case--edit page
+  const buildingMatch = newAddress.addressLineOne.match(/^([^ ]+)/);
+  newAddress.buildingNumber = buildingMatch ? buildingMatch[1] : '';
+
+  // Save selected address for destination page
+  req.session.data.lookupAddress = {
+    buildingNumber: newAddress.buildingNumber,
+    streetName: newAddress.streetName,
+    addressLineOne: newAddress.addressLineOne,
+    addressLineTwo: newAddress.addressLineTwo,
+    town: newAddress.town,
+    county: newAddress.county,
+    postcode: newAddress.postcode
   };
 
   const returnTo = req.session.returnTo;
@@ -1018,6 +1036,16 @@ router.get(/^\/v1\/matex\/edit-or-reissue$/, function (req, res) {
 //
 // CASE EDIT SCREEN
 //
+router.get(/case--edit/, function( req, res ){
+  const lookupAddress = req.session.data.lookupAddress;
+  delete req.session.data.lookupAddress;
+  
+  res.render('v1/matex/case--edit', {
+    ...req.session.data,
+    lookupAddress
+  });
+});
+
 router.post(/case--edit/, function( req, res ){
   const destination = 'case--view--can-edit';
   return res.redirect( destination );
