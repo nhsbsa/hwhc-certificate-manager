@@ -759,3 +759,41 @@ body::before {
 .accesskeys-off [data-ak]::after {
   content: "";
 }
+
+
+
+/* TEMP FIX */
+
+.nhsuk-button--small {
+  min-height: 2.25rem;
+  padding: 0.375rem 0.75rem;
+}
+.nhsuk-button--small {
+  margin-bottom: 20px;
+}
+@media (min-width: 40.0625em) {
+  .nhsuk-button--small {
+    margin-bottom: 28px;
+  }
+}
+@media (min-width: 40.0625em) {
+  .nhsuk-button--small {
+    font-weight: 600;
+  }
+  .nhsuk-button--small {
+    font-size: 0.875rem;
+    line-height: 1.3571428571;
+  }
+}
+@media (min-width: 40.0625em) and (min-width: 40.0625em) {
+  .nhsuk-button--small {
+    font-size: 1rem;
+    line-height: 1.1875;
+  }
+}
+@media print and (min-width: 40.0625em) {
+  .nhsuk-button--small {
+    font-size: 12pt;
+    line-height: 19px;
+  }
+}
