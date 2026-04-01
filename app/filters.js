@@ -12,6 +12,16 @@ module.exports = function (env) {
     return Math.round(Math.random() * max);
   }
 
+  //
+  // CAPITALISE FILTER
+  //
+  filters.capitalise = function( term ){
+    if( term ){
+      term = term.charAt(0).toUpperCase() + term.slice(1);
+    }
+    return term;
+  }
+
 
   //
   // DWP ADDRESS PATTERN GET RESULTS STATUS FILTER
