@@ -33,9 +33,8 @@
         summaryText: 'What date formats can I use?'
     }) %}
 
-        <p>You can copy and paste many dates in multiple formats into any of the fields.</p>
-        <p>If a date is not valid, the paste will not work.</p>
-        
+        <p>You can copy dates in these formats and paste them into any of the fields:</p>
+
         {{ summaryList({
            attributes: { 'id': 'dates' },
            rows: [{
@@ -60,6 +59,8 @@
                }
            ]
         }) }}
+
+        <p>If a date is not valid (such as 32 February 99), the paste will not work.</p>
 
 
     {% endcall %}
