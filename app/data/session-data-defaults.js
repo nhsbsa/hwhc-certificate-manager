@@ -48,7 +48,9 @@ module.exports = {
         currentPage: 0,
         certificateTypes: ['matex','hrtppc'],
         sortBy: 'lastName',
-        sortDirection: 'descending' // Test
+        sortDirection: 'descending',
+        
+        allowSearchCopyPaste: 'true'
         
     }
 

@@ -334,6 +334,7 @@ router.get(/reset-search/,function( req, res ){
   delete req.session.data.searchPostcode;
   delete req.session.data.searchFirstName;
   delete req.session.data.searchLastName;
+  delete req.session.data.searchDateOfBirth;
 
   delete req.session.data.searchStatus;
   delete req.session.data.searchChecking;

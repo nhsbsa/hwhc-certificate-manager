@@ -377,6 +377,16 @@ module.exports = function (env) {
               filteredRows.push(row);
             }
 
+          } else if( key === 'dateOfBirth' ){
+
+            const dayCheck = ( searchTerms[key].day === row[key].day ) ? true : false;
+            const monthCheck = ( searchTerms[key].month === row[key].month ) ? true : false;
+            const yearCheck = ( searchTerms[key].year === row[key].year ) ? true : false;
+
+            if( dayCheck && monthCheck && yearCheck ){
+              filteredRows.push(row);
+            }
+          
           } else {
 
             const needles = (key === 'status') ? searchTerms[key].split(',') : [searchTerms[key].trim().toLowerCase()];
@@ -981,6 +991,11 @@ module.exports = function (env) {
       summary.push('"' + searchTerms.postcode + '" in postcode');
     }
 
+     if (this.ctx.data.searchDateOfBirth) {
+      searchTerms.dateOfBirth = _tidySearchDate(this.ctx.data.searchDateOfBirth);
+      summary.push('"' + _processDate(searchTerms.dateOfBirth) + '" in date of birth');
+    }
+
 
 
     if (summary.length === 0) {
@@ -1192,10 +1207,45 @@ module.exports = function (env) {
   };
 
   //
+  // TIDY SEARCH DATE FUNCTION
+  // Converts strings into numbers, and corrects month to zero-index
+  //
+  _tidySearchDate = function( dateObj ){
+
+    if( dateObj && dateObj.day && dateObj.month && dateObj.year ){
+
+      dateObj.day = ( !Number.isNaN(parseInt(dateObj.day)) ) ? parseInt(dateObj.day) : dateObj.day;
+      dateObj.month = ( !Number.isNaN(parseInt(dateObj.month)) ) ? parseInt(dateObj.month)-1 : dateObj.month;
+      dateObj.year = ( !Number.isNaN(parseInt(dateObj.year)) ) ? parseInt(dateObj.year) : dateObj.year;
+
+    }
+
+    return dateObj
+
+  }
+
+  //
+  // PROCESS DATE FUNCTION
+  // Make sure to zero-index the month when you use this
+  //
+  _processDate = function( dateObj ){
+    let date = '';
+    if( dateObj && dateObj.day && dateObj.month && dateObj.year ){
+      date = new Date( parseInt(dateObj.year), parseInt(dateObj.month), parseInt(dateObj.day), 0, 0, 0, 0 );
+      date = date.toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+    return date;
+  };
+
+  //
   // PROCESS DATE FILTER
   //
-  filters.processDate = function () {
-    return '12 September 1999';
+  filters.processDate = function ( dateObj ) {
+    return _processDate( dateObj );
   };
 
   //

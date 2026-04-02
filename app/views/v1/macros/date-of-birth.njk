@@ -1,0 +1,254 @@
+{% macro dateOfBirth( searchDateOfBirth, allowSearchCopyPaste ) %}
+
+    {% from "date-input/macro.njk" import dateInput %}
+    {% from "details/macro.njk" import details %}
+    {% from "summary-list/macro.njk" import summaryList %}
+
+    {% if allowSearchCopyPaste === 'true' %}
+        {% set hintObj = { html: '<span class="nhsuk-u-font-size-14">You can paste valid dates here, for example 20111996</span>' } %}
+    {% endif %}
+
+    {{ dateInput({
+      id: "searchDateOfBirth",
+      namePrefix: "searchDateOfBirth",
+      values: searchDateOfBirth,
+      fieldset: {
+        legend: {
+          html: '<span data-ak="X">Date of birth</span>',
+          classes: "nhsuk-body"
+        }
+      },
+      hint: hintObj,
+      items: [
+        { name: "day",   label: '<span class="nhsuk-u-visually-hidden">Day</span>',   classes: 'nhsuk-input--width-2' },
+        { name: "month", label: '<span class="nhsuk-u-visually-hidden">Month</span>', classes: 'nhsuk-input--width-2' },
+        { name: "year",  label: '<span class="nhsuk-u-visually-hidden">Year</span>',  classes: 'nhsuk-input--width-4' }
+      ]
+    }) }}
+
+
+    {% if allowSearchCopyPaste === 'true' %}
+
+    {% call details({
+        summaryText: 'What date formats can I use?'
+    }) %}
+
+        <p>You can copy and paste many dates in multiple formats into any of the fields.</p>
+        <p>If a date is not valid, the paste will not work.</p>
+        
+        {{ summaryList({
+           attributes: { 'id': 'dates' },
+           rows: [{
+                   key: { text: 'ddmmyyyy' },
+                   value: { text: '02031978' }
+               },
+               {
+                   key: { text: 'dd/mm/yyyy' },
+                   value: { text: '02/04/2025' }
+               },{
+                   key: { text: 'dd-mm-yyyy' },
+                   value: { text: '20-2-1965' }
+               },{
+                   key: { text: 'dd month yyyy' },
+                   value: { text: '3 May 1997' }
+               }, {
+                   key: { text: 'dd.mmm.yyyy' },
+                   value: { text: '4.Dec.1990' }
+               }, {
+                   key: { text: 'month dd, yyyy' },
+                   value: { text: 'September 25th, 2001' }
+               }
+           ]
+        }) }}
+
+
+    {% endcall %}
+
+    <script>
+
+        const DateHandler = (function(){
+
+            let _id;
+
+            //
+            // INIT FUNCTION
+            //
+            function _init( id ){
+                
+                if( id ){
+
+                    _id = id;
+
+                    const dayField = document.querySelector('#'+id+'-day');
+                    const monthField = document.querySelector('#'+id+'-month');
+                    const yearField = document.querySelector('#'+id+'-year');
+
+                    _initField( dayField );
+                    _initField( monthField );
+                    _initField( yearField );
+
+                }
+
+            }
+
+            //
+            // INIT FIELD FUNCTION
+            //
+            function _initField( el ){
+                
+                // Add change listener
+                el.addEventListener( 'change', function( e ){
+
+                    const t = e.target;
+                    const val = t.value;
+                    const type = t.id.split('-')[1];
+
+                    if( val && !/^\d+$/.test(val) ){
+
+                        const check = _isDateUKValid( val );
+                        if( check.check ){
+
+                            // Check for UK date first e.g. dd/mm/yyyy
+                             _populateInputs(check.newValue );
+
+                        } else {
+
+                            // Remove 2nd, 3rd etc.
+                            newVal = val.replace(/\b(\d{1,2})(st|nd|rd|th)\b/g, '$1');
+                            
+                            // Try something more international...
+                            if( _isDateValid( newVal ) ){
+                                 _populateInputs( newVal );
+                            }
+
+                        }
+                        
+                    }
+                });
+
+                // Add paste listener
+                el.addEventListener( 'paste', function( e ){
+
+                    navigator.clipboard.readText().then( function( val ){
+
+                        const t = e.target;
+                        const type = t.id.split('-')[1];
+                        
+                        let newVal;
+
+                        if( val && !/^\d+$/.test(val) ){
+
+                            const check = _isDateUKValid( val );
+                            if( check.check ){
+
+                                // Check for UK date first e.g. dd/mm/yyyy
+                                _populateInputs(check.newValue );
+                                e.preventDefault();
+
+                            } else {
+
+                                // Remove 2nd, 3rd etc.
+                                newVal = val.replace(/\b(\d{1,2})(st|nd|rd|th)\b/g, '$1');
+                                
+                                // Try something more international...
+                                if( _isDateValid( newVal ) ){
+                                    _populateInputs( newVal );
+                                    e.preventDefault();
+                                }
+
+                            }
+                            
+                        } else {
+                            
+                            // Smart agent format (ddmmyyyy)
+                            if( /^\d{8}$/.test(val) ){
+
+                                const day = val.slice(0, 2);
+                                const month = val.slice(2, 4);
+                                const year = val.slice(4, 8);
+
+                                newVal = year + '/' + month + '/' + day;
+
+                                if( _isDateValid( newVal ) ){
+                                    _populateInputs( newVal );
+                                    e.preventDefault();
+                                }
+                            }
+
+                        }
+
+
+                    });
+                });
+
+                    
+
+            }
+
+            //
+            // IS DATE VALID FUNCTION
+            //
+            function _isDateValid( date ){
+
+                console.log( '_isDateValid(' + date + ')' );
+
+                const timestamp = Date.parse( date );
+                return !isNaN(timestamp);
+            }
+
+            //
+            // IS DATE UK VALUE FUNCTION
+            //
+            function _isDateUKValid( date ){
+
+                console.log( '_isDateUKValid(' + date + ')' );
+
+                const regex = new RegExp( /^([0-3]?[0-9])[\s\/\.\-]([0-1]?[0-9])[\s\/\.\-]([12][0-9]{3})$/ );
+                if( regex.test(date) ){
+                    date = date.replaceAll(' ','/').replaceAll('-','/').replaceAll('.', '/').split('/').reverse();
+                    check = _isDateValid( date.join('/') );
+                    if( check ){
+                        date = date.join('/');
+                    }
+                } else {
+                    check = false;
+                }
+                return { 'check': check, 'newValue': date };
+
+            }
+
+            //
+            // POPULATE INPUTS FUNCTION
+            //
+            function _populateInputs( date ){
+                
+                let parsedDate = new Date( Date.parse( date ) );
+
+                const dayField = document.querySelector('#'+_id+'-day');
+                const monthField = document.querySelector('#'+_id+'-month');
+                const yearField = document.querySelector('#'+_id+'-year');
+
+                dayField.value = parsedDate.getDate();
+                monthField.value = parsedDate.getMonth() + 1;
+                yearField.value = parsedDate.getFullYear();
+
+                yearField.focus();
+
+            }
+
+
+            return {
+                init: _init
+            }
+
+        })();
+
+        document.addEventListener('DOMContentLoaded',function(){
+            DateHandler.init('searchDateOfBirth');
+        });
+
+    </script>
+
+    {% endif %}
+
+{% endmacro %}

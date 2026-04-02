@@ -89,22 +89,11 @@
 
 
               <div class="nhsuk-grid-row">
-                <div class="nhsuk-grid-column-one-third">              
-                  {{ dateInput({
-                    id: "searchDateOfBirth",
-                    namePrefix: "searchDateOfBirth",
-                    fieldset: {
-                      legend: {
-                        html: '<span data-ak="X">Date of birth</span>',
-                        classes: "nhsuk-body"
-                      }
-                    },
-                    items: [
-                      { name: "day",   label: '<span class="nhsuk-u-visually-hidden">Day</span>',   classes: 'nhsuk-input--width-2' },
-                      { name: "month", label: '<span class="nhsuk-u-visually-hidden">Month</span>', classes: 'nhsuk-input--width-2' },
-                      { name: "year",  label: '<span class="nhsuk-u-visually-hidden">Year</span>',  classes: 'nhsuk-input--width-4' }
-                    ]
-                  }) }}
+                <div class="nhsuk-grid-column-one-third">
+                  
+                  {% from './macros/date-of-birth.njk' import dateOfBirth %}
+                  {{ dateOfBirth( data.searchDateOfBirth, data[version].allowSearchCopyPaste ) }}
+
                 </div>
 
                 <div class="nhsuk-grid-column-one-third">
@@ -149,29 +138,6 @@
                     <input type="hidden" name="searchStatus" value="" />
 
                   {% elif data.role === 'backOffice' %}
-    
-                    {#{ select({
-                      label: {
-                        html: '<span data-ak="T">Certificate type</span>'
-                      },
-                      id: 'searchCertificateType',
-                      name: 'searchCertificateType',
-                      value: data.searchCertificateType,
-                      items: [
-                        {
-                          value: '',
-                          text: 'All certificate types'
-                        },
-                        {
-                          value: 'hrtppc',
-                          text: 'HRT PPC'
-                        },
-                        {
-                          value: 'matex',
-                          text: 'Maternity exemption'
-                        }
-                      ]
-                    }) }#}
 
                     <input type="hidden" name="searchCertificateType" value="matex" />
 
