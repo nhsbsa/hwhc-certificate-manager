@@ -176,7 +176,7 @@
                         }
 
                         //
-                        // SUMMARY LIST ROWS
+                        // SUMMARY LIST (WITH LINK) ROWS
                         //
                         if( el.matches('.nhsuk-summary-list .nhsuk-link') ){
 
@@ -209,6 +209,63 @@
                     });
 
                 }
+
+                //
+                // SUMMARY LIST (FOCUS IMAGE VERSION)
+                // Can't use attributes on the summary list component, and there are no links to hook off on the case-rejected screens, so gonna have to do this the hard way...
+                //
+                const summaryLists = document.querySelectorAll('.summary-list--focus-image');
+
+                summaryLists.forEach(function( summaryList ){
+                    
+                    const fieldNames = [
+                        'First name',
+                        'Last name',
+                        'Address',
+                        'Date of birth',
+                        'NHS number',
+                        'Telephone number',
+                        'Email address',
+                        "Child's due or birth date"
+                    ];
+
+                    const focusImageTags = [
+                        'firstName',
+                        'lastName',
+                        'address',
+                        'dateOfBirth',
+                        'nhsNumber',
+                        'telephoneNumber',
+                        'emailAddress',
+                        'childsDueOrBirthDate'
+                    ];
+
+                    summaryList.querySelectorAll('.nhsuk-summary-list__row').forEach( function( row ){
+
+                        const keyValue = row.querySelector('.nhsuk-summary-list__key').innerText.trim();
+
+                        if( fieldNames.indexOf(keyValue) > -1 ){
+
+                            const focusTag = focusImageTags[ fieldNames.indexOf(keyValue) ];
+                            row.setAttribute( 'data-focus-image', focusTag );
+                            
+                            row.addEventListener('mouseover',function(e){
+                                _focusImage(focusTag);
+                            });
+
+                            if(mouseOutsActive){
+                                row.addEventListener('mouseout',function(e){
+                                    _focusImage();
+                                });
+                            }
+
+
+                        }
+
+                    });
+
+
+                });
 
             }
             

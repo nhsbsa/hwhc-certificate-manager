@@ -991,13 +991,19 @@ module.exports = function (env) {
       summary.push('"' + searchTerms.postcode + '" in postcode');
     }
 
-     if (this.ctx.data.searchDateOfBirth) {
-      searchTerms.dateOfBirth = _tidySearchDate(this.ctx.data.searchDateOfBirth);
-      summary.push('"' + _processDate(searchTerms.dateOfBirth) + '" in date of birth');
+     if (this.ctx.data.searchDateOfBirth ) {
+
+      const dayCheck = ( this.ctx.data.searchDateOfBirth.day && this.ctx.data.searchDateOfBirth.day.trim() !== '' ) ? true : false;
+      const monthCheck = ( this.ctx.data.searchDateOfBirth.month && this.ctx.data.searchDateOfBirth.month.trim() !== '' ) ? true : false;
+      const yearCheck = ( this.ctx.data.searchDateOfBirth.year && this.ctx.data.searchDateOfBirth.year.trim() !== '' ) ? true : false;
+      
+      if( dayCheck && monthCheck && yearCheck ){
+        searchTerms.dateOfBirth = _tidySearchDate(this.ctx.data.searchDateOfBirth);
+        summary.push('"' + _processDate(searchTerms.dateOfBirth) + '" in date of birth');
+      }
+
     }
-
-
-
+    
     if (summary.length === 0) {
       this.ctx.data.summaryText = start;
     } else if (summary.length === 1) {
