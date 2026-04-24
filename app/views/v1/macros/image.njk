@@ -33,7 +33,12 @@
             _fields.patientSignature = { x: 1164, y: 684, width: 1116, height: 86 };
             _fields.healthcarePractitionerSignature = { x: 1164, y: 958, width: 1116, height: 86 };
 
-            _fields.healthcarePractitionerDetails = { x: 1164, y: 1044, width: 1116, height: 558 };
+            _fields.healthcarePractitionerDetails = { x: 1164, y: 700, width: 1116, height: 558 };
+
+            _fields.healthcarePractitionerName = { x: 1164, y: 1148, width: 1116, height: 100 };
+
+            _fields.healthcarePractitionerAddress = { x: 1164, y: 1274, width: 1116, height: 400 };
+
             _fields.healthcarePractitionerStamp = { x: 1916, y: 1044, width: 364, height: 482 };
 
             //
@@ -161,19 +166,19 @@
                         // TINY CHECKBOXES
                         // These appear on the Cannot process application page
                         //
-                        if( el.matches('.nhsuk-radios .nhsuk-checkboxes--small .nhsuk-checkboxes__input') ){
+                        if (el.matches('.nhsuk-checkboxes__input')) {
 
-                            const focusTarget = el.getAttribute('data-focus-image');
+                        const focusTarget = el.getAttribute('data-focus-image');
 
-                            el.parentElement.addEventListener('mouseover',function(){
-                                _focusImage(focusTarget);
-                            });
+                        el.addEventListener('focus', () => _focusImage(focusTarget));
+                        el.addEventListener('mouseover', () => _focusImage(focusTarget));
 
-                            el.parentElement.addEventListener('mouseout',function(){
-                                _focusImage();
-                            });
-
+                        if (blursActive) {
+                            el.addEventListener('blur', () => _focusImage());
+                            el.addEventListener('mouseout', () => _focusImage());
                         }
+                        }
+
 
                         //
                         // SUMMARY LIST (WITH LINK) ROWS
@@ -337,6 +342,8 @@
                     'patientSignature',
                     'healthcarePractitionerSignature',
                     'healthcarePractitionerDetails',
+                    'healthcarePractitionerName',
+                    'healthcarePractitionerAddress',
                     'healthcarePractitionerStamp'
                 ];
 

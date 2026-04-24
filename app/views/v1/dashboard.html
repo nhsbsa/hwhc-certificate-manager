@@ -16,42 +16,40 @@
 
             <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
 
+
+            {% set insetTextHtml %}
+            <p>386 forms awaiting processing</p>
+            {% endset %}
+
             {{ insetText({
-              html: '386 forms awaiting processing',
-              classes: 'nhsuk-inset-text--summary'
+              html: insetTextHtml,
+              classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-top-0'
             }) }}
 
 
               {% from './macros/stats.njk' import stats %}
-              {{ stats( [7,0,1,2,10] ) }}
-
-
-
-            <div class="nhsuk-button-group">
-
-              {{ button({
-                html: '<span data-ak="I">Process an application</span>',
-                href: 'process-application/experimental--horizontal-labels'
-              }) }}
-
-              {{ button({
-                html: '<span data-ak="K">Enter application manually</span>',
-                href: 'process-application/new-application',
-                classes: 'nhsuk-button--secondary'
-              }) }}
-
-               {{ button({
-                html: '<span data-ak="M">Search for a certificate</span>',
-                href: 'reset-search',
-                classes: 'nhsuk-button--secondary'
-              }) }}
-
-            </div>
+              {{ stats
+                ([
+                data.applicationStats.accepted,
+                data.applicationStats.rejected,
+                data.applicationStats.rescans,
+                data.applicationStats.onHold,
+                data.applicationStats.total 
+                ])
+              }}
   
+
+              {% set captionHtml %}
+              Applications you need to change
+              <span class="nhsuk-hint nhsuk-u-margin-top-2">
+                These applications have been quality checked. The checker has identified changes you need to&nbsp;make.
+              </span>
+              {% endset %}
+
 
             {{ table({
                 panel: false,
-                caption: "Certificates you need to change",
+                caption: captionHtml | safe,                    
                 firstCellIsHeader: false,
                 responsive: true,
                 tableClasses: 'patient-table',
@@ -65,7 +63,26 @@
                 rows: checkingRows
               }) }}
 
+              <div class="nhsuk-button-group">
 
+                {{ button({
+                  html: '<span data-ak="I">Process an application</span>',
+                  href: 'process-application/start-processing'
+                }) }}
+  
+                {{ button({
+                  html: '<span data-ak="K">Enter application manually</span>',
+                  href: 'process-application/new-application',
+                  classes: 'nhsuk-button--secondary'
+                }) }}
+  
+                 {{ button({
+                  html: '<span data-ak="M">Search for a certificate</span>',
+                  href: 'reset-search',
+                  classes: 'nhsuk-button--secondary'
+                }) }}
+  
+              </div>
             
 
           </div>

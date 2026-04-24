@@ -12,12 +12,23 @@
 {% block content %}
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-grid-column-one-half">
 
       <h1 class="nhsuk-heading-m">{{ pageName }}
         {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
         {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
 
+    </div>
+    {% set processedToday = data.applicationStats.total %}
+    <div class="nhsuk-grid-column-one-half">
+      {% set insetTextHtml %}
+      <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
+    {% endset %}
+
+    {{ insetText({
+      html: insetTextHtml,
+      classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
+    }) }}
     </div>
   </div>
 
@@ -44,91 +55,6 @@
                       <h2 class="nhsuk-heading-m">Cannot process application</h2>
 
 
-                      {% set askForFurtherInformationFromPatientHTML %}
-
-                        <!-- ASK FOR FURTHER INFORMATION FROM PATIENT HTML -->
-
-                        {% set values = [
-                            "Patient's signature",
-                            "Healthcare practitioner's signature",
-                            "Healthcare practitioner's contact information",
-                            "Date of birth",
-                            'Full address including postcode',
-                            'Email address',
-                            'NHS number',
-                            "Child's due or birth date"
-                        ] %}
-
-                        {{ checkboxes({
-                          idPrefix: 'infoFromPatient',
-                          name: 'infoFromPatient',
-                          values: data.infoFromPatient,
-                          fieldset: {
-                            legend: {
-                              classes: 'nhsuk-u-visually-hidden',
-                              text: 'What information is needed from the patient?',
-                              isPageHeading: false
-                            }
-                          },
-                          classes: 'nhsuk-checkboxes--small',
-                          items: [
-                            { value: values[0], html: values[0], attributes: { 'data-focus-image' : 'patientSignature' } },
-                            { value: values[1], html: values[1], attributes: { 'data-focus-image' : 'healthcarePractitionerSignature' } },
-                            { value: values[2], html: values[2], attributes: { 'data-focus-image' : 'healthcarePractitionerDetails' } },
-                            { value: values[3], html: values[3], attributes: { 'data-focus-image' : 'dateOfBirth' } },
-                            { value: values[4], html: values[4], attributes: { 'data-focus-image' : 'address' } },
-                            { value: values[5], html: values[5], attributes: { 'data-focus-image' : 'emailAddress' } },
-                            { value: values[6], html: values[6], attributes: { 'data-focus-image' : 'nhsNumber' } },
-                            { value: values[7], html: values[7], attributes: { 'data-focus-image' : 'childsDueOrBirthDate' } }
-                          ]
-                        }) }}
-
-
-                      {% endset %}
-
-
-
-                      {% set askForFurtherInformationFromHCPHTML %}
-
-                        <!-- ASK FOR FURTHER INFORMATION FROM HCP HTML -->
-
-                        {% set values = [
-                          "Patient's signature",
-                          "Healthcare practitioner's signature",
-                          "Date of birth",
-                          'Full address including postcode',
-                          'NHS number',
-                          "Child's due or birth date"
-                        ] %}
-
-                        {{ checkboxes({
-                          idPrefix: 'infoFromHCP',
-                          name: 'infoFromHCP',
-                          values: data.infoFromHCP,
-                          fieldset: {
-                            legend: {
-                              classes: 'nhsuk-u-visually-hidden',
-                              text: 'What information is needed from the healthcare practitioner?',
-                              isPageHeading: false
-                            }
-                          },
-                          classes: 'nhsuk-checkboxes--small',
-                          items: [
-                            { value: values[0], html: values[0], attributes: { 'data-focus-image' : 'patientSignature' } },
-                            { value: values[1], html: values[1], attributes: { 'data-focus-image' : 'healthcarePractitionerSignature' } },
-                            { value: values[2], html: values[2], attributes: { 'data-focus-image' : 'dateOfBirth' } },
-                            { value: values[3], html: values[3], attributes: { 'data-focus-image' : 'address' } },
-                            { value: values[4], html: values[4], attributes: { 'data-focus-image' : 'nhsNumber' } },
-                            { value: values[5], html: values[5], attributes: { 'data-focus-image' : 'childsDueOrBirthDate' } }
-                          ]
-                        }) }}
-
-                        <!-- <span class="nhsuk-u-secondary-text-colour"> -->
-
-
-                      {% endset %}
-
-
                       {% set rejectApplicationHTML %}
 
                         <!-- REASON FOR REJECTION -->
@@ -138,7 +64,6 @@
                           'Patient is outside England',
                           'Patient is under 16',
                           'Patient is over 60',
-                          'Patient already has a valid exemption certificate',
                           'Application is not on a Matex form'
                         ] %}
 
@@ -158,13 +83,13 @@
                             { value: values[1], html: values[1] },
                             { value: values[2], html: values[2] },
                             { value: values[3], html: values[3] },
-                            { value: values[4], html: values[4] },
-                            { value: values[5], html: values[5] }
+                            { value: values[4], html: values[4] }
                           ]
                         }) }}
 
                       {% endset %}
-
+                  
+                    
                       
                       <form method="post" novalidate>
 
@@ -179,14 +104,8 @@
                           },
                           items: [
                             {
-                              value: 'askForFurtherInformationFromPatient',
-                              text: 'Ask the patient for further information',
-                              conditional: { html: askForFurtherInformationFromPatientHTML }
-                            },
-                            {
-                              value: 'askForFurtherInformationFromHCP',
-                              text: 'Ask the healthcare practitioner for further information',
-                              conditional: { html: askForFurtherInformationFromHCPHTML }
+                              value: 'askForFurtherInformation',
+                              text: 'Ask for further information'
                             },
                             {
                               value: 'requestARescan',
@@ -211,7 +130,15 @@
 
 
                         {{ button({
-                          text: 'Submit'
+                          html: '<span data-ak="I">Continue</span>',
+                          attributes: {
+                            type: 'submit',
+                            id: 'cannot-process-submit',
+                            'data-text-ask': 'Continue',
+                            'data-text-rescan': 'Request a rescan and move to next application',
+                            'data-text-reject': 'Reject application and move to next application'
+                          },
+                          classes: 'nhsuk-u-visually-hidden'
                         }) }}
 
                       </form>
@@ -227,5 +154,37 @@
 
     </div>
   </div>
-
+  
+  <!-- BUTTON DISPLAY AND CHANGE WITH RADIO SELECTION -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const button = document.getElementById('cannot-process-submit');
+      const radios = document.querySelectorAll('input[name="cannotProcessApplication"]');
+    
+      button.disabled = true;
+    
+      function show(text) {
+        button.innerHTML = `<span data-ak="I">${text}</span>`;
+        button.classList.remove('nhsuk-u-visually-hidden');
+        button.disabled = false;
+      }
+    
+      radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          switch (radio.value) {
+            case 'askForFurtherInformation':
+              show(button.dataset.textAsk);
+              break;
+            case 'requestARescan':
+              show(button.dataset.textRescan);
+              break;
+            case 'rejectApplication':
+              show(button.dataset.textReject);
+              break;
+          }
+        });
+      });
+    });
+    </script>
+  
 {% endblock %}

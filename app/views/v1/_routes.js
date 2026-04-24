@@ -3,6 +3,61 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
+
+function initPaperMatexQueue(req) {
+  if (req.session.data.paperMatexQueue) return;
+
+  const fixtures = req.session.data.patientFixtures || [];
+
+  const paperMatex = fixtures.filter(p =>
+    p.certificateType === 'matex' && p.channel === 'Paper'
+  );
+
+  req.session.data.paperMatexQueue = paperMatex;
+  req.session.data.currentIndex = 0;
+  req.session.data.processedToday = 0;
+
+  hydrateImageFields(req, paperMatex[0]);
+}
+
+function hydrateImageFields(req, application) {
+  if (!application) return;
+
+  req.session.data.imageFirstName = application.firstName;
+  req.session.data.imageLastName = application.lastName;
+  req.session.data.imageNHSNumber = application.nhsNumber;
+
+  req.session.data.imageDateOfBirth = application.dateOfBirth;
+
+  req.session.data.imageEmailAddress = application.emailAddress || '';
+
+  req.session.data.imageBuildingNumberOrName = application.address.buildingNumber;
+
+  req.session.data.imageAddressLine1 = application.address.streetName;
+
+  req.session.data.imageAddressLine2 = application.address.addressLine2 || '';
+
+  req.session.data.imageTown = application.address.postTown;
+
+  req.session.data.imageCounty = application.address.county || '';
+
+  req.session.data.imagePostcode = application.address.postcode;
+
+  req.session.data.confidence = application.confidence || {};
+}
+
+function processCurrentApplication(req) {
+  initPaperMatexQueue(req);
+
+  const queue = req.session.data.paperMatexQueue;
+
+  req.session.data.processedToday += 1;
+
+  req.session.data.currentIndex = (req.session.data.currentIndex + 1) % queue.length;
+
+  hydrateImageFields(req, queue[req.session.data.currentIndex]);
+}
+
 router.post(/index/, function (req, res) {
     
     let destination = 'search';
@@ -54,13 +109,58 @@ router.post(/process-application\/experimental--single/, function (req, res) {
     res.redirect( destination );
 });
 
-router.post(/process-application\/experimental--horizontal-labels/, function (req, res) {
-    let destination = 'review-application--horizontal-labels';
-    if( req.session.data.backTo === 'onhold' ){
-      destination = 'review-application--horizontal-labels--on-hold?backTo=';
-    }
-    res.redirect( destination );
+router.post(/process-application\/cannot-process-application--horizontal-labels-fil/, function (req, res) {
+
+    initPaperMatexQueue(req);
+
+    const stats = req.session.data.applicationStats;
+
+    stats.onHold += 1;
+    stats.total += 1;
+
+    processCurrentApplication(req);
+
+    return res.redirect('/v1/process-application/experimental--horizontal-labels');
+
 });
+
+router.get(/process-application\/experimental--horizontal-labels/, function (req, res) {
+  
+  initPaperMatexQueue(req);
+
+  const queue = req.session.data.paperMatexQueue;
+  const index = req.session.data.currentIndex;
+
+
+  res.render('v1/process-application/experimental--horizontal-labels', {
+    processedToday: req.session.data.applicationStats.total
+  });
+});
+
+
+router.post(/process-application\/experimental--horizontal-labels/, function (req, res) {
+
+  if (req.body.applicationDecision === 'approve') {
+
+    const stats = req.session.data.applicationStats;
+
+    stats.accepted += 1;
+    stats.total += 1;
+
+    processCurrentApplication(req);
+
+    return res.redirect('/v1/process-application/experimental--horizontal-labels');
+  }
+
+  if (req.body.applicationDecision === 'cannotProcess') {
+    delete req.session.data.cannotProcessApplication;
+    delete req.session.data.cannotProcessApplicationNotes;
+    delete req.session.data.reasonForRejection;
+
+    return res.redirect('/v1/process-application/cannot-process-application--horizontal-labels');
+  }
+});
+
 
 router.post(/process-application\/review-application/, function (req, res) {
     const destination = 'confirmation?confirmationStatus=applicationApproved';
@@ -68,32 +168,135 @@ router.post(/process-application\/review-application/, function (req, res) {
 });
 
 
+router.post(/process-application\/cannot-process-application--horizontal-labels/, function (req, res) {
 
+    const cannotProcessApplication = req.session.data.cannotProcessApplication;
 
-router.post(/process-application\/cannot-process-application--horizontal-labels/, function( req, res){
+    const stats = req.session.data.applicationStats;
 
-    const cannotProcessApplication = req.session.data.cannotProcessApplication || 'rejectApplication';
+    delete req.session.data.furtherInformation;
+    delete req.session.data.furtherInformationRequest;
+    delete req.session.data.furtherInformationNotes;
 
-    let destination = 'confirmation--on-hold';
+    switch (cannotProcessApplication) {
 
-    switch( cannotProcessApplication ){
-        
-        case 'askForFurtherInformationFromPatient':
-        case 'askForFurtherInformationFromHCP':
-        case 'requestARescan':
-            destination = 'confirmation--on-hold';
-            break;
+      case 'askForFurtherInformation':
+        // NOT counted here – handled in --fil
+        return res.redirect(
+          'cannot-process-application--horizontal-labels-fil'
+        );
 
-        case 'rejectApplication':
-            destination = 'confirmation--rejected';
-            break;
+      case 'requestARescan':
+        stats.rescans += 1;
+        stats.total += 1;
+        break;
+
+      case 'rejectApplication':
+        stats.rejected += 1;
+        stats.total += 1;
+        break;
     }
-    
-    res.redirect( destination );
 
-});
+    processCurrentApplication(req);
+
+    res.redirect('experimental--horizontal-labels');
+  }
+);
+
+router.get(/process-application\/cannot-process-application--horizontal-labels-fil/, function (req, res) {
+
+    initPaperMatexQueue(req);
+
+    const queue = req.session.data.paperMatexQueue;
+    const index = req.session.data.currentIndex;
+
+    res.render(
+      'v1/process-application/cannot-process-application--horizontal-labels-fil'
+    );
+  }
+);
+
+router.get(/process-application\/cannot-process-application--horizontal-labels$/, function (req, res) {
+
+    initPaperMatexQueue(req);
+
+    const queue = req.session.data.paperMatexQueue;
+    const index = req.session.data.currentIndex;
 
 
+    res.render(
+      'v1/process-application/cannot-process-application--horizontal-labels'
+    );
+  }
+);
+
+router.get(/process-application\/start-processing/, function (req, res) {
+
+// Reset decision state
+  delete req.session.data.cannotProcessApplication;
+  delete req.session.data.cannotProcessApplicationNotes;
+  delete req.session.data.reasonForRejection;
+  delete req.session.data.askForFurtherInformation;
+  delete req.session.data.sendRequest;
+  delete req.session.data.sendRequestEmail;
+  delete req.session.data.infoFromPatient;
+
+
+    // HARD RESET (only here)
+  req.session.data.applicationStats = {
+    accepted: 0,
+    rejected: 0,
+    rescans: 0,
+    onHold: 0,
+    total: 0
+  };
+
+    delete req.session.data.paperMatexQueue;
+    delete req.session.data.currentIndex;
+    delete req.session.data.processedToday;
+
+    // Contact / address inputs
+    delete req.session.data.sendRequestEmail;
+    delete req.session.data.fullName;
+    delete req.session.data.addressLine1;
+    delete req.session.data.addressLine2;
+    delete req.session.data.addressTown;
+    delete req.session.data.addressCounty;
+    delete req.session.data.addressPostcode;
+
+    // Image address overrides
+    delete req.session.data.imageFirstName;
+    delete req.session.data.imageLastName;
+    delete req.session.data.imageNHSNumber;
+    delete req.session.data.imageDateOfBirth;
+    delete req.session.data.imageBuildingNumberOrName;
+    delete req.session.data.imageAddressLine1;
+    delete req.session.data.imageAddressLine2;
+    delete req.session.data.imageTown;
+    delete req.session.data.imageCounty;
+    delete req.session.data.imagePostcode;
+
+    // Further information (FIL) state
+    delete req.session.data.furtherInformation;
+    delete req.session.data.furtherInformationRequest;
+    delete req.session.data.furtherInformationNotes;
+
+    // Lookup helpers
+    delete req.session.data.lookupAddress;
+    delete req.session.data.sendRequestHTML;
+
+    // Decisions
+    delete req.session.data.cannotProcessApplication;
+    delete req.session.data.applicationDecision;
+
+    // Re‑initialise cleanly
+    initPaperMatexQueue(req);
+
+    res.redirect(
+      '/v1/process-application/experimental--horizontal-labels'
+    );
+  }
+);
 
 
 router.post(/process-application\/cannot-process-application/, function( req, res){
@@ -117,6 +320,7 @@ router.post(/process-application\/cannot-process-application/, function( req, re
     res.redirect( destination );
 
 });
+
 
 router.post(/process-application\/postcode-results/, function (req, res) {
     const destination = 'review-application';
@@ -147,7 +351,6 @@ router.post(/process-application\/experimental--horizontal-labels/, function (re
     const destination = 'review-application';
     res.redirect( destination );
 });
-
 
 
 router.post(/process-application/, function (req, res) {
@@ -700,15 +903,23 @@ if (/^(flat|apartment)/i.test(parts[0]) && parts.length >= 2) {
 } else {
   // STANDARD HOUSE
   if (parts.length > 0) {
-    newAddress.addressLineOne = toTitleCase(parts.shift());   // ✅ title-case here
+    newAddress.addressLineOne = toTitleCase(parts.shift());
     newAddress.addressLineTwo = toTitleCase(parts.join(', ') || '');
   }
 }
 
-// ✅ ✅ NOW — RIGHT HERE — split building/house number from addressLineOne
-const [buildingNumberOrName, ...streetParts] = newAddress.addressLineOne.split(' ');
-newAddress.buildingNumber = buildingNumberOrName;
-newAddress.streetName = streetParts.join(' ').trim();
+// Split building number only if line starts with a number (e.g. "10", "10A")
+const numberMatch = newAddress.addressLineOne.match(/^(\d+[A-Za-z]?)(\s+.+)?$/);
+
+if (numberMatch) {
+  // Numeric building number
+  newAddress.buildingNumber = numberMatch[1];
+  newAddress.streetName = (numberMatch[2] || '').trim();
+} else {
+  // Building name only (no number)
+  newAddress.buildingNumber = '';
+  newAddress.streetName = newAddress.addressLineOne;
+}
 
 
 // Map which namespace to use based on source (page that opened lookup)
@@ -741,9 +952,6 @@ const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJ
     ...newAddress
   };
 
-  // Extract building/house number from addressLineOne for case--edit page
-  const buildingMatch = newAddress.addressLineOne.match(/^([^ ]+)/);
-  newAddress.buildingNumber = buildingMatch ? buildingMatch[1] : '';
 
   // Save selected address for destination page
   req.session.data.lookupAddress = {

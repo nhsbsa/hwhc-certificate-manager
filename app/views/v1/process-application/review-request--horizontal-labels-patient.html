@@ -1,0 +1,159 @@
+{% extends 'layout-fullscreen.html' %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
+
+{% block beforeContent %}
+ {{ backLink({
+    href: 'experimental--horizontal-labels',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+      </h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+          <div class="nhsuk-grid-row">
+
+            <!-- ONE HALF -->
+            <div class="nhsuk-grid-column-one-half sticky-column">
+
+              {% from '../macros/image.njk' import image %}
+              {{ image() }}
+
+            </div>
+
+            <!-- ONE HALF -->
+            <div class="nhsuk-grid-column-one-half">
+
+               <div class="nhsuk-card nhsuk-card--grey">
+        <div class="nhsuk-card__content">
+
+              <h2 class="nhsuk-heading-m">Review request</h2>
+
+              <h3 class="nhsuk-heading-s">Further information details</h3>
+
+              {% set firstName = data.imageFirstName %}
+              {% set lastName = data.imageLastName %}
+
+              {% set houseNumber = data.imageBuildingNumberOrName %}
+              {% set addressLine1 = data.imageAddressLine1 %}
+              {% set addressLine2 = data.imageAddressLine2 %}
+              {% set town = data.imageTown %}
+              {% set county = data.imageCounty %}
+              {% set postcode = data.imagePostcode %}
+
+              {% set reason = 'Rescan requested' %}
+
+              {% if data.cannotProcessApplication === 'askForFurtherInformationFromPatient' %}
+        
+                {% set reason %}
+                  <p>Further information requested from the patient</p>
+                  <ul>
+                    {% for info in data.infoFromPatient %}<li>{{ info }}</li>{% endfor %}
+                  </ul>
+                {% endset %}
+        
+              {% elif data.cannotProcessApplication === 'askForFurtherInformationFromHCP' %}
+        
+                {% set reason %}
+                  <p>Further information requested from the healthcare practitioner</p>
+                  <ul>
+                    {% for info in data.infoFromHCP %}<li>{{ info }}</li>{% endfor %}
+                  </ul>
+                {% endset %}
+        
+              {% endif %}
+
+
+              <form method="post" novalidate>
+
+                {{ summaryList({
+                  rows: [
+                    {
+                      key: { text: 'Name' },
+                      value: { text: firstName | processFullName( lastName ) },
+                      actions: {
+                        items: [
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageLastName', text: 'Change', visuallyHiddenText: 'name', attributes: { 'data-focus-image': 'lastName'  } }
+                        ]
+                      }
+                    },
+                    {
+                      key: { text: 'Reference' },
+                      value: { text: patient.certificateReference or '95 311 581 185' }
+                    },
+                    {
+                      key: { text: 'Request' },
+                      value: { html: reason },
+                      actions: {
+                         items: [
+                         { href: 'cannot-process-application--horizontal-labels?cannotProcessApplication=askForFurtherInformationFromPatient', text: 'Change', visuallyHiddenText: 'further information request' }
+                         ]
+                      }
+                    },
+                    {
+                      key: { text: 'Request sent by' },
+                      value: { text: data.patientFurtherInformation | capitalize },
+                      actions: {
+                         items: [
+                          { href: 'cannot-process-application--horizontal-labels-patient?patientFurtherInformation', text: 'Change', visuallyHiddenText: 'request sent by email or post' }
+                        ]
+                      }
+                    },
+                    {
+                      key: { visuallyHiddenText: 'patient\'s', text: 'Postal address' },
+                      value: { html: houseNumber | processAddress( addressLine1, addressLine2, town, county, postcode ) },
+                      actions: {
+                         items: [
+                          { href: 'experimental--horizontal-labels?showAllFields=true#imageBuildingNumberOrName', text: 'Change', visuallyHiddenText: 'address', attributes: { 'data-focus-image': 'address' } }
+                        ]
+                      }
+                    }
+                  ]
+                }) }}
+
+
+
+                <div class="nhsuk-button-group">
+
+                  {{ button({
+                    html: '<span data-ak="I">Confirm</span>'
+                  }) }}
+
+                  {{ button({
+                    html: '<span data-ak="K">Cancel</span>',
+                    classes: 'nhsuk-button--secondary'
+                  }) }}
+
+                </div>
+              </form>
+
+              </div>
+            </div>
+                
+
+            </div>
+
+          </div>
+
+    </div>
+  </div>
+
+{% endblock %}

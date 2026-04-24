@@ -58,18 +58,9 @@
       }) }}
 
 
-      {% if ( ( 1 | getRandomNumber ) === 0 ) %}
-
         <!-- NO CHECK -->
         <h2 class="nhsuk-heading-s">What happens next?</h2>
         <p class="nhsuk-body">You do not need to do anything else with this application.</p>
-
-      {% else %}
-
-        {% from '../macros/checking.njk' import checking %}
-        {{ checking() }}
-
-      {% endif %}
 
 
 

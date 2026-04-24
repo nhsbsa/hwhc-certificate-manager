@@ -4,22 +4,70 @@
 
 {% block beforeContent %}
   {{ backLink({
-    href: 'javascript:history.go(-1)',
-    html: '<span data-ak="B">Back</span>'
+    href: '../dashboard',
+    html: '<span data-ak="B">Return to your dashboard</span>'
   }) }}
 {% endblock %}
 
 {% block content %}
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-grid-column-one-half">
 
       <h1 class="nhsuk-heading-m">{{ pageName }}
         {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
         {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
 
     </div>
+    <div class="nhsuk-grid-column-one-half">
+      {% set insetTextHtml %}
+      <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
+    {% endset %}
+
+    {{ insetText({
+      html: insetTextHtml,
+      classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
+    }) }}
+    </div>
   </div>
+  
+  {% set lookup = data.lookupAddress or {} %}
+
+  {% if lookup.buildingNumber is defined %}
+  {% set buildingNumberValue = lookup.buildingNumber %}
+  {% else %}
+    {% set buildingNumberValue = data.imageBuildingNumberOrName %}
+  {% endif %}
+
+  {% if lookup.addressLineOne is defined %}
+  {% set addressValue1 = lookup.streetName %}
+  {% else %}
+    {% set addressValue1 = data.imageAddressLine1 %}
+  {% endif %}
+
+  {% if lookup.addressLineTwo is defined %}
+    {% set addressValue2 = lookup.addressLineTwo %}
+  {% else %}
+    {% set addressValue2 = data.imageAddressLine2 %}
+  {% endif %}
+
+  {% if lookup.town is defined %}
+    {% set townValue = lookup.town %}
+  {% else %}
+    {% set townValue = data.imageTown %}
+  {% endif %}
+
+  {% if lookup.county is defined %}
+    {% set countyValue = lookup.county %}
+  {% else %}
+    {% set countyValue = data.imageCounty %}
+  {% endif %}
+
+  {% if lookup.postcode is defined %}
+  {% set postcodeValue = lookup.postcode %}
+  {% else %}
+    {% set postcodeValue = data.imagePostcode %}
+  {% endif %}
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
@@ -28,7 +76,7 @@
 
           <div class="nhsuk-grid-row">
 
-            <!-- ONE THIRD -->
+            <!-- ONE HALF -->
             <div class="nhsuk-grid-column-one-half sticky-column">
 
               {% from '../macros/image.njk' import image %}
@@ -36,7 +84,7 @@
 
             </div>
 
-            <!-- TWO THIRDS -->
+            <!-- ONE HALF -->
             <div class="nhsuk-grid-column-one-half">
 
                <div class="nhsuk-card nhsuk-card--grey">
@@ -72,25 +120,44 @@
                       const hrs = document.querySelectorAll('.horizontal-labels hr');
                       const addressButton = document.querySelector('.address-button');
 
-                      const _showHighlightedFields = function(){
+                      const highlightedIncludesAddress = () => {
+                        return Array.from(highlightedFields).some(label => {
+                          const formGroup = label.closest('.nhsuk-form-group');
+                          if (!formGroup) return false;
 
-                           allFields.forEach( function( field ){
-                               field.parentNode.classList.add('hidden');
-                             });
- 
-                             highlightedFields.forEach( function( field ){
-                               field.parentNode.classList.remove('hidden');
-                             });
- 
-                             hrs.forEach( function( hr ){
-                               hr.classList.add('hidden');
-                             } );
+                          const input = formGroup.querySelector('[data-focus-image]');
+                          if (!input) return false;
 
-                             addressButton.classList.add('hidden');
+                          return [
+                            'houseNumber',
+                            'street',
+                            'address',
+                            'town',
+                            'postcode'
+                          ].includes(input.getAttribute('data-focus-image'));
+                        });
+                      };
 
-                            toggleButton.setAttribute('aria-pressed', 'false' );
-                            toggleButton.textContent = 'Show all fields';
+                      const _showHighlightedFields = function () {
 
+                        allFields.forEach(field => {
+                          field.parentNode.classList.add('hidden');
+                        });
+
+                        highlightedFields.forEach(field => {
+                          field.parentNode.classList.remove('hidden');
+                        });
+
+                        hrs.forEach(hr => hr.classList.add('hidden'));
+
+                        if (highlightedIncludesAddress()) {
+                          addressButton.classList.remove('hidden');
+                        } else {
+                          addressButton.classList.add('hidden');
+                        }
+
+                        toggleButton.setAttribute('aria-pressed', 'false');
+                        toggleButton.textContent = 'Show all fields';
                       };
 
                        const _showAllFields = function(){
@@ -140,7 +207,79 @@
 
                       }
 
+                      
+                      document
+                        .querySelectorAll('.horizontal-labels input, .horizontal-labels select')
+                        .forEach(input => {
+
+                          input.addEventListener('keydown', event => {
+                            if (event.key === 'Enter') {
+                              event.preventDefault();
+                              markFieldConfirmed(input);
+                            }
+                          });
+
+                        });
+
+
                     });
+
+
+                    const isShortInput = input =>
+                      input.classList.contains('nhsuk-input--width-2') ||
+                      input.classList.contains('nhsuk-input--width-3') ||
+                      input.classList.contains('nhsuk-input--width-4') ||
+                      input.classList.contains('nhsuk-input--width-5') ||
+                      input.classList.contains('nhsuk-input--width-10');
+
+                      function markFieldConfirmed(input) {
+                        // Short inputs: inline tick
+                        if (isShortInput(input)) {
+                          if (input.nextElementSibling?.classList.contains('input-confirmed-inline')) return;
+
+                          const tickTemplate = document.getElementById('nhs-confirm-tick');
+                          if (!tickTemplate) return;
+
+                          const tick = tickTemplate.firstElementChild.cloneNode(true);
+                          const wrapper = document.createElement('span');
+
+                          wrapper.className = 'input-confirmed-inline';
+                          wrapper.appendChild(tick);
+
+                          input.insertAdjacentElement('afterend', wrapper);
+                          return;
+                        }
+
+                        // Long inputs: keep existing group-level tick
+                        const formGroup = input.closest('.nhsuk-form-group');
+                        if (!formGroup || formGroup.querySelector('.field-confirmed')) return;
+
+                        const tickTemplate = document.getElementById('nhs-confirm-tick');
+                        if (!tickTemplate) return;
+
+                        const tickIcon = tickTemplate.firstElementChild.cloneNode(true);
+                        const tickWrapper = document.createElement('span');
+
+                        tickWrapper.className = 'field-confirmed';
+                        tickWrapper.appendChild(tickIcon);
+
+                        formGroup.appendChild(tickWrapper);
+                      }
+
+                    [
+                      'imageBuildingNumberOrName',
+                      'imageAddressLine1',
+                      'imageAddressLine2',
+                      'imageTown',
+                      'imageCounty',
+                      'imagePostcode'
+                    ].forEach(id => {
+                      const field = document.getElementById(id);
+                      if (field && field.value) {
+                        markFieldConfirmed(field);
+                      }
+                    });
+
 
                   </script>
 
@@ -183,23 +322,23 @@
 
                 {{ input({
                     label: {
-                      html: 'Last name ' + 53 | getConfidenceTag
+                      html: 'Last name ' + (data.confidence.lastName | default(null)) | getConfidenceTag
                     },
                     id: 'imageLastName',
                     name: 'imageLastName',
                     attributes: { 'data-focus-image' : 'lastName' },
                     classes: 'nhsuk-input--width-20',
-                    value: data.imageLastName or 'Jaaahnson'
+                    value: data.imageLastName
                   }) }}
 
                   {{ input({
                     label: {
-                      html: 'First name ' + 42 | getConfidenceTag
+                      html: 'First name ' + (data.confidence.firstName | default(null)) | getConfidenceTag
                     },
                     id: 'imageFirstName',
                     name: 'imageFirstName',
                     attributes: { 'data-focus-image' : 'firstName' },
-                    value: data.imageFirstName or 'Sorah',
+                    value: data.imageFirstName,
                     classes: 'nhsuk-input--width-20'
                   }) }}
 
@@ -207,33 +346,33 @@
 
                 {% endcall %}
 
-
+                {% set dobConfidence = data.confidence.dateOfBirth | default(null) %}
 
                 {{ dateInput({
                   id: 'imageDateOfBirth',
                   namePrefix: 'imageDateOfBirth',
                   fieldset: {
                     legend: {
-                      html: 'Date of birth ' + 87 | getConfidenceTag
+                      html: 'Date of birth ' + dobConfidence | getConfidenceTag
                     }
                   },
                   items: [
                     {
                       name: 'day',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageDateOfBirth.day or '2',
+                      value: data.imageDateOfBirth.day,
                       attributes: { 'data-focus-image' : 'dateOfBirth' }
                     },
                     {
                       name: 'month',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageDateOfBirth.month or '7',
+                      value: data.imageDateOfBirth.month,
                       attributes: { 'data-focus-image' : 'dateOfBirth' }
                     },
                     {
                       name: 'year',
                       classes: 'nhsuk-input--width-4',
-                      value: data.imageDateOfBirth.year or '1995',
+                      value: data.imageDateOfBirth.year,
                       attributes: { 'data-focus-image' : 'dateOfBirth' }
                     }
                   ]
@@ -242,19 +381,22 @@
 
                 {{ input({
                     label: {
-                      html: 'NHS number ' + 67 | getConfidenceTag
+                      html: 'NHS number ' + (data.confidence.nhsNumber | default(null)) | getConfidenceTag
                     },
                     id: 'imageNHSNumber',
                     name: 'imageNHSNumber',
                     attributes: { 'data-focus-image' : 'nhsNumber' },
                     classes: 'nhsuk-input--width-10',
-                    value: data.imageNHSNumber or '1252 567 987'
+                    value: data.imageNHSNumber
                   }) }}
 
 
                 <hr />
 
                 <!-- ADDRESS -->
+
+                {% set addrConf = data.confidence.address | default({}) %}
+
                 {% call fieldset({
                   legend: {
                     html: 'Address',
@@ -264,77 +406,77 @@
 
                     {{ input({
                       label: {
-                        html: 'House number or name ' + 67 | getConfidenceTag
+                        html: 'House number or name ' + (addrConf.buildingNumber | default(null)) | getConfidenceTag
                       },
                       id: 'imageBuildingNumberOrName',
                       name: 'imageBuildingNumberOrName',
                       attributes: { 'data-focus-image' : 'houseNumber' },
                       classes: 'nhsuk-input--width-10',
-                      value: data.imageBuildingNumberOrName or '12'
+                      value: buildingNumberValue
                     }) }}
 
                     {{ input({
                       label: {
-                        html: 'Address line 1 ' + 87 | getConfidenceTag
+                        html: 'Address line 1 ' + (addrConf.streetName | default(null)) | getConfidenceTag                        
                       },
                       classes: 'nhsuk-input--width-20',
                       id: 'imageAddressLine1',
                       name: 'imageAddressLine1',
                       attributes: { 'data-focus-image' : 'street' },
-                      value: data.imageAddressLine1 or 'Crown Passage'
+                      value: addressValue1
                     }) }}
 
                     {{ input({
                       label: {
-                        html: 'Address line 2 ' + 0 | getConfidenceTag + ' (optional)'
+                        html: 'Address line 2 ' + (addrConf.addressLine2 | default(null)) | getConfidenceTag + ' (optional)'
                       },
                       classes: 'nhsuk-input--width-20',
                       id: 'imageAddressLine2',
                       name: 'imageAddressLine2',
                       attributes: { 'data-focus-image' : 'address' },
-                      value: data.imageAddress2
+                      value: addressValue2
                     }) }}
 
                     {{ input({
                       label: {
-                        html: 'Town or city ' + 77 | getConfidenceTag
+                        html: 'Town or city ' + (addrConf.postTown | default(null)) | getConfidenceTag                        
                       },
                       classes: 'nhsuk-input--width-20',
                       id: 'imageTown',
                       name: 'imageTown',
                       attributes: { 'data-focus-image' : 'town' },
-                      value: data.imageTown or 'Birmingham'
+                      value: townValue
                     }) }}
 
                     {{ input({
                       label: {
-                        html: 'County ' + 0 | getConfidenceTag + ' (optional)'
+                        html: 'County ' + (addrConf.county | default(null)) | getConfidenceTag + ' (optional)'
                       },
                       classes: 'nhsuk-input--width-10',
                       id: 'imageCounty',
                       name: 'imageCounty',
                       attributes: { 'data-focus-image' : 'address' },
-                      value: data.imageCounty
+                      value: countyValue
                     }) }}
 
                     {{ input({
                       label: {
-                        html: 'Postcode ' + 89 | getConfidenceTag
+                        html: 'Postcode ' + (addrConf.postcode | default(null)) | getConfidenceTag
                       },
                       classes: 'nhsuk-input--width-10',
                       id: 'imagePostcode',
                       name: 'imagePostcode',
                       attributes: { 'data-focus-image' : 'postcode' },
-                      value: data.imagePostcode or 'B14 9QX'
+                      value: postcodeValue
                     }) }}
 
                   {% endcall %}
 
                   <div class="nhsuk-button-group address-button">
                     {{ button({
-                      html: '<span data-ak="G">Populate address fields using address lookup</span>',
+                      html: '<span data-ak="G">Change address fields using address lookup</span>',
                       classes: "nhsuk-button--secondary nhsuk-button--small",
-                      href: "/v1/hrtppc/address-lookup?source=newHRT&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dtrue%23postcode"
+                      href: "/v1/matex/address-lookup?source=matex&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dtrue%23postcode"
                     }) }}
                   </div>
 
@@ -358,7 +500,7 @@
 
                    {{ input({
                       label: {
-                        html: 'Email address ' + 0 | getConfidenceTag + ' (optional)'
+                        html: 'Email address ' + (data.confidence.email | default(null)) | getConfidenceTag + ' (optional)'
                       },
                       attributes: { type: 'email', autocomplete: 'off' },
                       classes: 'nhsuk-input--width-20',
@@ -379,26 +521,26 @@
                   namePrefix: 'imageBabyDateOfBirth',
                   fieldset: {
                     legend: {
-                      html: "Child's due or birth date " + 12 | getConfidenceTag
+                      html: "Child's due or birth date " + (data.confidence.childDOB | default(null)) | getConfidenceTag
                     }
                   },
                   items: [
                     {
                       name: 'day',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageBabyDateOfBirth.day or '',
+                      value: data.imageBabyDateOfBirth.day or '25',
                       attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
                     },
                     {
                       name: 'month',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageBabyDateOfBirth.month or '',
+                      value: data.imageBabyDateOfBirth.month or '11',
                       attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
                     },
                     {
                       name: 'year',
                       classes: 'nhsuk-input--width-4',
-                      value: data.imageBabyDateOfBirth.year or '',
+                      value: data.imageBabyDateOfBirth.year or '2025',
                       attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
                     }
                   ]
@@ -465,18 +607,68 @@
                 }) }}
 
 
+
                 <div class="nhsuk-button-group">
+                {{ button({
+                  html: '<span data-ak="I">Approve and move to next application</span>',
+                  attributes: {
+                    name: 'applicationDecision',
+                    value: 'approve'
+                  }
+                }) }}
 
-                  {{ button({
-                    html : '<span data-ak="I">Continue</span>'
-                  }) }}
 
-                </div>
+                {{ button({
+                  html: '<span data-ak="K">Cannot process application</span>',
+                  classes: 'nhsuk-button--secondary',
+                  attributes: {
+                    name: 'applicationDecision',
+                    value: 'cannotProcess'
+                  }
+                }) }}
+              
+              </div>
+                
 
               </form>
 
-                
+              {% from "nhsuk/macros/icon.njk" import nhsukIcon %}
+              <div class="nhsuk-u-visually-hidden">
+                <span id="nhs-confirm-tick">
+                  {{ nhsukIcon("tick") }}
+                </span>
+              </div>
 
+
+              <style>
+                .field-confirmed {
+                  right: 3.5rem;
+                  align-items: center;
+                }
+
+                /* Size the NHS icon nicely */
+                .field-confirmed .nhsuk-icon {
+                  width: 1.5rem;
+                  height: 1.5rem;
+                  color: #007f3b;
+                  fill: currentColor;
+                }
+
+                /* Inline tick right next to short inputs */
+                .input-confirmed-inline {
+                  display: inline-flex;
+                  align-items: center;
+                  margin-left: 0.25rem;
+                }
+
+                /* NHS green tick */
+                .input-confirmed-inline .nhsuk-icon {
+                  width: 1.5rem;
+                  height: 1.5rem;
+                  color: #007f3b;
+                  fill: currentColor;
+                }
+              </style>
 
               </div>
               </div>
@@ -491,5 +683,14 @@
 
     </div>
   </div>
+
+  <script>
+    window.addEventListener('pageshow', function (event) {
+      // Fired when page is restored from back/forward cache
+      if (event.persisted) {
+        window.location.reload();
+      }
+    });
+  </script>
 
 {% endblock %}
