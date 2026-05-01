@@ -56,7 +56,7 @@
 
   {% set fulfilment = data.editMATEX.certificateFulfilment or patient.fulfilment or "Email" %}
 
-  {% if fulfilment == 'Email' %}
+  {% if fulfilment == 'email' %}
   {% set titleText %}
   The certificate has been reissued by email
   {% endset %}
