@@ -617,7 +617,9 @@ module.exports = function (env) {
     // Processor page view
     rows = [
       firstNameObj,
+      { text: 'Address' },
       { text: 'Postcode' },
+      { text: 'Date of birth' },
       { text: 'Type' },
       { text: 'Status' },
       { text: 'Reference' },
@@ -765,7 +767,9 @@ module.exports = function (env) {
 
         obj = [
         { html: nameHTML },
+        { html: addressHtml },
         { html: patient.address.postcode },
+        { html: patient.dateOfBirth.display },
         { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
         { html: (patient.checking === true) ? _getStatusTextOrTag(patient.status, true) + ' ' + _getStatusTextOrTag('checking', true) : _getStatusTextOrTag(patient.status, true) },
         { html: patient.certificateReference },
@@ -800,49 +804,152 @@ module.exports = function (env) {
   //
   // GET CHECKING TABLE ROWS
   //
-  filters.getCheckingTableRows = function (patientData, count) {
+  filters.getCheckingTableRows = function (patientData) {
 
     if (typeof patientData === 'string') {
       patientData = JSON.parse(patientData);
     }
-
-    count = (!Number.isNaN(parseInt(count))) ? parseInt(count) : 1;
-
-    const loop = (Array.isArray(patientData)) ? patientData.length : 0;
+  
+    const rowsPerPage = 5;
+    const currentPage = Number.isInteger(parseInt(this.ctx.data.currentPage))
+      ? parseInt(this.ctx.data.currentPage)
+      : 0;
+  
+    const start = currentPage * rowsPerPage;
+    const end = start + rowsPerPage;
+  
     const rows = [];
+    let checkingIndex = 0;
+    let checkingTotal = 0;
+  
+    for (let i = 0; i < patientData.length; i++) {
+  
+      const patient = patientData[i];
+  
+      if (patient.checking === true) {
+        checkingTotal++;
+  
+        if (checkingIndex >= start && checkingIndex < end) {
+  
+          let addressHtml = '';
 
-    for (let i = 0; i < loop; i++) {
-
-      if (rows.length < count) {
-
-        const patient = patientData[i];
-
-        if (patient.checking === true) {
-
-          const obj = [
-            { html: '<a class="nhsuk-link nhsuk-link--no-visited-state" href="' + patient.certificateType + '/comparison--correction?patientID=' + patient.id + '"><strong>' + patient.firstName + ' ' + patient.lastName + '</strong></a><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
+          if (!(patient.certificateType === 'matex' && patient.channel === 'Digital')) {
+            const fullAddressLine1 = patient.address.buildingNumber + ' ' + patient.address.streetName;
+            const hadMore = patient.address.locality || patient.address.postTown || patient.address.county;
+          
+            addressHtml = hadMore
+              ? fullAddressLine1 + '...'
+              : fullAddressLine1;
+          }
+  
+          rows.push([
+            {
+              html:
+                '<a class="nhsuk-link nhsuk-link--no-visited-state" href="' +
+                patient.certificateType +
+                '/comparison--correction?patientID=' +
+                patient.id +
+                '"><strong>' +
+                patient.firstName +
+                ' ' +
+                patient.lastName +
+                '</strong></a><br />' +
+                '<span class="nhsuk-body-s">' +
+                patient.nhsNumber +
+                '</span>'
+            },
+            { html: addressHtml },
             { html: patient.address.postcode },
+            { html: patient.dateOfBirth.display },
             { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
-            { html: _getStatusTextOrTag(patient.status, true) + ' ' + _getStatusTextOrTag('checking', true) },
-            { html: (patient.status === 'processing') ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' + patient.certificateReference + '</span>' : patient.certificateReference }
-          ];
-
-          rows.push(obj);
-
+            {
+              html:
+                _getStatusTextOrTag(patient.status, true) +
+                ' ' +
+                _getStatusTextOrTag('checking', true)
+            },
+            {
+              html:
+                patient.status === 'processing'
+                  ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' +
+                    patient.certificateReference +
+                    '</span>'
+                  : patient.certificateReference
+            }
+          ]);
         }
-
-      } else {
-
-        break;
-
+  
+        checkingIndex++;
       }
-
     }
-
+  
+    this.ctx.data.noOfCheckingRows = checkingTotal;
     return rows;
-
   };
 
+  
+  //
+  // CHECKING PAGINATION LINKS
+  //
+  filters.getCheckingPaginationLinks = function (classes) {
+
+    const rowsPerPage = 5;
+    const currentPage = Number.isInteger(parseInt(this.ctx.data.currentPage))
+      ? parseInt(this.ctx.data.currentPage)
+      : 0;
+
+    const total = Number.isInteger(this.ctx.data.noOfCheckingRows)
+      ? this.ctx.data.noOfCheckingRows
+      : 0;
+
+    const totalPages = Math.ceil(total / rowsPerPage);
+    const obj = {};
+
+    if (totalPages > 1) {
+
+      const items = [];
+
+      if (currentPage > 0) {
+        obj.previous = { href: '?currentPage=' + (currentPage - 1) };
+      }
+
+      if (currentPage < totalPages - 1) {
+        obj.next = { href: '?currentPage=' + (currentPage + 1) };
+      }
+
+      for (let i = 0; i < totalPages; i++) {
+        items.push({
+          number: i + 1,
+          href: '?currentPage=' + i,
+          current: i === currentPage
+        });
+      }
+
+      obj.items = items;
+    }
+
+    if (classes) obj.classes = classes;
+
+    return obj;
+  };
+
+  filters.getCheckingResultsSummary = function () {
+
+    const rowsPerPage = 5;
+    const currentPage = Number.isInteger(parseInt(this.ctx.data.currentPage))
+      ? parseInt(this.ctx.data.currentPage)
+      : 0;
+  
+    const total = Number.isInteger(this.ctx.data.noOfCheckingRows)
+      ? this.ctx.data.noOfCheckingRows
+      : 0;
+  
+    const start = (currentPage * rowsPerPage) + 1;
+    const end = Math.min(start + rowsPerPage - 1, total);
+  
+    return `${start} to ${end} of ${total} applications`;
+  };
+  
 
   //
   // ALTER DATE BY NUMBER OF DAYS FUNCTION

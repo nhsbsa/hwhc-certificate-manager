@@ -27,6 +27,7 @@
             }) }}
 
 
+            <div class="nhsuk-heading-s">Session statistics</div>
               {% from './macros/stats.njk' import stats %}
               {{ stats
                 ([
@@ -37,32 +38,6 @@
                 data.applicationStats.total 
                 ])
               }}
-  
-
-              {% set captionHtml %}
-              Applications you need to change
-              <span class="nhsuk-hint nhsuk-u-margin-top-2">
-                These applications have been quality checked. The checker has identified changes you need to&nbsp;make.
-              </span>
-              {% endset %}
-
-
-            {{ table({
-                panel: false,
-                caption: captionHtml | safe,                    
-                firstCellIsHeader: false,
-                responsive: true,
-                tableClasses: 'patient-table',
-                head: [
-                        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' },
-                        { text: 'Postcode' },
-                        { text: 'Certificate type' },
-                        { text: 'Status' },
-                        { text: 'Reference' }
-                      ],
-                rows: checkingRows
-              }) }}
-
               <div class="nhsuk-button-group">
 
                 {{ button({
@@ -82,6 +57,46 @@
                   classes: 'nhsuk-button--secondary'
                 }) }}
   
+              </div>
+              
+              <hr>
+
+              {% set captionHtml %}
+              Applications you need to change
+              <span class="nhsuk-hint nhsuk-u-margin-top-2">
+                These applications have been quality checked. The checker has identified changes you need to&nbsp;make.
+              </span>
+              {% endset %}
+
+
+            {{ table({
+                panel: false,
+                caption: captionHtml | safe,                    
+                firstCellIsHeader: false,
+                responsive: true,
+                tableClasses: 'patient-table',
+                head: [
+                        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' },
+                        { text: 'Address' },
+                        { text: 'Postcode' },
+                        { text: 'Date of birth' },
+                        { text: 'Type' },
+                        { text: 'Status' },
+                        { text: 'Reference' }
+                      ],
+                rows: checkingRows
+              }) }}
+
+              <div class="nhsuk-grid-row">
+                <div class="nhsuk-grid-column-one-half">
+                  {{ pagination('nhsuk-u-margin-0' | getCheckingPaginationLinks) }}
+                </div>
+              
+                <div class="nhsuk-grid-column-one-half nhsuk-u-text-align-right nhsuk-u-padding-top-1">
+                  <p class="nhsuk-body nhsuk-u-margin-0">
+                    <strong>{{ '' | getCheckingResultsSummary }}</strong>
+                  </p>
+                </div>
               </div>
             
 
