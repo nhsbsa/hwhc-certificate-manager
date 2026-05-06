@@ -108,8 +108,8 @@
                               text: 'Ask for further information'
                             },
                             {
-                              value: 'requestARescan',
-                              text: 'Request a rescan'
+                              value: 'requestKFP',
+                              text: 'Request key from paper'
                             },
                             {
                               value: 'rejectApplication',
@@ -119,14 +119,16 @@
                           ]
                         }) }}
 
-                        {{ textarea({
-                          name: 'cannotProcessApplicationNotes',
-                          id: 'cannotProcessApplicationNotes',
-                          value: data.cannotProcessApplicationNotes,
-                          label: {
-                            text: 'Notes'
-                          }
-                        }) }}
+                        <div id="cannot-process-notes" class="nhsuk-u-visually-hidden">
+                          {{ textarea({
+                            name: 'cannotProcessApplicationNotes',
+                            id: 'cannotProcessApplicationNotes',
+                            label: {
+                              text: 'Notes'
+                            },
+                            value: data.cannotProcessApplicationNotes
+                          }) }}
+                        </div>
 
 
                         {{ button({
@@ -135,7 +137,7 @@
                             type: 'submit',
                             id: 'cannot-process-submit',
                             'data-text-ask': 'Continue',
-                            'data-text-rescan': 'Request a rescan and move to next application',
+                            'data-text-kfp': 'Request key from paper and move to next application',
                             'data-text-reject': 'Reject application and move to next application'
                           },
                           classes: 'nhsuk-u-visually-hidden'
@@ -160,26 +162,34 @@
     document.addEventListener('DOMContentLoaded', () => {
       const button = document.getElementById('cannot-process-submit');
       const radios = document.querySelectorAll('input[name="cannotProcessApplication"]');
+      const notes = document.getElementById('cannot-process-notes');
     
       button.disabled = true;
     
-      function show(text) {
+      function showButton(text) {
         button.innerHTML = `<span data-ak="I">${text}</span>`;
         button.classList.remove('nhsuk-u-visually-hidden');
         button.disabled = false;
+      }
+
+      function toggleNotes(show) {
+        notes.classList.toggle('nhsuk-u-visually-hidden', !show);
       }
     
       radios.forEach(radio => {
         radio.addEventListener('change', () => {
           switch (radio.value) {
             case 'askForFurtherInformation':
-              show(button.dataset.textAsk);
+              showButton(button.dataset.textAsk);
+              toggleNotes(false);
               break;
-            case 'requestARescan':
-              show(button.dataset.textRescan);
+            case 'requestKFP':
+              showButton(button.dataset.textKfp);
+              toggleNotes(true);
               break;
             case 'rejectApplication':
-              show(button.dataset.textReject);
+              showButton(button.dataset.textReject);
+              toggleNotes(true);
               break;
           }
         });

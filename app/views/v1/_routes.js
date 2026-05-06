@@ -554,8 +554,6 @@ router.get(/reset-search/,function( req, res ){
 router.get(/^\/[^\/]+\/address-lookup$/, function (req, res) {
 
 
-  console.log('LOOKING UP ADDRESS');
-
   function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
   function normPostcode(s) { return (s || '').replace(/\s+/g, '').toUpperCase(); }
 
@@ -631,7 +629,9 @@ req.session.data.addressSearchBuildingNumberOrName =
   if (!baseURL || !apiKey) {
     req.session.data.addressSearchResults = [];
     const journey = req.session.lookupJourney;
-    return res.render(`v1/${journey}/address-lookup`);
+    return res.render(`v1/${journey}/address-lookup`, {
+      returnTo: req.session.returnTo
+    });
   }
 
 
@@ -798,7 +798,11 @@ results.push({
   }).catch(err => {
     console.error(err);
     const journey = req.session.lookupJourney || 'matex';
-    return res.render(`v1/${journey}/address-lookup`);
+
+    return res.render(`v1/${journey}/address-lookup`, {
+      returnTo: req.session.returnTo
+    });
+      
   });
   
 });
@@ -807,7 +811,10 @@ results.push({
 router.get(/^\/[^\/]+\/address-lookup-result$/, function (req, res) {
   
   const journey = req.session.lookupJourney || 'matex';
-  return res.render(`v1/${journey}/address-lookup-result`);
+
+  res.render(`v1/${journey}/address-lookup-result`, {
+    returnTo: req.session.returnTo
+  });
 });
 
 
@@ -967,8 +974,6 @@ const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJ
   const returnTo = req.session.returnTo;
   return res.redirect(returnTo);
 });
-
-
 
 
 

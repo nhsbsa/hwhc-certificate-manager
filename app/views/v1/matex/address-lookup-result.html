@@ -22,7 +22,6 @@
     <div class="nhsuk-card nhsuk-card--grey">
       <div class="nhsuk-card__content">
 
-
       
         {% if not data.addressSearchResults or data.addressSearchResults.length === 0 %}
 
@@ -38,12 +37,11 @@
             })
           }}
           
-          {{ button
-            ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
+          {{ button({
+            classes: "nhsuk-button--secondary nhsuk-u-margin-left-3",
             html: '<span data-ak="K">Enter address manually</span>',
-            href: "edit-or-reissue"
-            }) 
-          }}
+            href: returnTo
+          }) }}
 
           <p class="nhsuk-body"><a href="../search"><span data-ak="M">Cancel</span></a></p>
 

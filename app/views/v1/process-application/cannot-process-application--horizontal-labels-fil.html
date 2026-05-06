@@ -113,91 +113,30 @@
 
 
                     {% set postHTML %}
-
-                      <h3 class="nhsuk-heading-xs">Patient's postal address</h3>
-                      
-                      <!-- ADDRESS -->
-                      {% call fieldset({
-                        legend: {
-                          html: 'Address',
-                          classes: 'nhsuk-u-visually-hidden'
-                        }
-                      }) %}
-
-                          {{ input({
-                            label: {
-                              html: 'House number or name '
-                            },
-                            id: 'imageBuildingNumberOrName',
-                            name: 'imageBuildingNumberOrName',
-                            attributes: { 'data-focus-image' : 'houseNumber' },
-                            value: buildingNumberValue
-                          }) }}
-
-                          {{ input({
-                            label: {
-                              html: 'Address line 1 '
-                            },
-                            id: 'imageAddressLine1',
-                            name: 'imageAddressLine1',
-                            attributes: { 'data-focus-image' : 'street' },
-                            value: addressValue1
-                          }) }}
-
-                          {{ input({
-                            label: {
-                              html: 'Address line 2 (optional)'
-                            },
-                            id: 'imageAddressLine2',
-                            name: 'imageAddressLine2',
-                            attributes: { 'data-focus-image' : 'address' },
-                            value: addressValue2
-                          }) }}
-
-                          {{ input({
-                            label: {
-                              html: 'Town or city '
-                            },
-                            classes: "nhsuk-u-width-two-thirds",
-                            id: 'imageTown',
-                            name: 'imageTown',
-                            attributes: { 'data-focus-image' : 'town' },
-                            value: townValue
-                          }) }}
-
-                          {{ input({
-                            label: {
-                              html: 'County (optional)'
-                            },
-                            classes: 'nhsuk-u-width-two-thirds',
-                            id: 'imageCounty',
-                            name: 'imageCounty',
-                            attributes: { 'data-focus-image' : 'address' },
-                            value: countyValue
-                          }) }}
-
-                          {{ input({
-                            label: {
-                              html: 'Postcode '
-                            },
-                            classes: 'nhsuk-input--width-10',
-                            id: 'imagePostcode',
-                            name: 'imagePostcode',
-                            attributes: { 'data-focus-image' : 'postcode' },
-                            value: postcodeValue
-                          }) }}
-
-                        {% endcall %}
-
-                        <div class="address-button nhsuk-u-margin-top-5">
-                          {{ button({
-                            html: '<span data-ak="G">Change address fields using address lookup</span>',
-                            classes: "nhsuk-button--secondary nhsuk-button--small",
-                            href: "/v1/matex/address-lookup?source=matex&returnTo=%2Fv1%2Fprocess-application%2Fcannot-process-application--horizontal-labels-fil%3FsendRequestHTML%3Dpost"
-                          }) }}
-                        </div>
-
-                      {% endset %}
+                      <!-- PATIENT ADDRESS -->
+                      <p>
+                        We will send your further information request to:<br>
+                        <strong>
+                          {{ buildingNumberValue }} <br>
+                          {{ addressValue1 }} <br>
+                          {% if addressValue2 and addressValue2 | trim %}
+                            {{ addressValue2 }}<br>
+                          {% endif %}
+                          {{ townValue }}<br>
+                          {% if countyValue and countyValue | trim %}
+                            {{ countyValue }}<br>
+                          {% endif %}
+                          {{ postcodeValue }}
+                        </strong>
+                      </p>
+                  
+                      <p>
+                        <a class="nhsuk-link" href="/v1/process-application/experimental--horizontal-labels?showAllFields=true#imageBuildingNumberOrName">
+                          Change
+                          <span class="nhsuk-u-visually-hidden"> patient's address</span>
+                        </a>
+                      </p>
+                  {% endset %}
 
 
                     {% set hcpPostConditionalHTML %}
@@ -373,7 +312,9 @@
                           {
                             value: 'patientPost',
                             text: 'Send to patient by post',
-                            conditional: { html: postHTML }
+                            conditional: { 
+                              html: postHTML
+                            }
                           }
                         ]
                       }) }}

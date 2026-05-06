@@ -116,6 +116,16 @@
 
                       const highlightedFields = document.querySelectorAll('.horizontal-labels .nhsuk-label:not(.nhsuk-date-input__label):has(.confidence-level), .horizontal-labels .nhsuk-fieldset__legend:not(.nhsuk-u-visually-hidden):has(.confidence-level)');
                       const allFields = document.querySelectorAll( '.horizontal-labels .nhsuk-label:not(.nhsuk-date-input__label), .horizontal-labels .nhsuk-fieldset__legend:not(.nhsuk-u-visually-hidden)' );
+
+                      const formFields = Array.from(
+                        document.querySelectorAll(
+                          '.horizontal-labels input, .horizontal-labels select, .horizontal-labels textarea'
+                        )
+                      ).filter(field =>
+                        !field.disabled &&
+                        field.type !== 'hidden' &&
+                        field.offsetParent !== null
+                      );
                       
                       const hrs = document.querySelectorAll('.horizontal-labels hr');
                       const addressButton = document.querySelector('.address-button');
@@ -208,18 +218,28 @@
                       }
 
                       
-                      document
-                        .querySelectorAll('.horizontal-labels input, .horizontal-labels select')
+                      document.querySelectorAll('.horizontal-labels input, .horizontal-labels select')
                         .forEach(input => {
 
                           input.addEventListener('keydown', event => {
                             if (event.key === 'Enter') {
                               event.preventDefault();
+
+                              // Confirm current field
                               markFieldConfirmed(input);
+
+                              // Move focus to the next field
+                              const currentIndex = formFields.indexOf(input);
+                              const nextField = formFields[currentIndex + 1];
+
+                              if (nextField) {
+                                nextField.focus();
+                              }
                             }
                           });
 
                         });
+
 
 
                     });
@@ -476,7 +496,7 @@
                     {{ button({
                       html: '<span data-ak="G">Change address fields using address lookup</span>',
                       classes: "nhsuk-button--secondary nhsuk-button--small",
-                      href: "/v1/matex/address-lookup?source=matex&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dtrue%23postcode"
+                      href: "/v1/matex/address-lookup?source=matex&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dfalse%23postcode"
                     }) }}
                   </div>
 

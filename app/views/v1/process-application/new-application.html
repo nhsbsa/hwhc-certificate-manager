@@ -306,12 +306,38 @@
 
 
 
+                <!-- APPLICATION DATE -->
+                {{ dateInput({
+                  id: "application-date",
+                  namePrefix: "applicationDate",
+                  fieldset: {
+                    legend: {
+                      text: "Application date"
+                    }
+                  },
+                  items: [
+                    {
+                      name: "day",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "month",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "year",
+                      classes: "nhsuk-input--width-4"
+                    }
+                  ]
+                }) }}
+                
                 
 
                 <div class="nhsuk-button-group">
 
                   {{ button({
-                    html : '<span data-ak="I">Continue</span>'
+                    html : '<span data-ak="I">Submit application</span>',
+                    href: '../dashboard'
                   }) }}
 
                 </div>
