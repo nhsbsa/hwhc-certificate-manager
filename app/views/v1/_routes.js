@@ -186,8 +186,8 @@ router.post(/process-application\/cannot-process-application--horizontal-labels/
           'cannot-process-application--horizontal-labels-fil'
         );
 
-      case 'requestARescan':
-        stats.rescans += 1;
+      case 'requestKFP':
+        stats.kfp += 1;
         stats.total += 1;
         break;
 
@@ -246,8 +246,8 @@ router.get(/process-application\/start-processing/, function (req, res) {
   req.session.data.applicationStats = {
     accepted: 0,
     rejected: 0,
-    rescans: 0,
     onHold: 0,
+    kfp: 0,
     total: 0
   };
 

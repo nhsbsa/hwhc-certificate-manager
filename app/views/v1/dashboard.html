@@ -31,11 +31,11 @@
               {% from './macros/stats.njk' import stats %}
               {{ stats
                 ([
-                data.applicationStats.accepted,
-                data.applicationStats.rejected,
-                data.applicationStats.rescans,
-                data.applicationStats.onHold,
-                data.applicationStats.total 
+                data.applicationStats.accepted or '0',
+                data.applicationStats.onHold or '0',
+                data.applicationStats.rejected or '0',
+                data.applicationStats.kfp or '0',
+                data.applicationStats.total or '0' 
                 ])
               }}
               <div class="nhsuk-button-group">
