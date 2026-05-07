@@ -210,6 +210,14 @@ router.get(/process-application\/cannot-process-application--horizontal-labels-f
     const queue = req.session.data.paperMatexQueue;
     const index = req.session.data.currentIndex;
 
+    if (req.query.furtherInformationRequest) {
+      req.session.data.furtherInformationRequest =
+        req.query.furtherInformationRequest;
+    }
+        
+    console.log('HCP lookup before render:', req.session.data.lookupHCPAddress);
+    console.log('Patient lookup before render:', req.session.data.lookupPatientAddress);
+
     res.render(
       'v1/process-application/cannot-process-application--horizontal-labels-fil'
     );
@@ -560,6 +568,11 @@ router.get(/^\/[^\/]+\/address-lookup$/, function (req, res) {
 const qs = require('querystring');
 const parsed = qs.parse(req.url.split('?')[1] || '');
 
+// Persist addressTarget across requests
+if (parsed.addressTarget) {
+  req.session.addressTarget = parsed.addressTarget;
+}
+
 // If lookup is opened fresh (no user input), clear previous state
 const noParamsProvided =
   !parsed.addressSearchPostcode &&
@@ -808,7 +821,9 @@ results.push({
 });
 
 
-router.get(/^\/[^\/]+\/address-lookup-result$/, function (req, res) {
+router.get(/address-lookup-result$/, function (req, res) {
+
+  console.log('✅ ADDRESS LOOKUP RESULT POST HIT');
   
   const journey = req.session.lookupJourney || 'matex';
 
@@ -970,6 +985,14 @@ const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJ
     county: newAddress.county,
     postcode: newAddress.postcode
   };
+
+  if (req.session.addressTarget === 'hcp') {
+    req.session.data.lookupHCPAddress = newAddress;
+  }
+  
+  if (req.session.addressTarget === 'patient') {
+    req.session.data.lookupPatientAddress = newAddress;
+  }
 
   const returnTo = req.session.returnTo;
   return res.redirect(returnTo);

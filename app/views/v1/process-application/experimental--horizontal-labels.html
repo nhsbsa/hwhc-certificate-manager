@@ -31,43 +31,25 @@
     </div>
   </div>
   
-  {% set lookup = data.lookupAddress or {} %}
-
-  {% if lookup.buildingNumber is defined %}
-  {% set buildingNumberValue = lookup.buildingNumber %}
+  {% set patientLookup = data.lookupPatientAddress or {} %}
+  
+  {% if patientLookup.buildingNumber is defined %}
+  {% set patientBuildingNumber = patientLookup.buildingNumber %}
   {% else %}
-    {% set buildingNumberValue = data.imageBuildingNumberOrName %}
+  {% set patientBuildingNumber = data.imageBuildingNumberOrName %}
   {% endif %}
-
-  {% if lookup.addressLineOne is defined %}
-  {% set addressValue1 = lookup.streetName %}
+  
+  {% set patientAddressLine1 = patientLookup.streetName or data.imageAddressLine1 %}
+  
+  {% if patientLookup.addressLineTwo is defined %}
+  {% set patientAddressLine2 = patientLookup.addressLineTwo %}
   {% else %}
-    {% set addressValue1 = data.imageAddressLine1 %}
+  {% set patientAddressLine2 = '' or data.imageAddressLine2 %}
   {% endif %}
-
-  {% if lookup.addressLineTwo is defined %}
-    {% set addressValue2 = lookup.addressLineTwo %}
-  {% else %}
-    {% set addressValue2 = data.imageAddressLine2 %}
-  {% endif %}
-
-  {% if lookup.town is defined %}
-    {% set townValue = lookup.town %}
-  {% else %}
-    {% set townValue = data.imageTown %}
-  {% endif %}
-
-  {% if lookup.county is defined %}
-    {% set countyValue = lookup.county %}
-  {% else %}
-    {% set countyValue = data.imageCounty %}
-  {% endif %}
-
-  {% if lookup.postcode is defined %}
-  {% set postcodeValue = lookup.postcode %}
-  {% else %}
-    {% set postcodeValue = data.imagePostcode %}
-  {% endif %}
+  
+  {% set patientTown = patientLookup.town or data.imageTown %}
+  {% set patientCounty = patientLookup.county or data.imageCounty %}
+  {% set patientPostcode = patientLookup.postcode or data.imagePostcode %}
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
@@ -432,7 +414,7 @@
                       name: 'imageBuildingNumberOrName',
                       attributes: { 'data-focus-image' : 'houseNumber' },
                       classes: 'nhsuk-input--width-10',
-                      value: buildingNumberValue
+                      value: patientBuildingNumber
                     }) }}
 
                     {{ input({
@@ -443,7 +425,7 @@
                       id: 'imageAddressLine1',
                       name: 'imageAddressLine1',
                       attributes: { 'data-focus-image' : 'street' },
-                      value: addressValue1
+                      value: patientAddressLine1
                     }) }}
 
                     {{ input({
@@ -454,7 +436,7 @@
                       id: 'imageAddressLine2',
                       name: 'imageAddressLine2',
                       attributes: { 'data-focus-image' : 'address' },
-                      value: addressValue2
+                      value: patientAddressLine2
                     }) }}
 
                     {{ input({
@@ -465,7 +447,7 @@
                       id: 'imageTown',
                       name: 'imageTown',
                       attributes: { 'data-focus-image' : 'town' },
-                      value: townValue
+                      value: patientTown
                     }) }}
 
                     {{ input({
@@ -476,7 +458,7 @@
                       id: 'imageCounty',
                       name: 'imageCounty',
                       attributes: { 'data-focus-image' : 'address' },
-                      value: countyValue
+                      value: patientCounty
                     }) }}
 
                     {{ input({
@@ -487,7 +469,7 @@
                       id: 'imagePostcode',
                       name: 'imagePostcode',
                       attributes: { 'data-focus-image' : 'postcode' },
-                      value: postcodeValue
+                      value: patientPostcode
                     }) }}
 
                   {% endcall %}
@@ -496,7 +478,7 @@
                     {{ button({
                       html: '<span data-ak="G">Change address fields using address lookup</span>',
                       classes: "nhsuk-button--secondary nhsuk-button--small",
-                      href: "/v1/matex/address-lookup?source=matex&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dfalse%23postcode"
+                      href: "/v1/matex/address-lookup?source=matex&addressTarget=patient&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dfalse%23postcode"
                     }) }}
                   </div>
 

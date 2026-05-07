@@ -32,43 +32,58 @@
     </div>
   </div>
 
-  {% set lookup = data.lookupAddress or {} %}
 
-  {% if lookup.buildingNumber is defined %}
-  {% set buildingNumberValue = lookup.buildingNumber %}
+  {% set patientLookup = data.lookupPatientAddress or {} %}
+
+  {% if patientLookup.buildingNumber is defined %}
+    {% set patientBuildingNumber = patientLookup.buildingNumber %}
   {% else %}
-    {% set buildingNumberValue = data.imageBuildingNumberOrName or '12' %}
+    {% set patientBuildingNumber = data.imageBuildingNumberOrName %}
+  {% endif %}
+  
+  {% if patientLookup.streetName is defined %}
+    {% set patientAddressLine1 = patientLookup.streetName %}
+  {% else %}
+    {% set patientAddressLine1 = data.imageAddressLine1 %}
+  {% endif %}
+  
+  {% if patientLookup.addressLineTwo is defined %}
+    {% set patientAddressLine2 = patientLookup.addressLineTwo %}
+  {% else %}
+    {% set patientAddressLine2 = data.imageAddressLine2 %}
+  {% endif %}
+  
+  {% if patientLookup.town is defined %}
+    {% set patientTown = patientLookup.town %}
+  {% else %}
+    {% set patientTown = data.imageTown %}
+  {% endif %}
+  
+  {% if patientLookup.county is defined %}
+    {% set patientCounty = patientLookup.county %}
+  {% else %}
+    {% set patientCounty = data.imageCounty %}
+  {% endif %}
+  
+  {% if patientLookup.postcode is defined %}
+    {% set patientPostcode = patientLookup.postcode %}
+  {% else %}
+    {% set patientPostcode = data.imagePostcode %}
   {% endif %}
 
-  {% if lookup.addressLineOne is defined %}
-  {% set addressValue1 = lookup.streetName %}
-  {% else %}
-    {% set addressValue1 = data.imageAddressLine1 or 'Crown Passage' %}
-  {% endif %}
 
-  {% if lookup.addressLineTwo is defined %}
-    {% set addressValue2 = lookup.addressLineTwo %}
-  {% else %}
-    {% set addressValue2 = data.imageAddressLine2 %}
-  {% endif %}
 
-  {% if lookup.town is defined %}
-    {% set townValue = lookup.town %}
-  {% else %}
-    {% set townValue = data.imageTown or 'Birmingham' %}
-  {% endif %}
+  {% set HCPLookup = data.lookupHCPAddress or {} %}
 
-  {% if lookup.county is defined %}
-    {% set countyValue = lookup.county %}
-  {% else %}
-    {% set countyValue = data.imageCounty %}
-  {% endif %}
-
-  {% if lookup.postcode is defined %}
-  {% set postcodeValue = lookup.postcode %}
-  {% else %}
-    {% set postcodeValue = data.imagePostcode or 'B14 9QX' %}
-  {% endif %}
+  {% set hcpBuildingNumber = HCPLookup.buildingNumber or '' %}
+  {% set hcpStreetName = HCPLookup.streetName or '' %}
+  {% set hcpAddressLine1 = (hcpBuildingNumber ~ ' ' ~ hcpStreetName) | trim %}
+  
+  {% set hcpAddressLine2 = HCPLookup.addressLineTwo or '' %}
+  {% set hcpTown = HCPLookup.town or '' %}
+  {% set hcpCounty = HCPLookup.county or '' %}
+  {% set hcpPostcode = HCPLookup.postcode or '' %}
+  
 
 
   <div class="nhsuk-grid-row">
@@ -117,25 +132,39 @@
                       <p>
                         We will send your further information request to:<br>
                         <strong>
-                          {{ buildingNumberValue }} <br>
-                          {{ addressValue1 }} <br>
-                          {% if addressValue2 and addressValue2 | trim %}
-                            {{ addressValue2 }}<br>
+                          {% if patientBuildingNumber %}
+                            {{ patientBuildingNumber }}<br>
                           {% endif %}
-                          {{ townValue }}<br>
-                          {% if countyValue and countyValue | trim %}
-                            {{ countyValue }}<br>
+                      
+                          {% if patientAddressLine1 %}
+                            {{ patientAddressLine1 }}<br>
                           {% endif %}
-                          {{ postcodeValue }}
+                      
+                          {% if patientAddressLine2 and patientAddressLine2 | trim %}
+                            {{ patientAddressLine2 }}<br>
+                          {% endif %}
+                      
+                          {% if patientTown %}
+                            {{ patientTown }}<br>
+                          {% endif %}
+                      
+                          {% if patientCounty and patientCounty | trim %}
+                            {{ patientCounty }}<br>
+                          {% endif %}
+                      
+                          {% if patientPostcode %}
+                            {{ patientPostcode }}
+                          {% endif %}
                         </strong>
                       </p>
-                  
-                      <p>
-                        <a class="nhsuk-link" href="/v1/process-application/experimental--horizontal-labels?showAllFields=true#imageBuildingNumberOrName">
-                          Change
-                          <span class="nhsuk-u-visually-hidden"> patient's address</span>
-                        </a>
-                      </p>
+
+                      <div class="address-button nhsuk-u-margin-top-5">
+                        {{ button({
+                          html: '<span data-ak="G">Change address fields using address lookup</span>',
+                          classes: "nhsuk-button--secondary nhsuk-button--small",
+                          href: "/v1/matex/address-lookup?addressTarget=patient&returnTo=%2Fv1%2Fprocess-application%2Fcannot-process-application--horizontal-labels-fil%3FfurtherInformationRequest%3DpatientPost%23conditional-furtherInformationRequest-patientPost"
+                        }) }}
+                      </div>
                   {% endset %}
 
 
@@ -168,7 +197,8 @@
                           attributes: { 'data-focus-image' : 'healthcarePractitionerAddress' },
                           id: "address-line-1",
                           name: "addressLine1",
-                          autocomplete: "address-line1"
+                          autocomplete: "address-line1",
+                          value: hcpAddressLine1
                         }) }}
                       
                         {{ input({
@@ -178,7 +208,8 @@
                           attributes: { 'data-focus-image' : 'healthcarePractitionerAddress' },
                           id: "address-line-2",
                           name: "addressLine2",
-                          autocomplete: "address-line2"
+                          autocomplete: "address-line2",
+                          value: hcpAddressLine2
                         }) }}
                       
                         {{ input({
@@ -189,7 +220,8 @@
                           attributes: { 'data-focus-image' : 'healthcarePractitionerAddress' },
                           id: "address-town",
                           name: "addressTown",
-                          autocomplete: "address-level2"
+                          autocomplete: "address-level2",
+                          value: hcpTown
                         }) }}
 
                         {{ input({
@@ -199,7 +231,8 @@
                           classes: 'nhsuk-u-width-two-thirds',
                           attributes: { 'data-focus-image' : 'healthcarePractitionerAddress' },
                           id: 'address-county',
-                          name: 'addressCounty'
+                          name: 'addressCounty',
+                          value: hcpCounty
                         }) }}
                       
                         {{ input({
@@ -211,7 +244,8 @@
                           id: "address-postcode",
                           name: "addressPostcode",
                           autocomplete: "postal-code",
-                          spellcheck: false
+                          spellcheck: false,
+                          value: hcpPostcode
                         }) }}
                       
                       {% endcall %}
@@ -220,7 +254,7 @@
                         {{ button({
                           html: '<span data-ak="G">Populate address fields using address lookup</span>',
                           classes: "nhsuk-button--secondary nhsuk-button--small",
-                          href: "/v1/matex/address-lookup?source=matex&returnTo=%2Fv1%2Fprocess-application%2Fcannot-process-application--horizontal-labels-fil%3FsendRequestHTML%3Dpost"
+                          href: "/v1/matex/address-lookup?source=matex&addressTarget=hcp&returnTo=%2Fv1%2Fprocess-application%2Fcannot-process-application--horizontal-labels-fil%3FfurtherInformationRequest%3Dhcp%23address-line-1"
                         }) }}
                       </div>
 

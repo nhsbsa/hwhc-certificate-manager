@@ -128,7 +128,8 @@
                       },
                       id: 'imageBuildingNumberOrName',
                       name: 'imageBuildingNumberOrName',
-                      classes: 'nhsuk-input--width-10'
+                      classes: 'nhsuk-input--width-10',
+                      value: data.lookupAddress.buildingNumber
                     }) }}
 
                     {{ input({
@@ -137,7 +138,8 @@
                       },
                       classes: 'nhsuk-input--width-20',
                       id: 'imageAddressLine1',
-                      name: 'imageAddressLine1'
+                      name: 'imageAddressLine1',
+                      value: data.lookupAddress.streetName
                     }) }}
 
                     {{ input({
@@ -146,7 +148,8 @@
                       },
                       classes: 'nhsuk-input--width-20',
                       id: 'imageAddressLine2',
-                      name: 'imageAddressLine2'
+                      name: 'imageAddressLine2',
+                      value: data.lookupAddress.addressLineTwo
                     }) }}
 
                     {{ input({
@@ -155,7 +158,8 @@
                       },
                       classes: 'nhsuk-input--width-20',
                       id: 'imageTown',
-                      name: 'imageTown'
+                      name: 'imageTown',
+                      value: data.lookupAddress.town
                     }) }}
 
                     {{ input({
@@ -164,7 +168,8 @@
                       },
                       classes: 'nhsuk-input--width-10',
                       id: 'imageCounty',
-                      name: 'imageCounty'
+                      name: 'imageCounty',
+                      value: data.lookupAddress.county
                     }) }}
 
                     {{ input({
@@ -173,7 +178,8 @@
                       },
                       classes: 'nhsuk-input--width-10',
                       id: 'imagePostcode',
-                      name: 'imagePostcode'
+                      name: 'imagePostcode',
+                      value: data.lookupAddress.postcode
                     }) }}
 
                   {% endcall %}
