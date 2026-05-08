@@ -214,9 +214,6 @@ router.get(/process-application\/cannot-process-application--horizontal-labels-f
       req.session.data.furtherInformationRequest =
         req.query.furtherInformationRequest;
     }
-        
-    console.log('HCP lookup before render:', req.session.data.lookupHCPAddress);
-    console.log('Patient lookup before render:', req.session.data.lookupPatientAddress);
 
     res.render(
       'v1/process-application/cannot-process-application--horizontal-labels-fil'
