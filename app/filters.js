@@ -847,7 +847,7 @@ module.exports = function (env) {
               html:
                 '<a class="nhsuk-link nhsuk-link--no-visited-state" href="' +
                 patient.certificateType +
-                '/comparison--correction?patientID=' +
+                '/application--correction?patientID=' +
                 patient.id +
                 '"><strong>' +
                 patient.firstName +

@@ -156,7 +156,7 @@ router.post(/process-application\/experimental--horizontal-labels/, function (re
     delete req.session.data.cannotProcessApplication;
     delete req.session.data.cannotProcessApplicationNotes;
     delete req.session.data.reasonForRejection;
-
+    
     return res.redirect('/v1/process-application/cannot-process-application--horizontal-labels');
   }
 });
@@ -1263,10 +1263,6 @@ router.get(/^\/v1\/matex\/edit-or-reissue$/, function (req, res) {
 });
 
 
-
-
-
-
 //
 // CASE EDIT SCREEN
 //
@@ -1293,6 +1289,14 @@ router.post(/comparison--edit/, function( req, res ){
   return res.redirect( destination );
 });
 
+router.get('/v1/matex/cannot-process-application--correction', function (req, res) {
 
+  // Clear previous cannot-process correction state
+  delete req.session.data.cannotProcessApplicationCorrection;
+  delete req.session.data.cannotProcessApplicationNotes;
+  delete req.session.data.reasonForRejection;
+
+  res.render('v1/matex/cannot-process-application--correction');
+});
 
 module.exports = router;
