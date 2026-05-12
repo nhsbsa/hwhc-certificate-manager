@@ -6,11 +6,6 @@
 
 {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
 
-{% set errors = {
-  imageLastName: {
-    text: 'Last name is incorrect'
-  }
-} %}
 
 {% block beforeContent %}
  {{ backLink({
@@ -24,22 +19,6 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
 
-    {% set errorList = [] %}
-
-    {% for field, error in errors %}
-      {% set errorList = errorList.concat([{
-        href: '#' ~ field,
-        text: error.text
-      }]) %}
-    {% endfor %}
-    
-    {% if errorList | length %}
-      {{ errorSummary({
-        titleText: 'Feedback from supervisor',
-        descriptionText: "Good work so far, trainee! However, I think the last name should be " + patient.lastName + ".",
-        errorList: errorList
-      }) }}
-    {% endif %}
 
     <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
       {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
