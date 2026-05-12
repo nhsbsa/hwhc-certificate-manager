@@ -234,9 +234,13 @@
 
                               // Remove error tag from label
                               const label = document.querySelector(`label[for="${input.id}"]`);
-                                if (label) {
-                                  label.classList.remove('nhsuk-form-group--error');
-                                }
+                              if (label) {
+                                label.classList.remove('nhsuk-form-group--error');
+                              }
+
+                              // Remove error border from input
+                              input.classList.remove('nhsuk-input--error');
+                              input.removeAttribute('aria-invalid');
                               
                               // Remove corresponding item from error summary
                               const errorSummary = document.querySelector('.nhsuk-error-summary');
