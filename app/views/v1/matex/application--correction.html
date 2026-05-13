@@ -6,6 +6,10 @@
 
 {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
 
+{% block pageTitle %}
+{{ pageName }} {{ patient.certificateReference }} - HwHC certificate manager - NHS
+{% endblock %}
+
 {% set errors = {
   imageLastName: {
     text: 'Last name is incorrect'

@@ -217,8 +217,12 @@
                               markFieldConfirmed(input);
 
                               // Move focus to the next field
-                              const currentIndex = formFields.indexOf(input);
-                              const nextField = formFields[currentIndex + 1];
+                              const visibleFields = Array.from(
+                                document.querySelectorAll('.horizontal-labels input, .horizontal-labels select, .horizontal-labels textarea')
+                              ).filter(field => !field.disabled && field.type !== 'hidden' && field.offsetParent !== null);
+
+                              const currentIndex = visibleFields.indexOf(input);
+                              const nextField = visibleFields[currentIndex + 1];
 
                               if (nextField) {
                                 nextField.focus();
