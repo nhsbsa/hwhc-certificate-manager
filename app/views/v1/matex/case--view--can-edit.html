@@ -154,7 +154,7 @@
                 text: "Application date"
               },
               value: {
-                html: "25 November 2025"
+                html: patient.startDate or "25 November 2025"
               }
             }
           ]
@@ -198,7 +198,7 @@
                 text: "Date of birth"
               },
               value: {
-                html: "24 July 1997"
+                html: patient.dateOfBirth.display or "24 July 1997"
               }
             },
             {
@@ -232,7 +232,7 @@
               },
               value: {                
                 html: (
-                  data.editMATEX.childDOBDisplay or "25 November 2025"
+                  patient.startDate or data.editMATEX.childDOBDisplay or "25 November 2025"
                 )
               }
             }

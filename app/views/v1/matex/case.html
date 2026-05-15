@@ -157,7 +157,7 @@
                 text: "Start date"
               },
               value: {
-                html: (data.editMATEX.startDisplay  or "25 November 2025") 
+                html: patient.startDate or data.editMATEX.startDisplay or "25 November 2025"
               }
             },
             {
@@ -165,7 +165,7 @@
                 text: "Expiry date"
               },
               value: {
-                html: (data.editMATEX.expiryDisplay or "24 November 2026")
+                html: patient.endDate or data.editMATEX.expiryDisplay or "24 November 2026"
               }
             },
             {
@@ -174,7 +174,7 @@
                 text: "Application date"
               },
               value: {
-                html: "25 November 2025"
+                html: patient.startDate or "25 November 2025"
               }
             }
           ]
@@ -218,7 +218,7 @@
                 text: "Date of birth"
               },
               value: {
-                html: "24 July 1997"
+                html: patient.dateOfBirth.display or "24 July 1997"
               }
             },
             {
@@ -252,7 +252,7 @@
               },
               value: {                
                 html: (
-                  data.editMATEX.childDOBDisplay or "25 November 2025"
+                  patient.childsDOB.display or data.editMATEX.childDOBDisplay or "25 November 2025"
                 )
               }
             }

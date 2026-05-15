@@ -42,7 +42,7 @@
 {% endif %}
 
 
-{% set fulfilment = data.editHRT.certificateFulfilment or patient.fulfilment or "email" %}
+{% set fulfilment = data.editHRT.certificateFulfilment or patient.certificateFulfilment or "email" %}
 
 {% if fulfilment == "email" %}
   {% set isEmail = true %}
@@ -219,17 +219,17 @@
                         {
                           name: "day",
                           classes: "nhsuk-input--width-2",
-                          value: "28"
+                          value: patient.dateOfBirth.day or "28"
                         },
                         {
                           name: "month",
                           classes: "nhsuk-input--width-2",
-                          value: "11"
+                          value: patient.dateOfBirth.month + 1 or "11"
                         },
                         {
                           name: "year",
                           classes: "nhsuk-input--width-4",
-                          value: "1970"
+                          value: patient.dateOfBirth.year or "1970"
                         }
                       ]
                     })

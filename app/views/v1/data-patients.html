@@ -546,8 +546,8 @@
 
                 const today = new Date();
                 
-                const minMonths = -6;
-                const maxMonths = -12;
+                const minMonths = -12;
+                const maxMonths = -6;
 
                 // Create date bounds
                 const minDate = new Date();
@@ -574,19 +574,31 @@
               //
               // GENERATE END DATE FUNCTION
               //
-              function _generateEndDate( startDateString ){
+              function _generateEndDate(startDateString) {
 
-                const startDate = new Date( startDateString );
-                startDate.setMonth( startDate.getMonth() + 21 );
-                startDate.setHours(0, 0, 0, 0);
+                const parts = startDateString.split(' ');
+                const day = parseInt(parts[0]);
+                const monthName = parts[1];
+                const year = parseInt(parts[2]);
 
-                const day = startDate.getDate();
-                const month = startDate.toLocaleString('en-GB', { month: 'long' });
-                const year = startDate.getFullYear();
+                const month = new Date(monthName + ' 1, 2000').getMonth();
 
-                return day + ' ' + month + ' ' + year;
+                const startDate = new Date(year, month, day);
 
-              };
+                const endDate = new Date(startDate);
+
+                // +1 year
+                endDate.setFullYear(endDate.getFullYear() + 1);
+
+                // -1 day
+                endDate.setDate(endDate.getDate() - 1);
+
+                const endDay = endDate.getDate();
+                const endMonth = endDate.toLocaleString('en-GB', { month: 'long' });
+                const endYear = endDate.getFullYear();
+
+                return endDay + ' ' + endMonth + ' ' + endYear;
+                }
 
 
               //
@@ -674,15 +686,28 @@
 
               }
 
+              //
+              // GENERATE CHILD'S DATE OF BIRTH
+              //
+              function _generateChildsDOB(startDateString) {
 
+                const parts = startDateString.split(' ');
+                const day = parseInt(parts[0]);
+                const monthName = parts[1];
+                const year = parseInt(parts[2]);
 
+                const month = new Date(monthName + ' 1, 2000').getMonth();
 
+                const date = new Date(year, month, day);
+                date.setHours(0, 0, 0, 0);
 
-
-
-
-
-
+                return {
+                  display: date.getDate() + ' ' + date.toLocaleString('en-GB', { month: 'long' }) + ' ' + date.getFullYear(),
+                  day: date.getDate(),
+                  month: date.getMonth(),
+                  year: date.getFullYear()
+                };
+                }
 
 
 
@@ -699,6 +724,7 @@
                 const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',');
                 const statusesMatex = ['processing','on-hold','rejected','active','deleted','expired'];
                 const statusesHRTPPC = ['active','deleted','expired'];
+                const fulfilment = ['email', 'post'];
                 
                 const processors = [];
                 /* Now generated from session data
@@ -783,13 +809,18 @@
                     }
 
 
-                    if( obj.status === 'matex' ){
+                    if( obj.certificateType === 'matex' ){
+
+                      obj.startDate = _generateStartDate();
                       obj.dueDate = _generateStartDate();
                       obj.endDate = _generateEndDate( obj.startDate );
+                      obj.childsDOB = _generateChildsDOB(obj.startDate);
                     } else {
                       obj.startDate = _generateStartDate();
                       obj.endDate = _generateEndDate( obj.startDate );
                     }
+
+                    obj.certificateFulfilment = fulfilment[Math.floor(Math.random() * fulfilment.length)];
                     
                     obj.address = ( addresses.length > i ) ? addresses[i] : addresses[Math.round(Math.random()*(addresses.length-1))];
                     obj.dateOfBirth = _generateDateOfBirth( obj.certificateType );

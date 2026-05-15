@@ -140,7 +140,7 @@ We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate 
                   text: "Start date"
                 },
                 value: {
-                  text: "25 November 2025"
+                  text: patient.startDate or "25 November 2025"
                 }
               },
               {
@@ -148,7 +148,7 @@ We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate 
                   text: "Expiry date"
                 },
                 value: {
-                  text: "24 November 2026"
+                  text: patient.endDate or "24 November 2026"
                 }
               },
               {

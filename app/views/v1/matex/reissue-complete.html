@@ -54,7 +54,7 @@
     {% set postcodeValue = patient.address.postcode %}
   {% endif %}
 
-  {% set fulfilment = data.editMATEX.certificateFulfilment or patient.fulfilment or "Email" %}
+  {% set fulfilment = data.editMATEX.certificateFulfilment or patient.fulfilment or "email" %}
 
   {% if fulfilment == 'email' %}
   {% set titleText %}

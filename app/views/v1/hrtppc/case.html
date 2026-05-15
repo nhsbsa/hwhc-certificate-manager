@@ -27,7 +27,7 @@
   {% set firstName = data.editHRT.firstName or patient.firstName or 'Jane' %}
   {% set lastName  = data.editHRT.lastName  or patient.lastName  or 'Smith' %}
 
-  {% set fulfilment = (data.editHRT.certificateFulfilment or patient.fulfilment or "Email") %}
+  {% set fulfilment = (data.editHRT.certificateFulfilment or patient.certificateFulfilment or "Email") %}
 
   {% set emailHTML = data.editHRT.email or patient.email or 'janedoe@example.com' %}
 
@@ -116,7 +116,7 @@
                 text: "Fulfilment" 
               },
               value: { 
-                text: fulfilment
+                text: fulfilment | capitalise
               }
             },
             {
@@ -124,7 +124,7 @@
                 text: "Start date"
               },
               value: {
-                html: "25 November 2025"
+                html: patient.startDate or "25 November 2025"
               }
             },
             {
@@ -132,7 +132,7 @@
                 text: "Expiry date"
               },
               value: {
-                html: "24 November 2026"
+                html: patient.endDate or "24 November 2026"
               }
             },
             {
@@ -141,7 +141,7 @@
                 text: "Application date"
               },
               value: {
-                html: "25 November 2025"
+                html: patient.startDate or "25 November 2025"
               }
             }
           ]
@@ -183,7 +183,7 @@
                 text: "Date of birth"
               },
               value: {
-                html: "28 November 1970"
+                html: patient.dateOfBirth.display or "28 November 1970"
               }
             },
             {

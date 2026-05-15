@@ -46,10 +46,10 @@
       {% set fulfilment = data['editMATEX.certificateFulfilment'] or data.editMATEX.certificateFulfilment or patient.fulfilment or "post" %}
       {% endif %}
 
-      {% set childDOBYear  = data.childDOBYear  or '2025' %}
-      {% set childDOBMonth = data.childDOBMonth or '11'   %}
-      {% set childDOBDay   = data.childDOBDay   or '25'   %}
-     
+      {% set childDOBYear  = patient.childsDOB.year or data.childDOBYear  or '2025' %}
+      {% set childDOBMonth = (patient.childsDOB.month + 1) if patient.childsDOB else (data.childDOBMonth or '11') %}
+      {% set childDOBDay   = patient.childsDOB.day or data.childDOBDay   or '25'   %}     
+      
       {% set lookup = data.lookupAddress or {} %}
 
       {% if lookup.buildingNumber is defined %}
@@ -160,19 +160,19 @@
                     {
                       name: 'day',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageDateOfBirth.day or '2',
+                      value: data.imageDateOfBirth.day or patient.dateOfBirth.day or '2',
                       attributes: { 'data-focus-image' : 'dateOfBirth' }
                     },
                     {
                       name: 'month',
                       classes: 'nhsuk-input--width-2',
-                      value: data.imageDateOfBirth.month or '7',
+                      value: data.imageDateOfBirth.month or (patient.dateOfBirth and (patient.dateOfBirth.month + 1)) or '7',
                       attributes: { 'data-focus-image' : 'dateOfBirth' }
                     },
                     {
                       name: 'year',
                       classes: 'nhsuk-input--width-4',
-                      value: data.imageDateOfBirth.year or '1995',
+                      value: data.imageDateOfBirth.year or patient.dateOfBirth.year or '1995',
                       attributes: { 'data-focus-image' : 'dateOfBirth' }
                     }
                   ]

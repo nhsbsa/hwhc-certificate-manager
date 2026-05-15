@@ -113,6 +113,12 @@ Certificate fulfilment
 
 {% endif %}
 
+{% if fulfilment == 'email' %}
+{% set emailHTML = data.editMATEX.email or patient.email or 'janedoe@example.com' %}
+{% else %}
+{% set emailHTML = '' %}
+{% endif %}
+
 {% if isDigital %}
   {% set addressValue1 = '' %}
   {% set addressValue2 = '' %}
@@ -149,9 +155,9 @@ Certificate fulfilment
 {% endif %}
 
 
-{% set childDOBYear  = data.childDOBYear  or '2025' %}
-{% set childDOBMonth = data.childDOBMonth or '11'   %}
-{% set childDOBDay   = data.childDOBDay   or '25'   %}
+{% set childDOBYear  = patient.childsDOB.year or data.childDOBYear  or '2025' %}
+{% set childDOBMonth = (patient.childsDOB.month + 1) if patient.childsDOB else (data.childDOBMonth or '11') %}
+{% set childDOBDay   = patient.childsDOB.day or data.childDOBDay   or '25'   %}
 
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
@@ -285,17 +291,17 @@ Certificate fulfilment
                         {
                           name: "day",
                           classes: "nhsuk-input--width-2",
-                          value: 24
+                          value: patient.dateOfBirth.day or "24"
                         },
                         {
                           name: "month",
                           classes: "nhsuk-input--width-2",
-                          value: 7
+                          value: patient.dateOfBirth.month + 1 or "7"
                         },
                         {
                           name: "year",
                           classes: "nhsuk-input--width-4",
-                          value: 1997
+                          value: patient.dateOfBirth.year or "1997"
                         }
                       ]
                     })
