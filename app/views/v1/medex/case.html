@@ -42,8 +42,8 @@
     <div class="nhsuk-grid-column-full">
 
       <h1 class="nhsuk-heading-m">
-        {{ pageName }} {{ patient.certificateReference }} - {{ patient.lastName or data['editMATEX.lastName'] or 'Smith' }}, {{ patient.firstName or data['editMATEX.firstName'] or 'Jane' }} 
-        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag(true) | safe }}
+        {{ pageName }} {{ patient.certificateReference }} - {{ patient.lastName or data['editMEDEX.lastName'] or 'Smith' }}, {{ patient.firstName or data['editMEDEX.firstName'] or 'Jane' }}
+        {{ (patient.certificateType or 'medex') | getCertificateTypeTextOrTag(true) | safe }}
         {{ statusForDisplay }}
       </h1>
 
@@ -56,35 +56,35 @@
   {% endset %}
 
 
-  {% set firstName = patient.firstName or data['editMATEX.firstName'] or 'Jane' %}
-  {% set lastName  = patient.lastName  or data['editMATEX.lastName'] or 'Smith' %}
-  
-  {% set addressValue1 = data.editMATEX.addressLineOne
+  {% set firstName = patient.firstName or data['editMEDEX.firstName'] or 'Jane' %}
+  {% set lastName  = patient.lastName  or data['editMEDEX.lastName']  or 'Smith' %}
+
+  {% set addressValue1 = data.editMEDEX.addressLineOne
     or (patient.address.buildingNumber + " " + patient.address.streetName) %}
   
-  {% if data.editMATEX.addressLineTwo is defined %}
-    {% set addressValue2 = data.editMATEX.addressLineTwo %}
+  {% if data.editMEDEX.addressLineTwo is defined %}
+    {% set addressValue2 = data.editMEDEX.addressLineTwo %}
   {% else %}
     {% set addressValue2 = patient.address.locality %}
   {% endif %}
   
-  {% set townValue = data.editMATEX.town 
+  {% set townValue = data.editMEDEX.town 
     or patient.address.postTown %}
   
-  {% if data.editMATEX.county is defined %}
-    {% set countyValue = data.editMATEX.county %}
+  {% if data.editMEDEX.county is defined %}
+    {% set countyValue = data.editMEDEX.county %}
   {% else %}
     {% set countyValue = patient.address.county %}
   {% endif %}
   
-  {% set postcodeValue = data.editMATEX.postcode 
+  {% set postcodeValue = data.editMEDEX.postcode 
     or patient.address.postcode %}
   
 
   {% if patient.channel === 'Paper' %}
 
   {% set channelHTML = 'Paper' ~ channelLinkHtml %}
-  {% set fulfilment = 'post' | capitalize %}
+  {% set fulfilment = 'Post' %}
 
   {% set address %}
   {{ addressValue1 | trim }}<br>
@@ -101,12 +101,12 @@
 
     {% set channelHTML = 'Digital' %}
     {% set address = '' %}
-    {% set fulfilment = 'email' | capitalize %}
+    {% set fulfilment = 'Email' %}
 
   {% endif %}
 
-  {% if fulfilment == 'email' %}
-    {% set emailHTML = patient.email or data['editMATEX.email'] or 'janedoe@example.com' %}
+  {% if fulfilment == 'Email' %}
+    {% set emailHTML = patient.email or data['editMEDEX.email'] or 'janedoe@example.com' %}
   {% else %}
     {% set emailHTML = '' %}
   {% endif %}
@@ -129,7 +129,7 @@
             },
             {
               key: { text: 'Type' },
-              value: { html: ( patient.certificateType or 'matex' ) | getCertificateTypeTextOrTag( true ) }
+              value: { html: ( patient.certificateType or 'medex' ) | getCertificateTypeTextOrTag( true ) }
             },
             {
               key: { text: 'Status' },
@@ -148,7 +148,7 @@
                 text: "Start date"
               },
               value: {
-                html: patient.startDate.display or data['editMATEX.startDisplay'] or "25 November 2025"
+                html: patient.startDate.display or data['editMEDEX.startDisplay'] or "25 November 2025"
               }
             },
             {
@@ -156,7 +156,7 @@
                 text: "Expiry date"
               },
               value: {
-                html: patient.endDate.display or data['editMATEX.expiryDisplay'] or "24 November 2026"
+                html: patient.endDate.display or data['editMEDEX.expiryDisplay'] or "24 November 2026"
               }
             },
             {
@@ -217,7 +217,7 @@
                 text: "NHS number"
               },
               value: {
-                html: patient.nhsNumber or data['editMATEX.nhsNumber'] or "123 456 7890"
+                html: patient.nhsNumber or data['editMEDEX.nhsNumber'] or "123 456 7890"
               }
             },
             {
@@ -225,7 +225,7 @@
                 text: "Telephone number"
               },
               value: {
-                html: "07700 123 456" or data['editMATEX.telephoneNumber']
+                html: data['editMEDEX.telephoneNumber'] or "07700 123 456"
               }
             },
             {
@@ -239,11 +239,11 @@
             {
               classes: "nhsuk-summary-list__row--no-border",
               key: {
-                text: "Child's due or birth date"
+                text: "Medical condition"
               },
               value: {                
                 html: (
-                  patient.childsDOB.display or data['editMATEX.childDOBDisplay'] or "25 November 2025"
+                  patient.medicalCondition or data.medicalCondition
                 )
               }
             }

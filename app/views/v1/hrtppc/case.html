@@ -17,56 +17,53 @@
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or 'HRT R33P ITIX' }} - {{ data.editHRT.lastName or patient.lastName or 'Smith' }}, {{ data.editHRT.firstName or patient.firstName or 'Jane' }} 
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or 'HRT R33P ITIX' }} - {{ patient.lastName or data['editHRT.lastName'] or 'Smith' }}, {{ patient.firstName or data['editHRT.firstName'] or 'Jane' }} 
         {{ ( patient.certificateType or 'hrtppc' ) | getCertificateTypeTextOrTag( true ) | safe }}
         {{ ( patient.status or 'active' ) | getStatusTextOrTag( true ) | safe }}
       </h1>
     </div>
   </div>
 
-  {% set firstName = data.editHRT.firstName or patient.firstName or 'Jane' %}
-  {% set lastName  = data.editHRT.lastName  or patient.lastName  or 'Smith' %}
+  {% set firstName = patient.firstName or data['editHRT.firstName'] or 'Jane' %}
+  {% set lastName  = patient.lastName or data['editHRT.lastName'] or 'Smith' %}
 
-  {% set fulfilment = (data.editHRT.certificateFulfilment or patient.certificateFulfilment or "Email") %}
+  {% set fulfilment = (patient.certificateFulfilment or data['editHRT.certificateFulfilment'] or "Email") %}
 
-  {% set emailHTML = data.editHRT.email or patient.email or 'janedoe@example.com' %}
+  {% set emailHTML = patient.email or data['editHRT.email'] or 'janedoe@example.com' %}
 
-  {% if data.editHRT.addressLineOne is defined %}
-    {% set addressValue1 = data.editHRT.addressLineOne %}
-  {% else %}
-    {% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
-  {% endif %}
-
+  {% set addressValue1 = data.editHRT.addressLineOne
+    or (patient.address.buildingNumber + " " + patient.address.streetName) %}
+  
   {% if data.editHRT.addressLineTwo is defined %}
     {% set addressValue2 = data.editHRT.addressLineTwo %}
   {% else %}
     {% set addressValue2 = patient.address.locality %}
   {% endif %}
-
-  {% if data.editHRT.town is defined %}
-    {% set townValue = data.editHRT.town %}
-  {% else %}
-    {% set townValue = patient.address.postTown %}
-  {% endif %}
-
+  
+  {% set townValue = data.editHRT.town 
+    or patient.address.postTown %}
+  
   {% if data.editHRT.county is defined %}
     {% set countyValue = data.editHRT.county %}
   {% else %}
     {% set countyValue = patient.address.county %}
   {% endif %}
-
-  {% if data.editHRT.postcode is defined %}
-  {% set postcodeValue = data.editHRT.postcode %}
-  {% else %}
-    {% set postcodeValue = patient.address.postcode %}
-  {% endif %}
+  
+  {% set postcodeValue = data.editHRT.postcode 
+    or patient.address.postcode %}
 
 
-
-  {% set addressHTML =  addressValue1 + '<br>' + addressValue2 + '<br>' + townValue + '<br>' + countyValue + '<br>' + postcodeValue %}
-  {% if addressHTML | trim === '' %}
-    {% set addressHTML = '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS' %}
-  {% endif %}
+    {% set addressHTML %}
+    {{ addressValue1 | trim }}<br>
+    {% if addressValue2 and addressValue2 | trim %}{{ addressValue2 | trim }}<br>{% endif %}
+    {{ townValue | trim }}<br>
+    {% if countyValue and countyValue | trim %}{{ countyValue | trim }}<br>{% endif %}
+    {{ postcodeValue | trim }}
+    {% endset %}
+    
+    {% if addressHTML | trim == '' %}
+      {% set addressHTML = '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS' %}
+    {% endif %}
 
   <div class="nhsuk-grid-row">
 
@@ -124,7 +121,7 @@
                 text: "Start date"
               },
               value: {
-                html: patient.startDate or "25 November 2025"
+                html: patient.startDate.display or "25 November 2025"
               }
             },
             {
@@ -132,7 +129,7 @@
                 text: "Expiry date"
               },
               value: {
-                html: patient.endDate or "24 November 2026"
+                html: patient.endDate.display or "24 November 2026"
               }
             },
             {
@@ -141,7 +138,7 @@
                 text: "Application date"
               },
               value: {
-                html: patient.startDate or "25 November 2025"
+                html: patient.startDate.display or "25 November 2025"
               }
             }
           ]
@@ -192,7 +189,7 @@
                 text: "NHS number"
               },
               value: {
-                html: data.editHRT.nhsNumber or patient.nhsNumber or "123 456 7890"
+                html: patient.nhsNumber or data['editHRT.nhsNumber'] or "123 456 7890"
               }
             },
             {
@@ -241,10 +238,10 @@
 
         {% elif patient.status == 'active' %}
 
-          {{ button({
-            html: '<span data-ak="I">Edit or reissue</span>',
-            href: "edit-or-reissue"
-          }) }}
+        {{ button({
+          html: '<span data-ak="I">Edit or reissue</span>',
+          href: "edit-or-reissue?patientID=" + patient.id
+        }) }}
           {{ button({
             classes: "nhsuk-button--secondary",
             html: '<span data-ak="K">Add note</span>',

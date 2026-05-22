@@ -17,8 +17,8 @@
         html: '<p>You have approved this application</p>'
       }) }}
 
-      {% set firstName = patient.firstName or data['editMATEX.firstName'] or 'Jane' %}
-      {% set lastName  = patient.lastName  or data['editMATEX.lastName'] or 'Smith' %}
+      {% set firstName = patient.firstName or data['editMEDEX.firstName'] or 'Jane' %}
+      {% set lastName  = patient.lastName  or data['editMEDEX.lastName']  or 'Smith' %}
 
       {% set buttonText = "<span data-ak='V'>View " ~ firstName + ' ' + lastName ~ "'s certificate</span>" %}
 

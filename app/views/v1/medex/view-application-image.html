@@ -1,0 +1,44 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Application' %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }} 2025 11 18 18 12 16N3000049
+        {{ 'medex' | getCertificateTypeTextOrTag( true ) | safe }}
+
+      {% if data.patientID %}
+          {{ patient.status | getStatusTextOrTag( true ) | safe }} {% if patient.checking === true %}{{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+        {% else %}
+          {{ 'accepted' | getStatusTextOrTag( true ) | safe }} {{ 'checking' | getStatusTextOrTag( true ) | safe }}
+        {% endif %}  
+        
+      </h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+          {% from '../macros/image.njk' import image %}
+          {{ image() }}
+
+    </div>
+  </div>
+
+{% endblock %}

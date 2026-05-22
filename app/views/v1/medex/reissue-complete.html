@@ -13,46 +13,46 @@
   {% set patient = data.patientID | getPatientData %}
   {% endif %}
 
-  {% set fullName = ((patient.firstName ~ " " ~ patient.lastName) | trim) | default('Jane Smith', true) or (data['editMATEX.firstName'] ~ " " ~ data['editMATEX.lastName']) | trim %}
 
+  {% set fullName = ((patient.firstName ~ " " ~ patient.lastName) | trim) | default('Jane Smith', true) or (data['editMEDEX.firstName'] ~ " " ~ data['editMEDEX.lastName']) | trim %}
+  
   {% set buttonText = "<span data-ak='V'>View " ~ fullName ~ "'s certificate</span>" %}
 
-
-  {% set addressValue1 = data.editMATEX.addressLineOne
+  {% set addressValue1 = data.editMEDEX.addressLineOne
     or (patient.address.buildingNumber + " " + patient.address.streetName) %}
   
-  {% if data.editMATEX.addressLineTwo is defined %}
-    {% set addressValue2 = data.editMATEX.addressLineTwo %}
+  {% if data.editMEDEX.addressLineTwo is defined %}
+    {% set addressValue2 = data.editMEDEX.addressLineTwo %}
   {% else %}
     {% set addressValue2 = patient.address.locality %}
   {% endif %}
   
-  {% set townValue = data.editMATEX.town 
+  {% set townValue = data.editMEDEX.town 
     or patient.address.postTown %}
   
-  {% if data.editMATEX.county is defined %}
-    {% set countyValue = data.editMATEX.county %}
+  {% if data.editMEDEX.county is defined %}
+    {% set countyValue = data.editMEDEX.county %}
   {% else %}
     {% set countyValue = patient.address.county %}
   {% endif %}
   
-  {% set postcodeValue = data.editMATEX.postcode 
+  {% set postcodeValue = data.editMEDEX.postcode 
     or patient.address.postcode %}
-  
-  {% if request.method == 'POST' and data['editMATEX.certificateFulfilment'] %}
-    {% set fulfilment = data['editMATEX.certificateFulfilment'] %}
+
+  {% if request.method == 'POST' and data['editMEDEX.certificateFulfilment'] %}
+    {% set fulfilment = data['editMEDEX.certificateFulfilment'] %}
   {% else %}
     {% set fulfilment = patient.certificateFulfilment %}
   {% endif %}
 
-  {% if fulfilment == 'email' %}
+  {% if fulfilment === 'email' %}
   {% set titleText %}
   The certificate has been reissued by email
   {% endset %}
 
   {% set sentAddressHtml %}
-    We have sent the maternity exemption (MATEX) certificate to:<br>
-    <strong>{{ patient.email or data['editMATEX.email'] or 'jane.doe@example.com' }}</strong>.
+    We have sent the medical exemption (MEDEX) certificate to:<br>
+    <strong>{{ patient.email or data['editMEDEX.email'] or 'jane.doe@example.com' }}</strong>.
     <p>The certificate holder will get their digital certificate in the next few minutes. But it could take up to 24 hours for the email to arrive. And they might need to check their junk or spam folder.</p>
   {% endset %}
 
@@ -63,7 +63,7 @@
   {% endset %}
 
   {% set sentAddressHtml %}
-  We will send the maternity exemption (MATEX) certificate to:<br>
+  We will send the medical exemption (MEDEX) certificate to:<br>
   <strong>
     {{ addressValue1 }} <br>
     {% if addressValue2 and addressValue2 | trim %}
@@ -88,7 +88,7 @@
         text: titleText
       }) }}
 
-        <p>{{ sentAddressHtml | safe }}</p>
+      <p>{{ sentAddressHtml | safe }}</p>
 
       <div class="nhsuk-card nhsuk-card--grey">
         <div class="nhsuk-card__content">
@@ -100,7 +100,7 @@
             rows: [
               {
                 key: { text: 'Type' },
-                value: { html: ( patient.certificateType or 'matex' ) | getCertificateTypeTextOrTag( true ) }
+                value: { html: ( patient.certificateType or 'medex' ) | getCertificateTypeTextOrTag( true ) }
               },
               {
                 key: {
@@ -119,7 +119,7 @@
                   text: "Start date"
                 },
                 value: {
-                  html: (patient.startDate.display or data['editMATEX.startDisplay'] or "25 November 2025") 
+                  html: (patient.startDate.display or data['editMEDEX.startDisplay']  or "25 November 2025") 
                 }
               },
               {
@@ -127,7 +127,7 @@
                   text: "Expiry date"
                 },
                 value: {
-                  html: (patient.endDate.display or data['editMATEX.expiryDisplay'] or "24 November 2026" )
+                  html: (patient.endDate.display or data['editMEDEX.expiryDisplay'] or "24 November 2026")
                 }
               },
               {
@@ -136,7 +136,7 @@
                   text: "Notes"
                 },
                 value: {
-                  html: data['editMATEX.notes'] or ""
+                  html: data['editMEDEX.notes'] or ""
                 }
               }
             ]

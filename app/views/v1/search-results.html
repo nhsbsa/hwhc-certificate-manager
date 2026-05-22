@@ -20,7 +20,7 @@
 
         <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
 
-        {% if data.searchCertificateType in ['hrtppc', 'matex'] %}
+        {% if data.searchCertificateType in ['hrtppc', 'matex', 'medex'] %}
 
           <div class="nhsuk-grid-row">
             <div class="nhsuk-grid-column-one-half">
@@ -43,6 +43,7 @@
 
           {% if ( filteredRows.length > 0 ) %}
 
+          <div class="patient-table-wrapper">
               {{ table({
                 panel: false,
                 caption: 'Certificates and applications',
@@ -53,6 +54,13 @@
                 head: true | getTableHeadRows,
                 rows: filteredRows
               }) }}
+          </div>
+
+              <style>
+                .patient-table-wrapper {
+                  overflow-x: auto;
+                }
+              </style>
 
               <div class="nhsuk-grid-row">
     

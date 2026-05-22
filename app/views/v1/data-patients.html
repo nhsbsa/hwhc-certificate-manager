@@ -25,7 +25,11 @@
              {
                key: { text: 'hrtppc' | getCertificateTypeTextOrTag },
                value: { html: 'hrtppc' | getCertificateTypeTextOrTag( true ) }
-             }
+             },
+             {
+              key: { text: 'medex' | getCertificateTypeTextOrTag },
+              value: { html: 'medex' | getCertificateTypeTextOrTag( true ) }
+            }
            ]
          }) }}
     </div>
@@ -383,6 +387,24 @@
                 "07093 114 236","07014 225 347","07025 336 458","07036 447 569","07047 558 671"
               ];
 
+
+              //
+              // MEDICAL CONDITION
+              //
+              const medicalCondition = [
+                'A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance',
+                'Epilepsy which needs continuous anticonvulsive therapy',
+                'Diabetes mellitus (not controlled by diet alone)',
+                'Myxoedema (hypothyroidism requiring thyroid hormone replacement)',
+                'Hypoparathyroidism',
+                'Diabetes insipidus or other forms of hypopituitarism',
+                'Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential',
+                'Myasthenia gravis',
+                'A continuing physical disability which means you cannot go out without the help of another person',
+                'Cancer (treatment or effects of disease/treatment)'
+              ];
+              
+
               //
               // INIT FUNCTION
               //
@@ -430,6 +452,7 @@
                     break;
 
                   case 'matex':
+                    case 'medex':
 
                     if( ['processing','on-hold','accepted','rejected'].indexOf(certificateStatus) > -1 ){
                       channel = 'Paper';
@@ -483,6 +506,7 @@
                 switch( certificateType ) {
                   
                   case 'matex':
+                  case 'medex':
 
                     loop = (12 + 3)-1; // 12 digits and 3 spaces
                     spaces = [2,6,10];
@@ -544,12 +568,9 @@
               //
               function _generateStartDate(){
 
-                const today = new Date();
-                
                 const minMonths = -12;
                 const maxMonths = -6;
 
-                // Create date bounds
                 const minDate = new Date();
                 minDate.setMonth(minDate.getMonth() + minMonths);
                 minDate.setHours(0, 0, 0, 0);
@@ -558,48 +579,49 @@
                 maxDate.setMonth(maxDate.getMonth() + maxMonths);
                 maxDate.setHours(0, 0, 0, 0);
 
-                // Pick a random date between them
                 const randomTime = minDate.getTime() + Math.random() * (maxDate.getTime() - minDate.getTime());
                 const randomDate = new Date(randomTime);
 
-                // Format: "1 November 2023"
                 const day = randomDate.getDate();
                 const month = randomDate.toLocaleString('en-GB', { month: 'long' });
                 const year = randomDate.getFullYear();
 
-                return day + ' ' + month + ' ' + year;
+                return {
+                  display: day + ' ' + month + ' ' + year,
+                  day: day,
+                  month: randomDate.getMonth(),
+                  year: year
+                };
 
-              };
+                }
 
               //
               // GENERATE END DATE FUNCTION
               //
-              function _generateEndDate(startDateString) {
+              function _generateEndDate(startDate) {
 
-                const parts = startDateString.split(' ');
-                const day = parseInt(parts[0]);
-                const monthName = parts[1];
-                const year = parseInt(parts[2]);
+                const start = new Date(
+                  startDate.year,
+                  startDate.month,
+                  startDate.day
+                );
 
-                const month = new Date(monthName + ' 1, 2000').getMonth();
+                const end = new Date(start);
 
-                const startDate = new Date(year, month, day);
+                end.setFullYear(end.getFullYear() + 1);
+                end.setDate(end.getDate() - 1);
 
-                const endDate = new Date(startDate);
+                const day = end.getDate();
+                const month = end.toLocaleString('en-GB', { month: 'long' });
+                const year = end.getFullYear();
 
-                // +1 year
-                endDate.setFullYear(endDate.getFullYear() + 1);
-
-                // -1 day
-                endDate.setDate(endDate.getDate() - 1);
-
-                const endDay = endDate.getDate();
-                const endMonth = endDate.toLocaleString('en-GB', { month: 'long' });
-                const endYear = endDate.getFullYear();
-
-                return endDay + ' ' + endMonth + ' ' + endYear;
-                }
-
+                return {
+                  display: day + ' ' + month + ' ' + year,
+                  day: day,
+                  month: end.getMonth(),
+                  year: year
+                };
+              }
 
               //
               // GENERATE DATE OF BIRTH FUNCTION
@@ -689,29 +711,36 @@
               //
               // GENERATE CHILD'S DATE OF BIRTH
               //
-              function _generateChildsDOB(startDateString) {
+              function _generateChildsDOB(startDate) {
 
-                const parts = startDateString.split(' ');
-                const day = parseInt(parts[0]);
-                const monthName = parts[1];
-                const year = parseInt(parts[2]);
+                const date = new Date(
+                  startDate.year,
+                  startDate.month,
+                  startDate.day
+                );
 
-                const month = new Date(monthName + ' 1, 2000').getMonth();
-
-                const date = new Date(year, month, day);
-                date.setHours(0, 0, 0, 0);
+                const day = date.getDate();
+                const month = date.toLocaleString('en-GB', { month: 'long' });
+                const year = date.getFullYear();
 
                 return {
-                  display: date.getDate() + ' ' + date.toLocaleString('en-GB', { month: 'long' }) + ' ' + date.getFullYear(),
-                  day: date.getDate(),
+                  display: day + ' ' + month + ' ' + year,
+                  day: day,
                   month: date.getMonth(),
-                  year: date.getFullYear()
+                  year: year
                 };
-                }
+                
+              }
 
 
-
-
+              //
+              // GENERATE MEDICAL CONDITION FUNCTION
+              //
+              function _generateMedicalCondition() {
+                return [
+                  medicalCondition[Math.floor(Math.random() * medicalCondition.length)]
+                ];
+              }
 
 
               //
@@ -721,7 +750,7 @@
 
                 const patients = [];
 
-                const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',');
+                const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',').map(type => type.trim());
                 const statusesMatex = ['processing','on-hold','rejected','active','deleted','expired'];
                 const statusesHRTPPC = ['active','deleted','expired'];
                 const fulfilment = ['email', 'post'];
@@ -759,11 +788,13 @@
                     obj.processor = processor.key;
                     obj.processorName = processor.name;
                     
-                    obj.certificateType = certificateTypes[Math.round(Math.random())*(certificateTypes.length-1)];
+                    obj.certificateType = certificateTypes[Math.floor(Math.random() * certificateTypes.length)];
+                    console.log(obj.certificateType);
+
                     obj.status = ( obj.certificateType === 'hrtppc' ) ? statusesHRTPPC[Math.round(Math.random()*(statusesHRTPPC.length-1))] : statusesMatex[Math.round(Math.random()*(statusesMatex.length-1))];
                     
                     // Generate more active results for Matex
-                    if( obj.certificateType === 'matex' && obj.status !== 'active' ){
+                    if( (obj.certificateType === 'matex' || obj.certificateType === 'medex') && obj.status !== 'active' ){
                       obj.status = ( Math.round(Math.random()*2) === 2 ) ? 'active' : obj.status;
                     }
 
@@ -790,7 +821,7 @@
                     } else {
 
                       // Only checking one of these...
-                      if( obj.certificateType === 'matex' && ['accepted','on-hold','rejected'].indexOf( obj.status ) > -1 && !processors[obj.processor] ){
+                      if( (obj.certificateType === 'matex' || obj.certificateType === 'medex') && ['accepted','on-hold','rejected'].indexOf( obj.status ) > -1 && !processors[obj.processor] ){
                         console.log('FOUND ONE ' + obj.status + ' FOR '+ obj.processor);
 
                         obj.checking = true;
@@ -804,10 +835,9 @@
                     obj.certificateReference = _generateCertificateReference( obj.certificateType, obj.status );
                     
                     obj.channel = _generateChannel( obj.certificateType, obj.status );
-                    if( obj.certificateType === 'matex' && obj.channel === 'Paper' ){
+                    if( ( obj.certificateType === 'matex' || obj.certificateType === 'medex') && obj.channel === 'Paper' ){
                       obj.imageReference = _generateImageReference();
                     }
-
 
                     if( obj.certificateType === 'matex' ){
 
@@ -815,13 +845,38 @@
                       obj.dueDate = _generateStartDate();
                       obj.endDate = _generateEndDate( obj.startDate );
                       obj.childsDOB = _generateChildsDOB(obj.startDate);
-                    } else {
+
+                    } else if ( obj.certificateType === 'medex' ) {
+
                       obj.startDate = _generateStartDate();
                       obj.endDate = _generateEndDate( obj.startDate );
+                      obj.medicalCondition = _generateMedicalCondition();
+
+                    } else {
+
+                      obj.startDate = _generateStartDate();
+                      obj.endDate = _generateEndDate(obj.startDate);
+                      
                     }
 
-                    obj.certificateFulfilment = fulfilment[Math.floor(Math.random() * fulfilment.length)];
+                    //Certificate fulfilment
+                    if (obj.certificateType === 'hrtppc') {
+
+                      obj.certificateFulfilment = ['email', 'post'][
+                        Math.floor(Math.random() * 2)
+                      ];
+
+                      } else if (obj.channel === 'Digital') {
+
+                      obj.certificateFulfilment = 'email';
+
+                      } else {
+
+                      obj.certificateFulfilment = 'post';
+
+                      }
                     
+
                     obj.address = ( addresses.length > i ) ? addresses[i] : addresses[Math.round(Math.random()*(addresses.length-1))];
                     obj.dateOfBirth = _generateDateOfBirth( obj.certificateType );
 

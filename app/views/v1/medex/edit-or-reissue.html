@@ -53,10 +53,10 @@
 {% endif %}
 
 {% set postcodeValue = patient.address.postcode %}
-{% if postcodeError %}
+  {% if postcodeError %}
   {% set postcodeValue = "" %}
   {% else %}
-  {% set postcodeValue = data['editMATEX.postcode'] %}
+  {% set postcodeValue = data['editMEDEX.postcode'] %}
 {% endif %}
 
 <div class="nhsuk-grid-row">
@@ -73,10 +73,11 @@
 </a>
 {% endset %}
 
+
 {% if patient.channel === 'Paper' %}
 {% set channelHTML = 'Paper' ~ channelLinkHtml %}
-{% set emailHTML = patient.email or data['editMATEX.email'] or '' %}
-{% set fulfilment = 'post' or data['editMATEX.certificateFulfilment'] %}
+{% set emailHTML = patient.email or data['editMEDEX.email'] or '' %}
+{% set fulfilment = 'post' or data['editMEDEX.certificateFulfilment'] %}
 {% set isDigital = false %}
 {% set fulfilmentKey %} 
 Certificate fulfilment
@@ -84,7 +85,7 @@ Certificate fulfilment
 {% set fulfilmentValue %}
 {{  radios({
     idPrefix: "certificate-fulfilment",
-    name: "editMATEX.certificateFulfilment",
+    name: "editMEDEX.certificateFulfilment",
     classes: "nhsuk-radios--inline summary-list-radios",
     items: [
       { 
@@ -104,15 +105,14 @@ Certificate fulfilment
 
 {% else %}
   {% set channelHTML = 'Digital' %}
-  {% set fulfilment = 'email' %}
+  {% set fulfilment = "email" %}
+  {% set emailHTML = patient.email or data['editMEDEX.email'] or 'janedoe@example.com' %}
   {% set isDigital = true %}
   {% set fulfilmentValue %} {% endset %}
   {% set fulfilmentKey %} {% endset %}
-  {% set emailHTML = patient.email or data['editMATEX.email'] or 'janedoe@example.com' %}
-  {% set postcodeValue = patient.address.postcode or data['editMATEX.postcode'] %}
+  {% set postcodeValue = patient.address.postcode or data['editMEDEX.postcode'] %}
 
 {% endif %}
-
 
 {% if isDigital %}
   {% set addressValue1 = '' %}
@@ -122,40 +122,39 @@ Certificate fulfilment
 
 {% else %}
 
-{% set addressValue1 = data.editMATEX.addressLineOne
+{% set addressValue1 = data.editMEDEX.addressLineOne
   or (patient.address.buildingNumber + " " + patient.address.streetName) %}
 
-{% if data.editMATEX.addressLineTwo is defined %}
-  {% set addressValue2 = data.editMATEX.addressLineTwo %}
+{% if data.editMEDEX.addressLineTwo is defined %}
+  {% set addressValue2 = data.editMEDEX.addressLineTwo %}
 {% else %}
   {% set addressValue2 = patient.address.locality %}
 {% endif %}
 
-{% set townValue = data.editMATEX.town 
+{% set townValue = data.editMEDEX.town 
   or patient.address.postTown %}
 
-{% if data.editMATEX.county is defined %}
-  {% set countyValue = data.editMATEX.county %}
+{% if data.editMEDEX.county is defined %}
+  {% set countyValue = data.editMEDEX.county %}
 {% else %}
   {% set countyValue = patient.address.county %}
 {% endif %}
 
-{% set postcodeValue = data.editMATEX.postcode 
+{% set postcodeValue = data.editMEDEX.postcode 
   or patient.address.postcode %}
 
 {% endif %}
 
+{% set selected = patient.medicalCondition or [] %}
+{% set selectedValue = patient.medicalCondition and patient.medicalCondition[0] %}
 
-{% set childDOBYear  = patient.childsDOB.year or data.childDOBYear  or '2025' %}
-{% set childDOBMonth = (patient.childsDOB.month + 1) if patient.childsDOB else (data.childDOBMonth or '11') %}
-{% set childDOBDay   = patient.childsDOB.day or data.childDOBDay   or '25'   %}
 
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
     <div class="nhsuk-card nhsuk-card--grey">
       <div class="nhsuk-card__content">
 
-        <form action="edit-matex" method="post">
+        <form action="edit-medex" method="post">
 
           {{ summaryList({
               classes: "nhsuk-summary-list--no-border",
@@ -168,8 +167,8 @@ Certificate fulfilment
                 { 
                   html: input ({
                     id: "first-name",
-                    name: "editMATEX.firstName",
-                    value: patient.firstName or data['editMATEX.firstName'] or 'Jane'
+                    name: "editMEDEX.firstName",
+                    value: patient.firstName or data['editMEDEX.firstName'] or 'Jane'
                   })
                 }
               },
@@ -181,8 +180,8 @@ Certificate fulfilment
                   { 
                     html: input ({
                       id: "last-name",
-                      name: "editMATEX.lastName",
-                      value: patient.lastName or data['editMATEX.lastName'] or 'Smith'
+                      name: "editMEDEX.lastName",
+                      value: patient.lastName or data['editMEDEX.lastName'] or 'Smith'
                     })
                   }
                 },
@@ -193,7 +192,7 @@ Certificate fulfilment
                   value: {
                     html: input ({
                       id: "address-line-1",
-                      name: "editMATEX.addressLineOne",
+                      name: "editMEDEX.addressLineOne",
                       value: addressValue1,
                       errorMessage: addressLineOneError,
                       disabled: isDigital
@@ -207,7 +206,7 @@ Certificate fulfilment
                   value: {
                     html: input ({
                       id: "address-line-2",
-                      name: "editMATEX.addressLineTwo",
+                      name: "editMEDEX.addressLineTwo",
                       value: addressValue2,
                       disabled: isDigital
                     })
@@ -220,7 +219,7 @@ Certificate fulfilment
                   value: {
                     html: input ({
                       id: "town",
-                      name: "editMATEX.town",
+                      name: "editMEDEX.town",
                       classes: "nhsuk-u-width-two-thirds",
                       value: townValue,
                       disabled: isDigital
@@ -234,7 +233,7 @@ Certificate fulfilment
                   value: {
                     html: input ({
                       id: "county",
-                      name: "editMATEX.county",
+                      name: "editMEDEX.county",
                       classes: "nhsuk-u-width-two-thirds",
                       value: countyValue,
                       disabled: isDigital
@@ -249,7 +248,7 @@ Certificate fulfilment
                   {
                     html: input({
                       id: "postcode",
-                      name: "editMATEX.postcode",
+                      name: "editMEDEX.postcode",
                       classes: "nhsuk-input--width-5",
                       value: postcodeValue,
                       errorMessage: postcodeError
@@ -266,7 +265,7 @@ Certificate fulfilment
                       button({
                         html: '<span data-ak="G">Change address fields using address lookup</span>',
                         classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-3",
-                        href: "address-lookup?source=matex&returnTo=/v1/matex/edit-or-reissue"
+                        href: "address-lookup?source=medex&returnTo=/v1/medex/edit-or-reissue"
                     })
                   }
                 },
@@ -306,9 +305,9 @@ Certificate fulfilment
                   { 
                     html: input ({
                       id: "nhs-number",
-                      name: "editMATEX.nhsNumber",
+                      name: "editMEDEX.nhsNumber",
                       classes: "nhsuk-input--width-10",
-                      value: patient.nhsNumber or data['editMATEX.nhsNumber'] or "1234567890"
+                      value: patient.nhsNumber or data['editMEDEX.nhsNumber'] or "1234567890"
                     })
                   }
                 },
@@ -320,9 +319,9 @@ Certificate fulfilment
                   { 
                     html: input ({
                       id: "phone-number",
-                      name: "editMATEX.telephoneNumber",
+                      name: "editMEDEX.telephoneNumber",
                       classes: "nhsuk-input--width-10",
-                      value: "07700 123 456" or data['editMATEX.telephoneNumber']
+                      value: "07700 123 456" or data['editMEDEX.telephoneNumber']
                     })
                   }
                 },
@@ -334,7 +333,7 @@ Certificate fulfilment
                   { 
                     html: input ({
                       id: "email",
-                      name: "editMATEX.email",
+                      name: "editMEDEX.email",
                       value: emailHTML,
                       errorMessage: emailError
                     })
@@ -348,36 +347,125 @@ Certificate fulfilment
                     classes: "fulfilment-value",
                     html: fulfilmentValue | safe
                   }
+                },        
+                {
+                  key: { 
+                    html: '<span data-ak="Y">Medical condition</span>'
+                  },
+                  value: { 
+                    html: radios({
+                      idPrefix: "medicalCondition",
+                      name: "medicalCondition",
+                      classes: "nhsuk-radios--small",
+                      items: [
+                        {
+                          value: "permanent-fistula",
+                          text: "A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance",
+                          checked: selected.includes("A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance")
+                        },
+                        {
+                          value: "epilepsy",
+                          text: "Epilepsy which needs continuous anticonvulsive therapy",
+                          checked: selected.includes("Epilepsy which needs continuous anticonvulsive therapy")
+                        },
+                        {
+                          value: "diabetes-mellitus",
+                          text: "Diabetes mellitus (not controlled by diet alone)",
+                          checked: selected.includes("Diabetes mellitus (not controlled by diet alone)")
+                        },
+                        {
+                          value: "myxoedema",
+                          text: "Myxoedema (hypothyroidism requiring thyroid hormone replacement)",
+                          checked: selected.includes("Myxoedema (hypothyroidism requiring thyroid hormone replacement)")
+                        },
+                        {
+                          value: "hypoparathyroidism",
+                          text: "Hypoparathyroidism",
+                          checked: selected.includes("Hypoparathyroidism")
+                        },
+                        {
+                          value: "diabetes-insipidus",
+                          text: "Diabetes insipidus or other forms of hypopituitarism",
+                          checked: selected.includes("Diabetes insipidus or other forms of hypopituitarism")
+                        },
+                        {
+                          value: "hypoadrenalism",
+                          text: "Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential",
+                          checked: selected.includes("Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential")
+                        },
+                        {
+                          value: "myasthenia-gravis",
+                          text: "Myasthenia gravis",
+                          checked: selected.includes("Myasthenia gravis")
+                        },
+                        {
+                          value: "physical-disability",
+                          text: "A continuing physical disability which means you cannot go out without the help of another person",
+                          checked: selected.includes("A continuing physical disability which means you cannot go out without the help of another person")
+                        },
+                        {
+                          value: "cancer",
+                          text: "Cancer (treatment or effects of disease/treatment)",
+                          checked: selected.includes("Cancer (treatment or effects of disease/treatment)")
+                        }
+                      ]
+                    })                    
+                  }
                 },
                 {
                   key: { 
-                    html: '<span data-ak="Y">Child\'s due or birth date</span>'
+                    html: '<span data-ak="Y">Medical condition</span>'
                   },
                   value: { 
-                    html: dateInput({
-                      id: "child-dob",
-                      namePrefix: "childDOB", 
-                      classes: "nhsuk-dates--inline summary-list-dates",
+                    html: select({
+                      id: "medicalCondition",
+                      name: "medicalCondition",
+                      value: selectedValue,                    
                       items: [
-                        {
-                          name: "day",
-                          classes: "nhsuk-input--width-2",
-                          value: childDOBDay
-                        },
-                        {
-                          name: "month",
-                          classes: "nhsuk-input--width-2",
-                          value: childDOBMonth
-                        },
-                        {
-                          name: "year",
-                          classes: "nhsuk-input--width-4",
-                          value: childDOBYear
-                        }
-                      ]
+                      {
+                        value: "A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance",
+                        text: "A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance"
+                      },
+                      {
+                        value: "Epilepsy which needs continuous anticonvulsive therapy",
+                        text: "Epilepsy which needs continuous anticonvulsive therapy"
+                      },
+                      {
+                        value: "Diabetes mellitus (not controlled by diet alone)",
+                        text: "Diabetes mellitus (not controlled by diet alone)"
+                      },
+                      {
+                        value: "Myxoedema (hypothyroidism requiring thyroid hormone replacement)",
+                        text: "Myxoedema (hypothyroidism requiring thyroid hormone replacement)"
+                      },
+                      {
+                        value: "Hypoparathyroidism",
+                        text: "Hypoparathyroidism"
+                      },
+                      {
+                        value: "Diabetes insipidus or other forms of hypopituitarism",
+                        text: "Diabetes insipidus or other forms of hypopituitarism"
+                      },
+                      {
+                        value: "Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential",
+                        text: "Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential"
+                      },
+                      {
+                        value: "Myasthenia gravis",
+                        text: "Myasthenia gravis"
+                      },
+                      {
+                        value: "A continuing physical disability which means you cannot go out without the help of another person",
+                        text: "A continuing physical disability which means you cannot go out without the help of another person"
+                      },
+                      {
+                        value: "Cancer (treatment or effects of disease/treatment)",
+                        text: "Cancer (treatment or effects of disease/treatment)"
+                      }
+                    ]
                     })
                   }
-                },        
+                },
                 {
                   key: { 
                     html: '<span data-ak="C">Notes</span>' 
@@ -386,8 +474,8 @@ Certificate fulfilment
                   { 
                     html: textarea ({
                       id: "notes",
-                      name: "editMATEX.notes",
-                      value: data['editMATEX.notes']
+                      name: "editMEDEX.notes",
+                      value: data['editMEDEX.notes']
                     })
                   }
                 }
@@ -425,17 +513,28 @@ Certificate fulfilment
 </div>
 
 <style>
+.summary-list-radios {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
 
-  .summary-list-radios {
-      display: flex;
-      align-items: first baseline;
-      white-space: nowrap;
-    }
+.summary-list-radios .nhsuk-radios__item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
 
-  .summary-list-dates {
-    display: flex;
-    align-items: last baseline
-  }
+.summary-list-radios .nhsuk-radios__label {
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+
+.summary-list-dates {
+  display: flex;
+  align-items: center;
+}
 
   .nhsuk-summary-list__value .nhsuk-radios,
   .nhsuk-summary-list__value .nhsuk-textarea {

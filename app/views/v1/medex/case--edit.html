@@ -28,7 +28,7 @@
     <div class="nhsuk-grid-column-full">
 
       <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
-        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.certificateType or 'medex') | getCertificateTypeTextOrTag( true ) | safe }}
         {{ statusForDisplay }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
       </h1>
 
@@ -39,36 +39,51 @@
     <div class="nhsuk-grid-column-full">
 
      
-      {% set firstName = patient.firstName or data.imageFirstName or 'Jane' %}
-      {% set lastName  = patient.lastName  or data.imageLastName  or 'Smith' %}
+      {% set firstName = patient.firstName or data.editMEDEX.firstName or 'Jane' %}
+      {% set lastName  = patient.lastName  or data.editMEDEX.lastName or 'Smith' %}
+      
+      {% set lookup = data.lookupAddress or {} %}
 
-      {% set childDOBYear  = patient.childsDOB.year or data.childDOBYear  or '2025' %}
-      {% set childDOBMonth = (patient.childsDOB.month + 1) if patient.childsDOB else (data.childDOBMonth or '11') %}
-      {% set childDOBDay   = patient.childsDOB.day or data.childDOBDay   or '25'   %}     
-      
-      {% set buildingNumberValue = data.editMATEX.buildingNumber
-        or patient.address.buildingNumber %}
-        
-      {% set addressValue1 = data.editMATEX.streetName
-        or patient.address.streetName %}
-      
-      {% if data.editMATEX.addressLineTwo is defined %}
-        {% set addressValue2 = data.editMATEX.addressLineTwo %}
+      {% if lookup.buildingNumber is defined %}
+      {% set buildingNumberValue = lookup.buildingNumber %}
       {% else %}
-        {% set addressValue2 = patient.address.locality %}
+        {% set buildingNumberValue = data.imageBuildingNumberOrName or patient.address.buildingNumber or '12' %}
       {% endif %}
-      
-      {% set townValue = data.editMATEX.town 
-        or patient.address.postTown %}
-      
-      {% if data.editMATEX.county is defined %}
-        {% set countyValue = data.editMATEX.county %}
+
+      {% if lookup.addressLineOne is defined %}
+      {% set addressValue1 = lookup.streetName %}
       {% else %}
-        {% set countyValue = patient.address.county %}
+        {% set addressValue1 = data.imageAddressLine1 or patient.address.streetName or 'Crown Passage' %}
       {% endif %}
-      
-      {% set postcodeValue = data.editMATEX.postcode 
-        or patient.address.postcode %}
+
+      {% if lookup.addressLineTwo is defined %}
+        {% set addressValue2 = lookup.addressLineTwo %}
+      {% else %}
+        {% set addressValue2 = data.imageAddressLine2 or patient.address.locality %}
+      {% endif %}
+
+      {% if lookup.town is defined %}
+        {% set townValue = lookup.town %}
+      {% else %}
+        {% set townValue = data.imageTown or patient.address.postTown or 'Birmingham' %}
+      {% endif %}
+
+      {% if lookup.county is defined %}
+        {% set countyValue = lookup.county %}
+      {% else %}
+        {% set countyValue = data.imageCounty or patient.address.county %}
+      {% endif %}
+
+      {% if lookup.postcode is defined %}
+      {% set postcodeValue = lookup.postcode %}
+      {% else %}
+        {% set postcodeValue = data.imagePostcode or patient.address.postcode %}
+      {% endif %}
+
+      {% set selected = patient.medicalCondition or [] %}
+
+      {% set selectedValue = patient.medicalCondition and patient.medicalCondition[0] %}
+
 
           <div class="nhsuk-grid-row">
 
@@ -255,7 +270,7 @@
                     {{ button({
                       html: '<span data-ak="G">Change address fields using address lookup</span>',
                       classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-top-3",
-                      href: "/v1/matex/address-lookup?source=matex&returnTo=/v1/matex/case--edit"                    }) }}
+                      href: "/v1/medex/address-lookup?source=medex&returnTo=/v1/medex/case--edit"                    }) }}
                   </div>
 
                 <hr/>
@@ -288,39 +303,139 @@
                       value: data.imageEmailAddress
                   }) }}
 
-
-              
-
-                {{ dateInput({
-                  id: 'imageBabyDateOfBirth',
-                  namePrefix: 'imageBabyDateOfBirth',
-                  fieldset: {
-                    legend: {
-                      html: '<span data-ak="Y">Child\'s due or birth date</span>'
-                    }
-                  },
-                  items: [
+                  <div class="horizontal-select">
+                  {{ select({
+                    label: {
+                      html: '<span data-ak="Y">Medical condition</span>'
+                    },
+                    id: "sort-by",
+                    name: "sortBy",
+                    value: selectedValue,
+                    classes: "nhsuk-input--width-30",
+                    items: [
                     {
-                      name: 'day',
-                      classes: 'nhsuk-input--width-2',
-                      value: childDOBDay,
-                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
+                      value: "A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance",
+                      text: "A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance"
                     },
                     {
-                      name: 'month',
-                      classes: 'nhsuk-input--width-2',
-                      value: childDOBMonth,
-                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
+                      value: "Epilepsy which needs continuous anticonvulsive therapy",
+                      text: "Epilepsy which needs continuous anticonvulsive therapy"
                     },
                     {
-                      name: 'year',
-                      classes: 'nhsuk-input--width-4',
-                      value: childDOBYear,
-                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
+                      value: "Diabetes mellitus (not controlled by diet alone)",
+                      text: "Diabetes mellitus (not controlled by diet alone)"
+                    },
+                    {
+                      value: "Myxoedema (hypothyroidism requiring thyroid hormone replacement)",
+                      text: "Myxoedema (hypothyroidism requiring thyroid hormone replacement)"
+                    },
+                    {
+                      value: "Hypoparathyroidism",
+                      text: "Hypoparathyroidism"
+                    },
+                    {
+                      value: "Diabetes insipidus or other forms of hypopituitarism",
+                      text: "Diabetes insipidus or other forms of hypopituitarism"
+                    },
+                    {
+                      value: "Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential",
+                      text: "Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential"
+                    },
+                    {
+                      value: "Myasthenia gravis",
+                      text: "Myasthenia gravis"
+                    },
+                    {
+                      value: "A continuing physical disability which means you cannot go out without the help of another person",
+                      text: "A continuing physical disability which means you cannot go out without the help of another person"
+                    },
+                    {
+                      value: "Cancer (treatment or effects of disease/treatment)",
+                      text: "Cancer (treatment or effects of disease/treatment)"
                     }
                   ]
-                }) }}
+                  }) }}
+                </div>
 
+                  <style>
+                    .horizontal-select .nhsuk-form-group {
+                      display: flex;
+                      align-items: center;
+                    }
+
+                    .horizontal-select .nhsuk-label {
+                      width: 250px; /* match your other labels */
+                      margin-bottom: 0;
+                    }
+
+                    .horizontal-select .nhsuk-select {
+                      flex: 1;
+                    }
+
+                  </style>
+
+              {{ radios({
+                idPrefix: "medicalCondition",
+                name: "medicalCondition",
+                classes: "nhsuk-radios--small",
+                fieldset: {
+                  legend: {
+                    html: '<span data-ak="Y">Medical condition</span>'
+                  }
+                },
+                items: [
+                  {
+                    value: "permanent-fistula",
+                    text: "A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance",
+                    checked: selected.includes("A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance")
+                  },
+                  {
+                    value: "epilepsy",
+                    text: "Epilepsy which needs continuous anticonvulsive therapy",
+                    checked: selected.includes("Epilepsy which needs continuous anticonvulsive therapy")
+                  },
+                  {
+                    value: "diabetes-mellitus",
+                    text: "Diabetes mellitus (not controlled by diet alone)",
+                    checked: selected.includes("Diabetes mellitus (not controlled by diet alone)")
+                  },
+                  {
+                    value: "myxoedema",
+                    text: "Myxoedema (hypothyroidism requiring thyroid hormone replacement)",
+                    checked: selected.includes("Myxoedema (hypothyroidism requiring thyroid hormone replacement)")
+                  },
+                  {
+                    value: "hypoparathyroidism",
+                    text: "Hypoparathyroidism",
+                    checked: selected.includes("Hypoparathyroidism")
+                  },
+                  {
+                    value: "diabetes-insipidus",
+                    text: "Diabetes insipidus or other forms of hypopituitarism",
+                    checked: selected.includes("Diabetes insipidus or other forms of hypopituitarism")
+                  },
+                  {
+                    value: "hypoadrenalism",
+                    text: "Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential",
+                    checked: selected.includes("Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential")
+                  },
+                  {
+                    value: "myasthenia-gravis",
+                    text: "Myasthenia gravis",
+                    checked: selected.includes("Myasthenia gravis")
+                  },
+                  {
+                    value: "physical-disability",
+                    text: "A continuing physical disability which means you cannot go out without the help of another person",
+                    checked: selected.includes("A continuing physical disability which means you cannot go out without the help of another person")
+                  },
+                  {
+                    value: "cancer",
+                    text: "Cancer (treatment or effects of disease/treatment)",
+                    checked: selected.includes("Cancer (treatment or effects of disease/treatment)")
+                  }
+                ]
+              }) }}
 
 
 

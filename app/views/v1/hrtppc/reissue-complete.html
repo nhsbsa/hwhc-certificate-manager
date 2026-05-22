@@ -13,21 +13,14 @@
 {% set patient = data.patientID | getPatientData %}
 {% endif %}
 
-{#{ patient | dump }#}
 
-{% if data.editHRT.firstName is defined and data.editHRT.lastName is defined %}
-{% set fullName = (data.editHRT.firstName ~ " " ~ data.editHRT.lastName) | trim %}
-{% else %}
-  {% set fullName = ((patient.firstName ~ " " ~ patient.lastName) | trim) | default('Jane Smith', true) %}
-{% endif %}
+{% set fullName = ((patient.firstName ~ " " ~ patient.lastName) | trim) | default('Jane Smith', true) or (data['editHRT.firstName'] ~ " " ~ data['editHRT.lastName']) | trim %}
 
 {% set buttonText = "<span data-ak='V'>View " ~ fullName ~ "'s certificate</span>" %}
 
-{% if data.editHRT.addressLineOne is defined %}
-{% set addressValue1 = data.editHRT.addressLineOne %}
-{% else %}
-  {% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
-{% endif %}
+
+{% set addressValue1 = data.editHRT.addressLineOne
+  or (patient.address.buildingNumber + " " + patient.address.streetName) %}
 
 {% if data.editHRT.addressLineTwo is defined %}
   {% set addressValue2 = data.editHRT.addressLineTwo %}
@@ -35,11 +28,8 @@
   {% set addressValue2 = patient.address.locality %}
 {% endif %}
 
-{% if data.editHRT.town is defined %}
-  {% set townValue = data.editHRT.town %}
-{% else %}
-  {% set townValue = patient.address.postTown %}
-{% endif %}
+{% set townValue = data.editHRT.town 
+  or patient.address.postTown %}
 
 {% if data.editHRT.county is defined %}
   {% set countyValue = data.editHRT.county %}
@@ -47,14 +37,14 @@
   {% set countyValue = patient.address.county %}
 {% endif %}
 
-{% if data.editHRT.postcode is defined %}
-{% set postcodeValue = data.editHRT.postcode %}
+{% set postcodeValue = data.editHRT.postcode 
+  or patient.address.postcode %}
+
+{% if request.method == 'POST' and data['editHRT.certificateFulfilment'] %}
+  {% set fulfilment = data['editHRT.certificateFulfilment'] %}
 {% else %}
-  {% set postcodeValue = patient.address.postcode %}
+  {% set fulfilment = patient.certificateFulfilment %}
 {% endif %}
-
-
-{% set fulfilment = data.editHRT.certificateFulfilment or patient.fulfilment or "Email" %}
 
 {% if fulfilment == 'email' %}
 {% set titleText %}
@@ -63,7 +53,7 @@ The certificate has been reissued by email
 
 {% set sentAddressHtml %}
   We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate (HRT PPC) to:<br>
-  <strong>{{ data.editHRT.email or patient.email or 'jane.doe@example.com' }}</strong>.
+  <strong>{{ patient.email or data['editHRT.email'] or 'jane.doe@example.com' }}</strong>.
   <p>The certificate holder will get their digital certificate in the next few minutes.</p>
 {% endset %}
 
@@ -140,7 +130,7 @@ We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate 
                   text: "Start date"
                 },
                 value: {
-                  text: patient.startDate or "25 November 2025"
+                  text: patient.startDate.display or "25 November 2025"
                 }
               },
               {
@@ -148,7 +138,7 @@ We have sent the Hormone Repacement Therapy Prescription Prepayment Certificate 
                   text: "Expiry date"
                 },
                 value: {
-                  text: patient.endDate or "24 November 2026"
+                  text: patient.endDate.display or "24 November 2026"
                 }
               },
               {

@@ -1,0 +1,230 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% if data.patientID %}
+{% set patient = data.patientID | getPatientData %}
+{% endif %}
+
+{% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
+
+
+{% block beforeContent %}
+ {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+        {{ (patient.certificateType or 'medex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+      </h1>
+
+    </div>
+
+  </div>
+
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+          <div class="nhsuk-grid-row">
+
+            <!-- ONE THIRD -->
+            <div class="nhsuk-grid-column-one-half sticky-column">
+
+              {% from '../macros/image.njk' import image %}
+              {{ image() }}
+
+            </div>
+
+            <!-- TWO THIRDS -->
+            <div class="nhsuk-grid-column-one-half">
+
+              <div class="nhsuk-card nhsuk-card--grey">
+                <div class="nhsuk-card__content">
+
+                      <h2 class="nhsuk-heading-m">Cannot process application</h2>
+
+
+                      {% set rejectApplicationHTML %}
+
+                        <!-- REASON FOR REJECTION -->
+
+                        {% set values = [
+                          'Child has already reached their first birthday',
+                          'Patient is outside England',
+                          'Patient is under 16',
+                          'Patient is over 60',
+                          'Application is not on a medex form'
+                        ] %}
+
+                        {{ radios({
+                          idPrefix: 'reasonForRejection',
+                          name: 'reasonForRejection',
+                          value: data.reasonForRejection,
+                          fieldset: {
+                            legend: {
+                              classes: 'nhsuk-u-visually-hidden',
+                              text: 'What is the reason for the rejection?'
+                            }
+                          },
+                          classes: 'nhsuk-radios--small',
+                          items: [
+                            { value: values[0], html: values[0] },
+                            { value: values[1], html: values[1] },
+                            { value: values[2], html: values[2] },
+                            { value: values[3], html: values[3] },
+                            { value: values[4], html: values[4] }
+                          ]
+                        }) }}
+
+                      {% endset %}
+                  
+                    
+                      
+                      <form method="post" novalidate>
+
+                        {{ radios({
+                          idPrefix: 'cannotProcessApplicationCorrection',
+                          name: 'cannotProcessApplicationCorrection',
+                          value: data.cannotProcessApplicationCorrection,
+                          fieldset: {
+                            legend: {
+                              text: 'What would you like to do next?'
+                            }
+                          },
+                          items: [
+                            {
+                              value: 'askForFurtherInformation',
+                              text: 'Ask for further information'
+                            },
+                            {
+                              value: 'requestKFP',
+                              text: 'Request key from paper'
+                            },
+                            {
+                              value: 'rejectApplication',
+                              text: 'Reject application',
+                              conditional: { html: rejectApplicationHTML }
+                            }
+                          ]
+                        }) }}
+
+                        <div id="cannot-process-notes" class="nhsuk-u-visually-hidden">
+                          {{ textarea({
+                            name: 'cannotProcessApplicationNotes',
+                            id: 'cannotProcessApplicationNotes',
+                            label: {
+                              text: 'Notes'
+                            },
+                            value: data.cannotProcessApplicationNotes
+                          }) }}
+                        </div>
+
+                        <div id="cannot-process-hint" class="nhsuk-hint nhsuk-u-visually-hidden">
+                          Your corrections will be sent to your supervisor for confirmation
+                        </div>
+
+
+                        {{ button({
+                          html: '<span data-ak="I">Continue</span>',
+                          attributes: {
+                            type: 'button',
+                            id: 'cannot-process-submit',
+                            'data-text-ask': 'Continue',
+                            'data-text-kfp': 'Request key from paper',
+                            'data-text-reject': 'Reject application'
+                          },
+                          classes: 'nhsuk-u-visually-hidden'
+                        }) }}
+
+                      </form>
+
+                      
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+    </div>
+  </div>
+  
+  <!-- BUTTON DISPLAY AND CHANGE WITH RADIO SELECTION -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      let selectedAction = null;
+
+      const button = document.getElementById('cannot-process-submit');
+      const radios = document.querySelectorAll('input[name="cannotProcessApplicationCorrection"]');
+      const notes = document.getElementById('cannot-process-notes');
+      const hint = document.getElementById('cannot-process-hint');
+    
+      button.disabled = true;
+    
+      function showButton(text) {
+        button.innerHTML = `<span data-ak="I">${text}</span>`;
+        button.classList.remove('nhsuk-u-visually-hidden');
+        button.disabled = false;
+      }
+
+      function toggleNotes(show) {
+        notes.classList.toggle('nhsuk-u-visually-hidden', !show);
+      }
+
+      function toggleHint(show) {
+        hint.classList.toggle('nhsuk-u-visually-hidden', !show);
+      }
+    
+      radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          selectedAction = radio.value;
+
+          switch (radio.value) {
+            case 'askForFurtherInformation':
+              showButton(button.dataset.textAsk);
+              toggleNotes(false);
+              toggleHint(false);
+              break;
+
+            case 'requestKFP':
+              showButton(button.dataset.textKfp);
+              toggleNotes(true);
+              toggleHint(true);
+              break;
+
+            case 'rejectApplication':
+              showButton(button.dataset.textReject);
+              toggleNotes(true);
+              toggleHint(true);
+              break;
+          }
+        });
+      });
+      button.addEventListener('click', event => {
+  event.preventDefault();
+
+  switch (selectedAction) {
+    case 'askForFurtherInformation':
+      window.location.href =
+        '/v1/medex/cannot-process-application--correction-fil';
+      break;
+
+    case 'requestKFP':
+    case 'rejectApplication':
+      window.location.href = '/v1/dashboard';
+      break;
+  }
+});
+    });
+    </script>
+  
+{% endblock %}

@@ -23,7 +23,7 @@
     <div class="nhsuk-grid-column-full">
 
       <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
-        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.certificateType or 'medex') | getCertificateTypeTextOrTag( true ) | safe }}
         {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
       </h1>
 
@@ -34,30 +34,30 @@
  
   {% endset %}
   
-  {% set firstName = patient.firstName or data['editMATEX.firstName'] or 'Jane' %}
-  {% set lastName  = patient.lastName  or data['editMATEX.lastName'] or 'Smith' %}
+{% set firstName = patient.firstName or data.editMEDEX.firstName or 'Jane' %}
+{% set lastName  = patient.lastName  or data.editMEDEX.lastName or 'Smith' %}
 
-  {% set addressValue1 = data.editMATEX.addressLineOne
-    or (patient.address.buildingNumber + " " + patient.address.streetName) %}
-  
-  {% if data.editMATEX.addressLineTwo is defined %}
-    {% set addressValue2 = data.editMATEX.addressLineTwo %}
-  {% else %}
-    {% set addressValue2 = patient.address.locality %}
-  {% endif %}
-  
-  {% set townValue = data.editMATEX.town 
-    or patient.address.postTown %}
-  
-  {% if data.editMATEX.county is defined %}
-    {% set countyValue = data.editMATEX.county %}
-  {% else %}
-    {% set countyValue = patient.address.county %}
-  {% endif %}
-  
-  {% set postcodeValue = data.editMATEX.postcode 
-    or patient.address.postcode %}
-  
+{% set addressValue1 = data.editMEDEX.addressLineOne
+  or (patient.address.buildingNumber + " " + patient.address.streetName) %}
+
+{% if data.editMEDEX.addressLineTwo is defined %}
+  {% set addressValue2 = data.editMEDEX.addressLineTwo %}
+{% else %}
+  {% set addressValue2 = patient.address.locality %}
+{% endif %}
+
+{% set townValue = data.editMEDEX.town 
+  or patient.address.postTown %}
+
+{% if data.editMEDEX.county is defined %}
+  {% set countyValue = data.editMEDEX.county %}
+{% else %}
+  {% set countyValue = patient.address.county %}
+{% endif %}
+
+{% set postcodeValue = data.editMEDEX.postcode 
+  or patient.address.postcode %}
+
 
 {% if patient.channel === 'Paper' %}
 
@@ -84,7 +84,7 @@
 {% endif %}
 
 {% if fulfilment == 'Email' %}
-  {% set emailHTML = patient.email or data['editMATEX.email'] or 'janedoe@example.com' %}
+  {% set emailHTML = patient.email or data['editMEDEX.email'] or 'janedoe@example.com' %}
 {% else %}
   {% set emailHTML = '' %}
 {% endif %}
@@ -107,7 +107,7 @@
             },
             {
               key: { text: 'Type' },
-              value: { html: ( patient.certificateType or 'matex' ) | getCertificateTypeTextOrTag( true ) }
+              value: { html: ( patient.certificateType or 'medex' ) | getCertificateTypeTextOrTag( true ) }
             },
             {
               key: { text: 'Status' },
@@ -197,7 +197,7 @@
                 text: "NHS number"
               },
               value: {
-                html: patient.nhsNumber or data['editMATEX.nhsNumber'] or "123 456 7890"
+                html: patient.nhsNumber or data.editMEDEX.nhsNumber or "123 456 7890"
               }
             },
             {
@@ -205,7 +205,7 @@
                 text: "Telephone number"
               },
               value: {
-                html: "07700 123 456" or data['editMATEX.telephoneNumber']
+                html: "07700 123 456" or data.editMEDEX.telephoneNumber
               }
             },
             {
@@ -219,11 +219,11 @@
             {
               classes: "nhsuk-summary-list__row--no-border",
               key: {
-                text: "Child's due or birth date"
+                text: "Medical condition"
               },
               value: {                
                 html: (
-                  patient.startDate.display or data['editMATEX.childDOBDisplay'] or "25 November 2025"
+                  patient.medicalCondition or data.medicalCondition
                 )
               }
             }

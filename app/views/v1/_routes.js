@@ -558,7 +558,6 @@ router.get(/reset-search/,function( req, res ){
 // ADDRESS LOOKUP 
 router.get(/^\/[^\/]+\/address-lookup$/, function (req, res) {
 
-
   function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
   function normPostcode(s) { return (s || '').replace(/\s+/g, '').toUpperCase(); }
 
@@ -596,7 +595,7 @@ if (isSearchAgain) {
 }
 
 // Normalise source to a journey folder and remember which source invoked lookup
-const sourceAlias = { matex: 'matex', hrtppc: 'hrtppc', newHRT: 'hrtppc' }; 
+const sourceAlias = { matex: 'matex', hrtppc: 'hrtppc', newHRT: 'hrtppc', medex: 'medex' }; 
 
 // Remember raw source (which page invoked lookup)
 req.session.lookupSourceRaw = parsed.source || req.session.lookupSourceRaw || 'hrtppc';
@@ -648,11 +647,7 @@ req.session.data.addressSearchBuildingNumberOrName =
 
   const url = baseURL + '&key=' + apiKey;
 
-  console.log( url );
-
   axios.get(url).then(response => {
-
-    console.log( response );
 
     const results = [];
   
@@ -819,8 +814,6 @@ results.push({
 
 
 router.get(/address-lookup-result$/, function (req, res) {
-
-  console.log('✅ ADDRESS LOOKUP RESULT POST HIT');
   
   const journey = req.session.lookupJourney || 'matex';
 
@@ -945,11 +938,12 @@ if (numberMatch) {
 const sourceToNamespace = {
   matex: 'editMATEX',
   hrtppc: 'editHRT',
-  newHRT: 'newHRT' 
+  newHRT: 'newHRT',
+  medex: 'editMEDEX'
 };
 
 const rawSource = req.session.lookupSourceRaw || 'hrtppc';
-const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJourney] || 'editHRT';
+const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJourney] || 'editMATEX';
 
   
   // Title-case line1 and line2 AFTER parsing
@@ -1150,9 +1144,6 @@ router.post(/edit-matex/, function (req, res) {
 
 
 
-
-
-
 router.post(/edit-hrt/, function (req, res) {
   const data = req.session.data || {};
   data.editHRT = data.editHRT || {}; 
@@ -1199,40 +1190,100 @@ router.post(/edit-hrt/, function (req, res) {
 });
 
 
+// Pass edit inputs to case screen
+router.post(/edit-medex/, function (req, res) {
+
+  const fulfilment = req.body['editMEDEX.certificateFulfilment'];
+  const email = req.body['editMEDEX.email'];
+  const addressLineOne = req.body['editMEDEX.addressLineOne'];
+  const postcode = req.body['editMEDEX.postcode'];
+  const notes = req.body['editMEDEX.notes'];
+
+  const errors = [];
+
+  //Email fulfilment selected but email address not entered
+  if (fulfilment === 'email' && (!email || email.trim() === "")) {
+    errors.push ({
+      text: "Enter the certificate holder's email address",
+      href: "#email"
+    });
+  }
+
+  //Fulfilment is Post but address and/or postcode missing
+  if (fulfilment === 'post') {
+
+    const missingAddress = !addressLineOne || addressLineOne.trim() === "";
+    const missingPostcode = !postcode || postcode.trim() === "";
+
+    if (missingAddress) {
+      errors.push({
+        text: "Enter certificate holder's address line 1",
+        href: "#address-line-1"
+      });
+    }
+    else if (missingPostcode) {
+      errors.push({
+        text: "Enter certificate holder's postcode",
+        href: "#postcode"
+      });
+    }
+  }
+
+  //If errors, redirect back
+  if (errors.length > 0) {
+    const data = {
+      ...req.session.data,
+      errors,
+      editMEDEX: {
+        ...(req.session.data.editMEDEX || {}),
+        certificateFulfilment: fulfilment ?? '',
+        email: email ?? '',
+        addressLineOne: addressLineOne ?? '',
+        postcode: postcode ?? '',
+        notes: notes ?? ''
+      }
+    };
+  
+    // Optionally also set flattened keys if your template reads those
+    data['editMEDEX.certificateFulfilment'] = data.editMEDEX.certificateFulfilment;
+    data['editMEDEX.email'] = data.editMEDEX.email;
+    data['editMEDEX.addressLineOne'] = data.editMEDEX.addressLineOne;
+    data['editMEDEX.postcode'] = data.editMEDEX.postcode;
+    data['editMEDEX.notes'] = data.editMEDEX.notes;
+  
+    // Do NOT update req.session here; just render the error state
+    return res.status(400).render('v1/medex/edit-or-reissue', { data });
+  }
+
+  //No errors? Continue as normal
+  req.session.data.errors = null;
+
+  
+  req.session.data.editMEDEX = req.session.data.editMEDEX || {};
+
+  const data = req.session.data || {};
+  data.editMEDEX = data.editMEDEX || {};
+
+  if ('editMEDEX.firstName' in req.body) data.editMEDEX.firstName = req.body['editMEDEX.firstName'];
+  if ('editMEDEX.lastName'  in req.body) data.editMEDEX.lastName  = req.body['editMEDEX.lastName'];
+  if ('editMEDEX.email' in req.body) data.editMEDEX.email = req.body['editMEDEX.email'];
+  if ('editMEDEX.certificateFulfilment' in req.body) data.editMEDEX.certificateFulfilment = req.body['editMEDEX.certificateFulfilment'];
+  if ('editMEDEX.addressLineOne' in req.body) data.editMEDEX.addressLineOne = req.body['editMEDEX.addressLineOne'];
+  if ('editMEDEX.addressLineTwo' in req.body) data.editMEDEX.addressLineTwo = req.body['editMEDEX.addressLineTwo'];
+  if ('editMEDEX.town' in req.body)          data.editMEDEX.town   = req.body['editMEDEX.town'];
+  if ('editMEDEX.county' in req.body)        data.editMEDEX.county = req.body['editMEDEX.county'];
+  if ('editMEDEX.postcode' in req.body)      data.editMEDEX.postcode = req.body['editMEDEX.postcode'];
+  if ('editMEDEX.telephoneNumber' in req.body) data.editMEDEX.telephoneNumber = req.body['editMEDEX.telephoneNumber'];
+
+  req.session.data = data;
+
+  if (req.body.action === 'reissue') {
+    return res.redirect('/v1/medex/reissue-complete');
+  }
+  return res.redirect('/v1/medex/case');
+});
 
 
-
-
-
-//Editable certificate start date fields
-function getCertificateViewData(req) {
-
-  console.log('HRRRRRGH');
-
-  const applicationDate = new Date('2025-11-25');
-
-  const formattedApplicationDate = applicationDate.toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  });
-
-  const editableUntil = new Date(applicationDate);
-  editableUntil.setDate(editableUntil.getDate() + 30);
-
-  const today = req.query.today
-    ? (() => {
-        const parts = req.query.today.split('/');
-        return new Date(parts[2], parts[1] - 1, parts[0]);
-      })()
-    : new Date();
-
-  return {
-    canEditCertificateStart: today <= editableUntil,
-    today,
-    formattedApplicationDate
-  };
-}
 
 router.get('/v1/hrtppc/edit-or-reissue', (req, res) => {
 
@@ -1247,7 +1298,8 @@ router.get('/v1/hrtppc/edit-or-reissue', (req, res) => {
 
 
 
-router.get(/^\/v1\/matex\/edit-or-reissue$/, function (req, res) {
+router.get(/^\/v1\/(matex|medex)\/edit-or-reissue$/, function (req, res) {
+
   const iso = req.session.data?.editMATEX?.childDOBISO; // e.g. "2025-12-05"
   if (iso && /^\d{4}-\d{2}-\d{2}$/.test(iso)) {
     req.session.data.childDOBYear  = iso.substring(0, 4);
@@ -1259,30 +1311,40 @@ router.get(/^\/v1\/matex\/edit-or-reissue$/, function (req, res) {
     req.session.data.childDOBMonth = req.session.data.childDOBMonth || '11';
     req.session.data.childDOBDay   = req.session.data.childDOBDay   || '25';
   }
-  return res.render('v1/matex/edit-or-reissue');
+  return res.render(`v1/${req.params[0]}/edit-or-reissue`);
 });
 
 
 //
 // CASE EDIT SCREEN
 //
-router.get(/case--edit/, function( req, res ){
+router.get(/^\/v1\/(matex|medex)\/case--edit$/, function(req, res){
+
   const lookupAddress = req.session.data.lookupAddress;
   delete req.session.data.lookupAddress;
-  
-  res.render('v1/matex/case--edit', {
+
+  const match = req.url.match(/^\/v1\/(matex|medex)\/case--edit$/);
+  const type = match ? match[1] : 'matex';
+
+  res.render(`v1/${type}/case--edit`, {
     ...req.session.data,
     lookupAddress
   });
+
 });
 
-router.post(/case--edit/, function( req, res ){
-  const destination = 'case--view--can-edit';
-  return res.redirect( destination );
+
+router.post(/^\/v1\/(matex|medex)\/case--edit$/, function(req, res){
+
+  const match = req.url.match(/^\/v1\/(matex|medex)\/case--edit$/);
+  const type = match ? match[1] : 'matex';
+
+  return res.redirect(`/v1/${type}/case--view--can-edit`);
+
 });
 
 //
-// CASE EDIT SCREEN
+// COMPARISON EDIT SCREEN
 //
 router.post(/comparison--edit/, function( req, res ){
   const destination = 'comparison--correction';
