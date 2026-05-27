@@ -80,9 +80,8 @@
         {% set postcodeValue = data.imagePostcode or patient.address.postcode %}
       {% endif %}
 
-      {% set selected = patient.medicalCondition or [] %}
 
-      {% set selectedValue = patient.medicalCondition and patient.medicalCondition[0] %}
+      {% set conditions = data.editMEDEX.medicalCondition or patient.medicalCondition or [] %}
 
 
           <div class="nhsuk-grid-row">
@@ -91,7 +90,7 @@
             <div class="nhsuk-grid-column-one-half sticky-column">
 
               {% from '../macros/image.njk' import image %}
-              {{ image() }}
+              {{ image(patient.certificateType) }}
 
             </div>
 
@@ -303,140 +302,36 @@
                       value: data.imageEmailAddress
                   }) }}
 
-                  <div class="horizontal-select">
-                  {{ select({
-                    label: {
-                      html: '<span data-ak="Y">Medical condition</span>'
-                    },
-                    id: "sort-by",
-                    name: "sortBy",
-                    value: selectedValue,
-                    classes: "nhsuk-input--width-30",
-                    items: [
-                    {
-                      value: "A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance",
-                      text: "A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance"
-                    },
-                    {
-                      value: "Epilepsy which needs continuous anticonvulsive therapy",
-                      text: "Epilepsy which needs continuous anticonvulsive therapy"
-                    },
-                    {
-                      value: "Diabetes mellitus (not controlled by diet alone)",
-                      text: "Diabetes mellitus (not controlled by diet alone)"
-                    },
-                    {
-                      value: "Myxoedema (hypothyroidism requiring thyroid hormone replacement)",
-                      text: "Myxoedema (hypothyroidism requiring thyroid hormone replacement)"
-                    },
-                    {
-                      value: "Hypoparathyroidism",
-                      text: "Hypoparathyroidism"
-                    },
-                    {
-                      value: "Diabetes insipidus or other forms of hypopituitarism",
-                      text: "Diabetes insipidus or other forms of hypopituitarism"
-                    },
-                    {
-                      value: "Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential",
-                      text: "Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential"
-                    },
-                    {
-                      value: "Myasthenia gravis",
-                      text: "Myasthenia gravis"
-                    },
-                    {
-                      value: "A continuing physical disability which means you cannot go out without the help of another person",
-                      text: "A continuing physical disability which means you cannot go out without the help of another person"
-                    },
-                    {
-                      value: "Cancer (treatment or effects of disease/treatment)",
-                      text: "Cancer (treatment or effects of disease/treatment)"
-                    }
-                  ]
-                  }) }}
-                </div>
+
+                  <div class="nhsuk-form-group horizontal-row">
+                  
+                    <label class="nhsuk-label horizontal-label">
+                      Medical condition
+                    </label>
+                                    
+                    <div class="horizontal-input">
+                      {% for c in conditions %}
+                      <div class="nhsuk-body nhsuk-u-margin-bottom-2">{{ c }}</div>
+                      {% endfor %}           
+                  
+                      <p class="nhsuk-u-margin-top-3">
+                        <a class="nhsuk-link nhsuk-link--no-visited-state" href="/v1/medex/edit-medical-condition"><span data-ak="Y">Change</span><span class="nhsuk-u-visually-hidden"> medical condition</span>
+                        </a>
+                      </p>
+                    </div>      
+                  </div>                  
 
                   <style>
-                    .horizontal-select .nhsuk-form-group {
+                    .horizontal-row {
                       display: flex;
-                      align-items: center;
+                      flex-wrap: nowrap;
                     }
 
-                    .horizontal-select .nhsuk-label {
-                      width: 250px; /* match your other labels */
-                      margin-bottom: 0;
-                    }
-
-                    .horizontal-select .nhsuk-select {
+                    .horizontal-input {
                       flex: 1;
+                      min-width: 0;
                     }
-
                   </style>
-
-              {{ radios({
-                idPrefix: "medicalCondition",
-                name: "medicalCondition",
-                classes: "nhsuk-radios--small",
-                fieldset: {
-                  legend: {
-                    html: '<span data-ak="Y">Medical condition</span>'
-                  }
-                },
-                items: [
-                  {
-                    value: "permanent-fistula",
-                    text: "A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance",
-                    checked: selected.includes("A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance")
-                  },
-                  {
-                    value: "epilepsy",
-                    text: "Epilepsy which needs continuous anticonvulsive therapy",
-                    checked: selected.includes("Epilepsy which needs continuous anticonvulsive therapy")
-                  },
-                  {
-                    value: "diabetes-mellitus",
-                    text: "Diabetes mellitus (not controlled by diet alone)",
-                    checked: selected.includes("Diabetes mellitus (not controlled by diet alone)")
-                  },
-                  {
-                    value: "myxoedema",
-                    text: "Myxoedema (hypothyroidism requiring thyroid hormone replacement)",
-                    checked: selected.includes("Myxoedema (hypothyroidism requiring thyroid hormone replacement)")
-                  },
-                  {
-                    value: "hypoparathyroidism",
-                    text: "Hypoparathyroidism",
-                    checked: selected.includes("Hypoparathyroidism")
-                  },
-                  {
-                    value: "diabetes-insipidus",
-                    text: "Diabetes insipidus or other forms of hypopituitarism",
-                    checked: selected.includes("Diabetes insipidus or other forms of hypopituitarism")
-                  },
-                  {
-                    value: "hypoadrenalism",
-                    text: "Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential",
-                    checked: selected.includes("Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential")
-                  },
-                  {
-                    value: "myasthenia-gravis",
-                    text: "Myasthenia gravis",
-                    checked: selected.includes("Myasthenia gravis")
-                  },
-                  {
-                    value: "physical-disability",
-                    text: "A continuing physical disability which means you cannot go out without the help of another person",
-                    checked: selected.includes("A continuing physical disability which means you cannot go out without the help of another person")
-                  },
-                  {
-                    value: "cancer",
-                    text: "Cancer (treatment or effects of disease/treatment)",
-                    checked: selected.includes("Cancer (treatment or effects of disease/treatment)")
-                  }
-                ]
-              }) }}
-
 
 
                 {% if data.role === 'backOffice' or data.role === 'backOfficeSupervisor' %}

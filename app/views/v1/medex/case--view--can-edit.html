@@ -90,6 +90,16 @@
 {% endif %}
 
 
+{% set conditions = data.editMEDEX.medicalCondition or patient.medicalCondition or [] %}
+
+{% set conditionsHtml %}
+  <ul class="nhsuk-list">
+    {% for c in conditions %}
+      <li>{{ c }}</li>
+    {% endfor %}
+  </ul>
+{% endset %}
+
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-one-third">
@@ -223,7 +233,7 @@
               },
               value: {                
                 html: (
-                  patient.medicalCondition or data.medicalCondition
+                  conditionsHtml
                 )
               }
             }
@@ -238,7 +248,7 @@
             <div class="nhsuk-grid-column-one-third sticky-column">
 
               {% from '../macros/image.njk' import image %}
-              {{ image() }}
+              {{ image(patient.certificateType) }}
 
               {% from '../macros/notes.njk' import notes %}
               {{ notes( patient ) }}

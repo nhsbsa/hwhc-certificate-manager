@@ -1361,4 +1361,19 @@ router.get('/v1/matex/cannot-process-application--correction', function (req, re
   res.render('v1/matex/cannot-process-application--correction');
 });
 
+router.post(/edit-medical-condition/, (req, res) => {
+
+  // Get values from form (force to array)
+  let values = [].concat(req.body['editMEDEX.medicalCondition'] || []);
+
+  // Remove unwanted values
+  values = values.filter(v => v && v !== '_unchecked');
+
+  // Save to session
+  req.session.data.editMEDEX = req.session.data.editMEDEX || {};
+  req.session.data.editMEDEX.medicalCondition = values;
+
+  res.redirect('/v1/medex/case--edit');
+});
+
 module.exports = router;

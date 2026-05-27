@@ -1,4 +1,4 @@
-{% macro image( classes ) %}
+{% macro image(type, classes ) %}
 
     <!-- EXPANDER IMAGE SCRIPT -->
     <script>
@@ -41,6 +41,31 @@
 
             _fields.healthcarePractitionerStamp = { x: 1916, y: 1044, width: 364, height: 482 };
 
+
+            //
+            // MEDEX FIELDS 
+            //
+            const _fieldsMedex = {};
+                _fieldsMedex.firstName = { x: 1550, y: 500, width: 700, height: 70 };
+                _fieldsMedex.lastName  = { x: 1550, y: 440, width: 700, height: 70 };
+
+                _fieldsMedex.houseNumber = { x: 1550, y: 620, width: 700, height: 80 };
+                _fieldsMedex.street      = { x: 1550, y: 700, width: 700, height: 80 };
+
+                _fieldsMedex.town     = { x: 1550, y: 860, width: 700, height: 80 };
+                _fieldsMedex.postcode = { x: 1550, y: 940, width: 350, height: 80 };
+
+                _fieldsMedex.dateOfBirth = { x: 1900, y: 940, width: 350, height: 80 };
+
+                _fieldsMedex.telephoneNumber = { x: 1550, y: 1020, width: 700, height: 80 };
+                _fieldsMedex.emailAddress    = { x: 1550, y: 1100, width: 700, height: 80 };
+
+                _fieldsMedex.nhsNumber = { x: 1550, y: 1180, width: 700, height: 90 };
+
+                _fieldsMedex.patientSignature = { x: 1550, y: 1350, width: 700, height: 120 };
+
+                _fieldsMedex.healthcarePractitionerDetails = { x: 1550, y: 1500, width: 700, height: 500 };
+
             //
             // INIT FUNCTION
             //
@@ -50,10 +75,16 @@
 
                 _initFocusElements();
 
-                Object.keys(_fields).forEach(function( key ){
-                    _fields[key].midPointX = Math.round( _fields[key].x + ( _fields[key].width/2 ) );
-                    _fields[key].midPointY = Math.round( _fields[key].y + ( _fields[key].height/2 ) );
-                });
+                    function addMidpoints(fieldSet){
+                    Object.keys(fieldSet).forEach(function(key){
+                        fieldSet[key].midPointX = Math.round(fieldSet[key].x + (fieldSet[key].width / 2));
+                        fieldSet[key].midPointY = Math.round(fieldSet[key].y + (fieldSet[key].height / 2));
+                    });
+                    }
+
+                    addMidpoints(_fields);
+                    addMidpoints(_fieldsMedex);
+
 
                 const expander = document.querySelector( '.expandable-image' );
                 expander.querySelector('.expandable-image__button').addEventListener('click',function(){
@@ -322,7 +353,6 @@
             //
             function _focusImage( fieldName ){
 
-                console.log( 'ExpanderImage.focusImage( '+ fieldName +' );' );
 
                 _resetImage();
 
@@ -356,17 +386,19 @@
 
                 const intrinsicImgWidth = img.width;
                 const intrinsicImgHeight = img.height;
+                const FORM_TYPE = "{{ type }}";
+                const activeFields = (FORM_TYPE === 'medex') ? _fieldsMedex : _fields;
 
                 if( fieldName ){
 
                     // Calculate scale of img
-                    const scale = viewPane.offsetWidth / _fields[fieldName].width;
+                    const scale = viewPane.offsetWidth / activeFields[fieldName].width;
 
                     const scaledImgWidth = Math.round( img.width * scale );
                     const scaledImgHeight = Math.round( img.height * scale );
 
-                    const scaledMidPointX = Math.round( _fields[fieldName].midPointX * scale );
-                    const scaledMidPointY = Math.round( _fields[fieldName].midPointY * scale );
+                    const scaledMidPointX = Math.round( activeFields[fieldName].midPointX * scale );
+                    const scaledMidPointY = Math.round( activeFields[fieldName].midPointY * scale );
 
                     img.setAttribute('style','height:'+scaledImgHeight+'px; width:'+scaledImgWidth+'px' );
 
@@ -377,10 +409,10 @@
                     viewPane.scrollLeft = (32+scaledMidPointX) - Math.round(viewPane.clientWidth/2);
 
                     // Draw a highlight over the image
-                    const highlightX = 32+Math.round(_fields[fieldName].x * scale);
-                    const highlightY = 32+Math.round(_fields[fieldName].y * scale);
-                    const highlightWidth = Math.round(_fields[fieldName].width * scale);
-                    const highlightHeight = Math.round(_fields[fieldName].height * scale);
+                    const highlightX = 32+Math.round(activeFields[fieldName].x * scale);
+                    const highlightY = 32+Math.round(activeFields[fieldName].y * scale);
+                    const highlightWidth = Math.round(activeFields[fieldName].width * scale);
+                    const highlightHeight = Math.round(activeFields[fieldName].height * scale);
 
                     const span = document.createElement('span');
                     span.setAttribute( 'style', 'top: '+highlightY+'px; left: '+highlightX+'px; width:'+highlightWidth+'px; height: '+highlightHeight+'px;' );
@@ -415,7 +447,13 @@
         
         <div class="expandable-image__inner">
             <div>
-                <img class="expandable-image__image" src="/assets/images/FW8-MATEX-scan.png" alt=""/>
+               {% set imgSrc = "/assets/images/FW8-MATEX-scan.png" %}
+
+                {% if type == "medex" %}
+                {% set imgSrc = "/assets/images/FP92A-MEDEX-scan.png" %}
+                {% endif %}
+
+                <img class="expandable-image__image" src="{{ imgSrc }}" alt=""/>
             </div>
         </div>
         <summary class="expandable-image__button nhsuk-button nhsuk-button--small">

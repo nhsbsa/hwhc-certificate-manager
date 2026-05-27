@@ -1,0 +1,136 @@
+{% extends "layout-fullscreen.html" %}
+
+{% if data.patientID %}
+{% set patient = data.patientID | getPatientData %}
+{% endif %}
+
+{% if patient.status == "rejected" %}
+{% set rawStatus = "on-hold" %}
+{% else %}
+  {% set rawStatus = patient.status %}
+{% endif %}
+
+{% set statusForDisplay = rawStatus | getStatusTextOrTag(true) | safe %}
+
+{% set pageName = rawStatus | isApplicationOrCertificate | capitalize %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/v1/medex/case--edit",
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+      {{ (patient.certificateType or 'medex') | getCertificateTypeTextOrTag( true ) | safe }}
+      {{ statusForDisplay }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+    </h1>
+
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+<div class="nhsuk-grid-row">
+
+  <!-- ONE THIRD -->
+  <div class="nhsuk-grid-column-one-half sticky-column">
+
+    {% from '../macros/image.njk' import image %}
+    {{ image(patient.certificateType) }}
+
+  </div>
+
+  <!-- TWO THIRDS -->
+  <div class="nhsuk-grid-column-one-half">
+
+     <div class="nhsuk-card nhsuk-card--grey">
+
+      <!-- HEADER LOCK-UP -->
+        <div class="nhsuk-card__content">
+
+          <div class="nhsuk-card__heading-container">
+            <h2 class="nhsuk-card__heading nhsuk-heading-m">Edit medical condition</h2>
+          </div>
+
+  <form method="post">
+
+    {% set conditions = data.editMEDEX.medicalCondition or patient.medicalCondition or [] %}
+
+    {{ checkboxes({
+      name: "editMEDEX.medicalCondition",
+      idPrefix: "medicalCondition",
+      hint: {
+        text: "Select all the medical conditions that are relevant to this application"
+      },
+      items: [
+        {
+          value: "(1) Permanent fistula",
+          text: "A permanent fistula",
+          checked: conditions.includes("(1) Permanent fistula")
+        },
+        {
+          value: "(2) Epilepsy",
+          text: "Epilepsy",
+          checked: conditions.includes("(2) Epilepsy")
+        },
+        {
+          value: "(3) Diabetes mellitus",
+          text: "Diabetes mellitus",
+          checked: conditions.includes("(3) Diabetes mellitus")
+        },
+        {
+          value: "(4) Myxoedema",
+          text: "Myxoedema",
+          checked: conditions.includes("(4) Myxoedema")
+        },
+        {
+          value: "(5) Hypoparathyroidism",
+          text: "Hypoparathyroidism",
+          checked: conditions.includes("(5) Hypoparathyroidism")
+        },
+        {
+          value: "(6) Diabetes insipidus",
+          text: "Diabetes insipidus",
+          checked: conditions.includes("(6) Diabetes insipidus")
+        },
+        {
+          value: "(7) Forms of hypoadrenalism",
+          text: "Forms of hypoadrenalism",
+          checked: conditions.includes("(7) Forms of hypoadrenalism")
+        },
+        {
+          value: "(8) Myasthenia gravis",
+          text: "Myasthenia gravis",
+          checked: conditions.includes("(8) Myasthenia gravis")
+        },
+        {
+          value: "(9) Continuing physical disability",
+          text: "Continuing physical disability",
+          checked: conditions.includes("(9) Continuing physical disability")
+        },
+        {
+          value: "(10) Cancer",
+          text: "Cancer",
+          checked: conditions.includes("(10) Cancer")
+        }
+      ]
+    }) }}
+
+      {{ button({
+        html: '<span data-ak="K">Save and continue</span>'
+      }) }}
+
+  </form>
+        </div>
+     </div>
+    </div>
+</div>
+
+{% endblock %}

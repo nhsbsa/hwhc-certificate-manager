@@ -145,8 +145,7 @@ Certificate fulfilment
 
 {% endif %}
 
-{% set selected = patient.medicalCondition or [] %}
-{% set selectedValue = patient.medicalCondition and patient.medicalCondition[0] %}
+{% set conditions = data.editMEDEX.medicalCondition or patient.medicalCondition or [] %}
 
 
 <div class="nhsuk-grid-row">
@@ -347,122 +346,67 @@ Certificate fulfilment
                     classes: "fulfilment-value",
                     html: fulfilmentValue | safe
                   }
-                },        
+                },      
                 {
                   key: { 
                     html: '<span data-ak="Y">Medical condition</span>'
                   },
                   value: { 
-                    html: radios({
-                      idPrefix: "medicalCondition",
-                      name: "medicalCondition",
-                      classes: "nhsuk-radios--small",
+                    html: checkboxes({
+                      name: "editMEDEX.medicalCondition",
+                      classes: "nhsuk-checkboxes--small",
                       items: [
                         {
-                          value: "permanent-fistula",
-                          text: "A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance",
-                          checked: selected.includes("A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance")
+                          value: "(1) Permanent fistula",
+                          text: "A permanent fistula",
+                          checked: conditions.includes("(1) Permanent fistula")
                         },
                         {
-                          value: "epilepsy",
-                          text: "Epilepsy which needs continuous anticonvulsive therapy",
-                          checked: selected.includes("Epilepsy which needs continuous anticonvulsive therapy")
+                          value: "(2) Epilepsy",
+                          text: "Epilepsy",
+                          checked: conditions.includes("(2) Epilepsy")
                         },
                         {
-                          value: "diabetes-mellitus",
-                          text: "Diabetes mellitus (not controlled by diet alone)",
-                          checked: selected.includes("Diabetes mellitus (not controlled by diet alone)")
+                          value: "(3) Diabetes mellitus",
+                          text: "Diabetes mellitus",
+                          checked: conditions.includes("(3) Diabetes mellitus")
                         },
                         {
-                          value: "myxoedema",
-                          text: "Myxoedema (hypothyroidism requiring thyroid hormone replacement)",
-                          checked: selected.includes("Myxoedema (hypothyroidism requiring thyroid hormone replacement)")
+                          value: "(4) Myxoedema",
+                          text: "Myxoedema",
+                          checked: conditions.includes("(4) Myxoedema")
                         },
                         {
-                          value: "hypoparathyroidism",
+                          value: "(5) Hypoparathyroidism",
                           text: "Hypoparathyroidism",
-                          checked: selected.includes("Hypoparathyroidism")
+                          checked: conditions.includes("(5) Hypoparathyroidism")
                         },
                         {
-                          value: "diabetes-insipidus",
-                          text: "Diabetes insipidus or other forms of hypopituitarism",
-                          checked: selected.includes("Diabetes insipidus or other forms of hypopituitarism")
+                          value: "(6) Diabetes insipidus",
+                          text: "Diabetes insipidus",
+                          checked: conditions.includes("(6) Diabetes insipidus")
                         },
                         {
-                          value: "hypoadrenalism",
-                          text: "Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential",
-                          checked: selected.includes("Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential")
+                          value: "(7) Forms of hypoadrenalism",
+                          text: "Forms of hypoadrenalism",
+                          checked: conditions.includes("(7) Forms of hypoadrenalism")
                         },
                         {
-                          value: "myasthenia-gravis",
+                          value: "(8) Myasthenia gravis",
                           text: "Myasthenia gravis",
-                          checked: selected.includes("Myasthenia gravis")
+                          checked: conditions.includes("(8) Myasthenia gravis")
                         },
                         {
-                          value: "physical-disability",
-                          text: "A continuing physical disability which means you cannot go out without the help of another person",
-                          checked: selected.includes("A continuing physical disability which means you cannot go out without the help of another person")
+                          value: "(9) Continuing physical disability",
+                          text: "Continuing physical disability",
+                          checked: conditions.includes("(9) Continuing physical disability")
                         },
                         {
-                          value: "cancer",
-                          text: "Cancer (treatment or effects of disease/treatment)",
-                          checked: selected.includes("Cancer (treatment or effects of disease/treatment)")
+                          value: "(10) Cancer",
+                          text: "Cancer",
+                          checked: conditions.includes("(10) Cancer")
                         }
                       ]
-                    })                    
-                  }
-                },
-                {
-                  key: { 
-                    html: '<span data-ak="Y">Medical condition</span>'
-                  },
-                  value: { 
-                    html: select({
-                      id: "medicalCondition",
-                      name: "medicalCondition",
-                      value: selectedValue,                    
-                      items: [
-                      {
-                        value: "A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance",
-                        text: "A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance"
-                      },
-                      {
-                        value: "Epilepsy which needs continuous anticonvulsive therapy",
-                        text: "Epilepsy which needs continuous anticonvulsive therapy"
-                      },
-                      {
-                        value: "Diabetes mellitus (not controlled by diet alone)",
-                        text: "Diabetes mellitus (not controlled by diet alone)"
-                      },
-                      {
-                        value: "Myxoedema (hypothyroidism requiring thyroid hormone replacement)",
-                        text: "Myxoedema (hypothyroidism requiring thyroid hormone replacement)"
-                      },
-                      {
-                        value: "Hypoparathyroidism",
-                        text: "Hypoparathyroidism"
-                      },
-                      {
-                        value: "Diabetes insipidus or other forms of hypopituitarism",
-                        text: "Diabetes insipidus or other forms of hypopituitarism"
-                      },
-                      {
-                        value: "Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential",
-                        text: "Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential"
-                      },
-                      {
-                        value: "Myasthenia gravis",
-                        text: "Myasthenia gravis"
-                      },
-                      {
-                        value: "A continuing physical disability which means you cannot go out without the help of another person",
-                        text: "A continuing physical disability which means you cannot go out without the help of another person"
-                      },
-                      {
-                        value: "Cancer (treatment or effects of disease/treatment)",
-                        text: "Cancer (treatment or effects of disease/treatment)"
-                      }
-                    ]
                     })
                   }
                 },
@@ -516,18 +460,16 @@ Certificate fulfilment
 .summary-list-radios {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .summary-list-radios .nhsuk-radios__item {
   display: flex;
-  align-items: center;
   margin-bottom: 0;
   flex-shrink: 0;
 }
 
 .summary-list-radios .nhsuk-radios__label {
-  margin-left: 0.5rem;
   white-space: nowrap;
 }
 

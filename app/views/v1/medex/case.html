@@ -111,6 +111,15 @@
     {% set emailHTML = '' %}
   {% endif %}
 
+  {% set conditions = data.editMEDEX.medicalCondition or patient.medicalCondition or [] %}
+
+  {% set conditionsHtml %}
+    <ul class="nhsuk-list">
+      {% for c in conditions %}
+        <li>{{ c }}</li>
+      {% endfor %}
+    </ul>
+  {% endset %}
 
   <div class="nhsuk-grid-row">
 
@@ -241,11 +250,9 @@
               key: {
                 text: "Medical condition"
               },
-              value: {                
-                html: (
-                  patient.medicalCondition or data.medicalCondition
-                )
-              }
+              value: {
+                html: conditionsHtml
+              }                               
             }
           ]
 

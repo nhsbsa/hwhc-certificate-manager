@@ -146,7 +146,7 @@
 
               
               {% from '../macros/image.njk' import image %}
-              {{ image() }}
+              {{ image(patient.certificateType) }}
 
               {% from '../macros/notes.njk' import notes %}
               {{ notes( patient ) }}

@@ -238,7 +238,7 @@
             <div class="nhsuk-grid-column-one-third sticky-column">
 
               {% from '../macros/image.njk' import image %}
-              {{ image() }}
+              {{ image(patient.certificateType) }}
 
               {% from '../macros/notes.njk' import notes %}
               {{ notes( patient ) }}

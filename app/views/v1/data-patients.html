@@ -392,16 +392,16 @@
               // MEDICAL CONDITION
               //
               const medicalCondition = [
-                'A permanent fistula (for example, caecostomy, colostomy, laryngostomy or ileostomy) which needs continuous surgical dressing or an appliance',
-                'Epilepsy which needs continuous anticonvulsive therapy',
-                'Diabetes mellitus (not controlled by diet alone)',
-                'Myxoedema (hypothyroidism requiring thyroid hormone replacement)',
-                'Hypoparathyroidism',
-                'Diabetes insipidus or other forms of hypopituitarism',
-                'Forms of hypoadrenalism (for example, Addison’s Disease) for which specific substitution therapy is essential',
-                'Myasthenia gravis',
-                'A continuing physical disability which means you cannot go out without the help of another person',
-                'Cancer (treatment or effects of disease/treatment)'
+                '(1) Permanent fistula',
+                '(2) Epilepsy',
+                '(3) Diabetes mellitus',
+                '(4) Myxoedema',
+                '(5) Hypoparathyroidism',
+                '(6) Diabetes insipidus',
+                '(7) Forms of hypoadrenalism',
+                '(8) Myasthenia gravis',
+                '(9) Continuing physical disability',
+                '(10) Cancer'
               ];
               
 
@@ -737,9 +737,22 @@
               // GENERATE MEDICAL CONDITION FUNCTION
               //
               function _generateMedicalCondition() {
-                return [
-                  medicalCondition[Math.floor(Math.random() * medicalCondition.length)]
-                ];
+
+                const maxConditions = 3;
+                const count = Math.floor(Math.random() * maxConditions) + 1;
+
+                const shuffled = [...medicalCondition].sort(() => 0.5 - Math.random());
+
+                const selected = shuffled.slice(0, count);
+
+                // Sort back into numeric order after shuffle
+                const ordered = selected.sort((a, b) => {
+                  const numA = parseInt(a.match(/\d+/)[0]);
+                  const numB = parseInt(b.match(/\d+/)[0]);
+                  return numA - numB;
+                });
+
+                return ordered;
               }
 
 
