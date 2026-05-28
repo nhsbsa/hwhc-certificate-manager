@@ -303,35 +303,93 @@
                   }) }}
 
 
-                  <div class="nhsuk-form-group horizontal-row">
-                  
-                    <label class="nhsuk-label horizontal-label">
-                      Medical condition
-                    </label>
-                                    
-                    <div class="horizontal-input">
-                      {% for c in conditions %}
-                      <div class="nhsuk-body nhsuk-u-margin-bottom-2">{{ c }}</div>
-                      {% endfor %}           
-                  
-                      <p class="nhsuk-u-margin-top-3">
-                        <a class="nhsuk-link nhsuk-link--no-visited-state" href="/v1/medex/edit-medical-condition"><span data-ak="Y">Change</span><span class="nhsuk-u-visually-hidden"> medical condition</span>
-                        </a>
-                      </p>
-                    </div>      
-                  </div>                  
+                <div class="nhsuk-form-group">
 
-                  <style>
-                    .horizontal-row {
-                      display: flex;
-                      flex-wrap: nowrap;
-                    }
+                    {{ checkboxes({
+                      idPrefix: "medicalCondition",
+                      name: "editMEDEX.medicalCondition",
+                      classes: "medex-checkboxes",
+                      fieldset: {
+                        legend: {
+                          html: '<span data-ak="Y">Medical condition</span>',
+                          size: "s",
+                          isPageHeading: false
+                        }
+                      },
+                      items: [
+                      {
+                        value: "(1) Permanent fistula",
+                        text: "A permanent fistula",
+                        checked: conditions.includes("(1) Permanent fistula")
+                      },
+                      {
+                        value: "(2) Epilepsy",
+                        text: "Epilepsy",
+                        checked: conditions.includes("(2) Epilepsy")
+                      },
+                      {
+                        value: "(3) Diabetes mellitus",
+                        text: "Diabetes mellitus",
+                        checked: conditions.includes("(3) Diabetes mellitus")
+                      },
+                      {
+                        value: "(4) Myxoedema",
+                        text: "Myxoedema",
+                        checked: conditions.includes("(4) Myxoedema")
+                      },
+                      {
+                        value: "(5) Hypoparathyroidism",
+                        text: "Hypoparathyroidism",
+                        checked: conditions.includes("(5) Hypoparathyroidism")
+                      },
+                      {
+                        value: "(6) Diabetes insipidus",
+                        text: "Diabetes insipidus",
+                        checked: conditions.includes("(6) Diabetes insipidus")
+                      },
+                      {
+                        value: "(7) Forms of hypoadrenalism",
+                        text: "Forms of hypoadrenalism",
+                        checked: conditions.includes("(7) Forms of hypoadrenalism")
+                      },
+                      {
+                        value: "(8) Myasthenia gravis",
+                        text: "Myasthenia gravis",
+                        checked: conditions.includes("(8) Myasthenia gravis")
+                      },
+                      {
+                        value: "(9) Continuing physical disability",
+                        text: "Continuing physical disability",
+                        checked: conditions.includes("(9) Continuing physical disability")
+                      },
+                      {
+                        value: "(10) Cancer",
+                        text: "Cancer",
+                        checked: conditions.includes("(10) Cancer")
+                      }
+                    ]
+                    }) }}
 
-                    .horizontal-input {
-                      flex: 1;
-                      min-width: 0;
+                </div>                  
+
+                <style>
+
+                  .medex-checkboxes {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                  }
+
+                  .medex-checkboxes .nhsuk-checkboxes__label {
+                    font-weight: 400 !important;
+                  }
+
+                  @media (max-width: 1024px) {
+                    .medex-checkboxes {
+                      grid-template-columns: 1fr;
                     }
-                  </style>
+                  }
+
+                </style>
 
 
                 {% if data.role === 'backOffice' or data.role === 'backOfficeSupervisor' %}

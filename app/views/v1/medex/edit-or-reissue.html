@@ -346,7 +346,71 @@ Certificate fulfilment
                     classes: "fulfilment-value",
                     html: fulfilmentValue | safe
                   }
-                },      
+                },
+                {
+                  key: { 
+                  html: '<span data-ak="Y">Medical condition</span>'
+                },
+                value: { 
+                  html: checkboxes({
+                    idPrefix: "medicalCondition",
+                    name: "editMEDEX.medicalCondition",
+                    classes: "medex-checkboxes",
+                    items: [
+                    {
+                      value: "(1) Permanent fistula",
+                      text: "A permanent fistula",
+                      checked: conditions.includes("(1) Permanent fistula")
+                    },
+                    {
+                      value: "(2) Epilepsy",
+                      text: "Epilepsy",
+                      checked: conditions.includes("(2) Epilepsy")
+                    },
+                    {
+                      value: "(3) Diabetes mellitus",
+                      text: "Diabetes mellitus",
+                      checked: conditions.includes("(3) Diabetes mellitus")
+                    },
+                    {
+                      value: "(4) Myxoedema",
+                      text: "Myxoedema",
+                      checked: conditions.includes("(4) Myxoedema")
+                    },
+                    {
+                      value: "(5) Hypoparathyroidism",
+                      text: "Hypoparathyroidism",
+                      checked: conditions.includes("(5) Hypoparathyroidism")
+                    },
+                    {
+                      value: "(6) Diabetes insipidus",
+                      text: "Diabetes insipidus",
+                      checked: conditions.includes("(6) Diabetes insipidus")
+                    },
+                    {
+                      value: "(7) Forms of hypoadrenalism",
+                      text: "Forms of hypoadrenalism",
+                      checked: conditions.includes("(7) Forms of hypoadrenalism")
+                    },
+                    {
+                      value: "(8) Myasthenia gravis",
+                      text: "Myasthenia gravis",
+                      checked: conditions.includes("(8) Myasthenia gravis")
+                    },
+                    {
+                      value: "(9) Continuing physical disability",
+                      text: "Continuing physical disability",
+                      checked: conditions.includes("(9) Continuing physical disability")
+                    },
+                    {
+                      value: "(10) Cancer",
+                      text: "Cancer",
+                      checked: conditions.includes("(10) Cancer")
+                    }
+                  ]
+                  }) 
+                }
+                }, 
                 {
                   key: { 
                     html: '<span data-ak="Y">Medical condition</span>'
@@ -354,7 +418,6 @@ Certificate fulfilment
                   value: { 
                     html: checkboxes({
                       name: "editMEDEX.medicalCondition",
-                      classes: "nhsuk-checkboxes--small",
                       items: [
                         {
                           value: "(1) Permanent fistula",
@@ -481,6 +544,11 @@ Certificate fulfilment
   .nhsuk-summary-list__value .nhsuk-radios,
   .nhsuk-summary-list__value .nhsuk-textarea {
     margin-top: 0.5rem;
+  }
+
+  .medex-checkboxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
 

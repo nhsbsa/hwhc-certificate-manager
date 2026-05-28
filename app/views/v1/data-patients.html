@@ -598,7 +598,7 @@
               //
               // GENERATE END DATE FUNCTION
               //
-              function _generateEndDate(startDate) {
+              function _generateEndDate(startDate, medicalCondition) {
 
                 const start = new Date(
                   startDate.year,
@@ -608,7 +608,22 @@
 
                 const end = new Date(start);
 
-                end.setFullYear(end.getFullYear() + 1);
+                // Medex end date logic 
+                if (medicalCondition && medicalCondition.length) {
+                  const hasCancer = medicalCondition.includes("(10) Cancer");
+                  const isCancerOnly = hasCancer && medicalCondition.length === 1;
+
+                  if (isCancerOnly) {
+                    end.setFullYear(end.getFullYear() + 5);
+                  } else {
+                    end.setFullYear(end.getFullYear() + 10);
+                  }
+                
+                } else {
+                  //Existing defualt 1 year end date
+                  end.setFullYear(end.getFullYear() + 1);
+                }
+
                 end.setDate(end.getDate() - 1);
 
                 const day = end.getDate();
@@ -739,7 +754,11 @@
               function _generateMedicalCondition() {
 
                 const maxConditions = 3;
-                const count = Math.floor(Math.random() * maxConditions) + 1;
+
+                // 60% single-condition, 40% multi-condition
+                const count = Math.random() < 0.6
+                            ? 1
+                            : Math.floor(Math.random() * 3) + 1;
 
                 const shuffled = [...medicalCondition].sort(() => 0.5 - Math.random());
 
@@ -862,8 +881,8 @@
                     } else if ( obj.certificateType === 'medex' ) {
 
                       obj.startDate = _generateStartDate();
-                      obj.endDate = _generateEndDate( obj.startDate );
                       obj.medicalCondition = _generateMedicalCondition();
+                      obj.endDate = _generateEndDate( obj.startDate, obj.medicalCondition );
 
                     } else {
 
