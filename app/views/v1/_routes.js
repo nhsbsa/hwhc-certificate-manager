@@ -413,8 +413,6 @@ router.get(/postcode-handler/, function (req, res) {
     baseURL = 'https://api.os.uk/search/places/v1/postcode?postcode=' + encodeURI(addressSearchPostcode);
   }
 
-  console.log( baseURL );
-  console.log( apiKey );
 
   // Make the call
   if( baseURL && apiKey ){
