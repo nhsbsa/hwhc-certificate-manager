@@ -223,7 +223,7 @@
           hint: {
             text: "We'll send them a renewal reminder one month before their HRT PPC is due to expire."
           },
-          classes: "nhsuk-radios--inline nhsuk-u-margin-top-3",
+          classes: "nhsuk-radios--inline inline-radios nhsuk-u-margin-top-3",
           items: [
             {
               value: "email",
@@ -258,8 +258,7 @@
           label: {
             html: '<span data-ak="C">Add note</span>',
             size: "s"
-          },
-          value: "A new HRT prepaid certificate created using telephony sales channel."
+          }
         }) }}
         
 
@@ -283,7 +282,11 @@
 </div>
 
 <style>
-
+  .inline-radios {
+      display: flex;
+      align-items: last baseline;
+      white-space: nowrap;
+    }
     .postcode-block {
       display: flex;
       flex-direction: column;

@@ -16,7 +16,7 @@
 
           <!-- PROTOTYPE TAB V1 -->
 
-          <p>An initial prototype for Help with Health Costs (HwHC) telesales. This first iteration will handle Maternity exemption (MATEX), Medical exemption (MEDEX), and HRT PPC cases.</p>
+          <p>An initial prototype for Help with Health Costs (HwHC) telesales. This first iteration will handle Maternity exemption (Matex), Medical exemption (Medex), and HRT PPC cases.</p>
 
 
           <h2 class="nhsuk-heading-m">{{ 'callCentre' | getJobTitle }}</h2>
@@ -43,7 +43,7 @@
           <p class="nhsuk-body">Process scanned applications, correct mistakes and request further information</p>
 
           <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
-            <li>Process Matex paper applications</li>
+            <li>Process Matex and Medex paper applications</li>
             <li>Answer letters from patients</li>
             <li>Find records for patients</li>
             <li>Amend records for patients</li>
@@ -63,7 +63,7 @@
 
           <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
             <li>Check processing of other applications processors</li>
-            <li>Process Matex paper applications</li>
+            <li>Process Matex and Medex paper applications</li>
             <li>Answer letters from patients</li>
             <li>Find records for patients</li>
             <li>Amend records for patients</li>
@@ -101,14 +101,9 @@
 
         {% set pageListV1TabHTML %}
 
-        {% call details({
-          summaryText: "MATEX pages",
-          classes: "nhsuk-expander"
-        }) %}
-
         <h2 class="nhsuk-heading-m">Customer contact adviser screens</h2>
         {{ table({
-          caption: "Search pages",
+          caption: "General/Common pages",
           head: [
             {
               text: "Description"
@@ -128,10 +123,18 @@
             ],
             [
               {
+                text: "Search/Start page - Blank fields error"
+              },
+              {
+                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/search-errors">Search page</a>'
+              }
+            ],
+            [
+              {
                 text: "Search results"
               },
               {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/search-results?searchCertificateType=matex">Search results found</a>'
+                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/search-results">Search results found</a>'
               }
             ],
             [
@@ -154,7 +157,7 @@
         }) }}
 
         {{ table({
-          caption: "Certificate case pages",
+          caption: "Matex certificate pages",
           head: [
             {
               text: "Description"
@@ -166,7 +169,15 @@
           rows: [
             [
               {
-                text: "Certificate summary - Active"
+                text: "Certificate summary - Active - Digital application"
+              },
+              {
+                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/case?patientID=6">Certificate summary</a>'
+              }
+            ],
+            [
+              {
+                text: "Certificate summary - Active - Paper application"
               },
               {
                 html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/case?patientID=89">Certificate summary</a>'
@@ -230,18 +241,50 @@
           ],
           [
             {
-              text: "Edit certificate details or reissue"
+              text: "Edit application (for on-hold or rejected cases)"
             },
             {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/edit-or-reissue">Edit or reissue</a>'
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/case--edit">Edit application</a>'
             }
           ],
           [
             {
-              text: "Address lookup"
+              text: "Edit certificate details or reissue - Digital application"
             },
             {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/address-lookup?source=matex&returnTo=/v1/matex/edit-or-reissue">Find an address</a>'
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/edit-or-reissue?patientID=6">Edit or reissue</a>'
+            }
+          ],
+          [
+            {
+              text: "Edit certificate details or reissue - Paper application"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/edit-or-reissue?patientID=89">Edit or reissue</a>'
+            }
+          ],
+          [
+            {
+              text: "Address lookup - Find an address"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/address-lookup">Find an address</a>'
+            }
+          ],
+          [
+            {
+              text: "Address lookup result - Select an address"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/address-lookup?addressSearchPostcode=NE15%208NY">Select an address</a>'
+            }
+          ],
+          [
+            {
+              text: "Address lookup result - No address found"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/address-lookup-result?addressSearchPostcode=ZZ1 1ZZ">No address found</a>'
             }
           ],
           [
@@ -263,7 +306,267 @@
           ]
         }) }}
 
-        {% endcall %}
+
+        {{ table({
+          caption: "Medex certificate pages",
+          head: [
+            {
+              text: "Description"
+            },
+            {
+              text: "Prototype link"
+            }
+          ],
+          rows: [
+            [
+              {
+                text: "Certificate summary - Active - Digital application"
+              },
+              {
+                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case?patientID=21">Certificate summary</a>'
+              }
+            ],
+            [
+              {
+                text: "Certificate summary - Active - Paper application"
+              },
+              {
+                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case?patientID=93">Certificate summary</a>'
+              }
+            ],
+            [
+              {
+                text: "Certificate summary - On hold"
+              },
+              {
+                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case--view--can-edit?patientID=34">Certificate summary</a>'
+              }
+            ],
+            [
+              {
+                text: "Certificate summary - Rejected"
+              },
+              {
+                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case--view--can-edit?patientID=43">Certificate summary</a>'
+              }
+            ],
+            [
+            {
+              text: "Certificate summary - Deleted/Expired"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case?patientID=92">Certificate summary</a>'
+            }
+          ],
+          [
+            {
+              text: "Certificate summary - Processing"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case--view--can-edit?patientID=15">Certificate summary</a>'
+            }
+          ],
+          [
+            {
+              text: "View image of scanned application form"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/view-application-image">View application</a>'
+            }
+          ],
+          [
+            {
+              text: "Add note"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/add-note">Add note</a>'
+            }
+          ],
+          [
+            {
+              text: "Edit application (for on-hold or rejected cases)"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case--edit">Edit application</a>'
+            }
+          ],
+          [
+            {
+              text: "Edit certificate details or reissue - Digital application"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/edit-or-reissue?patientID=21">Edit or reissue</a>'
+            }
+          ],
+          [
+            {
+              text: "Edit certificate details or reissue - Paper application"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/edit-or-reissue?patientID=93">Edit or reissue</a>'
+            }
+          ],
+          [
+            {
+              text: "Address lookup - Find an address"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/address-lookup">Find an address</a>'
+            }
+          ],
+          [
+            {
+              text: "Address lookup result - Select an address"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/address-lookup?addressSearchPostcode=NE15%208NY">Select an address</a>'
+            }
+          ],
+          [
+            {
+              text: "Address lookup result - No address found"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/address-lookup-result?addressSearchPostcode=ZZ1 1ZZ">No address found</a>'
+            }
+          ],
+          [
+            {
+              text: "Reissue complete - Post"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/reissue-complete?patientID=93">Reissue complete</a>'
+            }
+          ],
+          [
+            {
+              text: "Reissue complete - Email"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/reissue-complete?patientID=21">Reissue complete</a>'
+            }
+          ]
+          ]
+        }) }}
+
+        {{ table({
+          caption: "HRT PPC certificate pages",
+          head: [
+            {
+              text: "Description"
+            },
+            {
+              text: "Prototype link"
+            }
+          ],
+          rows: [
+            [
+              {
+                text: "Certificate summary - Active"
+              },
+              {
+                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/case?patientID=30">Certificate summary</a>'
+              }
+            ],
+            [
+            {
+              text: "Certificate summary - Deleted/Expired"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/case?patientID=80">Certificate summary</a>'
+            }
+          ],
+          [
+            {
+              text: "Add note"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/add-note">Add note</a>'
+            }
+          ],
+          [
+            {
+              text: "Edit certificate details or reissue"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/edit-or-reissue?patientID=8">Edit or reissue</a>'
+            }
+          ],
+          [
+            {
+              text: "Address lookup - Find an address"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/address-lookup">Find an address</a>'
+            }
+          ],
+          [
+            {
+              text: "Address lookup result - Select an address"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/address-lookup?addressSearchPostcode=NE15%208NY">Select an address</a>'
+            }
+          ],
+          [
+            {
+              text: "Address lookup result - No address found"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/address-lookup-result?addressSearchPostcode=ZZ1 1ZZ">No address found</a>'
+            }
+          ],
+          [
+            {
+              text: "Reissue complete - Post"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/reissue-complete?patientID=99">Reissue complete</a>'
+            }
+          ],
+          [
+            {
+              text: "Reissue complete - Email"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/reissue-complete?patientID=30">Reissue complete</a>'
+            }
+          ],
+          [
+            {
+              text: "New application - Applicant details"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/new-application">Start HRT PPC application</a>'
+            }
+          ],
+          [
+            {
+              text: "New application - Check their details"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/check-their-answers">Check their answers</a>'
+            }
+          ],
+          [
+            {
+              text: "New application - Card payment call"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/card-payment">Card payment</a>'
+            }
+          ],
+          [
+            {
+              text: "Retry payment"
+            },
+            {
+              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/retry-payment">Retry payment</a>'
+            }
+          ]
+          ]
+        }) }}
+
 
         <h2 class="nhsuk-heading-m">Customer contact adviser screens</h2>
         <ul class="nhsuk-list">

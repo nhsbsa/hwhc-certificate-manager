@@ -1,74 +1,87 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'Certificate summary' %}
+{% set pageName = 'Certificate' %}
 
 {% block beforeContent %}
  {{ backLink({
-    href: 'javascript:history.back();',
-    html: '<span data-ak="B">Back</span>'
+  href: 'javascript:history.go(-1)',
+  html: '<span data-ak="B">Back</span>'
   }) }}
 {% endblock %}
 
 {% block content %}
 
+  <!-- {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %} -->
+
+  {% set patient = {
+    status: 'on-hold',
+    certificateType: 'hrtppc'
+  } %}
+
+  {% set isRetryPayment = true %}
+
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ 'HRT R33P ITIX' }} - {{ 'Smith' }}, {{ 'Jane' }} 
+        {{ ( 'hrtppc' ) | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ ( 'on-hold' ) | getStatusTextOrTag( true ) | safe }}
+      </h1>
     </div>
   </div>
+
 
   <div class="nhsuk-grid-row">
 
     <div class="nhsuk-grid-column-one-third">
 
-      {{ card({
-        heading: "Certificate details",
-        headingLevel: "2",
-        headingClasses: "nhsuk-heading-s",
-        description: summaryList({
-          classes: "summary-list--single-line",
+      {{ summaryList({
+        card: {
+          heading: "Certificate details",
+          headingSize: "s",
+          classes: "summary-list--single-line"
+        },
           rows: [
             {
-              key: {
-                text: "Reference"
+              key: { 
+                text: "Reference" 
               },
-              value: {
-                text: "HRT AF4A 488E"
+              value: { 
+                text: "HRT R33P ITIX" 
               }
             },
             {
-              key: {
-                text: "Type"
+              key: { 
+                text: "Type" 
               },
-              value: {
-                html: tag({
-                  text: "HRT PPC",
-                  classes: "nhsuk-tag--blue"
-                })
+              value: { 
+                html: "hrtppc" | getCertificateTypeTextOrTag( true ) 
               }
             },
             {
-              key: {
-                text: "Status"
+              key: { 
+                text: "Status" 
               },
-              value: {
-                html: "Pending"
+              value: { 
+                html: 'on-hold' | getStatusTextOrTag( true ) 
               }
             },
             {
-              key: {
-                text: "Channel"
+              key: { 
+                text: "Channel" 
               },
-              value: {
-                html: "Online"
+              value: { 
+                text:"Digital" 
               }
             },
             {
-              key: {
-                text: "Fulfilment"
+              key: { 
+                text: "Fulfilment" 
               },
-              value: {
-                html: "Email"
+              value: { 
+                text: 'email' | capitalise
               }
             },
             {
@@ -76,7 +89,7 @@
                 text: "Start date"
               },
               value: {
-                html: ""
+                html: "25 November 2025"
               }
             },
             {
@@ -84,10 +97,11 @@
                 text: "Expiry date"
               },
               value: {
-                html: ""
+                html: "24 November 2026"
               }
             },
             {
+              classes: "nhsuk-summary-list__row--no-border",
               key: {
                 text: "Application date"
               },
@@ -96,13 +110,7 @@
               }
             }
           ]
-        })
-        +
-        button({
-          text: "Edit certificate details",
-          classes: "nhsuk-button--secondary nhsuk-u-margin-top-5",
-          href: "edit-certificate"
-        })
+
       }) }}
     
     </div>
@@ -111,30 +119,29 @@
 
 
     <div class="nhsuk-grid-column-one-third">
-      {{ card({
-        heading: "Personal details",
-        headingLevel: "2",
-        headingClasses: "nhsuk-heading-s",
-        description: summaryList({
-          classes: "summary-list--single-line",
+      {{ summaryList({
+        card: {
+          heading: "Personal details",
+          headingSize: "s",
+          classes: "summary-list--single-line"
+        },
           rows: [
+          {
+            key: { text: 'First name' },
+            value: { text: 'Jane' }
+          },
             {
-              classes: "nhsuk-summary-list__row",
-              key: {
-                text: "Name"
-              },
-              value: {
-                text: "Jane Smith"
-              }
+              key: { text: 'Last name' },
+              value: { text: 'Smith'}
             },
             {
-              classes: "nhsuk-summary-list__row",
               key: {
                 text: "Address"
               },
               value: {
-                html: "101 Test Lane<br>Stella<br>Goldcrest<br>TR110TS"
+                html: '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS'
               }
+              
             },
             {
               key: {
@@ -147,318 +154,61 @@
             {
               classes: "nhsuk-summary-list__row",
               key: {
-                text: "Email address"
-              },
-              value: {
-                html: "jane.smith@example.com"
-              }
-            },
-            {
-              key: {
                 text: "NHS number"
               },
               value: {
-                html: "1234567890"
+                html: "123 456 7890"
               }
-            }
-          ]
-        })
-
-      }) }}
-    </div>
-
-
-    <div class="nhsuk-grid-column-one-third">
-
-      <!-- <div class="nhsuk-card nhsuk-card--grey">
-            <div class="nhsuk-card__content"> -->
-
-              <h2 class="nhsuk-u-visually-hidden">Certificate history</h2>
-
-        <!-- Import from NHS App frontend
-        {% from 'nhsapp/components/timeline/macro.njk' import nhsappTimeline %}
-
-       {{ nhsappTimeline({
-          items: [
-            {
-              headingText: 'Certificate issued via online',
-              html: '<span class="nhsuk-body-s">28 November 2025, 16:32</span>',
-              active: true
-            }
-          ]
-        }) }} -->
-
-        <!-- </div>
-      </div> -->
-
-      {% from "tabs/macro.njk" import tabs %}
-      {% from "tables/macro.njk" import table %}
-
-      {% set EventsContent %}
-        <div class="scroll-container">
-        {{ nhsappTimeline({
-          items: [
-            {
-              headingText: 'Card payment',
-              html: '
-                <ul class="nhsuk-list nhsuk-u-margin-top-1">
-                  <li style="color: #d5281b;">Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Failed</li>
-                </ul>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:32am</p>
-              ',
-              active: true
             },
             {
-              headingText: 'Application submitted',
-              html: '
-              <ul class="nhsuk-list nhsuk-u-margin-top-1">
-                <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Pending</li>
-              </ul>
-                <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:30am</p>
-                '
-            }
-          ]
-        }) }}
-      </div>
-
-      {% endset -%} 
-
-      {% set NotesContent %}
-      <div class="scroll-container">
-      {{ nhsappTimeline({
-        items: [
-          {
-            html: '
-              <p class="nhsuk-u-margin-bottom-1">No notes available</p>
-            '
-          }
-        ]
-      }) }}
-      </div>
-      {% endset -%} 
-
-      {% set FullLogContent %}
-      <div class="scroll-container">
-      {{ nhsappTimeline({
-        items: [
-        {
-          headingText: 'Card payment',
-          html: '
-            <ul class="nhsuk-list nhsuk-u-margin-top-1">
-              <li style="color: #d5281b;">Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Failed</li>
-            </ul>
-            <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:32am</p>
-          ',
-          active: true
-        },
-        {
-          headingText: 'Application submitted',
-          html: '
-          <ul class="nhsuk-list nhsuk-u-margin-top-1">
-            <li>Status:<span class="nhsuk-u-visually-hidden"> changed from</span> Pending TO Pending</li>
-          </ul>
-            <p class="nhsuk-body-s nhsuk-u-margin-top-1">23 November 2025 08:30am</p>
-            '
-        }
-        ]
-      }) }}
-    </div>
-
-    {% endset -%}
-
-
-      {{ tabs({
-        items: [
-        {
-          label: "Notes",
-          id: "notes",
-          panel: {
-            html: NotesContent
-          }
-        },
-          {
-            label: "Events",
-            id: "events",
-            panel: {
-              html: EventsContent
-            }
-          },
-          {
-            label: "Full log",
-            id: "full-log",
-            panel: {
-              html: FullLogContent
+              classes: "nhsuk-summary-list__row--no-border",
+              key: {
+                text: "Email address"
+              },
+              value: {
+                html: 'janesmith@example.com'
               }
             }
-        ]
-      }) }}
+          ]
 
+      }) }}
+    </div>
+
+
+    <div class="nhsuk-grid-column-one-third sticky-column">
+
+      {% from '../macros/notes.njk' import notes %}
+      {{ notes(patient, isRetryPayment) }}
 
     </div>
 
-</div>
-
-<div class="nhsuk-grid-row-buttons">
-
-    {{ button({
-      text: 'Retry payment',
-      href: "check-their-answers-retry-payment"
-    }) }}
-
-    {{ button({
-      classes: "nhsuk-button--secondary-solid",
-      text: 'Cancel',
-      href: "../search"
-    }) }}
 
 </div>
 
 
-    <!-- Summary list card styling -->
-    <style>
-      /* --------------------------------------------------- */
-      /* Base (default) layout: applies to 426px–1023px & >1024px */
-      /* --------------------------------------------------- */
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
 
-      .summary-list--single-line {
-        margin-bottom: 0;
-      }
+      <div class="nhsuk-button-group">
 
-      .summary-list--single-line .nhsuk-summary-list__row {
-        display: flex;
-        flex-wrap: nowrap;
-        align-items: flex-start;
-      }
+        {{ button({
+          html: '<span data-ak="I">Retry payment</span>',
+          href: "check-their-answers"
+        }) }}
+          {{ button({
+            classes: "nhsuk-button--secondary",
+            html: '<span data-ak="K">Add note</span>',
+            href: "add-note"
+          }) }}
+          {{ button({
+            classes: "nhsuk-button--secondary",
+            html: '<span data-ak="M">Cancel</span>',
+            href: "../search"
+          }) }}
 
-      .summary-list--single-line .nhsuk-summary-list__key {
-        flex: 0 0 auto;
-        white-space: nowrap;
-        margin-right: 5rem;
-      }
-
-      .summary-list--single-line .nhsuk-summary-list__value {
-        flex: 1 1 auto;
-        min-width: 0;
-        white-space: normal;
-        overflow-wrap: anywhere;
-        word-break: break-word;
-      }
-
-      /* Buttons row (default: left & right inline) */
-      .summary-list--single-line .nhsuk-summary-list__row--no-border {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: nowrap;
-        margin-top: 1rem;
-      }
-
-      .summary-list--single-line .nhsuk-summary-list__row--no-border 
-        .nhsuk-summary-list__key,
-      .summary-list--single-line .nhsuk-summary-list__row--no-border 
-        .nhsuk-summary-list__value {
-        flex: 0 0 auto;
-        margin: 0;
-      }
-
-      .nhsuk-grid-row-buttons .nhsuk-button--secondary-solid {
-          margin-left: 1rem;
-      }
-
-      /* --------------------------------------------------- */
-      /* STACKING BREAKPOINT 1 — small screens (≤425px)      */
-      /* --------------------------------------------------- */
-      @media (max-width: 425px) {
-
-        .summary-list--single-line .nhsuk-summary-list__row {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 0.25rem;
-          padding-bottom: 0.5rem;
-        }
-
-        .summary-list--single-line .nhsuk-summary-list__key {
-          margin: 0;
-        }
-
-        .summary-list--single-line .nhsuk-summary-list__row--no-border {
-          flex-direction: column;
-          align-items: stretch;
-          gap: 0.5rem;
-        }
-      }
-
-
-      /* --------------------------------------------------- */
-      /* STACKING BREAKPOINT 2 — special case: 1024px only   */
-      /* --------------------------------------------------- */
-      @media (min-width: 1024px) and (max-width: 1024px) {
-
-        .summary-list--single-line .nhsuk-summary-list__row {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 0.25rem;
-          padding-bottom: 0.5rem;
-        }
-
-        .summary-list--single-line .nhsuk-summary-list__key {
-          margin: 0;
-        }
-
-        .summary-list--single-line .nhsuk-summary-list__row--no-border {
-          flex-direction: column;
-          align-items: stretch;
-          gap: 0.5rem;
-        }
-
-        .nhsuk-tabs__panel {
-        height: 1000px;
-      }
-
-      .scroll-container {
-        min-height: 910px !important;
-        overflow-y: auto;
-        }
-      }
-      
-      /* --------------------------------------------------- */
-      /* Same height columns — Desktop only */
-      /* --------------------------------------------------- */
-      @media (min-width: 1024px) {
-
-        .nhsuk-grid-row {
-          display: flex ;
-          align-items: stretch;
-        }
-
-        .nhsuk-grid-row > .nhsuk-grid-column-one-third {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .nhsuk-grid-row .nhsuk-card {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-        }
-
-        .nhsuk-grid-row .nhsuk-card__content {
-          flex: 1 1 auto;
-        }
-
-        .nhsuk-grid-row-buttons .nhsuk-button--secondary {
-          margin-left: 1rem;
-        }
-
-        .scroll-container {
-          max-height: calc(100vh - 372px);
-          min-height: 0;
-          overflow-y: auto;
-        }
-
-      }
-
-
-    </style>
+        </div>
+    </div>
+  </div>
 
 
 {% endblock %}

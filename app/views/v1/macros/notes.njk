@@ -1,4 +1,4 @@
-{% macro notes( patient ) %}
+{% macro notes( patient, isRetryPayment=false ) %}
 
     {% from 'nhsapp/components/timeline/macro.njk' import nhsappTimeline %}
 
@@ -239,9 +239,26 @@
 
 
         <!-- HRT PPC -->
+        {% if isRetryPayment and patient.certificateType === 'hrtppc' %}
+
         {% set items = [
             {
-                headingText: 'Pending',
+                headingText: 'On hold',
+                isPastItem: true,
+                html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Application received, awaiting payment</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+( - 64 | alterTodaysDateByNumberOfDays)+', 8:30 am</span>'
+            },
+            {
+                headingText: 'On hold',
+                isPastItem: true,
+                html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2" style="color:#d5281b;">Payment failed</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+( - 64 | alterTodaysDateByNumberOfDays)+', 8:31 am</span>'
+            }
+        ] %}
+
+        {% else %}
+
+        {% set items = [
+            {
+                headingText: 'On hold',
                 isPastItem: true,
                 html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Application received, awaiting payment</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+( - 64 | alterTodaysDateByNumberOfDays)+', 8:30 am</span>'
             },
@@ -251,6 +268,8 @@
                 html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Certificate active</p><span class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-0">'+( - 64 | alterTodaysDateByNumberOfDays)+', 8:31 am</span>'
             }
         ] %}
+
+        {% endif %}
 
         {% if 2 | getRandomNumber === 0 %}
 

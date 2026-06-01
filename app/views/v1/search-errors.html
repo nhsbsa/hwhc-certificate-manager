@@ -114,6 +114,8 @@
                     },
                     errorMessage: {
                     },
+                    hint: { html: '<span class="nhsuk-u-font-size-14">You can paste valid dates here, for example 20111996</span>' 
+                    },
                     items: [
                       {
                         name: "day",
@@ -133,11 +135,49 @@
                     ]
                   }) }}
                   
+                  {% call details({
+                    summaryText: 'What date formats can I paste?'
+                  }) %}
+              
+                      <p>You can copy dates in these formats and paste them into any of the fields:</p>
+              
+                      {{ summaryList({
+                        attributes: { 'id': 'dates' },
+                        rows: [{
+                                key: { text: 'ddmmyyyy' },
+                                value: { text: '02031978' }
+                            },
+                            {
+                                key: { text: 'dd/mm/yyyy' },
+                                value: { text: '02/04/2025' }
+                            },{
+                                key: { text: 'dd-mm-yyyy' },
+                                value: { text: '20-2-1965' }
+                            },{
+                                key: { text: 'dd month yyyy' },
+                                value: { text: '3 May 1997' }
+                            }, {
+                                key: { text: 'dd.mmm.yyyy' },
+                                value: { text: '4.Dec.1990' }
+                            }, {
+                                key: { text: 'month dd, yyyy' },
+                                value: { text: 'September 25th, 2001' }
+                            }
+                        ]
+                      }) }}
+              
+                      <p>If a date is not valid (such as 32 February 99), the paste will not work.</p>
+              
+              
+                  {% endcall %}
+
                 </div>
+
+                
 
                 <style>
                   .nhsuk-date-input {
-                    margin-top: -12px
+                    margin-top: -10px
                   }
 
                 </style>
