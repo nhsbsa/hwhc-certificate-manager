@@ -46,21 +46,34 @@
             // MEDEX FIELDS 
             //
             const _fieldsMedex = {};
-                _fieldsMedex.firstName = { x: 1550, y: 500, width: 700, height: 70 };
-                _fieldsMedex.lastName  = { x: 1550, y: 440, width: 700, height: 70 };
+                _fieldsMedex.firstName = { x: 1180, y: 286, width: 1095, height: 65 };
+                _fieldsMedex.lastName  = { x: 1180, y: 236, width: 1095, height: 65 };
 
-                _fieldsMedex.houseNumber = { x: 1550, y: 620, width: 700, height: 80 };
-                _fieldsMedex.street      = { x: 1550, y: 700, width: 700, height: 80 };
+                _fieldsMedex.houseNumber = { x: 1180, y: 326, width: 1095, height: 65 };
+                _fieldsMedex.street      = { x: 1180, y: 376, width: 1095, height: 65 };
 
-                _fieldsMedex.town     = { x: 1550, y: 860, width: 700, height: 80 };
-                _fieldsMedex.postcode = { x: 1550, y: 940, width: 350, height: 80 };
+                _fieldsMedex.addressLine2 = { x: 1180, y: 426, width: 1095, height: 70 };
 
-                _fieldsMedex.dateOfBirth = { x: 1900, y: 940, width: 350, height: 80 };
+                _fieldsMedex.town     = { x: 1180, y: 476, width: 1095, height: 65 };
+                _fieldsMedex.postcode = { x: 1180, y: 526, width: 500, height: 65 };
 
-                _fieldsMedex.telephoneNumber = { x: 1550, y: 1020, width: 700, height: 80 };
-                _fieldsMedex.emailAddress    = { x: 1550, y: 1100, width: 700, height: 80 };
+                _fieldsMedex.dateOfBirth = { x: 1680, y: 526, width: 700, height: 65 };
 
-                _fieldsMedex.nhsNumber = { x: 1550, y: 1180, width: 700, height: 90 };
+                _fieldsMedex.telephoneNumber = { x: 1180, y: 576, width: 1095, height: 65 };
+                _fieldsMedex.emailAddress    = { x: 1180, y: 626, width: 1095, height: 65 };
+
+                _fieldsMedex.nhsNumber = { x: 1180, y: 652, width: 1000, height: 80 };
+
+                _fieldsMedex.permanentFistula = { x: 80, y: 606, width: 1100, height: 85 };
+                _fieldsMedex.epilepsy = { x: 80, y: 696, width: 1100, height: 65 };
+                _fieldsMedex.diabetesMellitus = { x: 80, y: 746, width: 1100, height: 65 };
+                _fieldsMedex.myxoedema = { x: 80, y: 796, width: 1100, height: 65 };
+                _fieldsMedex.hypoparathyroidism = { x: 80, y: 846, width: 1100, height: 65 };
+                _fieldsMedex.diabetesInsipidus = { x: 80, y: 896, width: 1100, height: 65 };
+                _fieldsMedex.formsOfHypoadrenalism = { x: 80, y: 946, width: 1100, height: 85 };
+                _fieldsMedex.myastheniaGravis = { x: 80, y: 1036, width: 1100, height: 65 };
+                _fieldsMedex.continuingPhysicalDisability = { x: 80, y: 1086, width: 1100, height: 125 };
+                _fieldsMedex.cancer = { x: 80, y: 1266, width: 1100, height: 125 };
 
                 _fieldsMedex.patientSignature = { x: 1550, y: 1350, width: 700, height: 120 };
 
@@ -362,6 +375,7 @@
                     'dateOfBirth',
                     'nhsNumber',
                     'address',
+                    'addressLine2',
                     'houseNumber',
                     'street',
                     'town',
@@ -374,7 +388,17 @@
                     'healthcarePractitionerDetails',
                     'healthcarePractitionerName',
                     'healthcarePractitionerAddress',
-                    'healthcarePractitionerStamp'
+                    'healthcarePractitionerStamp',
+                    'permanentFistula',
+                    'epilepsy',
+                    'diabetesMellitus',
+                    'myxoedema',
+                    'hypoparathyroidism',
+                    'diabetesInsipidus',
+                    'formsOfHypoadrenalism',
+                    'myastheniaGravis',
+                    'continuingPhysicalDisability',
+                    'cancer'
                 ];
 
                 fieldName = ( fieldPositions.indexOf( fieldName ) > -1 ) ? fieldName : '';
