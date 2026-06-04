@@ -450,6 +450,28 @@
         }) }}
 
         {{ table({
+          caption: "Medex error pages",
+          head: [
+            {
+              text: "Description"
+            },
+            {
+              text: "Prototype link"
+            }
+          ],
+          rows: [
+            [
+              {
+                text: "Edit certificate - Paper application - Blank medical conditions"
+              },
+              {
+                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/blank-medical-conditions?patientID=93">Edit or reissue</a>'
+              }
+            ]
+          ]
+        }) }}
+
+        {{ table({
           caption: "HRT PPC certificate pages",
           head: [
             {

@@ -15,70 +15,16 @@
 {% set patient = data.patientID | getPatientData %}
 {% endif %}
 
-{#{ patient | dump }#}
 
-{% if data.errors %}
-  {{ errorSummary({
-      titleText: "There is a problem",
-      errorList: data.errors
-  }) }}
-{% endif %}
-
-{% set emailError = null %}
-{% if data.errors %}
-  {% for err in data.errors %}
-    {% if err.href == "#email" %}
-      {% set emailError = { text: err.text } %}
-    {% endif %}
-  {% endfor %}
-{% endif %}
-
-{% set addressLineOneError = null %}
-{% if data.errors %}
-  {% for err in data.errors %}
-    {% if err.href == "#address-line-1" %}
-      {% set addressLineOneError = { text: err.text } %}
-    {% endif %}
-  {% endfor %}
-{% endif %}
-
-
-{% set postcodeError = null %}
-{% if data.errors %}
-  {% for err in data.errors %}
-    {% if err.href == "#postcode" %}
-      {% set postcodeError = { text: err.text } %}
-    {% endif %}
-  {% endfor %}
-{% endif %}
-
-{% set postcodeValue = patient.address.postcode %}
-  {% if postcodeError %}
-  {% set postcodeValue = "" %}
-  {% else %}
-  {% set postcodeValue = data['editMEDEX.postcode'] %}
-{% endif %}
-
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
-  </div>
-</div>
-
-{% set channelLinkHtml %}
-<br>
+{% set viewImageHtml %}
 <a class="nhsuk-link nhsuk-link--no-visited-state"
-   href="comparison">
-  View application
+   href="../view-application-image">
+   View application
 </a>
 {% endset %}
 
 
-{% if patient.channel === 'Paper' %}
-{% set channelHTML = 'Paper' ~ channelLinkHtml %}
-{% set emailHTML = patient.email or data['editMEDEX.email'] or '' %}
-{% set fulfilment = 'post' or data['editMEDEX.certificateFulfilment'] %}
-{% set isDigital = false %}
+{% set fulfilment = 'post' %}
 {% set fulfilmentKey %} 
 Certificate fulfilment
 {% endset %}
@@ -103,24 +49,7 @@ Certificate fulfilment
 {% endset %}
 
 
-{% else %}
-  {% set channelHTML = 'Digital' %}
-  {% set fulfilment = "email" %}
-  {% set emailHTML = patient.email or data['editMEDEX.email'] or 'janedoe@example.com' %}
-  {% set isDigital = true %}
-  {% set fulfilmentValue %} {% endset %}
-  {% set fulfilmentKey %} {% endset %}
-  {% set postcodeValue = patient.address.postcode or data['editMEDEX.postcode'] %}
 
-{% endif %}
-
-{% if isDigital %}
-  {% set addressValue1 = '' %}
-  {% set addressValue2 = '' %}
-  {% set townValue = '' %}
-  {% set countyValue = '' %}
-
-{% else %}
 
 {% set addressValue1 = data.editMEDEX.addressLineOne
   or (patient.address.buildingNumber + " " + patient.address.streetName) %}
@@ -143,17 +72,29 @@ Certificate fulfilment
 {% set postcodeValue = data.editMEDEX.postcode 
   or patient.address.postcode %}
 
-{% endif %}
 
-{% set conditions = data.editMEDEX.medicalCondition or patient.medicalCondition or [] %}
+{{ errorSummary({
+  titleText: "There is a problem",
+  descriptionHtml: "Check the scanned image to confirm the correct medical condition:" + " " + viewImageHtml,
+  errorList: [
+    {
+      text: "Select a medical condition",
+      href: "#medical-condition-error"
+    }
+  ]
+}) }}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+  </div>
+</div>
 
 
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
     <div class="nhsuk-card nhsuk-card--grey">
       <div class="nhsuk-card__content">
-
-        <form action="edit-medex" method="post">
 
           {{ summaryList({
               classes: "nhsuk-summary-list--no-border",
@@ -192,9 +133,7 @@ Certificate fulfilment
                     html: input ({
                       id: "address-line-1",
                       name: "editMEDEX.addressLineOne",
-                      value: addressValue1,
-                      errorMessage: addressLineOneError,
-                      disabled: isDigital
+                      value: addressValue1
                     })
                   }
                 },                
@@ -206,8 +145,7 @@ Certificate fulfilment
                     html: input ({
                       id: "address-line-2",
                       name: "editMEDEX.addressLineTwo",
-                      value: addressValue2,
-                      disabled: isDigital
+                      value: addressValue2
                     })
                   }
                 },                
@@ -220,8 +158,7 @@ Certificate fulfilment
                       id: "town",
                       name: "editMEDEX.town",
                       classes: "nhsuk-u-width-two-thirds",
-                      value: townValue,
-                      disabled: isDigital
+                      value: townValue
                     })
                   }
                 },                
@@ -234,8 +171,7 @@ Certificate fulfilment
                       id: "county",
                       name: "editMEDEX.county",
                       classes: "nhsuk-u-width-two-thirds",
-                      value: countyValue,
-                      disabled: isDigital
+                      value: countyValue
                     })
                   }
                 },                
@@ -249,8 +185,7 @@ Certificate fulfilment
                       id: "postcode",
                       name: "editMEDEX.postcode",
                       classes: "nhsuk-input--width-5",
-                      value: postcodeValue,
-                      errorMessage: postcodeError
+                      value: postcodeValue
                     })
                   }
                 },
@@ -358,54 +293,45 @@ Certificate fulfilment
                     classes: "medex-checkboxes",
                     items: [
                     {
+                      id: "medical-condition-error",
                       value: "(1) Permanent fistula",
-                      text: "A permanent fistula",
-                      checked: conditions.includes("(1) Permanent fistula")
+                      text: "A permanent fistula"
                     },
                     {
                       value: "(2) Epilepsy",
-                      text: "Epilepsy",
-                      checked: conditions.includes("(2) Epilepsy")
+                      text: "Epilepsy"
                     },
                     {
                       value: "(3) Diabetes mellitus",
-                      text: "Diabetes mellitus",
-                      checked: conditions.includes("(3) Diabetes mellitus")
+                      text: "Diabetes mellitus"
                     },
                     {
                       value: "(4) Myxoedema",
-                      text: "Myxoedema",
-                      checked: conditions.includes("(4) Myxoedema")
+                      text: "Myxoedema"
                     },
                     {
                       value: "(5) Hypoparathyroidism",
-                      text: "Hypoparathyroidism",
-                      checked: conditions.includes("(5) Hypoparathyroidism")
+                      text: "Hypoparathyroidism"
                     },
                     {
                       value: "(6) Diabetes insipidus",
-                      text: "Diabetes insipidus",
-                      checked: conditions.includes("(6) Diabetes insipidus")
+                      text: "Diabetes insipidus"
                     },
                     {
                       value: "(7) Forms of hypoadrenalism",
-                      text: "Forms of hypoadrenalism",
-                      checked: conditions.includes("(7) Forms of hypoadrenalism")
+                      text: "Forms of hypoadrenalism"
                     },
                     {
                       value: "(8) Myasthenia gravis",
-                      text: "Myasthenia gravis",
-                      checked: conditions.includes("(8) Myasthenia gravis")
+                      text: "Myasthenia gravis"
                     },
                     {
                       value: "(9) Continuing physical disability",
-                      text: "Continuing physical disability",
-                      checked: conditions.includes("(9) Continuing physical disability")
+                      text: "Continuing physical disability"
                     },
                     {
                       value: "(10) Cancer",
-                      text: "Cancer",
-                      checked: conditions.includes("(10) Cancer")
+                      text: "Cancer"
                     }
                   ]
                   }) 
@@ -429,28 +355,20 @@ Certificate fulfilment
 
             {{ button
               ({ 
-                html: '<span data-ak="I">Reissue</span>',
-                type: "submit",
-                name: "action",
-                value: "reissue"
+                html: '<span data-ak="I">Reissue</span>'
               })
             }}
             {{ button
               ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
-              html: '<span data-ak="K">Save changes</span>',
-              type: "submit",
-                name: "save",
-                value: "1"
+              html: '<span data-ak="K">Save changes</span>'
               }) 
             }}
             {{ button
               ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
-              html: '<span data-ak="M">Cancel</span>',
-              href: "../search"
+              html: '<span data-ak="M">Cancel</span>'
               }) 
             }}
 
-        </form>
 
       </div>
       </div>
