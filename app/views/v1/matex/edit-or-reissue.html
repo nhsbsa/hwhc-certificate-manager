@@ -115,10 +115,10 @@ Certificate fulfilment
 
 
 {% if isDigital %}
-  {% set addressValue1 = '' %}
-  {% set addressValue2 = '' %}
-  {% set townValue = '' %}
-  {% set countyValue = '' %}
+  {% set addressValue1 = '' or data.editMATEX.addressLineOne %}
+  {% set addressValue2 = '' or data.editMATEX.addressLineTwo %}
+  {% set townValue = '' or data.editMATEX.town %}
+  {% set countyValue = '' or data.editMATEX.county %}
 
 {% else %}
 
@@ -195,8 +195,7 @@ Certificate fulfilment
                       id: "address-line-1",
                       name: "editMATEX.addressLineOne",
                       value: addressValue1,
-                      errorMessage: addressLineOneError,
-                      disabled: isDigital
+                      errorMessage: addressLineOneError
                     })
                   }
                 },                
@@ -208,8 +207,7 @@ Certificate fulfilment
                     html: input ({
                       id: "address-line-2",
                       name: "editMATEX.addressLineTwo",
-                      value: addressValue2,
-                      disabled: isDigital
+                      value: addressValue2
                     })
                   }
                 },                
@@ -222,8 +220,7 @@ Certificate fulfilment
                       id: "town",
                       name: "editMATEX.town",
                       classes: "nhsuk-u-width-two-thirds",
-                      value: townValue,
-                      disabled: isDigital
+                      value: townValue
                     })
                   }
                 },                
@@ -236,8 +233,7 @@ Certificate fulfilment
                       id: "county",
                       name: "editMATEX.county",
                       classes: "nhsuk-u-width-two-thirds",
-                      value: countyValue,
-                      disabled: isDigital
+                      value: countyValue
                     })
                   }
                 },                
