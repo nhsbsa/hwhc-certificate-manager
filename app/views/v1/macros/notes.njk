@@ -6,7 +6,7 @@
     {% set today = 0 | alterTodaysDateByNumberOfDays %}
     {% set processorFullName = patient.processorName + ' (' + patient.processor + ')' %}
 
-    {% if patient.certificateType === 'matex' %}
+    {% if patient.certificateType === 'matex' or 'medex' %}
 
         {% if patient.channel === 'Paper' %}
 
@@ -193,7 +193,7 @@
 
         {% else %}
 
-            <!-- DIGITAL MATEX -->
+            <!-- DIGITAL MATEX OR MEDEX -->
 
             {% set items = [
                 {
