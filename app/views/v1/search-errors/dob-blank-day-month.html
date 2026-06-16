@@ -22,16 +22,15 @@
             titleText: "There is a problem",
             errorList: [
               {
-                text: "Enter at least one field",
-                href: "#searchCertificateReference"
+                text: "Date of birth must include a day and month",
+                href: "#searchDateOfBirth-day"
               }
             ]
           }) }}
 
           {{ button({
                 html: '<span data-ak="Y">Start HRT PPC application</span>',
-                classes: 'nhsuk-button nhsuk-button--small nhsuk-button--secondary nhsuk-u-float-right',
-                href: "hrtppc/new-application"
+                classes: 'nhsuk-button nhsuk-button--small nhsuk-button--secondary nhsuk-u-float-right'
               }) }}
 
         </div>
@@ -51,8 +50,6 @@
 
             <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
 
-            <form action="search" method="post" novalidate>
-
               <div class="nhsuk-grid-row">
 
                 <div class="nhsuk-grid-column-one-third">
@@ -62,9 +59,7 @@
                     },
                     id: 'searchCertificateReference',
                     name: 'searchCertificateReference',
-                    value: data.searchCertificateReference,
-                    errorMessage: {
-                    }
+                    value: data.searchCertificateReference
                   }) }}
                 </div>
 
@@ -75,9 +70,7 @@
                     },
                     id: 'searchFirstName',
                     name: 'searchFirstName',
-                    value: data.searchFirstName,
-                    errorMessage: {
-                    }
+                    value: data.searchFirstName
                   }) }}
                 </div>
 
@@ -88,9 +81,7 @@
                     },
                     id: 'searchLastName',
                     name: 'searchLastName',
-                    value: data.searchLastName,
-                    errorMessage: {
-                    }
+                    value: data.searchLastName
                   }) }}
                 </div>
 
@@ -112,9 +103,10 @@
                         classes: "nhsuk-body"
                       }
                     },
-                    errorMessage: {
-                    },
                     hint: { html: '<span class="nhsuk-u-font-size-14">You can paste valid dates here, for example 20111996</span>' 
+                    },
+                    errorMessage: {
+                      text: "Date of birth must include a day and month"
                     },
                     items: [
                       {
@@ -130,7 +122,8 @@
                       {
                         name: "year",
                         label: '<span class="nhsuk-u-visually-hidden">Year</span>',
-                        classes: "nhsuk-input--width-4 nhsuk-input--error"
+                        classes: "nhsuk-input--width-4",
+                        value: '2006'
                       }
                     ]
                   }) }}
@@ -190,9 +183,7 @@
                     id: 'searchPostcode',
                     name: 'searchPostcode',
                     value: data.searchPostcode,
-                    classes: "nhsuk-input--width-10",
-                    errorMessage: {
-                    }
+                    classes: "nhsuk-input--width-10"
                   }) }}
                 </div>
 
@@ -289,7 +280,6 @@
 
                   {{ button({
                     html: '<span data-ak="R">Reset</span>',
-                    href: 'reset-search',
                     classes: 'nhsuk-button--secondary nhsuk-button--small nhsuk-u-float-right'
                   }) }}
 
@@ -297,8 +287,6 @@
               </div>
 
 
-
-            </form>
 
           </div>
           </div>

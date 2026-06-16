@@ -1,0 +1,297 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'Search for a certificate' %}
+
+{% block beforeContent %}
+  {% if data.role === 'backOffice' or data.role === 'backOfficeSupervisor' or data.role === 'qualityControl' %}
+    {{ backLink({
+      href: 'javascript:history.go(-1)',
+      html: '<span data-ak="B">Back</span>'
+    }) }}
+  {% endif %}
+{% endblock %}
+
+
+{% block content %}
+
+  {% if data.role === 'callCentre' %}
+
+    <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          {{ errorSummary({
+            titleText: "There is a problem",
+            errorList: [
+              {
+                text: "Date of birth must include a day and year",
+                href: "#searchDateOfBirth-day"
+              }
+            ]
+          }) }}
+
+          {{ button({
+                html: '<span data-ak="Y">Start HRT PPC application</span>',
+                classes: 'nhsuk-button nhsuk-button--small nhsuk-button--secondary nhsuk-u-float-right'
+              }) }}
+
+        </div>
+      </div>
+
+  {% endif %}
+
+
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+
+          <div class="nhsuk-card nhsuk-card--grey">
+            <div class="nhsuk-card__content">
+
+
+            <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
+
+              <div class="nhsuk-grid-row">
+
+                <div class="nhsuk-grid-column-one-third">
+                  {{ input({
+                    label: {
+                      html: '<span data-ak="Z">Certificate reference</span>'
+                    },
+                    id: 'searchCertificateReference',
+                    name: 'searchCertificateReference',
+                    value: data.searchCertificateReference
+                  }) }}
+                </div>
+
+                <div class="nhsuk-grid-column-one-third">
+                  {{ input({
+                    label: {
+                      html: '<span data-ak="S">First name</span>'
+                    },
+                    id: 'searchFirstName',
+                    name: 'searchFirstName',
+                    value: data.searchFirstName
+                  }) }}
+                </div>
+
+                <div class="nhsuk-grid-column-one-third">
+                  {{ input({
+                    label: {
+                      html: '<span data-ak="A">Last name</span>'
+                    },
+                    id: 'searchLastName',
+                    name: 'searchLastName',
+                    value: data.searchLastName
+                  }) }}
+                </div>
+
+              </div>
+
+
+
+
+              <div class="nhsuk-grid-row">
+
+                <div class="nhsuk-grid-column-one-third">
+
+                  {{ dateInput({
+                    id: "searchDateOfBirth",
+                    namePrefix: "searchDateOfBirth",
+                    fieldset: {
+                      legend: {
+                        html: '<span data-ak="X">Date of birth</span>',
+                        classes: "nhsuk-body"
+                      }
+                    },
+                    hint: { html: '<span class="nhsuk-u-font-size-14">You can paste valid dates here, for example 20111996</span>' 
+                    },
+                    errorMessage: {
+                      text: "Date of birth must include a day and year"
+                    },
+                    items: [
+                      {
+                        name: "day",
+                        label: '<span class="nhsuk-u-visually-hidden">Day</span>',
+                        classes: "nhsuk-input--width-2 nhsuk-input--error"
+                      },
+                      {
+                        name: "month",
+                        label: '<span class="nhsuk-u-visually-hidden">Month</span>',
+                        classes: "nhsuk-input--width-2",
+                        value: '9'
+                      },
+                      {
+                        name: "year",
+                        label: '<span class="nhsuk-u-visually-hidden">Year</span>',
+                        classes: "nhsuk-input--width-4 nhsuk-input--error"
+                      }
+                    ]
+                  }) }}
+                  
+                  {% call details({
+                    summaryText: 'What date formats can I paste?'
+                  }) %}
+              
+                      <p>You can copy dates in these formats and paste them into any of the fields:</p>
+              
+                      {{ summaryList({
+                        attributes: { 'id': 'dates' },
+                        rows: [{
+                                key: { text: 'ddmmyyyy' },
+                                value: { text: '02031978' }
+                            },
+                            {
+                                key: { text: 'dd/mm/yyyy' },
+                                value: { text: '02/04/2025' }
+                            },{
+                                key: { text: 'dd-mm-yyyy' },
+                                value: { text: '20-2-1965' }
+                            },{
+                                key: { text: 'dd month yyyy' },
+                                value: { text: '3 May 1997' }
+                            }, {
+                                key: { text: 'dd.mmm.yyyy' },
+                                value: { text: '4.Dec.1990' }
+                            }, {
+                                key: { text: 'month dd, yyyy' },
+                                value: { text: 'September 25th, 2001' }
+                            }
+                        ]
+                      }) }}
+              
+                      <p>If a date is not valid (such as 32 February 99), the paste will not work.</p>
+              
+              
+                  {% endcall %}
+
+                </div>
+
+                
+
+                <style>
+                  .nhsuk-date-input {
+                    margin-top: -10px
+                  }
+
+                </style>
+
+                <div class="nhsuk-grid-column-one-third">
+                  {{ input({
+                    label: {
+                      html: '<span data-ak="C">Postcode</span>'
+                    },
+                    id: 'searchPostcode',
+                    name: 'searchPostcode',
+                    value: data.searchPostcode,
+                    classes: "nhsuk-input--width-10"
+                  }) }}
+                </div>
+
+                <div class="nhsuk-grid-column-one-third">
+
+                  {% if data.role === 'callCentre' %}
+
+                    {{ select({
+                      label: {
+                        html: '<span data-ak="T">Certificate type</span>'
+                      },
+                      id: 'searchCertificateType',
+                      name: 'searchCertificateType',
+                      value: data.searchCertificateType,
+                      items: [
+                        {
+                          value: '',
+                          text: 'All certificate types'
+                        },
+                        {
+                          value: 'hrtppc',
+                          text: 'HRT PPC'
+                        },
+                        {
+                          value: 'matex',
+                          text: 'Maternity exemption'
+                        }
+                      ]
+                    }) }}
+
+                    <input type="hidden" name="searchStatus" value="" />
+
+                  {% elif data.role === 'backOffice' %}
+    
+                    {#{ select({
+                      label: {
+                        html: '<span data-ak="T">Certificate type</span>'
+                      },
+                      id: 'searchCertificateType',
+                      name: 'searchCertificateType',
+                      value: data.searchCertificateType,
+                      items: [
+                        {
+                          value: '',
+                          text: 'All certificate types'
+                        },
+                        {
+                          value: 'hrtppc',
+                          text: 'HRT PPC'
+                        },
+                        {
+                          value: 'matex',
+                          text: 'Maternity exemption'
+                        }
+                      ]
+                    }) }#}
+
+                    <input type="hidden" name="searchCertificateType" value="matex" />
+
+                  {% else %}
+
+                      {{ select({
+                      label: {
+                        text: 'Application processor'
+                      },
+                      id: 'searchProcessor',
+                      name: 'searchProcessor',
+                      value: data.searchProcessor,
+                      items: [
+                        { value: '', text: 'Any processor' },
+                        { value: 'AICOL', text: data.processors.AICOL.name },
+                        { value: 'DATHO', text: data.processors.DATHO.name },
+                        { value: 'JASMI', text: data.processors.JASMI.name },
+                        { value: 'PRPAT', text: data.processors.PRPAT.name },
+                        { value: 'ZAKHA', text: data.processors.ZAKHA.name }
+                      ]
+                    }) }}
+
+                    <input type="hidden" name="searchCertificateType" value="matex" />
+
+                  {% endif %}
+
+                </div>
+
+              </div>
+
+
+              <div class="nhsuk-grid-row">
+                <div class="nhsuk-grid-column-full">
+                  
+                  {{ button({
+                    html: '<span data-ak="I">Search</span>'
+                  }) }}
+
+                  {{ button({
+                    html: '<span data-ak="R">Reset</span>',
+                    classes: 'nhsuk-button--secondary nhsuk-button--small nhsuk-u-float-right'
+                  }) }}
+
+                </div>
+              </div>
+
+
+
+          </div>
+          </div>
+
+      </div>
+  </div>
+
+{% endblock %}
