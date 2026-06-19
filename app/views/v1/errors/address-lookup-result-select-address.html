@@ -1,0 +1,132 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Address lookup' %}
+
+{% block beforeContent %}
+ {{ backLink({
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+{{ errorSummary({
+  titleText: "There is a problem",
+  errorList: [
+    {
+      text: "Select address or enter the address manually",
+      href: "#addressSearchResult"
+    }
+  ]
+}) }}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+    <div class="nhsuk-card nhsuk-card--grey">
+      <div class="nhsuk-card__content">
+
+
+          <h2 class="nhsuk-heading-m">Select an address</h2>
+
+          <p><strong>7</strong> results found for <strong>NE15 8NY</strong>. <a href="search">Search again</a></p>
+
+              {{ radios({
+                idPrefix: 'addressSearchResult',
+                name: 'addressSearchResult',
+                fieldset: {
+                  legend: {
+                    html: '<span data-ak="S">Select an address</span>',
+                    isPageHeading: false
+                  }
+                },
+                errorMessage: {
+                  text: "Select address or enter the address manually"
+                },
+                items: [
+                  {
+                    id: "addressSearchResult",
+                    value: "health",
+                    text: "Health Education England, 4 The Waterfront, Goldcrest Way, Newcastle Upon Tyne, NE15 8NY"
+                  },
+                  {
+                    value: "property",
+                    text: "NHS Property Services Ltd, 4 The Waterfront, Goldcrest Way, Newcastle Upon Tyne, NE15 8NY"
+                  },
+                  {
+                    value: "strategic",
+                    text: "North East Strategic Health Authority, 4 The Waterfront, Goldcrest Way, Newcastle Upon Tyne, NE15 8NY"
+                  },
+                  {
+                    value: "north",
+                    text: "North Of England Commissioning Support, Riverside House, Goldcrest Way, Newcastle Upon Tyne, NE15 8NY"
+                  },
+                  {
+                    value: "bsa",
+                    text: "NHS B S A, Stella House, Goldcrest Way, Newcastle Upon Tyne, NE15 8NY"
+                  },
+                  {
+                    value: "ambulance",
+                    text: "North East Ambulance Service NHS Trust, Bernicia House, The Waterfront, Goldcrest Way, Newcastle Upon Tyne, NE15 8NY"
+                  },
+                  {
+                    value: "stan",
+                    text: "Stannah Stairlifts, Goldcrest Way, Newcastle Upon Tyne, NE15 8NY"
+                  }
+                ]
+              }) }}
+
+
+                {{ button({
+                  html: '<span data-ak="I">Use this address</span>',
+                  type: "submit"
+                }) }}
+
+                <p class="nhsuk-body"><a><span data-ak="K">Enter address manually</span></a></p>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<style>
+.postcode-subrow {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+}
+
+.postcode-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Stack buttons vertically on smaller screens */
+@media (max-width: 1024px) {
+  .postcode-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.25rem;
+  }
+
+}
+
+/* Small spacing between postcode text and "Change" link */
+.postcode-text + .nhsuk-summary-list__action {
+  margin-left: 1.5rem;
+}
+
+
+</style>
+
+{% endblock %}

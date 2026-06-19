@@ -1,0 +1,45 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Edit details or reissue certificate' %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "#",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% set panelHtml %}
+        <p>If you use this date, the certificate will expire immediately.</p>
+        <div class="nhsuk-button-group">
+          {{ button({
+            text: "Continue anyway",
+            classes: "nhsuk-button--reverse",
+            href: "#"
+          }) }}
+          <a href="#">Cancel</a>
+        </div>
+      {% endset %}
+
+      {{ panel({
+        titleText: "Child's due of birth date is more than a year in the past",
+        titleSize: "l",
+        classes: "nhsuk-panel--interruption",
+        html: panelHtml
+      }) }}
+
+    </div>
+  </div>
+
+  <style>
+    .nhsuk-panel--interruption {
+      background-color:	#005eb8;
+    }
+  </style>
+{% endblock %}

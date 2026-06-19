@@ -27,7 +27,7 @@
 
           <!-- THE MESSAGE FUNCTION (i.e. dwpAddressPatternGetResultsStatus) FOR THESE PAGES IS SET IN THE FILTERS.JS FILE -->
 
-          <h1 class="nhsuk-heading-m">No address found</h1>
+          <h2 class="nhsuk-heading-m">No address found</h2>
           {{ data.addressSearchResults | dwpAddressPatternGetResultsStatus( data.addressSearchPostcode, data.addressSearchBuildingNumberOrName ) | safe }}
 
           {{ button
@@ -45,7 +45,7 @@
 
         {% else %}
 
-          <h1 class="nhsuk-heading-m">Select an address</h1>
+          <h2 class="nhsuk-heading-m">Select an address</h2>
           {{ data.addressSearchResults | dwpAddressPatternGetResultsStatus( data.addressSearchPostcode, data.addressSearchBuildingNumberOrName ) | safe }}
 
            <form action="address-lookup-result" method="post" novalidate>

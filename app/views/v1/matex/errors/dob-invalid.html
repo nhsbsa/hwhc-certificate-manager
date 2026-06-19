@@ -1,0 +1,319 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Edit details or reissue certificate' %}
+
+{% block beforeContent %}
+ {{ backLink({
+    href: 'case',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+{{ errorSummary({
+  titleText: "There is a problem",
+  errorList: [
+    {
+      text: "Date of birth must be a real date",
+      href: "#date-of-birth-day"
+    }
+  ]
+}) }}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+  </div>
+</div>
+
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-card nhsuk-card--grey">
+      <div class="nhsuk-card__content">
+
+          {{ summaryList({
+              classes: "nhsuk-summary-list--no-border",
+              rows: [
+              {
+                key: { 
+                  html: '<span data-ak="S">First name</span>'
+                },
+                value: 
+                { 
+                  html: input ({
+                    id: "first-name",
+                    name: "firstName",
+                    value: 'Jane'
+                  })
+                }
+              },
+                {
+                  key: {
+                  html: '<span data-ak="A">Last name</span>'
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "last-name",
+                      name: "editMATEX.lastName",
+                      value: 'Smith'
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    html: '<span data-ak="1">Address line 1</span>'
+                  },
+                  value: {
+                    html: input ({
+                      id: "address-line-1",
+                      name: "editMATEX.addressLineOne",
+                      value: "101 Test Road"                    
+                    })
+                  }
+                },                
+                {
+                  key: { 
+                    html: '<span data-ak="2">Address line 2 (optional)</span>'
+                },
+                  value: {
+                    html: input ({
+                      id: "address-line-2",
+                      name: "editMATEX.addressLineTwo"
+                    })
+                  }
+                },                
+                {
+                  key: { 
+                    html: '<span data-ak="U">Town or city</span>' 
+                  },
+                  value: {
+                    html: input ({
+                      id: "town",
+                      name: "editMATEX.town",
+                      classes: "nhsuk-u-width-two-thirds",
+                      value: "Test town"
+                    })
+                  }
+                },                
+                {
+                  key: { 
+                    html: '<span data-ak="R">County (optional)</span>' 
+                  },
+                  value: {
+                    html: input ({
+                      id: "county",
+                      name: "editMATEX.county",
+                      classes: "nhsuk-u-width-two-thirds"
+                    })
+                  }
+                },                
+                {
+                  key: { 
+                    html: '<span data-ak="Z">Postcode</span>' 
+                  },
+                  value: 
+                  {
+                    html: input({
+                      id: "postcode",
+                      name: "editMATEX.postcode",
+                      classes: "nhsuk-input--width-5",
+                      value: 'TR1 0TS'
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: "" 
+                  },
+                  value:
+                  { 
+                    html:
+                      button({
+                        html: '<span data-ak="G">Change address fields using address lookup</span>',
+                        classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-3",
+                        href: "address-lookup?source=matex&returnTo=/v1/matex/edit-or-reissue"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    html: '<span data-ak="X">Date of birth</span>'
+                  },
+                  value: { 
+                    html: dateInput({
+                      id: "date-of-birth",
+                      classes: "nhsuk-dates--inline summary-list-dates",
+                      errorMessage: {
+                        text: "Date of birth must be a real date"
+                      },
+                      items: [
+                        {
+                          name: "day",
+                          classes: "nhsuk-input--width-2 nhsuk-input--error",
+                          value: "17"
+                        },
+                        {
+                          name: "month",
+                          classes: "nhsuk-input--width-2 nhsuk-input--error",
+                          value: "25"
+                        },
+                        {
+                          name: "year",
+                          classes: "nhsuk-input--width-4 nhsuk-input--error",
+                          value: "1997"
+                        }
+                      ]
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    html: '<span data-ak="V">NHS number</span>'
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "nhs-number",
+                      name: "editMATEX.nhsNumber",
+                      classes: "nhsuk-input--width-10",
+                      value: patient.nhsNumber or data['editMATEX.nhsNumber'] or "1234567890"
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    html: '<span data-ak="Q">Telephone number</span>'
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "phone-number",
+                      name: "editMATEX.telephoneNumber",
+                      classes: "nhsuk-input--width-10",
+                      value: "07700 123 456" or data['editMATEX.telephoneNumber']
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    html: '<span data-ak="J">Email address</span>' 
+                  },
+                  value:
+                  { 
+                    html: input ({
+                      id: "email",
+                      name: "editMATEX.email",
+                      value: 'janesmith@mail.com'
+                    })
+                  }
+                },
+                {
+                  key: { 
+                    text: fulfilmentKey | safe 
+                  },
+                  value: {
+                    classes: "fulfilment-value",
+                    html: fulfilmentValue | safe
+                  }
+                },
+                {
+                  key: { 
+                    html: '<span data-ak="Y">Child\'s due or birth date</span>'
+                  },
+                  value: { 
+                    html: dateInput({
+                      id: "child-dob",
+                      namePrefix: "childDOB", 
+                      classes: "nhsuk-dates--inline summary-list-dates",
+                      items: [
+                        {
+                          name: "day",
+                          classes: "nhsuk-input--width-2",
+                          value: '23'
+                        },
+                        {
+                          name: "month",
+                          classes: "nhsuk-input--width-2",
+                          value: '6'
+                        },
+                        {
+                          name: "year",
+                          classes: "nhsuk-input--width-4",
+                          value: '2026'
+                        }
+                      ]
+                    })
+                  }
+                },        
+                {
+                  key: { 
+                    html: '<span data-ak="C">Notes</span>' 
+                  },
+                  value:
+                  { 
+                    html: textarea ({
+                      id: "notes",
+                      name: "editMATEX.notes"
+                    })
+                  }
+                }
+              ]
+          }) }}
+
+            {{ button
+              ({ 
+                html: '<span data-ak="I">Reissue</span>'
+              })
+            }}
+            {{ button
+              ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
+              html: '<span data-ak="K">Save changes</span>'
+              }) 
+            }}
+            {{ button
+              ({ classes: "nhsuk-button--secondary nhsuk-u-margin-left-3", 
+              html: '<span data-ak="M">Cancel</span>'
+              }) 
+            }}
+
+      </div>
+      </div>
+    </div>
+</div>
+
+<style>
+
+  .summary-list-radios {
+      display: flex;
+      align-items: first baseline;
+      white-space: nowrap;
+    }
+
+  .summary-list-dates {
+    display: flex;
+    align-items: last baseline
+  }
+
+  .nhsuk-summary-list__value .nhsuk-radios,
+  .nhsuk-summary-list__value .nhsuk-textarea {
+    margin-top: 0.5rem;
+  }
+
+
+    /* --------------------------------------------------- */
+    /* GRID COLUMN BREAKPOINT — 1024px only   */
+    /* --------------------------------------------------- */
+    @media (min-width: 1024px) and (max-width: 1024px) {
+      .nhsuk-grid-column-one-half {
+      width: 100%
+    }
+  }
+
+</style>
+
+
+
+{% endblock %}

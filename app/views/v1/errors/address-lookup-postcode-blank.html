@@ -1,0 +1,120 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Address lookup' %}
+
+{% block beforeContent %}
+ {{ backLink({
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+{{ errorSummary({
+  titleText: "There is a problem",
+  errorList: [
+    {
+      text: "Enter postcode",
+      href: "#addressSearchPostcode"
+    }
+  ]
+}) }}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+    <div class="nhsuk-card nhsuk-card--grey">
+      <div class="nhsuk-card__content">
+
+
+          {% call fieldset({
+            legend: {
+              text: 'Find an address',
+              classes: 'nhsuk-fieldset__legend--m',
+              isPageHeading: true
+            }
+          }) %}
+
+            <!-- POSTCODE -->
+
+            {{ input({
+              label: {
+                html: '<span data-ak="Z">Postcode</span>'
+              },
+              classes: 'nhsuk-input nhsuk-input--width-10',
+              hint: {
+                text: 'For example, AA3 1AB.'
+              },
+              id: 'addressSearchPostcode',
+              name: 'addressSearchPostcode',
+              errorMessage: {
+                text: "Enter postcode"
+              }  
+            }) }}
+
+            <!-- BUILDING NUMBER OR NAME -->
+
+            {{ input({
+              label: {
+                html: '<span data-ak="N">Building number or name</span>'
+              },
+              classes: 'nhsuk-input nhsuk-input--width-20',
+              hint: {
+                text: 'For example, 15 or Prospect Cottage.'
+              },
+              id: 'addressSearchBuildingNumberOrName',
+              name: 'addressSearchBuildingNumberOrName'
+            }) }}
+
+          {% endcall %}
+
+
+          {{ button({
+            html: '<span data-ak="I">Find address</span>'
+          }) }}
+          
+      <p class="nhsuk-body">
+        <a>
+          <span data-ak="K">Enter address manually</span>
+        </a>
+      </p>
+      
+      </div>
+      </div>
+    </div>
+</div>
+
+<style>
+
+.postcode-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.postcode-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+
+
+@media (min-width: 1024px) and (max-width: 1024px) {
+  .nhsuk-grid-column-two-thirds{
+    width: 100%;
+  }
+}
+
+
+</style>
+
+
+
+{% endblock %}
