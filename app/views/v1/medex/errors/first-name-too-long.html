@@ -15,8 +15,8 @@
   titleText: "There is a problem",
   errorList: [
     {
-      text: "Year must include 4 numbers",
-      href: "#date-of-birth-year"
+      text: "First name must be 50 characters or less",
+      href: "#first-name"
     }
   ]
 }) }}
@@ -45,7 +45,11 @@
                   html: input ({
                     id: "first-name",
                     name: "firstName",
-                    value: 'Jane'
+                    value: 'Oliviaemilyavaisabellacharlotteamelianataliesophiagrace',
+                    classes: "nhsuk-input--error",
+                    errorMessage: {
+                      text: "First name must be 50 characters or less"
+                    }
                   })
                 }
               },
@@ -70,7 +74,7 @@
                     html: input ({
                       id: "address-line-1",
                       name: "editMATEX.addressLineOne",
-                      value: "101 Test Road"                    
+                      value: '101 Test Road'
                     })
                   }
                 },                
@@ -94,7 +98,7 @@
                       id: "town",
                       name: "editMATEX.town",
                       classes: "nhsuk-u-width-two-thirds",
-                      value: "Test town"
+                      value: 'Test Town'
                     })
                   }
                 },                
@@ -146,24 +150,21 @@
                     html: dateInput({
                       id: "date-of-birth",
                       classes: "nhsuk-dates--inline summary-list-dates",
-                      errorMessage: {
-                        text: "Year must include 4 numbers"
-                      },
                       items: [
                         {
                           name: "day",
                           classes: "nhsuk-input--width-2",
-                          value: "17"
+                          value: patient.dateOfBirth.day or "24"
                         },
                         {
                           name: "month",
                           classes: "nhsuk-input--width-2",
-                          value: "6"
+                          value: patient.dateOfBirth.month + 1 or "7"
                         },
                         {
                           name: "year",
-                          classes: "nhsuk-input--width-4 nhsuk-input--error",
-                          value: "97"
+                          classes: "nhsuk-input--width-4",
+                          value: patient.dateOfBirth.year or "1997"
                         }
                       ]
                     })
@@ -179,7 +180,7 @@
                       id: "nhs-number",
                       name: "editMATEX.nhsNumber",
                       classes: "nhsuk-input--width-10",
-                      value: patient.nhsNumber or data['editMATEX.nhsNumber'] or "1234567890"
+                      value: patient.nhsNumber or data['editMATEX.nhsNumber'] or "123 456 7890"
                     })
                   }
                 },
@@ -221,32 +222,58 @@
                 },
                 {
                   key: { 
-                    html: '<span data-ak="Y">Child\'s due or birth date</span>'
-                  },
-                  value: { 
-                    html: dateInput({
-                      id: "child-dob",
-                      namePrefix: "childDOB", 
-                      classes: "nhsuk-dates--inline summary-list-dates",
-                      items: [
-                        {
-                          name: "day",
-                          classes: "nhsuk-input--width-2",
-                          value: '23'
-                        },
-                        {
-                          name: "month",
-                          classes: "nhsuk-input--width-2",
-                          value: '6'
-                        },
-                        {
-                          name: "year",
-                          classes: "nhsuk-input--width-4",
-                          value: '2026'
-                        }
-                      ]
-                    })
-                  }
+                  html: '<span data-ak="Y">Medical condition</span>'
+                },
+                value: { 
+                  html: checkboxes({
+                    idPrefix: "medicalCondition",
+                    name: "editMEDEX.medicalCondition",
+                    classes: "medex-checkboxes",
+                    items: [
+                    {
+                      value: "(1) Permanent fistula",
+                      text: "A permanent fistula"
+                    },
+                    {
+                      value: "(2) Epilepsy",
+                      text: "Epilepsy"
+                    },
+                    {
+                      value: "(3) Diabetes mellitus",
+                      text: "Diabetes mellitus",
+                      checked: true
+                    },
+                    {
+                      value: "(4) Myxoedema",
+                      text: "Myxoedema"
+                    },
+                    {
+                      value: "(5) Hypoparathyroidism",
+                      text: "Hypoparathyroidism"
+                    },
+                    {
+                      value: "(6) Diabetes insipidus",
+                      text: "Diabetes insipidus"
+                    },
+                    {
+                      value: "(7) Forms of hypoadrenalism",
+                      text: "Forms of hypoadrenalism"
+                    },
+                    {
+                      value: "(8) Myasthenia gravis",
+                      text: "Myasthenia gravis"
+                    },
+                    {
+                      value: "(9) Continuing physical disability",
+                      text: "Continuing physical disability"
+                    },
+                    {
+                      value: "(10) Cancer",
+                      text: "Cancer"
+                    }
+                  ]
+                  }) 
+                }
                 },        
                 {
                   key: { 
@@ -302,6 +329,10 @@
     margin-top: 0.5rem;
   }
 
+  .medex-checkboxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
 
     /* --------------------------------------------------- */
     /* GRID COLUMN BREAKPOINT — 1024px only   */
