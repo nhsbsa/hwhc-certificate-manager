@@ -64,17 +64,7 @@
 
               <div class="nhsuk-grid-row">
     
-                <div class="nhsuk-grid-column-one-half">
-                    {{ pagination( 'nhsuk-u-margin-0' | getPaginationLinks ) }}
-                </div>
-
-                <div class="nhsuk-grid-column-one-half">
-                    {{ button({
-                        html: '<span data-ak="R">Reset</span>',
-                        href: 'reset-search',
-                        classes: 'nhsuk-u-float-right nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-0'
-                    }) }}
-                </div>
+                {{ pagination( 'nhsuk-u-margin-0' | getPaginationLinks ) }}
 
               </div>
 
