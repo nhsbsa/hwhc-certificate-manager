@@ -323,6 +323,7 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
   vertical-align: text-bottom;
   display: inline;
   white-space: nowrap;
+   display: none;
 }
 
 .confidence-level .confidence-score {
