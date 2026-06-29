@@ -1,0 +1,390 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'New medical exemption application' %}
+
+{% block beforeContent %}
+{{ backLink({
+href: 'javascript:history.go(-1)',
+html: '<span data-ak="B">Back</span>'
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <h1 class="nhsuk-heading-m">{{ pageName }}
+      {{ 'medex' | getCertificateTypeTextOrTag( true ) | safe }}
+      {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
+
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+
+
+    <div class="nhsuk-grid-row">
+
+
+      <!-- FULL -->
+      <div class="nhsuk-grid-column-full">
+
+        <div class="nhsuk-card nhsuk-card--grey">
+
+          <!-- HEADER LOCK-UP -->
+          <div class="nhsuk-card__content">
+
+            <div class="nhsuk-card__heading-container">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">Application details</h2>
+
+            </div>
+
+
+            <form class="horizontal-labels" method="post" novalidate>
+
+              <!-- FULL NAME -->
+              {% call fieldset({
+              legend: {
+              text: 'Name',
+              classes: 'nhsuk-u-visually-hidden'
+              }
+              }) %}
+
+              {{ input({
+              label: {
+              html: 'Last name'
+              },
+              id: 'imageLastName',
+              name: 'imageLastName',
+              classes: 'nhsuk-input--width-20'
+              }) }}
+
+              {{ input({
+              label: {
+              html: 'First name'
+              },
+              id: 'imageFirstName',
+              name: 'imageFirstName',
+              classes: 'nhsuk-input--width-20'
+              }) }}
+
+
+
+              {% endcall %}
+
+
+
+              {{ dateInput({
+              id: 'imageDateOfBirth',
+              namePrefix: 'imageDateOfBirth',
+              fieldset: {
+              legend: {
+              html: 'Date of birth'
+              }
+              },
+              items: [
+              {
+              name: 'day',
+              classes: 'nhsuk-input--width-2'
+              },
+              {
+              name: 'month',
+              classes: 'nhsuk-input--width-2'
+              },
+              {
+              name: 'year',
+              classes: 'nhsuk-input--width-4'
+              }
+              ]
+              }) }}
+
+
+              {{ input({
+              label: {
+              html: 'NHS number'
+              },
+              id: 'imageNHSNumber',
+              name: 'imageNHSNumber',
+              classes: 'nhsuk-input--width-10'
+              }) }}
+
+
+              <hr />
+
+              <!-- ADDRESS -->
+              {% call fieldset({
+              legend: {
+              html: 'Address',
+              classes: 'nhsuk-u-visually-hidden'
+              }
+              }) %}
+
+              {{ input({
+              label: {
+              html: 'House number or name ' + 67 | getConfidenceTag
+              },
+              id: 'imageBuildingNumberOrName',
+              name: 'imageBuildingNumberOrName',
+              classes: 'nhsuk-input--width-10',
+              value: data.lookupAddress.buildingNumber
+              }) }}
+
+              {{ input({
+              label: {
+              html: 'Address line 1'
+              },
+              classes: 'nhsuk-input--width-20',
+              id: 'imageAddressLine1',
+              name: 'imageAddressLine1',
+              value: data.lookupAddress.streetName
+              }) }}
+
+              {{ input({
+              label: {
+              html: 'Address line 2 (optional)'
+              },
+              classes: 'nhsuk-input--width-20',
+              id: 'imageAddressLine2',
+              name: 'imageAddressLine2',
+              value: data.lookupAddress.addressLineTwo
+              }) }}
+
+              {{ input({
+              label: {
+              html: 'Town or city'
+              },
+              classes: 'nhsuk-input--width-20',
+              id: 'imageTown',
+              name: 'imageTown',
+              value: data.lookupAddress.town
+              }) }}
+
+              {{ input({
+              label: {
+              html: 'County'
+              },
+              classes: 'nhsuk-input--width-10',
+              id: 'imageCounty',
+              name: 'imageCounty',
+              value: data.lookupAddress.county
+              }) }}
+
+              {{ input({
+              label: {
+              html: 'Postcode'
+              },
+              classes: 'nhsuk-input--width-10',
+              id: 'imagePostcode',
+              name: 'imagePostcode',
+              value: data.lookupAddress.postcode
+              }) }}
+
+              {% endcall %}
+
+              <div class="nhsuk-button-group address-button">
+                {{ button({
+                html: '<span data-ak="G">Populate address fields using address lookup</span>',
+                classes: "nhsuk-button--secondary nhsuk-button--small",
+                href: "/v1/hrtppc/address-lookup?source=newHRT&returnTo=/v1/process-application/new-application"
+                }) }}
+              </div>
+
+              <hr />
+
+
+              <!-- CONTACT DETAILS -->
+
+
+              {{ input({
+              label: {
+              html: 'Phone number (optional)'
+              },
+              attributes: { type: 'tel', autocomplete: 'off' },
+              classes: 'nhsuk-input--width-10',
+              id: 'imagePhoneNumber',
+              name: 'imagePhoneNumber',
+              value: data.imagePhoneNumber
+              }) }}
+
+
+              {{ input({
+              label: {
+              html: 'Email address (optional)'
+              },
+              classes: 'nhsuk-input--width-20',
+              id: 'imageEmailAddress',
+              name: 'imageEmailAddress',
+              value: data.imageEmailAddress
+              }) }}
+
+
+
+             {{ checkboxes({
+  idPrefix: "medicalCondition",
+  name: "editMEDEX.medicalCondition",
+  classes: "medex-checkboxes",
+  fieldset: {
+    legend: {
+      html: '<span data-ak="Y">Medical condition</span>'
+    }
+  },
+  items: [
+    {
+      value: "(1) Permanent fistula",
+      text: "A permanent fistula"
+    },
+    {
+      value: "(2) Epilepsy",
+      text: "Epilepsy"
+    },
+    {
+      value: "(3) Diabetes mellitus",
+      text: "Diabetes mellitus"
+    },
+    {
+      value: "(4) Myxoedema",
+      text: "Myxoedema"
+    },
+    {
+      value: "(5) Hypoparathyroidism",
+      text: "Hypoparathyroidism"
+    },
+    {
+      value: "(6) Diabetes insipidus",
+      text: "Diabetes insipidus"
+    },
+    {
+      value: "(7) Forms of hypoadrenalism",
+      text: "Forms of hypoadrenalism"
+    },
+    {
+      value: "(8) Myasthenia gravis",
+      text: "Myasthenia gravis"
+    },
+    {
+      value: "(9) Continuing physical disability",
+      text: "Continuing physical disability"
+    },
+    {
+      value: "(10) Cancer",
+      text: "Cancer"
+    }
+  ]
+}) }}
+              <hr />
+
+
+              <!-- SIGNATURES -->
+              {{ radios({
+              idPrefix: 'imagePatientSignature',
+              name: 'imagePatientSignature',
+              value: data.imagePatientSignature,
+              classes: 'nhsuk-radios--inline',
+              fieldset: {
+              legend: {
+              text: 'Is the patient signature present?',
+              isPageHeading: false
+              }
+              },
+              items: [
+              { value: 'yes', text: 'Yes' },
+              { value: 'no', text: 'No' }
+              ]
+              }) }}
+
+
+              {{ radios({
+              idPrefix: 'imageHealthcarePractitionerSignature',
+              name: 'imageHealthcarePractitionerSignature',
+              value: data.imageHealthcarePractitionerSignature,
+              classes: 'nhsuk-radios--inline',
+              fieldset: {
+              legend: {
+              text: 'Is the healthcare practitioner signature present?',
+              isPageHeading: false
+              }
+              },
+              items: [
+              { value: 'yes', text: 'Yes' },
+              { value: 'no', text: 'No' }
+              ]
+              }) }}
+
+              {{ radios({
+              idPrefix: 'imageHealthcarePractitionerDetails',
+              name: 'imageHealthcarePractitionerDetails',
+              value: data.imageHealthcarePractitionerDetails,
+              classes: 'nhsuk-radios--inline',
+              fieldset: {
+              legend: {
+              text: 'Are the healthcare practitioner\'s details present?',
+              isPageHeading: false
+              }
+              },
+              items: [
+              { value: 'yes', text: 'Yes' },
+              { value: 'no', text: 'No' }
+              ]
+              }) }}
+
+
+
+              <!-- APPLICATION DATE -->
+              {{ dateInput({
+              id: "application-date",
+              namePrefix: "applicationDate",
+              fieldset: {
+              legend: {
+              text: "Application date"
+              }
+              },
+              items: [
+              {
+              name: "day",
+              classes: "nhsuk-input--width-2"
+              },
+              {
+              name: "month",
+              classes: "nhsuk-input--width-2"
+              },
+              {
+              name: "year",
+              classes: "nhsuk-input--width-4"
+              }
+              ]
+              }) }}
+
+
+
+              <div class="nhsuk-button-group">
+
+                {{ button({
+                html : '<span data-ak="I">Submit application</span>',
+                href: '../dashboard'
+                }) }}
+
+              </div>
+
+            </form>
+
+
+
+
+          </div>
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'Maternity exemption processing' %}
+{% set pageName = 'Paper application processing' %}
 
 {% set checkingRows = '' | getPatientData | getCheckingTableRows %}
 
@@ -53,9 +53,11 @@
                 responsive: true,
                 tableClasses: 'patient-table',
                 head: [
-                        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' },
+                       { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' },
+                        { text: 'Address' },
                         { text: 'Postcode' },
-                        { text: 'Certificate type' },
+                        { text: 'Date of birth' },
+                        { text: 'Type' },
                         { text: 'Status' },
                         { text: 'Reference' }
                       ],
