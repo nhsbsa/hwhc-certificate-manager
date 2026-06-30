@@ -943,3 +943,85 @@ body::before {
     box-shadow: 0 0 0 0.3125rem #ffeb3b;
   }
 }
+
+
+.nhsuk-panel--interruption {
+  background-color: #005eb8;
+}
+
+.nhsuk-panel--interruption .nhsuk-link,
+.nhsuk-panel--interruption a:not(.nhsuk-button) {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.nhsuk-panel--interruption .nhsuk-link .nhsuk-icon,
+.nhsuk-panel--interruption a:not(.nhsuk-button) .nhsuk-icon {
+  fill: #ffffff;
+}
+
+.nhsuk-panel--interruption .nhsuk-link:visited,
+.nhsuk-panel--interruption a:not(.nhsuk-button):visited {
+  color: #ffffff;
+}
+
+.nhsuk-panel--interruption .nhsuk-link:visited .nhsuk-icon,
+.nhsuk-panel--interruption a:not(.nhsuk-button):visited .nhsuk-icon {
+  fill: #ffffff;
+}
+
+.nhsuk-panel--interruption .nhsuk-link:hover, .nhsuk-panel--interruption .nhsuk-link:hover:visited,
+.nhsuk-panel--interruption a:not(.nhsuk-button):hover,
+.nhsuk-panel--interruption a:not(.nhsuk-button):hover:visited {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.nhsuk-panel--interruption .nhsuk-link:hover .nhsuk-icon, .nhsuk-panel--interruption .nhsuk-link:hover:visited .nhsuk-icon,
+.nhsuk-panel--interruption a:not(.nhsuk-button):hover .nhsuk-icon,
+.nhsuk-panel--interruption a:not(.nhsuk-button):hover:visited .nhsuk-icon {
+  fill: #ffffff;
+}
+
+.nhsuk-panel--interruption .nhsuk-link:active, .nhsuk-panel--interruption .nhsuk-link:active:visited,
+.nhsuk-panel--interruption a:not(.nhsuk-button):active,
+.nhsuk-panel--interruption a:not(.nhsuk-button):active:visited {
+  color: #ffffff;
+}
+
+.nhsuk-panel--interruption .nhsuk-link:active .nhsuk-icon, .nhsuk-panel--interruption .nhsuk-link:active:visited .nhsuk-icon,
+.nhsuk-panel--interruption a:not(.nhsuk-button):active .nhsuk-icon,
+.nhsuk-panel--interruption a:not(.nhsuk-button):active:visited .nhsuk-icon {
+  fill: #ffffff;
+}
+
+.nhsuk-panel--interruption .nhsuk-link:focus, .nhsuk-panel--interruption .nhsuk-link:focus:visited,
+.nhsuk-panel--interruption a:not(.nhsuk-button):focus,
+.nhsuk-panel--interruption a:not(.nhsuk-button):focus:visited {
+  outline: 4px solid transparent;
+  background-color: #ffeb3b;
+  box-shadow: 0 -2px #ffeb3b, 0 4px #212b32;
+  text-decoration: none;
+}
+
+.nhsuk-panel--interruption .nhsuk-link:focus,
+.nhsuk-panel--interruption .nhsuk-link:focus .nhsuk-icon, .nhsuk-panel--interruption .nhsuk-link:focus:visited,
+.nhsuk-panel--interruption .nhsuk-link:focus:visited .nhsuk-icon,
+.nhsuk-panel--interruption a:not(.nhsuk-button):focus,
+.nhsuk-panel--interruption a:not(.nhsuk-button):focus .nhsuk-icon,
+.nhsuk-panel--interruption a:not(.nhsuk-button):focus:visited,
+.nhsuk-panel--interruption a:not(.nhsuk-button):focus:visited .nhsuk-icon {
+  color: #212b32;
+  fill: #212b32;
+}
+
+.nhsuk-panel--interruption .nhsuk-link:focus:hover, .nhsuk-panel--interruption .nhsuk-link:focus:visited:hover,
+.nhsuk-panel--interruption a:not(.nhsuk-button):focus:hover,
+.nhsuk-panel--interruption a:not(.nhsuk-button):focus:visited:hover {
+  text-decoration: none;
+}
+
+.nhsuk-panel--interruption .nhsuk-link:not(:focus):not(.\:focus):hover,
+.nhsuk-panel--interruption a:not(.nhsuk-button):not(:focus):not(.\:focus):hover {
+  color: rgba(255, 255, 255, 0.99);
+}

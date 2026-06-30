@@ -1,0 +1,45 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Timeout warning' %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+        <!-- <h1 class="nhsuk-heading-l">{{ pageName }}</h1> -->
+
+<!-- This page shows after 15 minutes of inactivity -->
+
+      <div class="nhsuk-panel nhsuk-panel--interruption">
+  <h1 class="nhsuk-panel__title nhsuk-panel__title--m">
+    This record will close in two minutes due to inactivity.
+  </h1>
+  <div class="nhsuk-panel__body">
+    <p>For security, we will close this record in 2 minutes.</p>
+    
+    <div class="nhsuk-button-group">
+      <a class="nhsuk-button nhsuk-button--reverse" data-module="nhsuk-button" href="#" role="button" draggable="false">
+        Continue working
+      </a>
+
+      <a href="/v1/sign-out">Back to dashboard</a>
+    </div>
+  </div>
+</div>
+
+
+
+    </div>
+</div>
+
+{% endblock %}
