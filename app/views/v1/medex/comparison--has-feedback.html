@@ -30,52 +30,12 @@
     </div>
   </div>
 
-  {% if data.editMATEX.addressLineOne is defined %}
-  {% set addressValue1 = data.editMATEX.addressLineOne %}
-  {% else %}
-    {% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
-  {% endif %}
-
-  {% if data.editMATEX.addressLineTwo is defined %}
-    {% set addressValue2 = data.editMATEX.addressLineTwo %}
-  {% else %}
-    {% set addressValue2 = patient.address.locality %}
-  {% endif %}
-
-  {% if data.editMATEX.town is defined %}
-    {% set townValue = data.editMATEX.town %}
-  {% else %}
-    {% set townValue = patient.address.postTown %}
-  {% endif %}
-
-  {% if data.editMATEX.county is defined %}
-    {% set countyValue = data.editMATEX.county %}
-  {% else %}
-    {% set countyValue = patient.address.county %}
-  {% endif %}
-
-  {% if data.editMATEX.postcode is defined %}
-  {% set postcodeValue = data.editMATEX.postcode %}
-  {% else %}
-    {% set postcodeValue = patient.address.postcode %}
-  {% endif %}
-
-  {% set address %}
-  {{ addressValue1 | trim }}<br>
-  {% if addressValue2 and addressValue2 | trim %}{{ addressValue2 | trim }}<br>{% endif %}
-  {{ townValue | trim }}<br>
-  {% if countyValue and countyValue | trim %}{{ countyValue | trim }}{% endif %}
-  {% endset %}
-  
-  {% if address | trim == '' %}
-    {% set address = '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS' %}
-  {% endif %}
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
           <div class="nhsuk-grid-row">
 
+            
             <!-- TWO THIRDS -->
             <div class="nhsuk-grid-column-two-thirds">
 
@@ -84,78 +44,97 @@
 
                         {{ table({
                             panel: false,
-                            caption: 'Application processing comparison',
+                            caption: 'Processing comparison',
                             captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
+                            attributes: { 'data-focus-image': 'firstName,lastName,dateOfBirth,nhsNumber,address,emailAddress,telephoneNumber,childsDueOrBirthDate,patientSignature,healthcarePractitionerSignature,healthcarePractitionerDetails' },
+                            tableClasses: 'has-error',
                             firstCellIsHeader: true,
                             head: [
                                 { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
+                                { text: 'Shown' },
                                 { text: 'Proposed value' },
                                 { text: 'Accepted value' }
                             ],
                             rows: [
                                 [
                                     { text: 'First name' },
+                                    { html: 'Yes' },
                                     { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
                                     { text: patient.firstName or 'Sarah' }
                                 ],
                                 [
-                                    { text: 'Last name' },
-                                    { text: 'Adam' },
-                                    { text: patient.lastName or 'Jahnson' }
+                                    { text: 'Last name', classes: 'error' },
+                                    { html: 'Yes' },
+                                    { text: '' },
+                                    { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' }
                                 ],
                                 [
                                     { text: 'Date of birth' },
+                                    { html: 'No' },
                                     { text: '2 July 1995' },
                                     { text: '2 July 1995' }
-                                ],
+                                  ],
                                 [
                                     { text: 'NHS number' },
+                                    { html: 'No' },
                                     { text: '1252 567 987' },
                                     { text: '1252 567 987' }
                                 ],
                                 [
                                     { text: 'Address' },
+                                    { html: 'No' },
                                     { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
-                                    { html: address or '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
+                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
                                 ],
                                 [
                                     { text: 'Phone number' },
+                                    { html: 'No' },
                                     { html: '07911 123456' },
                                     { html: '07911 123456' }
                                 ],
                                 [
                                     { text: 'Email address' },
+                                    { html: 'Empty' },
                                     { html: '' },
                                     { html: '' }
                                 ],
                                 [
                                     { text: "Child's due or birth date" },
+                                    { html: 'No' },
                                     { html: '10 January 2026' },
                                     { html: '10 January 2026' }
+                                ],
+                                [
+                                    { text: 'Patient signature' },
+                                    { html: 'No' },
+                                    { html: 'Yes' },
+                                    { html: 'Yes' }
+                                ],
+                                [
+                                    { text: 'Healthcare practitioner signature' },
+                                    { html: 'No' },
+                                    { html: 'Yes' },
+                                    { html: 'Yes' }
+                                ],
+                                [
+                                    { text: 'Healthcare practitioner details' },
+                                    { html: 'No' },
+                                    { html: 'Yes' },
+                                    { html: 'Yes' }
                                 ]
                             ]
                             }) }}
 
 
-                            {% if data.role === 'callCentre' %}
+                            <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-3">Feedback</h2>
+                            <p class="nhsuk-body-s">Left by Bob Archer (BOARC) on {{ 0 | alterTodaysDateByNumberOfDays }}</p>
 
-                                  {{ textarea({
-                                        name: 'notes',
-                                        id: 'notes',
-                                        classes: 'nhsuk-u-width-two-thirds',
-                                        label: {
-                                            text: 'Notes (optional)',
-                                            isPageHeading: false
-                                        }
-                                  }) }}
+                            {{ insetText({
+                              classes: 'nhsuk-u-margin-top-0',
+                              html: '<p>The last name is incorrect...</p>'
+                            }) }}
 
-                                  {{ button({
-                                    href: 'case',
-                                    text: 'Add note'
-                                }) }}
-
-                                
-                            {% endif %}
+                            
 
                     </div>
                 </div>
@@ -168,7 +147,7 @@
             <div class="nhsuk-grid-column-one-third sticky-column">
 
               {% from '../macros/image.njk' import image %}
-              {{ image() }}
+              {{ image('medex') }}
 
               {% from '../macros/notes.njk' import notes %}
               {{ notes( patient ) }}

@@ -1,0 +1,186 @@
+{% extends 'layout-fullscreen.html' %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+      </h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+          <div class="nhsuk-grid-row">
+
+
+            <!-- TWO THIRDS -->
+            <div class="nhsuk-grid-column-two-thirds">
+
+               <div class="nhsuk-card nhsuk-card--grey">
+                    <div class="nhsuk-card__content">
+
+                        {{ table({
+                            panel: false,
+                            caption: 'Processing comparison',
+                            captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
+                            attributes: { 'data-focus-image': 'firstName,lastName,dateOfBirth,nhsNumber,address,emailAddress,telephoneNumber,childsDueOrBirthDate,patientSignature,healthcarePractitionerSignature,healthcarePractitionerDetails' },
+                            tableClasses: 'has-error',
+                            firstCellIsHeader: true,
+                            head: [
+                                { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
+                                { text: 'Shown' },
+                                { text: 'Proposed value' },
+                                { text: 'Accepted value' },
+                                { html: '<span class="nhsuk-u-visually-hidden">Action</span>' }
+                            ],
+                            rows: [
+                                [
+                                    { text: 'First name' },
+                                    { html: 'Yes' },
+                                    { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
+                                    { text: patient.firstName or 'Sarah' },
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageFirstName">Change<span class="nhsuk-u-visually-hidden"> first name</span></a>' }
+                                ],
+                                [
+                                    { text: 'Last name', classes: 'error' },
+                                    { html: 'Yes' },
+                                    { text: '' },
+                                    { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' },
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageLastName">Change<span class="nhsuk-u-visually-hidden"> last name</span></a>' }
+                                ],
+                                [
+                                    { text: 'Date of birth' },
+                                    { html: 'No' },
+                                    { text: '2 July 1995' },
+                                    { text: '2 July 1995' },
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageDateOfBirth-day">Change<span class="nhsuk-u-visually-hidden"> date of birth</span></a>' }
+                                ],
+                                [
+                                    { text: 'NHS number' },
+                                    { html: 'No' },
+                                    { text: '1252 567 987' },
+                                    { text: '1252 567 987' },
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageNHSNumber">Change<span class="nhsuk-u-visually-hidden"> NHS number</span></a>' }
+                                ],
+                                [
+                                    { text: 'Address' },
+                                    { html: 'No' },
+                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
+                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
+                                    { html: '<a href="comparison--edit?showAllFields=true#imagePostcode">Change<span class="nhsuk-u-visually-hidden"> address</span></a>' }
+                                ],
+                                [
+                                    { text: 'Phone number' },
+                                    { html: 'No' },
+                                    { html: '07911 123456' },
+                                    { html: '07911 123456' },
+                                    { html: '<a href="comparison--edit?showAllFields=true#imagePhoneNumber">Change<span class="nhsuk-u-visually-hidden"> phone number</span></a>' }
+                                ],
+                                [
+                                    { text: 'Email address' },
+                                    { html: 'Empty' },
+                                    { html: '' },
+                                    { html: '' },
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageEmailAddress">Change<span class="nhsuk-u-visually-hidden"> email address</span></a>' }
+                                ],
+                                [
+                                    { text: "Child's due or birth date" },
+                                    { html: 'No' },
+                                    { html: '10 January 2026' },
+                                    { html: '10 January 2026' },
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageBabyDateOfBirth">Change<span class="nhsuk-u-visually-hidden"> baby\'s birth date</span></a>' }
+                                ],
+                                [
+                                    { text: 'Patient signature' },
+                                    { html: 'No' },
+                                    { html: 'Yes' },
+                                    { html: 'Yes' },
+                                    { html: '<a href="comparison--edit?showAllFields=true#imagePatientSignature">Change<span class="nhsuk-u-visually-hidden"> whether patient signature is present</span></a>' }
+                                ],
+                                [
+                                    { text: 'Healthcare practitioner signature' },
+                                    { html: 'No' },
+                                    { html: 'Yes' },
+                                    { html: 'Yes' },
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageHealthcarePractitionerSignature">Change<span class="nhsuk-u-visually-hidden"> whether healthcare practitioner signature is present</span></a>' }
+                                ],
+                                [
+                                    { text: 'Healthcare practitioner details' },
+                                    { html: 'No' },
+                                    { html: 'Yes' },
+                                    { html: 'Yes' },
+                                    { html: '<a href="comparison--edit?showAllFields=true#imageHealthcarePractitionerDetails">Change<span class="nhsuk-u-visually-hidden"> whether the healthcare practitioner\'s details are present</span></a>' }
+                                ]
+                            ]
+                            }) }}
+
+
+                            <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-3">Feedback</h2>
+                            <p class="nhsuk-body-s">Left by Bob Archer (BOARC) on {{ 0 | alterTodaysDateByNumberOfDays }}</p>
+
+                            {{ insetText({
+                              classes: 'nhsuk-u-margin-top-0',
+                              html: '<p>The last name is incorrect...</p>'
+                            }) }}
+
+
+
+                            <div class="nhsuk-button-group">
+
+                              {{ button({
+                                html: '<span data-ak="I">Approve application</span>',
+                                href: '../process-application/confirmation--approved?backTo=checking'
+                              }) }}
+
+                              {{ button({
+                                html: '<span data-ak="K">Cannot process application</span>',
+                                href: '../process-application/cannot-process-application--horizontal-labels?backTo=checking',
+                                classes: 'nhsuk-button--secondary'
+                              }) }}
+
+                            </div>
+              
+
+                    </div>
+                </div>
+                
+
+            </div>
+
+
+             <!-- ONE THIRD -->
+            <div class="nhsuk-grid-column-one-third sticky-column">
+
+              {% from '../macros/image.njk' import image %}
+              {{ image() }}
+
+              {% from '../macros/notes.njk' import notes %}
+              {{ notes( patient ) }}
+
+            </div>
+
+          </div>
+
+    </div>
+  </div>
+
+{% endblock %}

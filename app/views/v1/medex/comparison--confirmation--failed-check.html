@@ -1,0 +1,80 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Quality check complete' %}
+{% set searchProcessor = data.searchProcessor or 'JASMI' %}
+
+{% block content %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+            <!-- TWO THIRDS -->
+            <div class="nhsuk-grid-column-two-thirds">
+
+
+                       <!-- APPLICATION FAILED QUALITY CONTROL -->
+                      {% set panelHTML %}
+
+                      <p>The application failed the quality check because of incorrect or missing information for:</p>
+                      <ul>
+                        <li>Last name</li>
+                      </ul> 
+
+                      {% endset %}
+
+                      {{ panel({
+                          titleText: pageName,
+                          html: panelHTML
+                      }) }}
+
+
+                      <h2 class="nhsuk-heading-s">What happens next?</h2>
+                      <p class="nhsuk-body">We’ll tell {{ data.processors[searchProcessor].name }} what corrections they need to make and any other feedback you gave. When they have made these corrections, you’ll need to review the application again.</p>
+
+                      <div class="nhsuk-button-group">
+
+                        {% set destination = '../dashboard--quality-control' %}
+                        {% set classes = '' %}
+
+                        {% if data.role === 'backOfficeSupervisor' %}
+                          
+                          {% set destination = '../dashboard--supervisor' %}
+                          {% set classes = 'nhsuk-button--secondary' %}
+
+                          {{ button({
+                            text : 'Back to ' + data.processors[data.searchProcessor].name +"'s applications",
+                            href: '../processor?searchProcessor=' + data.searchProcessor
+                          }) }}
+
+                        {% endif %}
+
+                        {{ button({
+                          html: '<span data-ak="B">Back to dashboard</span>',
+                          href: destination,
+                          classes: classes
+                        }) }}
+
+                        {{ button({
+                          html: '<span data-ak="I">Next application to check</span>',
+                          href: '#',
+                          classes: 'nhsuk-button--secondary'
+                        }) }}
+
+                      </div>
+
+
+
+                
+
+            </div>
+
+          </div>
+
+    </div>
+  </div>
+
+{% endblock %}

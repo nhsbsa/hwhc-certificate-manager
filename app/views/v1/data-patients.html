@@ -820,7 +820,14 @@
                     obj.processor = processor.key;
                     obj.processorName = processor.name;
                     
-                    obj.certificateType = certificateTypes[Math.floor(Math.random() * certificateTypes.length)];
+                 const weightedTypes = [
+  'matex','matex','matex',
+  'medex','medex','medex',
+  'hrtppc',
+];
+
+obj.certificateType =
+  weightedTypes[Math.floor(Math.random() * weightedTypes.length)];
                     console.log(obj.certificateType);
 
                     obj.status = ( obj.certificateType === 'hrtppc' ) ? statusesHRTPPC[Math.round(Math.random()*(statusesHRTPPC.length-1))] : statusesMatex[Math.round(Math.random()*(statusesMatex.length-1))];
@@ -830,38 +837,51 @@
                       obj.status = ( Math.round(Math.random()*2) === 2 ) ? 'active' : obj.status;
                     }
 
-
+// Force some MEDEX records into checking
+if (obj.certificateType === 'medex' && Math.random() < 0.4) {
+  obj.status = ['accepted', 'on-hold', 'rejected'][
+    Math.floor(Math.random() * 3)
+  ];
+  obj.checking = true;
+  obj.checkType = 'quality';
+}
                     obj.dateOfBirth = _generateDateOfBirth();
 
                     obj.checking = false;
+
+
 
                     //
                     // This bit of code overwrites the random values for JASMI (the trainee)
                     // The part in the else statement selects just one record for a quality check...
                     //
-                    if( obj.processor === 'JASMI' ){
+if( obj.processor === 'JASMI' ){
+  obj.checking = true;
+  obj.checkType = 'supervisor';
 
-                      // Checking all of this guy's applications...
-                      obj.checking = true;
-                      obj.checkType = 'supervisor';
-                      obj.certificateType = 'matex';
+  obj.certificateType = Math.random() < 0.5
+    ? 'matex'
+    : 'medex';
 
-                      
-                      const checkingStatuses = ['on-hold','accepted','rejected'];
-                      obj.status = checkingStatuses[Math.round(Math.random()*(checkingStatuses.length-1))];
+  const checkingStatuses = ['on-hold','accepted','rejected'];
 
-                    } else {
+  obj.status = checkingStatuses[
+    Math.floor(Math.random() * checkingStatuses.length)
+  ];
+}
+else {
+  if (
+    !obj.checking &&
+    (obj.certificateType === 'matex' || obj.certificateType === 'medex') &&
+    ['accepted','on-hold','rejected'].indexOf(obj.status) > -1 &&
+    !processors[obj.processor]
+  ) {
+    obj.checking = true;
+    obj.checkType = 'quality';
+    processors[obj.processor] = true;
+  }
+}
 
-                      // Only checking one of these...
-                      if( (obj.certificateType === 'matex' || obj.certificateType === 'medex') && ['accepted','on-hold','rejected'].indexOf( obj.status ) > -1 && !processors[obj.processor] ){
-                        console.log('FOUND ONE ' + obj.status + ' FOR '+ obj.processor);
-
-                        obj.checking = true;
-                        obj.checkType = 'quality';
-                        processors[obj.processor] = true;
-                      }
-
-                    }
                     
                     
                     obj.certificateReference = _generateCertificateReference( obj.certificateType, obj.status );
