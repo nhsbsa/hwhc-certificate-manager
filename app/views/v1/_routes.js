@@ -58,6 +58,31 @@ function processCurrentApplication(req) {
   hydrateImageFields(req, queue[req.session.data.currentIndex]);
 }
 
+const PROCESS_OUTCOMES = ['accepted', 'reject', 'further-information'];
+
+function initMedexQueue(req) {
+  if (req.session.data.paperMedexQueue) return;
+
+  const fixtures = req.session.data.patientFixtures || [];
+
+  const paperMedex = fixtures.filter(p =>
+    p.certificateType === 'medex' && p.channel === 'Paper'
+  );
+
+  req.session.data.paperMedexQueue = paperMedex;
+  req.session.data.medexIndex = 0;
+}
+
+function processMedexApplication(req) {
+  initMedexQueue(req);
+
+  const queue = req.session.data.paperMedexQueue;
+
+  req.session.data.medexIndex = (req.session.data.medexIndex + 1) % queue.length;
+
+  hydrateImageFields(req, queue[req.session.data.medexIndex]);
+}
+
 router.post(/index/, function (req, res) {
     
     let destination = 'search';
@@ -120,45 +145,169 @@ router.post(/process-application\/cannot-process-application--horizontal-labels-
 
     processCurrentApplication(req);
 
-    return res.redirect('/v1/process-application/experimental--horizontal-labels');
+    return res.redirect('/v1/process-application/matex');
 
 });
 
-router.get(/process-application\/experimental--horizontal-labels/, function (req, res) {
-  
+router.get(/process-application\/matex/, function (req, res) {
+
   initPaperMatexQueue(req);
 
+  const matexScenarioMap = { accepted: 0, reject: 2, 'further-information': 4 };
+  if (req.query.scenario && matexScenarioMap[req.query.scenario] !== undefined) {
+    req.session.data.scenarioIndex = matexScenarioMap[req.query.scenario];
+  } else if (req.session.data.scenarioIndex === undefined) {
+    req.session.data.scenarioIndex = 0;
+  }
+
   const queue = req.session.data.paperMatexQueue;
-  const index = req.session.data.currentIndex;
+  const index = req.session.data.currentIndex || 0;
+  if (req.query.view) {
+    hydrateImageFields(req, queue[((index - 1) + queue.length) % queue.length]);
+  } else {
+    hydrateImageFields(req, queue[index]);
+  }
 
-
-  res.render('v1/process-application/experimental--horizontal-labels', {
+  res.render('v1/process-application/matex', {
     processedToday: req.session.data.applicationStats.total
   });
 });
 
 
-router.post(/process-application\/experimental--horizontal-labels/, function (req, res) {
+router.post(/process-application\/matex/, function (req, res) {
 
   if (req.body.applicationDecision === 'approve') {
 
     const stats = req.session.data.applicationStats;
 
-    stats.accepted += 1;
+    const idx = req.session.data.scenarioIndex || 0;
+    const outcome = PROCESS_OUTCOMES[Math.floor(idx / 2) % 3];
+
     stats.total += 1;
+    if (outcome === 'accepted') stats.accepted += 1;
+    else if (outcome === 'reject') stats.rejected += 1;
+    else if (outcome === 'further-information') stats.onHold += 1;
+
+    req.session.data.approvedFirstName = req.session.data.imageFirstName;
+    req.session.data.approvedLastName = req.session.data.imageLastName;
+    const rawCertMatex = String(Math.floor(Math.random() * 9000000000) + 1000000000);
+    req.session.data.certNumber = `${rawCertMatex.slice(0,4)} ${rawCertMatex.slice(4,7)} ${rawCertMatex.slice(7)}`;
+    req.session.data.certificateType = 'matex';
 
     processCurrentApplication(req);
 
-    return res.redirect('/v1/process-application/experimental--horizontal-labels');
+    req.session.data.scenarioIndex = (idx + 1) % 6;
+
+    return res.redirect('/v1/process-application/scenarios/' + outcome);
   }
 
   if (req.body.applicationDecision === 'cannotProcess') {
     delete req.session.data.cannotProcessApplication;
     delete req.session.data.cannotProcessApplicationNotes;
     delete req.session.data.reasonForRejection;
-    
+
     return res.redirect('/v1/process-application/cannot-process-application--horizontal-labels');
   }
+});
+
+
+router.get(/process-application\/medex/, function (req, res) {
+
+  initMedexQueue(req);
+
+  const medexScenarioMap = { accepted: 1, reject: 3, 'further-information': 5 };
+  if (req.query.scenario && medexScenarioMap[req.query.scenario] !== undefined) {
+    req.session.data.scenarioIndex = medexScenarioMap[req.query.scenario];
+  } else if (req.session.data.scenarioIndex === undefined) {
+    req.session.data.scenarioIndex = 0;
+  }
+
+  const queue = req.session.data.paperMedexQueue;
+  const medexIdx = req.session.data.medexIndex || 0;
+  if (req.query.view) {
+    hydrateImageFields(req, queue[((medexIdx - 1) + queue.length) % queue.length]);
+  } else {
+    hydrateImageFields(req, queue[medexIdx]);
+  }
+
+  res.render('v1/process-application/medex', {
+    processedToday: req.session.data.applicationStats.total
+  });
+});
+
+
+router.post(/process-application\/medex/, function (req, res) {
+
+  if (req.body.applicationDecision === 'approve') {
+
+    const stats = req.session.data.applicationStats;
+
+    const idx = req.session.data.scenarioIndex || 0;
+    const outcome = PROCESS_OUTCOMES[Math.floor(idx / 2) % 3];
+
+    stats.total += 1;
+    if (outcome === 'accepted') stats.accepted += 1;
+    else if (outcome === 'reject') stats.rejected += 1;
+    else if (outcome === 'further-information') stats.onHold += 1;
+
+    req.session.data.approvedFirstName = req.session.data.imageFirstName;
+    req.session.data.approvedLastName = req.session.data.imageLastName;
+    const rawCertMedex = String(Math.floor(Math.random() * 9000000000) + 1000000000);
+    req.session.data.certNumber = `${rawCertMedex.slice(0,4)} ${rawCertMedex.slice(4,7)} ${rawCertMedex.slice(7)}`;
+    req.session.data.certificateType = 'medex';
+
+    processMedexApplication(req);
+
+    req.session.data.scenarioIndex = (idx + 1) % 6;
+
+    return res.redirect('/v1/process-application/scenarios/' + outcome);
+  }
+
+  if (req.body.applicationDecision === 'cannotProcess') {
+    delete req.session.data.cannotProcessApplication;
+    delete req.session.data.cannotProcessApplicationNotes;
+    delete req.session.data.reasonForRejection;
+
+    return res.redirect('/v1/process-application/cannot-process-application--horizontal-labels');
+  }
+});
+
+
+
+router.get(/process-application\/scenarios\/accepted/, function (req, res) {
+  res.render('v1/process-application/scenarios/accepted', {
+    processedToday: req.session.data.applicationStats.total
+  });
+});
+
+router.get(/process-application\/scenarios\/reject/, function (req, res) {
+  res.render('v1/process-application/scenarios/reject', {
+    processedToday: req.session.data.applicationStats.total
+  });
+});
+
+router.get(/process-application\/scenarios\/further-information/, function (req, res) {
+  res.render('v1/process-application/scenarios/further-information', {
+    processedToday: req.session.data.applicationStats.total
+  });
+});
+
+
+router.post(/process-application\/scenarios\/reject/, function (req, res) {
+  const idx = req.session.data.scenarioIndex || 0;
+  const nextType = idx % 2 === 0 ? 'matex' : 'medex';
+  return res.redirect('/v1/process-application/' + nextType);
+});
+
+router.post(/process-application\/scenarios\/further-information/, function (req, res) {
+  req.session.data.confirmationType = 'further-information';
+  return res.redirect('/v1/process-application/scenarios/confirm');
+});
+
+router.get(/process-application\/scenarios\/confirm/, function (req, res) {
+  res.render('v1/process-application/scenarios/confirm', {
+    processedToday: req.session.data.applicationStats.total
+  });
 });
 
 
@@ -295,10 +444,14 @@ router.get(/process-application\/start-processing/, function (req, res) {
     delete req.session.data.applicationDecision;
 
     // Re‑initialise cleanly
+    delete req.session.data.paperMedexQueue;
+    delete req.session.data.medexIndex;
+    req.session.data.scenarioIndex = 0;
+
     initPaperMatexQueue(req);
 
     res.redirect(
-      '/v1/process-application/experimental--horizontal-labels'
+      '/v1/process-application/matex'
     );
   }
 );
@@ -352,7 +505,7 @@ router.post(/process-application\/send-a-letter/, function (req, res) {
     res.redirect( destination );
 });
 
-router.post(/process-application\/experimental--horizontal-labels/, function (req, res) {
+router.post(/process-application\/matex/, function (req, res) {
     const destination = 'review-application';
     res.redirect( destination );
 });

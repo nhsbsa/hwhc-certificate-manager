@@ -169,30 +169,17 @@
 
                                 <form method="post" novalidate>
 
-                                {{ radios({
-                                idPrefix: 'processingApproved',
-                                name: 'processingApproved',
-                                fieldset: {
-                                    legend: {
-                                        text: 'Has the application been processed correctly?',
-                                        classes: 'nhsuk-fieldset__legend--m',
-                                        isPageHeading: false
-                                    }
-                                },
-                                items: [
-                                    {
-                                        value: 'yes',
-                                        html: '<span data-ak="L">Yes</span>'
-                                    },
-                                    {
-                                        value: 'no',
-                                        html: '<span data-ak="N">No</span>',
-                                        conditional: {
-                                            html: noHTML
-                                        }
-                                    }
-                                ]
-                                }) }}
+                        <div class="nhsuk-u-width-one-half">
+                            <div class="nhsuk-form-group">
+                                <label class="nhsuk-label" for="example-right-size">
+                                    Add a comment (optional)
+                                </label>
+                        
+                                <textarea class="nhsuk-textarea" id="example-right-size" name="exampleRightSize" rows="3"
+                                    aria-describedby="example-right-size-hint"></textarea>
+                            </div>
+                        
+                        </div>
                                
 
                                 {{ button({

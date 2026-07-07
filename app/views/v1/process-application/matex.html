@@ -1,20 +1,6 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% if data.patientID %}
-{% set patient = data.patientID | getPatientData %}
-{% endif %}
-
-{% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
-
-{% block pageTitle %}
-{{ pageName }} {{ patient.certificateReference }} - HwHC certificate manager - NHS
-{% endblock %}
-
-{% set errors = {
-  imageLastName: {
-    text: 'Last name is incorrect'
-  }
-} %}
+{% set pageName = 'Application 2025 11 18 18 12 16N3000049' %}
 
 {% block beforeContent %}
   {{ backLink({
@@ -26,57 +12,50 @@
 {% block content %}
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-      {% set errorList = [] %}
+    <div class="nhsuk-grid-column-one-half">
 
-      {% for field, error in errors %}
-        {% set errorList = errorList.concat([{
-          href: '#' ~ field,
-          text: error.text
-        }]) %}
-      {% endfor %}
-      
-      {% if errorList | length %}
-        {{ errorSummary({
-          titleText: 'Feedback from supervisor',
-          descriptionText: "Good work so far, trainee! However, I think the last name should be " + patient.lastName + ".",
-          errorList: errorList
-        }) }}
-      {% endif %}
-
-      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
-        {{ (patient.certificateType or 'medex') | getCertificateTypeTextOrTag( true ) | safe }}
-        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
-      </h1>
+      <h1 class="nhsuk-heading-m">{{ pageName }}
+        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
 
     </div>
-  </div>
+    <div class="nhsuk-grid-column-one-half">
+      {% set insetTextHtml %}
+      <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
+    {% endset %}
 
+    {{ insetText({
+      html: insetTextHtml,
+      classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
+    }) }}
+    </div>
+  </div>
+  
   {% set patientLookup = data.lookupPatientAddress or {} %}
   
   {% if patientLookup.buildingNumber is defined %}
   {% set patientBuildingNumber = patientLookup.buildingNumber %}
   {% else %}
-  {% set patientBuildingNumber = patient.address.buildingNumber %}
+  {% set patientBuildingNumber = data.imageBuildingNumberOrName %}
   {% endif %}
   
-  {% set patientAddressLine1 = patientLookup.streetName or patient.address.streetName %}
+  {% set patientAddressLine1 = patientLookup.streetName or data.imageAddressLine1 %}
   
   {% if patientLookup.addressLineTwo is defined %}
   {% set patientAddressLine2 = patientLookup.addressLineTwo %}
   {% else %}
-  {% set patientAddressLine2 = '' or patient.address.locality %}
+  {% set patientAddressLine2 = '' or data.imageAddressLine2 %}
   {% endif %}
   
-  {% set patientTown = patientLookup.town or patient.address.postTown %}
-
+  {% set patientTown = patientLookup.town or data.imageTown %}
+  
   {% if patientCounty is defined %}
   {% set patientCounty = patientLookup.county  or patient.address.county %}
   {% else %}
   {% set patientCounty = '' %}
   {% endif %}
-
-  {% set patientPostcode = patientLookup.postcode or patient.address.postcode %}
+  
+  {% set patientPostcode = patientLookup.postcode or data.imagePostcode %}
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
@@ -89,7 +68,7 @@
             <div class="nhsuk-grid-column-one-half sticky-column">
 
               {% from '../macros/image.njk' import image %}
-              {{ image(patient.certificateType) }}
+              {{ image() }}
 
             </div>
 
@@ -103,6 +82,7 @@
 
                     <div class="nhsuk-card__heading-container">
                       <h2 class="nhsuk-card__heading nhsuk-heading-m">Application details</h2>
+
                       <div class="nhsuk-card__actions">
                         {{ button({
                           id: 'toggleButton',
@@ -122,7 +102,7 @@
 
                       const toggleButton = document.querySelector('#toggleButton');
 
-                      const highlightedFields = document.querySelectorAll('.nhsuk-label.nhsuk-form-group--error');
+                      const highlightedFields = document.querySelectorAll('.horizontal-labels .nhsuk-label:not(.nhsuk-date-input__label):has(.confidence-level), .horizontal-labels .nhsuk-fieldset__legend:not(.nhsuk-u-visually-hidden):has(.confidence-level)');
                       const allFields = document.querySelectorAll( '.horizontal-labels .nhsuk-label:not(.nhsuk-date-input__label), .horizontal-labels .nhsuk-fieldset__legend:not(.nhsuk-u-visually-hidden)' );
 
                       const formFields = Array.from(
@@ -233,42 +213,16 @@
                             if (event.key === 'Enter') {
                               event.preventDefault();
 
-                              // Show tick 
+                              // Confirm current field
                               markFieldConfirmed(input);
 
-                              // Remove error tag from label
-                              const label = document.querySelector(`label[for="${input.id}"]`);
-                              if (label) {
-                                label.classList.remove('nhsuk-form-group--error');
-                              }
-
-                              // Remove error border from input
-                              input.classList.remove('nhsuk-input--error');
-                              input.removeAttribute('aria-invalid');
-                              
-                              // Remove corresponding item from error summary
-                              const errorSummary = document.querySelector('.nhsuk-error-summary');
-
-                              if (errorSummary) {
-                                const links = errorSummary.querySelectorAll('a');
-
-                                links.forEach(link => {
-                                  if (link.getAttribute('href') === `#${input.id}`) {
-                                    const listItem = link.closest('li');
-                                    if (listItem) listItem.remove();
-                                  }
-                                });
-
-                                // If no errors left, remove the summary entirely
-                                if (!errorSummary.querySelector('li')) {
-                                  errorSummary.remove();
-                                }
-                              }
-
-
                               // Move focus to the next field
-                              const currentIndex = formFields.indexOf(input);
-                              const nextField = formFields[currentIndex + 1];
+                              const visibleFields = Array.from(
+                                document.querySelectorAll('.horizontal-labels input, .horizontal-labels select, .horizontal-labels textarea')
+                              ).filter(field => !field.disabled && field.type !== 'hidden' && field.offsetParent !== null);
+
+                              const currentIndex = visibleFields.indexOf(input);
+                              const nextField = visibleFields[currentIndex + 1];
 
                               if (nextField) {
                                 nextField.focus();
@@ -345,6 +299,8 @@
 
               <form class="horizontal-labels" method="post" novalidate>
 
+                <input type="hidden" name="applicationReference" value="{{ pageName }}">
+
                 <!-- FORM TYPE -->
 
                 {% set versions = [ 'FW81217', 'FW80104', 'FW80110', 'FW80211', 'FW80215', 'FW80406', 'FW80702', 'FW80710', 'FW80803', 'FW81207'] %}
@@ -378,63 +334,59 @@
                   }
                 }) %}
 
-                <div class="nhsuk-form-group ">
-                  <label
-                    class="nhsuk-label{% if errors.imageLastName %} nhsuk-form-group--error{% endif %}"
-                    for="imageLastName">
-                    Last name
-                  </label>
-                  {{ input({
+                {{ input({
+                    label: {
+                      html: 'Last name ' + (data.confidence.lastName | default(null)) | getConfidenceTag
+                    },
                     id: 'imageLastName',
                     name: 'imageLastName',
-                    classes: 'nhsuk-input--width-20 nhsuk-input--error',
-                    value: (patient.lastName | changeOneLetter),
-                    attributes: { 'data-focus-image': 'lastName' }
+                    attributes: { 'data-focus-image' : 'lastName' },
+                    classes: 'nhsuk-input--width-20',
+                    value: data.imageLastName
                   }) }}
-                </div>
-
-
-                
 
                   {{ input({
                     label: {
-                      html: 'First name'
+                      html: 'First name ' + (data.confidence.firstName | default(null)) | getConfidenceTag
                     },
                     id: 'imageFirstName',
                     name: 'imageFirstName',
                     attributes: { 'data-focus-image' : 'firstName' },
-                    value: patient.firstName,
+                    value: data.imageFirstName,
                     classes: 'nhsuk-input--width-20'
                   }) }}
 
+                  
+
                 {% endcall %}
 
+                {% set dobConfidence = data.confidence.dateOfBirth | default(null) %}
 
                 {{ dateInput({
-                  id: 'dateOfBirth',
-                  namePrefix: 'dateOfBirth',
+                  id: 'imageDateOfBirth',
+                  namePrefix: 'imageDateOfBirth',
                   fieldset: {
                     legend: {
-                      html: 'Date of birth'
+                      html: 'Date of birth ' + dobConfidence | getConfidenceTag
                     }
                   },
                   items: [
                     {
                       name: 'day',
                       classes: 'nhsuk-input--width-2',
-                      value: patient.dateOfBirth.day,
+                      value: data.imageDateOfBirth.day,
                       attributes: { 'data-focus-image' : 'dateOfBirth' }
                     },
                     {
                       name: 'month',
                       classes: 'nhsuk-input--width-2',
-                      value: patient.dateOfBirth.month,
+                      value: data.imageDateOfBirth.month,
                       attributes: { 'data-focus-image' : 'dateOfBirth' }
                     },
                     {
                       name: 'year',
                       classes: 'nhsuk-input--width-4',
-                      value: patient.dateOfBirth.year,
+                      value: data.imageDateOfBirth.year,
                       attributes: { 'data-focus-image' : 'dateOfBirth' }
                     }
                   ]
@@ -449,7 +401,7 @@
                     name: 'imageNHSNumber',
                     attributes: { 'data-focus-image' : 'nhsNumber' },
                     classes: 'nhsuk-input--width-10',
-                    value: patient.nhsNumber
+                    value: data.imageNHSNumber
                   }) }}
 
 
@@ -538,7 +490,7 @@
                     {{ button({
                       html: '<span data-ak="G">Change address fields using address lookup</span>',
                       classes: "nhsuk-button--secondary nhsuk-button--small",
-                      href: "/v1/medex/address-lookup?source=medex&addressTarget=patient&returnTo=%2Fv1%2Fmedex%2Fapplication--correction"
+                      href: "/v1/matex/address-lookup?source=matex&addressTarget=patient&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dfalse%23postcode"
                     }) }}
                   </div>
 
@@ -556,7 +508,7 @@
                       classes: 'nhsuk-input--width-10',
                       id: 'imagePhoneNumber',
                       name: 'imagePhoneNumber',
-                      value: patient.phoneNumber or '07911 123456'
+                      value: data.imagePhoneNumber or '07911 123456'
                   }) }}
 
 
@@ -569,7 +521,7 @@
                       id: 'imageEmailAddress',
                       name: 'imageEmailAddress',
                       attributes: { 'data-focus-image' : 'emailAddress' },
-                      value: patient.emailAddress
+                      value: data.imageEmailAddress
                   }) }}
 
 
@@ -578,104 +530,36 @@
 
               
 
-       
-                <div class="nhsuk-form-group">
-
-                    {{ checkboxes({
-                      idPrefix: "medicalCondition",
-                      name: "editMEDEX.medicalCondition",
-                      classes: "medex-checkboxes",
-                      fieldset: {
-                        legend: {
-                          html: '<span data-ak="Y">Medical condition</span>',
-                          size: "s",
-                          isPageHeading: false
-                        }
-                      },
-                      items: [
-                      {
-                        value: "(1) Permanent fistula",
-                        text: "A permanent fistula",
-                    
-                        attributes: { "data-focus-image": "permanentFistula" }
-                      },
-                      {
-                        value: "(2) Epilepsy",
-                        text: "Epilepsy",
-             
-                        attributes: { "data-focus-image": "epilepsy" }
-                      },
-                      {
-                        value: "(3) Diabetes mellitus",
-                        text: "Diabetes mellitus",
-               
-                        attributes: { "data-focus-image": "diabetesMellitus" }
-                      },
-                      {
-                        value: "(4) Myxoedema",
-                        text: "Myxoedema",
-                 
-                        attributes: { "data-focus-image": "myxoedema" }
-                      },
-                      {
-                        value: "(5) Hypoparathyroidism",
-                        text: "Hypoparathyroidism",
-                   
-                        attributes: { "data-focus-image": "hypoparathyroidism" }
-                      },
-                      {
-                        value: "(6) Diabetes insipidus",
-                        text: "Diabetes insipidus",
-             
-                        attributes: { "data-focus-image": "diabetesInsipidus" }
-                      },
-                      {
-                        value: "(7) Forms of hypoadrenalism",
-                        text: "Forms of hypoadrenalism",
-      
-                        attributes: { "data-focus-image": "formsOfHypoadrenalism" }
-                      },
-                      {
-                        value: "(8) Myasthenia gravis",
-                        text: "Myasthenia gravis",
-                 
-                        attributes: { "data-focus-image": "myastheniaGravis" }
-                      },
-                      {
-                        value: "(9) Continuing physical disability",
-                        text: "Continuing physical disability",
-               
-                        attributes: { "data-focus-image": "continuingPhysicalDisability" }
-                      },
-                      {
-                        value: "(10) Cancer",
-                        text: "Cancer",
-                
-                        attributes: { "data-focus-image": "cancer" }
-                      }
-                    ]
-                    }) }}
-
-                </div>                  
-
-                <style>
-
-                  .medex-checkboxes {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                  }
-
-                  .medex-checkboxes .nhsuk-checkboxes__label {
-                    font-weight: 400 !important;
-                  }
-
-                  @media (max-width: 1024px) {
-                    .medex-checkboxes {
-                      grid-template-columns: 1fr;
+                {{ dateInput({
+                  id: 'imageBabyDateOfBirth',
+                  namePrefix: 'imageBabyDateOfBirth',
+                  fieldset: {
+                    legend: {
+                      html: "Child's due or birth date " + (data.confidence.childDOB | default(null)) | getConfidenceTag
                     }
-                  }
+                  },
+                  items: [
+                    {
+                      name: 'day',
+                      classes: 'nhsuk-input--width-2',
+                      value: data.imageBabyDateOfBirth.day or '25',
+                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
+                    },
+                    {
+                      name: 'month',
+                      classes: 'nhsuk-input--width-2',
+                      value: data.imageBabyDateOfBirth.month or '11',
+                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
+                    },
+                    {
+                      name: 'year',
+                      classes: 'nhsuk-input--width-4',
+                      value: data.imageBabyDateOfBirth.year or '2025',
+                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
+                    }
+                  ]
+                }) }}
 
-                </style>
 
                 <hr />
 
@@ -736,22 +620,26 @@
                   ]
                 }) }}
 
-                {{ hint({
-                  html: 'Your corrections will be sent to your supervisor for confirmation'
-                }) }}
+
 
                 <div class="nhsuk-button-group">
-                  {{ button({
-                    html: '<span data-ak="I">Approve application</span>',
-                    href: '/v1/dashboard'
-                  }) }}
-
-
                 {{ button({
-                  html: '<span data-ak="K">Cannot process application</span>',
-                  classes: 'nhsuk-button--secondary',
-                  href: '/v1/medex/cannot-process-application--correction'
+                  html: '<span data-ak="I">Next</span>',
+                  attributes: {
+                    name: 'applicationDecision',
+                    value: 'approve'
+                  }
                 }) }}
+
+
+                 {{ button({
+                  html: '<span data-ak="K">Key from Paper (KFP)</span>',
+                  classes: 'nhsuk-button--secondary',
+                  attributes: {
+                    name: 'applicationDecision',
+                    value: 'cannotProcess'
+                  }
+                }) }} 
               
               </div>
                 

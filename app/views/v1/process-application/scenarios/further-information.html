@@ -1,11 +1,11 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'Application 2025 11 18 18 12 16N3000049' %}
+{% set pageName = data.applicationReference or 'Application 2025 11 18 18 12 16N3000049' %}
 
 {% block beforeContent %}
- {{ backLink({
-    href: 'javascript:history.go(-1)',
-    html: '<span data-ak="B">Back</span>'
+  {{ backLink({
+    href: '../../dashboard',
+    html: '<span data-ak="B">Return to your dashboard</span>'
   }) }}
 {% endblock %}
 
@@ -13,94 +13,32 @@
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-one-half">
-
       <h1 class="nhsuk-heading-m">{{ pageName }}
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
-        {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
-
+        {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}</h1>
     </div>
-    {% set processedToday = data.applicationStats.total %}
     <div class="nhsuk-grid-column-one-half">
       {% set insetTextHtml %}
-      <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
-    {% endset %}
-
-    {{ insetText({
-      html: insetTextHtml,
-      classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
-    }) }}
+        <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
+      {% endset %}
+      {{ insetText({
+        html: insetTextHtml,
+        classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
+      }) }}
     </div>
   </div>
 
-
-  {% set patientLookup = data.lookupPatientAddress or {} %}
-
-  {% if patientLookup.buildingNumber is defined %}
-    {% set patientBuildingNumber = patientLookup.buildingNumber %}
-  {% else %}
-    {% set patientBuildingNumber = data.imageBuildingNumberOrName %}
-  {% endif %}
-  
-  {% if patientLookup.streetName is defined %}
-    {% set patientAddressLine1 = patientLookup.streetName %}
-  {% else %}
-    {% set patientAddressLine1 = data.imageAddressLine1 %}
-  {% endif %}
-  
-  {% if patientLookup.addressLineTwo is defined %}
-    {% set patientAddressLine2 = patientLookup.addressLineTwo %}
-  {% else %}
-    {% set patientAddressLine2 = data.imageAddressLine2 %}
-  {% endif %}
-  
-  {% if patientLookup.town is defined %}
-    {% set patientTown = patientLookup.town %}
-  {% else %}
-    {% set patientTown = data.imageTown %}
-  {% endif %}
-  
-  {% if patientLookup.county is defined %}
-    {% set patientCounty = patientLookup.county %}
-  {% else %}
-    {% set patientCounty = data.imageCounty %}
-  {% endif %}
-  
-  {% if patientLookup.postcode is defined %}
-    {% set patientPostcode = patientLookup.postcode %}
-  {% else %}
-    {% set patientPostcode = data.imagePostcode %}
-  {% endif %}
-
-
-
-  {% set HCPLookup = data.lookupHCPAddress or {} %}
-
-  {% set hcpBuildingNumber = HCPLookup.buildingNumber or '' %}
-  {% set hcpStreetName = HCPLookup.streetName or '' %}
-  {% set hcpAddressLine1 = (hcpBuildingNumber ~ ' ' ~ hcpStreetName) | trim %}
-  
-  {% set hcpAddressLine2 = HCPLookup.addressLineTwo or '' %}
-  {% set hcpTown = HCPLookup.town or '' %}
-  {% set hcpCounty = HCPLookup.county or '' %}
-  {% set hcpPostcode = HCPLookup.postcode or '' %}
-  
-
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
+      <div class="nhsuk-grid-row">
 
-          <div class="nhsuk-grid-row">
+        <!-- ONE HALF - IMAGE -->
+        <div class="nhsuk-grid-column-one-half sticky-column">
+          {% from '../../macros/image.njk' import image %}
+          {{ image(data.certificateType) }}
+        </div>
 
-            <!-- ONE THIRD -->
-            <div class="nhsuk-grid-column-one-half sticky-column">
-
-              {% from '../macros/image.njk' import image %}
-              {{ image() }}
-
-            </div>
-
-            <!-- TWO THIRDS -->
-            <div class="nhsuk-grid-column-one-half">
+        <!-- ONE HALF - CONTENT -->
+    <div class="nhsuk-grid-column-one-half">
 
               <div class="nhsuk-card nhsuk-card--grey">
                 <div class="nhsuk-card__content">
@@ -261,8 +199,21 @@
                     {% endset %}
 
 
+                    {% if data.certificateType == 'matex' %}
+                      {% set typeSpecificItem = {
+                        value: "Child's due or birth date",
+                        text: "Child's due or birth date",
+                        attributes: { "data-focus-image": "childsDueOrBirthDate" }
+                      } %}
+                    {% else %}
+                      {% set typeSpecificItem = {
+                        value: "Medical conditions",
+                        text: "Medical conditions",
+                        attributes: { "data-focus-image": "permanentFistula" }
+                      } %}
+                    {% endif %}
                       
-                    <form method="post" action="/v1/process-application/cannot-process-application--horizontal-labels-fil" novalidate>
+                    <form method="post" action="/v1/process-application/scenarios/further-information" novalidate>
                       
                       {{ checkboxes({
                         idPrefix: "furtherInformation",
@@ -313,11 +264,7 @@
                             text: "NHS number",
                             attributes: { "data-focus-image": "nhsNumber" }
                           },
-                          {
-                            value: "Child's due or birth date",
-                            text: "Child's due or birth date",
-                            attributes: { "data-focus-image": "childsDueOrBirthDate" }
-                          }
+                          typeSpecificItem
                         ]
                       }) }}
                                           
@@ -363,16 +310,15 @@
                       }) }}
 
                     
-                    <div class="nhsuk-button-group">
-                      {{ button({
-                        html: '<span data-ak="I">' + 'Send <span class="nhsuk-u-visually-hidden">further information </span>request and move to next application' + '</span>',
-                        attributes: {
-                          type: 'submit',
-                          name: 'applicationDecision',
-                          value: 'onHold'
-                        }
-                      }) }}
-                    </div>
+                     <div class="nhsuk-button-group">
+            {{ button({ html: '<span data-ak="I">Send request</span>', attributes: { type: 'submit' } }) }}
+            {{ button({
+              html: '<span data-ak="C">View current application</span>',
+              href: '../' + data.certificateType + '?view=1',
+              classes: 'nhsuk-button--secondary'
+            }) }}
+          </div>
+
                     
                 </form>
                       
@@ -381,9 +327,7 @@
 
             </div>
 
-          </div>
-
-
+      </div>
     </div>
   </div>
 

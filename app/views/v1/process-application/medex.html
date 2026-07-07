@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'Application 2025 11 18 18 12 16N3000049' %}
+{% set pageName = 'Application 2026 11 20 19 12 16N3000049' %}
 
 {% block beforeContent %}
   {{ backLink({
@@ -15,7 +15,7 @@
     <div class="nhsuk-grid-column-one-half">
 
       <h1 class="nhsuk-heading-m">{{ pageName }}
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ 'medex' | getCertificateTypeTextOrTag( true ) | safe }}
         {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
 
     </div>
@@ -68,7 +68,7 @@
             <div class="nhsuk-grid-column-one-half sticky-column">
 
               {% from '../macros/image.njk' import image %}
-              {{ image() }}
+              {{ image('medex') }}
 
             </div>
 
@@ -299,6 +299,8 @@
 
               <form class="horizontal-labels" method="post" novalidate>
 
+                <input type="hidden" name="applicationReference" value="{{ pageName }}">
+
                 <!-- FORM TYPE -->
 
                 {% set versions = [ 'FW81217', 'FW80104', 'FW80110', 'FW80211', 'FW80215', 'FW80406', 'FW80702', 'FW80710', 'FW80803', 'FW81207'] %}
@@ -528,35 +530,103 @@
 
               
 
-                {{ dateInput({
-                  id: 'imageBabyDateOfBirth',
-                  namePrefix: 'imageBabyDateOfBirth',
-                  fieldset: {
-                    legend: {
-                      html: "Child's due or birth date " + (data.confidence.childDOB | default(null)) | getConfidenceTag
+                <div class="nhsuk-form-group">
+
+                    {{ checkboxes({
+                      idPrefix: "medicalCondition",
+                      name: "editMEDEX.medicalCondition",
+                      classes: "medex-checkboxes",
+                      fieldset: {
+                        legend: {
+                          html: '<span data-ak="Y">Medical condition</span>',
+                          size: "s",
+                          isPageHeading: false
+                        }
+                      },
+                      items: [
+                      {
+                        value: "(1) Permanent fistula",
+                        text: "A permanent fistula",
+                    
+                        attributes: { "data-focus-image": "permanentFistula" }
+                      },
+                      {
+                        value: "(2) Epilepsy",
+                        text: "Epilepsy",
+             
+                        attributes: { "data-focus-image": "epilepsy" }
+                      },
+                      {
+                        value: "(3) Diabetes mellitus",
+                        text: "Diabetes mellitus",
+               
+                        attributes: { "data-focus-image": "diabetesMellitus" }
+                      },
+                      {
+                        value: "(4) Myxoedema",
+                        text: "Myxoedema",
+                 
+                        attributes: { "data-focus-image": "myxoedema" }
+                      },
+                      {
+                        value: "(5) Hypoparathyroidism",
+                        text: "Hypoparathyroidism",
+                   
+                        attributes: { "data-focus-image": "hypoparathyroidism" }
+                      },
+                      {
+                        value: "(6) Diabetes insipidus",
+                        text: "Diabetes insipidus",
+             
+                        attributes: { "data-focus-image": "diabetesInsipidus" }
+                      },
+                      {
+                        value: "(7) Forms of hypoadrenalism",
+                        text: "Forms of hypoadrenalism",
+      
+                        attributes: { "data-focus-image": "formsOfHypoadrenalism" }
+                      },
+                      {
+                        value: "(8) Myasthenia gravis",
+                        text: "Myasthenia gravis",
+                 
+                        attributes: { "data-focus-image": "myastheniaGravis" }
+                      },
+                      {
+                        value: "(9) Continuing physical disability",
+                        text: "Continuing physical disability",
+               
+                        attributes: { "data-focus-image": "continuingPhysicalDisability" }
+                      },
+                      {
+                        value: "(10) Cancer",
+                        text: "Cancer",
+                
+                        attributes: { "data-focus-image": "cancer" }
+                      }
+                    ]
+                    }) }}
+
+                </div>                  
+
+                <style>
+
+                  .medex-checkboxes {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                  }
+
+                  .medex-checkboxes .nhsuk-checkboxes__label {
+                    font-weight: 400 !important;
+                  }
+
+                  @media (max-width: 1024px) {
+                    .medex-checkboxes {
+                      grid-template-columns: 1fr;
                     }
-                  },
-                  items: [
-                    {
-                      name: 'day',
-                      classes: 'nhsuk-input--width-2',
-                      value: data.imageBabyDateOfBirth.day or '25',
-                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
-                    },
-                    {
-                      name: 'month',
-                      classes: 'nhsuk-input--width-2',
-                      value: data.imageBabyDateOfBirth.month or '11',
-                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
-                    },
-                    {
-                      name: 'year',
-                      classes: 'nhsuk-input--width-4',
-                      value: data.imageBabyDateOfBirth.year or '2025',
-                      attributes: { 'data-focus-image' : 'childsDueOrBirthDate' }
-                    }
-                  ]
-                }) }}
+                  }
+
+                </style>
 
 
                 <hr />
@@ -622,7 +692,7 @@
 
                 <div class="nhsuk-button-group">
                 {{ button({
-                  html: '<span data-ak="I">Move to next application</span>',
+                  html: '<span data-ak="I">Next</span>',
                   attributes: {
                     name: 'applicationDecision',
                     value: 'approve'
@@ -630,15 +700,15 @@
                 }) }}
 
 
-                {{ button({
-                  html: '<span data-ak="K">Cannot process application</span>',
+                 {{ button({
+                  html: '<span data-ak="K">Key from Paper (KFP)</span>',
                   classes: 'nhsuk-button--secondary',
                   attributes: {
                     name: 'applicationDecision',
                     value: 'cannotProcess'
                   }
                 }) }}
-              
+               
               </div>
                 
 

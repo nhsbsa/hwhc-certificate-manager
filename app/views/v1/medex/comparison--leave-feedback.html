@@ -1,229 +1,222 @@
 {% extends 'layout-fullscreen.html' %}
 
-  {% if data.patientID %}
-    {% set patient = data.patientID | getPatientData %}
-  {% endif %}
+{% if data.patientID %}
+{% set patient = data.patientID | getPatientData %}
+{% endif %}
 
-  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
+{% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
 
 {% block beforeContent %}
-  {{ backLink({
-    href: 'javascript:history.go(-1)',
-    html: '<span data-ak="B">Back</span>'
-  }) }}
+{{ backLink({
+href: 'javascript:history.go(-1)',
+html: '<span data-ak="B">Back</span>'
+}) }}
 {% endblock %}
 
 {% block content %}
 
-  {% if data.patientID %}
-    {% set patient = data.patientID | getPatientData %}
-  {% endif %}
+{% if data.patientID %}
+{% set patient = data.patientID | getPatientData %}
+{% endif %}
 
 
-  {% macro mistakeCheckBox( field, shortField ) %}
+{% macro mistakeCheckBox( field, shortField ) %}
 
-    {{ checkboxes({
-        idPrefix: 'incorrect-'+shortField,
-        name: 'incorrect-'+shortField,
-        
-        items: [
-            { value: 'yes', html: '<span class="nhsuk-u-visually-hidden">'+field+' is incorrect</span>' }
-            ]
-        }) }}
+{{ checkboxes({
+idPrefix: 'incorrect-'+shortField,
+name: 'incorrect-'+shortField,
 
-  {% endmacro %}
+items: [
+{ value: 'yes', html: '<span class="nhsuk-u-visually-hidden">'+field+' is incorrect</span>' }
+]
+}) }}
 
-
+{% endmacro %}
 
 
-  <div class="nhsuk-grid-row">
+
+
+<div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
-        {{ (patient.certificateType or 'medex') | getCertificateTypeTextOrTag( true ) | safe }}
-        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
-      </h1>
+        <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+            {{ (patient.certificateType or 'medex') | getCertificateTypeTextOrTag( true ) | safe }}
+            {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %}
+            {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+        </h1>
 
     </div>
-  </div>
+</div>
 
-  <div class="nhsuk-grid-row">
+<div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-          <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-row">
 
             <!-- TWO THIRDS -->
             <div class="nhsuk-grid-column-two-thirds">
 
-               <div class="nhsuk-card nhsuk-card--grey">
+                <div class="nhsuk-card nhsuk-card--grey">
                     <div class="nhsuk-card__content">
 
                         {{ table({
-                            panel: false,
-                            caption: 'Processing comparison',
-                            captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
-                            attributes: { 'data-focus-image': 'firstName,lastName,dateOfBirth,nhsNumber,address,emailAddress,telephoneNumber,childsDueOrBirthDate,patientSignature,healthcarePractitionerSignature,healthcarePractitionerDetails' },
-                            firstCellIsHeader: true,
-                            head: [
-                                { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
-                                { text: 'Shown' },
-                                { text: 'Proposed value' },
-                                { text: 'Accepted value' },
-                                { text: 'Incorrect?' }
-                            ],
-                            rows: [
-                                [
-                                    { html: '<span data-ak="S">First name</span>'},
-                                    { html: 'Yes' },
-                                    { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
-                                    { text: patient.firstName or 'Sarah' },
-                                    { html: mistakeCheckBox('First name','first-name') }
-                                ],
-                                [
-                                    { html: '<span data-ak="A">Last name</span>' },
-                                    { html: 'Yes' },
-                                    { text: '' },
-                                    { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' },
-                                    { html: mistakeCheckBox('Last name','last-name') }
-                                ],
-                                [
-                                    { html: '<span data-ak="X">Date of birth</span>' },
-                                    { html: 'No' },
-                                    { text: '2 July 1995' },
-                                    { text: '2 July 1995' },
-                                    { html: mistakeCheckBox('Date of birth','date-of-birth') }
-                                ],
-                                [
-                                    { html: '<span data-ak="V">NHS number</span>' },
-                                    { html: 'No' },
-                                    { text: '1252 567 987' },
-                                    { text: '1252 567 987' },
-                                    { html: mistakeCheckBox('NHS number','nhs-number') }
-                                ],
-                                [
-                                    { html: '<span data-ak="Z">Address</span>' },
-                                    { html: 'No' },
-                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
-                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
-                                    { html: mistakeCheckBox('Address','address') }
-                                ],
-                                [
-                                    { html: '<span data-ak="Q">Phone number</span>' },
-                                    { html: 'No' },
-                                    { html: '07911 123456' },
-                                    { html: '07911 123456' },
-                                    { html: mistakeCheckBox('Phone number','phone-number') }
-                                ],
-                                [
-                                    { html: '<span data-ak="J">Email address</span>' },
-                                    { html: 'Empty' },
-                                    { html: '' },
-                                    { html: '' },
-                                    { html: mistakeCheckBox('Email address','email-address') }
-                                ],
-                                [
-                                    { html: '<span data-ak="C">Baby\'s birth date</span>' },
-                                    { html: 'No' },
-                                    { html: '10 January 2026' },
-                                    { html: '10 January 2026' },
-                                    { html: mistakeCheckBox("Child's due or birth date",'babys-dob') }
-                                ],
-                                [
-                                    { html: '<span data-ak="U">Patient signature</span>' },
-                                    { html: 'No' },
-                                    { html: 'Yes' },
-                                    { html: 'Yes' },
-                                    { html: mistakeCheckBox('Patient signature','patient-sig') }
-                                ],
-                                [
-                                    { html: '<span data-ak="H">Healthcare practitioner signature</span>' },
-                                    { html: 'No' },
-                                    { html: 'Yes' },
-                                    { html: 'Yes' },
-                                    { html: mistakeCheckBox('Healthcare practitioner signature','hcp-sig')  }
-                                ],
-                                [
-                                    { html: '<span data-ak="H">Healthcare practitioner details</span>' },
-                                    { html: 'No' },
-                                    { html: 'Yes' },
-                                    { html: 'Yes' },
-                                    { html: mistakeCheckBox('Healthcare practitioner details','hcp-details')  }
-                                ]
-                            ]
+                        panel: false,
+                        caption: 'Processing comparison',
+                        captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
+                        attributes: { 'data-focus-image':
+                        'firstName,lastName,dateOfBirth,nhsNumber,address,emailAddress,telephoneNumber,childsDueOrBirthDate,patientSignature,healthcarePractitionerSignature,healthcarePractitionerDetails'
+                        },
+                        firstCellIsHeader: true,
+                        head: [
+                        { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
+                        { text: 'Shown' },
+                        { text: 'Proposed value' },
+                        { text: 'Accepted value' },
+                        { text: 'Incorrect?' }
+                        ],
+                        rows: [
+                        [
+                        { html: '<span data-ak="S">First name</span>'},
+                        { html: 'Yes' },
+                        { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
+                        { text: patient.firstName or 'Sarah' },
+                        { html: mistakeCheckBox('First name','first-name') }
+                        ],
+                        [
+                        { html: '<span data-ak="A">Last name</span>' },
+                        { html: 'Yes' },
+                        { text: '' },
+                        { text: ( patient.lastName | changeOneLetter ) or 'Jahnson' },
+                        { html: mistakeCheckBox('Last name','last-name') }
+                        ],
+                        [
+                        { html: '<span data-ak="X">Date of birth</span>' },
+                        { html: 'No' },
+                        { text: '2 July 1995' },
+                        { text: '2 July 1995' },
+                        { html: mistakeCheckBox('Date of birth','date-of-birth') }
+                        ],
+                        [
+                        { html: '<span data-ak="V">NHS number</span>' },
+                        { html: 'No' },
+                        { text: '1252 567 987' },
+                        { text: '1252 567 987' },
+                        { html: mistakeCheckBox('NHS number','nhs-number') }
+                        ],
+                        [
+                        { html: '<span data-ak="Z">Address</span>' },
+                        { html: 'No' },
+                        { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
+                        { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
+                        { html: mistakeCheckBox('Address','address') }
+                        ],
+                        [
+                        { html: '<span data-ak="Q">Phone number</span>' },
+                        { html: 'No' },
+                        { html: '07911 123456' },
+                        { html: '07911 123456' },
+                        { html: mistakeCheckBox('Phone number','phone-number') }
+                        ],
+                        [
+                        { html: '<span data-ak="J">Email address</span>' },
+                        { html: 'Empty' },
+                        { html: '' },
+                        { html: '' },
+                        { html: mistakeCheckBox('Email address','email-address') }
+                        ],
+                        [
+                        { html: '<span data-ak="C">Baby\'s birth date</span>' },
+                        { html: 'No' },
+                        { html: '10 January 2026' },
+                        { html: '10 January 2026' },
+                        { html: mistakeCheckBox("Child's due or birth date",'babys-dob') }
+                        ],
+                        [
+                        { html: '<span data-ak="U">Patient signature</span>' },
+                        { html: 'No' },
+                        { html: 'Yes' },
+                        { html: 'Yes' },
+                        { html: mistakeCheckBox('Patient signature','patient-sig') }
+                        ],
+                        [
+                        { html: '<span data-ak="H">Healthcare practitioner signature</span>' },
+                        { html: 'No' },
+                        { html: 'Yes' },
+                        { html: 'Yes' },
+                        { html: mistakeCheckBox('Healthcare practitioner signature','hcp-sig') }
+                        ],
+                        [
+                        { html: '<span data-ak="H">Healthcare practitioner details</span>' },
+                        { html: 'No' },
+                        { html: 'Yes' },
+                        { html: 'Yes' },
+                        { html: mistakeCheckBox('Healthcare practitioner details','hcp-details') }
+                        ]
+                        ]
+                        }) }}
+
+
+
+                        {% set noHTML %}
+                        {{ textarea({
+                        name: 'feedback',
+                        id: 'feedback',
+                        classes: 'nhsuk-u-width-two-thirds',
+                        label: {
+                        text: "What needs to be corrected?",
+                        isPageHeading: false
+                        }
+                        }) }}
+                        {% endset %}
+
+
+                        <form method="post" novalidate>
+
+
+
+                            <div class="nhsuk-u-width-one-half">
+                                <div class="nhsuk-form-group">
+                                    <label class="nhsuk-label" for="example-right-size">
+                                        Add a comment (optional)
+                                    </label>
+
+                                    <textarea class="nhsuk-textarea" id="example-right-size" name="exampleRightSize"
+                                        rows="3" aria-describedby="example-right-size-hint"></textarea>
+                                </div>
+
+                            </div>
+
+
+
+                            {{ button({
+                            html: '<span data-ak="I">Leave feedback</span>'
                             }) }}
 
+                        </form>
 
 
-                                {% set noHTML %}
-                                    {{ textarea({
-                                        name: 'feedback',
-                                        id: 'feedback',
-                                        classes: 'nhsuk-u-width-two-thirds',
-                                        label: {
-                                            text: "What needs to be corrected?",
-                                            isPageHeading: false
-                                        }
-                                    }) }}
-                                {% endset %}
 
-
-                                <form method="post" novalidate>
-
-                                {{ radios({
-                                idPrefix: 'processingApproved',
-                                name: 'processingApproved',
-                                fieldset: {
-                                    legend: {
-                                        text: 'Has the application been processed correctly?',
-                                        classes: 'nhsuk-fieldset__legend--m',
-                                        isPageHeading: false
-                                    }
-                                },
-                                items: [
-                                    {
-                                        value: 'yes',
-                                        html: '<span data-ak="L">Yes</span>'
-                                    },
-                                    {
-                                        value: 'no',
-                                        html: '<span data-ak="N">No</span>',
-                                        conditional: {
-                                            html: noHTML
-                                        }
-                                    }
-                                ]
-                                }) }}
-                               
-
-                                {{ button({
-                                    html: '<span data-ak="I">Leave feedback</span>'
-                                }) }}
-
-                                </form>
-
-
-              
 
                     </div>
                 </div>
-                
+
 
             </div>
 
             <!-- ONE THIRD -->
             <div class="nhsuk-grid-column-one-third sticky-column">
 
-              {% from '../macros/image.njk' import image %}
-              {{ image('medex') }}
+                {% from '../macros/image.njk' import image %}
+                {{ image('medex') }}
 
-              {% from '../macros/notes.njk' import notes %}
-              {{ notes( patient ) }}
+                {% from '../macros/notes.njk' import notes %}
+                {{ notes( patient ) }}
 
             </div>
 
-          </div>
+        </div>
 
     </div>
-  </div>
+</div>
 
 {% endblock %}

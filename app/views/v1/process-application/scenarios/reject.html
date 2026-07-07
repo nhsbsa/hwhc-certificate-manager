@@ -1,0 +1,138 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = data.applicationReference or 'Application 2025 11 18 18 12 16N3000049' %}
+
+{% block beforeContent %}
+{{ backLink({
+href: '../../dashboard',
+html: '<span data-ak="B">Return to your dashboard</span>'
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-one-half">
+        <h1 class="nhsuk-heading-m">{{ pageName }}
+            {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}</h1>
+    </div>
+    <div class="nhsuk-grid-column-one-half">
+        {% set insetTextHtml %}
+        <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
+        {% endset %}
+        {{ insetText({
+        html: insetTextHtml,
+        classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
+        }) }}
+    </div>
+</div>
+
+<div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+        <div class="nhsuk-grid-row">
+
+            <!-- ONE HALF - IMAGE -->
+            <div class="nhsuk-grid-column-one-half sticky-column">
+                {% from '../../macros/image.njk' import image %}
+                {{ image(data.certificateType) }}
+            </div>
+
+            <!-- ONE HALF - CONTENT -->
+            <div class="nhsuk-grid-column-one-half">
+
+
+
+                <div class="nhsuk-card nhsuk-card--grey">
+                    <div class="nhsuk-card__content">
+
+                        <h2 class="nhsuk-heading-m">Application will be rejected</h2>
+
+                        <!-- REASON FOR REJECTION -->
+
+                    <form method="post" action="/v1/process-application/scenarios/reject" novalidate>
+
+{% if data.certificateType == 'matex' %}
+{{ radios({
+  idPrefix: "rejectReason",
+  name: "rejectReason",
+  value: data.rejectReason or "Child has already reached their first birthday",
+  fieldset: {
+    legend: {
+      text: "Why is this application being rejected?"
+    }
+  },
+  items: [
+    {
+      value: "Child has already reached their first birthday",
+      text: "Child has already reached their first birthday"
+    },
+    {
+      value: "Patient is under 14",
+      text: "Patient is under 14"
+    },
+    {
+      value: "Patient is over 60",
+      text: "Patient is over 60"
+    },
+    {
+      value: "Application is not on a Matex form",
+      text: "Application is not on a Matex form"
+    }
+  ]
+}) }}
+{% else %}
+{{ radios({
+  idPrefix: "rejectReason",
+  name: "rejectReason",
+  value: data.rejectReason or "Medical condition is not covered",
+  fieldset: {
+    legend: {
+      text: "Why is this application being rejected?"
+    }
+  },
+  items: [
+    {
+      value: "Medical condition is not covered",
+      text: "Medical condition is not covered"
+    },
+    {
+      value: "Patient is under 14",
+      text: "Patient is under 14"
+    },
+    {
+      value: "Patient is over 60",
+      text: "Patient is over 60"
+    },
+    {
+      value: "Application is not on a Medex form",
+      text: "Application is not on a Medex form"
+    }
+  ]
+}) }}
+{% endif %}
+
+
+
+                    </div>
+                </div>
+
+
+
+                <div class="nhsuk-button-group">
+                    {{ button({ html: '<span data-ak="I">Next application</span>', attributes: { type: 'submit' } }) }}
+                    {{ button({
+                    html: '<span data-ak="C">View current application</span>',
+                    href: '../' + data.certificateType + '?view=1',
+                    classes: 'nhsuk-button--secondary'
+                    }) }}
+                </div>
+
+                    </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
