@@ -3,198 +3,85 @@
 {% set pageName = 'Application 2025 11 18 18 12 16N3000049' %}
 
 {% block beforeContent %}
- {{ backLink({
-    href: 'javascript:history.go(-1)',
-    html: '<span data-ak="B">Back</span>'
-  }) }}
+{{ backLink({
+href: 'javascript:history.go(-1)',
+html: '<span data-ak="B">Back</span>'
+}) }}
 {% endblock %}
 
 {% block content %}
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-one-half">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-one-half">
 
-      <h1 class="nhsuk-heading-m">{{ pageName }}
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
-        {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
+    <h1 class="nhsuk-heading-m">{{ pageName }}
+      {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
+      {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
 
-    </div>
-    {% set processedToday = data.applicationStats.total %}
-    <div class="nhsuk-grid-column-one-half">
-      {% set insetTextHtml %}
-      <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
+  </div>
+  {% set processedToday = data.applicationStats.total %}
+  <div class="nhsuk-grid-column-one-half">
+    {% set insetTextHtml %}
+    <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
     {% endset %}
 
     {{ insetText({
-      html: insetTextHtml,
-      classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
+    html: insetTextHtml,
+    classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
     }) }}
-    </div>
   </div>
+</div>
 
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
 
-          <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-row">
 
-            <!-- ONE THIRD -->
-            <div class="nhsuk-grid-column-one-half sticky-column">
+      <!-- ONE THIRD -->
+      <div class="nhsuk-grid-column-one-half sticky-column">
 
-              {% from '../macros/image.njk' import image %}
-              {{ image() }}
+        {% from '../macros/image.njk' import image %}
+        {{ image() }}
 
-            </div>
+      </div>
 
-            <!-- TWO THIRDS -->
-            <div class="nhsuk-grid-column-one-half">
-
-              <div class="nhsuk-card nhsuk-card--grey">
-                <div class="nhsuk-card__content">
-
-                      <h2 class="nhsuk-heading-m">Cannot process application</h2>
+      <!-- TWO THIRDS -->
+      <div class="nhsuk-grid-column-one-half">
 
 
-                      {% set rejectApplicationHTML %}
+     <h2 class="nhsuk-heading-m">Request for this application to be keyed from paper</h2>
 
-                        <!-- REASON FOR REJECTION -->
+        {{ textarea({
+        name: "kfpNotes",
+        id: "kfp-notes",
+        rows: "3",
+        label: {
+        text: "Notes (optional)"
+        }
+        }) }}
 
-                        {% set values = [
-                          'Child has already reached their first birthday',
-                          'Patient is outside England',
-                          'Patient is under 16',
-                          'Patient is over 60',
-                          'Application is not on a Matex form'
-                        ] %}
-
-                        {{ radios({
-                          idPrefix: 'reasonForRejection',
-                          name: 'reasonForRejection',
-                          value: data.reasonForRejection,
-                          fieldset: {
-                            legend: {
-                              classes: 'nhsuk-u-visually-hidden',
-                              text: 'What is the reason for the rejection?'
-                            }
-                          },
-                          classes: 'nhsuk-radios--small',
-                          items: [
-                            { value: values[0], html: values[0] },
-                            { value: values[1], html: values[1] },
-                            { value: values[2], html: values[2] },
-                            { value: values[3], html: values[3] },
-                            { value: values[4], html: values[4] }
-                          ]
-                        }) }}
-
-                      {% endset %}
-                  
-                    
-                      
-                      <form method="post" novalidate>
-
-                        {{ radios({
-                          idPrefix: 'cannotProcessApplication',
-                          name: 'cannotProcessApplication',
-                          value: data.cannotProcessApplication,
-                          fieldset: {
-                            legend: {
-                              text: 'What would you like to do next?'
-                            }
-                          },
-                          items: [
-                            {
-                              value: 'askForFurtherInformation',
-                              text: 'Ask for further information'
-                            },
-                            {
-                              value: 'requestKFP',
-                              text: 'Request key from paper'
-                            },
-                            {
-                              value: 'rejectApplication',
-                              text: 'Reject application',
-                              conditional: { html: rejectApplicationHTML }
-                            }
-                          ]
-                        }) }}
-
-                        <div id="cannot-process-notes" class="nhsuk-u-visually-hidden">
-                          {{ textarea({
-                            name: 'cannotProcessApplicationNotes',
-                            id: 'cannotProcessApplicationNotes',
-                            label: {
-                              text: 'Notes (optional)'
-                            },
-                            value: data.cannotProcessApplicationNotes
-                          }) }}
-                        </div>
-
-
-                        {{ button({
-                          html: '<span data-ak="I">Continue</span>',
-                          attributes: {
-                            type: 'submit',
-                            id: 'cannot-process-submit',
-                            'data-text-ask': 'Continue',
-                            'data-text-kfp': 'Request key from paper and move to next application',
-                            'data-text-reject': 'Reject application and move to next application'
-                          },
-                          classes: 'nhsuk-u-visually-hidden'
-                        }) }}
-
-                      </form>
-
-                      
-                </div>
-              </div>
-
-            </div>
-
+        <div class="nhsuk-button-group">
+            {% if data.scenarioIndex % 2 == 0 %}
+              {{ button({ html: '<span data-ak="I">Next</span>', href: './matex' }) }}
+            {% else %}
+              {{ button({ html: '<span data-ak="I">Next</span>', href: './medex' }) }}
+            {% endif %}
+            {{ button({
+              html: '<span data-ak="K">Finish processing</span>',
+              href: '/v1/dashboard',
+              classes: 'nhsuk-button--secondary'
+            }) }}
           </div>
 
+      </div>
 
     </div>
-  </div>
-  
-  <!-- BUTTON DISPLAY AND CHANGE WITH RADIO SELECTION -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const button = document.getElementById('cannot-process-submit');
-      const radios = document.querySelectorAll('input[name="cannotProcessApplication"]');
-      const notes = document.getElementById('cannot-process-notes');
-    
-      button.disabled = true;
-    
-      function showButton(text) {
-        button.innerHTML = `<span data-ak="I">${text}</span>`;
-        button.classList.remove('nhsuk-u-visually-hidden');
-        button.disabled = false;
-      }
 
-      function toggleNotes(show) {
-        notes.classList.toggle('nhsuk-u-visually-hidden', !show);
-      }
-    
-      radios.forEach(radio => {
-        radio.addEventListener('change', () => {
-          switch (radio.value) {
-            case 'askForFurtherInformation':
-              showButton(button.dataset.textAsk);
-              toggleNotes(false);
-              break;
-            case 'requestKFP':
-              showButton(button.dataset.textKfp);
-              toggleNotes(true);
-              break;
-            case 'rejectApplication':
-              showButton(button.dataset.textReject);
-              toggleNotes(true);
-              break;
-          }
-        });
-      });
-    });
-    </script>
-  
+
+  </div>
+</div>
+
+
+
 {% endblock %}

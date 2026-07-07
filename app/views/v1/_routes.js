@@ -163,7 +163,9 @@ router.get(/process-application\/matex/, function (req, res) {
   const queue = req.session.data.paperMatexQueue;
   const index = req.session.data.currentIndex || 0;
   if (req.query.view) {
-    hydrateImageFields(req, queue[((index - 1) + queue.length) % queue.length]);
+    const previousIndex = ((index - 1) + queue.length) % queue.length;
+    req.session.data.currentIndex = previousIndex;
+    hydrateImageFields(req, queue[previousIndex]);
   } else {
     hydrateImageFields(req, queue[index]);
   }
@@ -225,7 +227,9 @@ router.get(/process-application\/medex/, function (req, res) {
   const queue = req.session.data.paperMedexQueue;
   const medexIdx = req.session.data.medexIndex || 0;
   if (req.query.view) {
-    hydrateImageFields(req, queue[((medexIdx - 1) + queue.length) % queue.length]);
+    const previousIndex = ((medexIdx - 1) + queue.length) % queue.length;
+    req.session.data.medexIndex = previousIndex;
+    hydrateImageFields(req, queue[previousIndex]);
   } else {
     hydrateImageFields(req, queue[medexIdx]);
   }
@@ -1526,5 +1530,8 @@ router.post(/edit-medical-condition/, (req, res) => {
 
   res.redirect('/v1/medex/case--edit');
 });
+
+
+
 
 module.exports = router;
