@@ -610,7 +610,7 @@
 
                 // Medex end date logic 
                 if (medicalCondition && medicalCondition.length) {
-                  const hasCancer = medicalCondition.includes("(10) Cancer");
+                  const hasCancer = medicalCondition.includes("(10) Cancer treatments");
                   const isCancerOnly = hasCancer && medicalCondition.length === 1;
 
                   if (isCancerOnly) {

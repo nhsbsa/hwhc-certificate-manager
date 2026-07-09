@@ -228,7 +228,9 @@ html: '<span data-ak="B">Back</span>'
   classes: "medex-checkboxes",
   fieldset: {
     legend: {
-      html: '<span data-ak="Y">Medical condition</span>'
+      html: '<span data-ak="Y">Medical condition</span>',
+                          size: "s",
+                          isPageHeading: false
     }
   },
   items: [
@@ -269,11 +271,31 @@ html: '<span data-ak="B">Back</span>'
       text: "Continuing physical disability"
     },
     {
-      value: "(10) Cancer",
-      text: "Cancer"
+      value: "(10) Cancer treatments",
+      text: "Cancer treatments"
     }
   ]
 }) }}
+
+
+                <style>
+
+                  .medex-checkboxes {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                  }
+
+                  .medex-checkboxes .nhsuk-checkboxes__label {
+                    font-weight: 400 !important;
+                  }
+
+                  @media (max-width: 1024px) {
+                    .medex-checkboxes {
+                      grid-template-columns: 1fr;
+                    }
+                  }
+
+                </style>
               <hr />
 
 
