@@ -12,18 +12,116 @@
           <!-- LETTER SENT -->
           {{ panel({
             titleText: 'Letter ' + ( data.letterType or 'PE07' ) + ' sent to printer',
-            html: ''
+            html: '        <form method="post" action="/v1/process-application/scenarios/further-information" novalidate>
+                      
+                      {{ checkboxes({
+                        idPrefix: "furtherInformation",
+                        name: "furtherInformation",
+                        values: data.furtherInformation,
+                        fieldset: {
+                          legend: {
+                            text: "In which fields do you need further information?",
+                            isPageHeading: false
+                          }
+                        },
+                        hint: {
+                          text: "Select all information that is missing or unclear."
+                        },
+                        items: [
+                          {
+                            value: "Patient's signature",
+                            text: "Patient's signature",
+                            attributes: { "data-focus-image": "patientSignature" }
+                          },
+                          {
+                            value: "Healthcare practitioner's signature",
+                            text: "Healthcare practitioner's signature",
+                            attributes: { "data-focus-image": "healthcarePractitionerSignature" }
+                          },
+                          {
+                            value: "Healthcare practitioner's contact information",
+                            text: "Healthcare practitioner's contact information",
+                            attributes: { "data-focus-image": "healthcarePractitionerDetails" }
+                          },
+                          {
+                            value: "Date of birth",
+                            text: "Date of birth",
+                            attributes: { "data-focus-image": "dateOfBirth" }
+                          },
+                          {
+                            value: "Full address including postcode",
+                            text: "Full address including postcode",
+                            attributes: { "data-focus-image": "address" }
+                          },
+                          {
+                            value: "Email address",
+                            text: "Email address",
+                            attributes: { "data-focus-image": "emailAddress" }
+                          },
+                          {
+                            value: "NHS number",
+                            text: "NHS number",
+                            attributes: { "data-focus-image": "nhsNumber" }
+                          },
+                          typeSpecificItem
+                        ]
+                      }) }}
+                                          
+                      <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+                    
+                      {{ radios({
+                        idPrefix: 'furtherInformationRequest',
+                        name: 'furtherInformationRequest',
+                        value: data.furtherInformationRequest,
+                        fieldset: {
+                          legend: {
+                            text: 'Who will you ask for further information?'
+                          }
+                        },
+                        items: [
+                          {
+                            value: 'hcp',
+                            text: 'Send to healthcare practitioner',
+                            conditional: { html: hcpPostConditionalHTML }
+                          },
+                          {
+                            value: 'patientEmail',
+                            text: 'Send to patient by email',
+                            conditional: { html: emailConditionalHTML }
+                          },
+                          {
+                            value: 'patientPost',
+                            text: 'Send to patient by post',
+                            conditional: { 
+                              html: postHTML
+                            }
+                          }
+                        ]
+                      }) }}
+
+                      {{ textarea({
+                        name: 'furtherInformationNotes',
+                        id: 'furtherInformationNotes',
+                        value: data.furtherInformationNotes,
+                        label: {
+                          text: 'Notes (optional)'
+                        }
+                      }) }}
+
+                    
+                     <div class="nhsuk-button-group">
+            {{ button({ html: '<span data-ak="I">Send request</span>', attributes: { type: 'submit' } }) }}
+            {{ button({
+              html: '<span data-ak="K">Finish processing</span>',
+              href: '/v1/dashboard',
+              classes: 'nhsuk-button--secondary'
+            }) }}
+          </div>
+
+                    
+                </form>'
           }) }}
 
-
-
-        {% elseif data.confirmationStatus === 'requestPaperKeyIn' %}
-
-          <!-- PAPER KEY-IN REQUESTED -->
-          {{ panel({
-            titleText: 'Paper key-in requested',
-            html: 'Your request has been sent to the post room'
-          }) }}
 
 
         
@@ -46,16 +144,22 @@
           {% set firstName = data.imageFirstName or 'Sarah' %}
           {% set lastName = data.imageLastName or 'Johnson' %}
 
-              <dl>
-                  <div>
-                      <dd class="nhsuk-body nhsuk-u-visually-hidden">Name</dd>
-                      <dt class="nhsuk-heading-l">{{ firstName | processFullName( lastName ) }}</dt>
-                  </div>
-                  <div>
-                      <dd class="nhsuk-body nhsuk-u-margin-0">Certificate number</dd>
-                      <dt class="nhsuk-heading-l">8436 810 379</dt>
-                  </div>
-              </dl>
+                               <div class="nhsuk-panel">
+  <h1 class="nhsuk-panel__title ">
+    Application processed
+  </h1>
+
+     <p class="nhsuk-body">
+      This application will be accepted and a certificate issued.
+    </p>
+<p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Name:</p><h2 class="nhsuk-u-padding-top-0"> 
+{{ data.approvedFirstName }} {{ data.approvedLastName }}
+</h2>
+
+<p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Certificate number:</p><h2 class="nhsuk-u-padding-top-0"> 
+{{ data.certNumber }}
+</h2>
+</div>
 
           {% endset %}
 

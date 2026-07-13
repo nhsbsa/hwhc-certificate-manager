@@ -14,7 +14,8 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-one-half">
       <h1 class="nhsuk-heading-m">{{ pageName }}
-        {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}</h1>
+        {{  data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}
+      {{ 'on-hold' | getStatusTextOrTag( true ) | safe }}</h1>
     </div>
     <div class="nhsuk-grid-column-one-half">
       {% set insetTextHtml %}
