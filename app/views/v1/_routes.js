@@ -676,11 +676,20 @@ router.post(/processor-edit/, function (req, res) {
 //
 // LEAVE FEEDBACK
 //
-router.post(/comparison--leave-feedback/, function( req, res ){
+router.post('/comparison--leave-feedback', function (req, res) {
+  console.log(req.body);
 
-  const destination = ( req.session.data.processingApproved === 'no' ) ? 'comparison--confirmation--failed-check' : 'comparison--confirmation--passed-check';
-  res.redirect( destination );
+  const failedCheck = Object.keys(req.body).some(key =>
+    key.startsWith('incorrect-')
+  );
 
+  console.log('failedCheck:', failedCheck);
+
+  res.redirect(
+    failedCheck
+      ? 'comparison--confirmation--failed-check'
+      : 'comparison--confirmation--passed-check'
+  );
 });
 
 

@@ -690,7 +690,7 @@ module.exports = function (env) {
 
           case 'backOffice':
 
-            link = patient.certificateType + '/comparison--correction?patientID=' + patient.id;
+            link = patient.certificateType + '/application--correction?patientID=' + patient.id;
             break;
 
           case 'callCentre':
@@ -721,7 +721,7 @@ module.exports = function (env) {
    case 'on-hold':
 
   if (role === 'backOffice' || role === 'backOfficeSupervisor') {
-    link = 'process-application/on-hold?patientID=' + patient.id;
+    link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
   } else if (role === 'qualityControl') {
     link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
   } else {
@@ -730,11 +730,15 @@ module.exports = function (env) {
 
   break;
 
-          case 'rejected':
+case 'rejected':
 
-            link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
+  if (role === 'qualityControl') {
+    link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
+  } else {
+    link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
+  }
 
-            break;
+  break;
 
 
         }
@@ -892,6 +896,8 @@ module.exports = function (env) {
     this.ctx.data.noOfCheckingRows = checkingTotal;
     return rows;
   };
+
+
 
 
   //
@@ -1422,8 +1428,30 @@ module.exports = function (env) {
     return returnPatientData;
   };
 
+// LOAD NEXT CHECKING URL
 
+filters.getNextCheckingUrl = function (currentPatientId) {
 
+  const patients = JSON.parse(filters.getPatientData());
+
+  const checkingPatients = patients.filter(
+    p => p.checking === true
+  );
+
+  const currentIndex = checkingPatients.findIndex(
+    p => String(p.id) === String(currentPatientId)
+  );
+
+  const nextPatient = checkingPatients[currentIndex + 1];
+
+  if (!nextPatient) {
+    return '/v1/dashboard';
+  }
+
+return '/v1/' + nextPatient.certificateType +
+       '/application--correction?patientID=' +
+       nextPatient.id;
+};
 
   //
   // RANDOMISE AND CONVERT TO LIST

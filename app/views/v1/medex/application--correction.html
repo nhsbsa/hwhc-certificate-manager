@@ -575,7 +575,6 @@
 
 
 
-
               
 
        
@@ -741,16 +740,16 @@
                 }) }}
 
                 <div class="nhsuk-button-group">
-                  {{ button({
-                    html: '<span data-ak="I">Approve application</span>',
-                    href: '/v1/dashboard'
-                  }) }}
+{{ button({
+  html: '<span data-ak="I">Next</span>',
+  href: patient.id | getNextCheckingUrl
+}) }}
 
 
                 {{ button({
-                  html: '<span data-ak="K">Cannot process application</span>',
+                  html: '<span data-ak="K">Finish correction</span>',
                   classes: 'nhsuk-button--secondary',
-                  href: '/v1/medex/cannot-process-application--correction'
+                  href: '/v1/dashboard'
                 }) }}
               
               </div>

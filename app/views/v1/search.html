@@ -142,8 +142,32 @@
                     <input type="hidden" name="searchStatus" value="" />
 
                   {% elif data.role === 'backOffice' %}
-
-                    <input type="hidden" name="searchCertificateType" value="matex" />
+{{ select({
+  label: {
+    html: '<span data-ak="T">Certificate type</span>'
+  },
+  id: 'searchCertificateType',
+  name: 'searchCertificateType',
+  value: data.searchCertificateType,
+  items: [
+    {
+      value: '',
+      text: 'All certificate types'
+    },
+    {
+      value: 'hrtppc',
+      text: 'HRT PPC'
+    },
+    {
+      value: 'matex',
+      text: 'Maternity exemption'
+    },
+    {
+      value: 'medex',
+      text: 'Medical exemption'
+    }
+  ]
+}) }}
 
                   {% else %}
 
@@ -164,7 +188,32 @@
                       ]
                     }) }}
 
-                    <input type="hidden" name="searchCertificateType" value="matex" />
+             {{ select({
+  label: {
+    html: '<span data-ak="T">Certificate type</span>'
+  },
+  id: 'searchCertificateType',
+  name: 'searchCertificateType',
+  value: data.searchCertificateType,
+  items: [
+    {
+      value: '',
+      text: 'All certificate types'
+    },
+    {
+      value: 'hrtppc',
+      text: 'HRT PPC'
+    },
+    {
+      value: 'matex',
+      text: 'Maternity exemption'
+    },
+    {
+      value: 'medex',
+      text: 'Medical exemption'
+    }
+  ]
+}) }}
 
                   {% endif %}
 

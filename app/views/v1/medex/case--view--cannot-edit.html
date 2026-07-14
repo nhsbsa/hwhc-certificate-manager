@@ -1,0 +1,166 @@
+{% extends 'layout-fullscreen.html' %}
+
+  {% if data.patientID %}
+    {% set patient = data.patientID | getPatientData %}
+  {% endif %}
+
+  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+      </h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+          <div class="nhsuk-grid-row">
+         
+
+            <!-- TWO THIRDS -->
+            <div class="nhsuk-grid-column-two-thirds">
+
+               <div class="nhsuk-card nhsuk-card--grey">
+                    <div class="nhsuk-card__content">
+
+                        {% set tableCaption = 'Proposed values' %}
+                        {% if patient.status === 'rejected' %}
+                          {% set tableCaption = 'Rejected values' %}
+                        {% endif %}
+
+                        {{ table({
+                            panel: false,
+                            caption: tableCaption,
+                            classes: 'table-head-visually-hidden',
+                            captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
+                            attributes: { 'data-focus-image': 'firstName,lastName,dateOfBirth,nhsNumber,address,emailAddress,telephoneNumber,childsDueOrBirthDate,patientSignature,healthcarePractitionerSignature,healthcarePractitionerDetails' },
+                            firstCellIsHeader: true,
+                            head: [
+                                { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
+                                { text: 'Accepted value' }
+                            ],
+                            rows: [
+                                [
+                                    { text: 'First name' },
+                                    { text: ( patient.firstName | changeOneLetter ) or 'Sorah' }
+                                ],
+                                [
+                                    { text: 'Last name' },
+                                    { text: '' }
+                                ],
+                                [
+                                    { text: 'Date of birth' },
+                                    { text: '2 July 1995' }
+                                ],
+                                [
+                                    { text: 'NHS number' },
+                                    { text: '1252 567 987' }
+                                ],
+                                [
+                                    { text: 'Address' },
+                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
+                                ],
+                                [
+                                    { text: 'Phone number' },
+                                    { html: '07911 123456' }
+                                ],
+                                [
+                                    { text: 'Email address' },
+                                    { html: '' }
+                                ],
+                                [
+                                    { text: "Child's due or birth date" },
+                                    { html: '10 January 2026' }
+                                ],
+                                [
+                                    { text: 'Patient signature' },
+                                    { html: 'Yes' }
+                                ],
+                                [
+                                    { text: 'Healthcare practitioner signature' },
+                                    { html: 'Yes' }
+                                ],
+                                [
+                                    { text: 'Healthcare practitioner\'s details' },
+                                    { html: 'Yes' }
+                                ]
+                            ]
+                            }) }}
+
+
+                            {{ textarea({
+                                  name: 'notes',
+                                  id: 'notes',
+                                  classes: 'nhsuk-u-width-two-thirds',
+                                  label: {
+                                      text: 'Note',
+                                      isPageHeading: false
+                                  }
+                            }) }}
+
+
+                            <div class="nhsuk-button-group">
+
+                              {{ button({
+                                  href: 'case--edit--confirmation--note-added',
+                                  html: '<span data-ak="K">Add note<span>'
+                              }) }}
+
+                              {% if patient.status === 'rejected' and patient.checking !== true and data.role !== 'qualityControl' %}
+
+                                {{ button({
+                                    classes: 'nhsuk-button--secondary',
+                                    href: 'case--edit--confirmation--on-hold',
+                                    html: '<span data-ak="I">Place back on hold<span>'
+                                }) }}
+
+                              {% endif %}
+
+                            </div>
+
+
+                    </div>
+                </div>
+                
+
+            </div>
+
+
+            <!-- ONE THIRD -->
+            <div class="nhsuk-grid-column-one-third sticky-column">
+
+              
+              {% from '../macros/image.njk' import image %}
+              {{ image(patient.certificateType) }}
+
+              {% from '../macros/notes.njk' import notes %}
+              {{ notes( patient ) }}
+
+
+            </div>
+
+
+
+
+
+          </div>
+
+    </div>
+  </div>
+
+{% endblock %}
