@@ -718,17 +718,17 @@ module.exports = function (env) {
 
             break;
 
-          case 'on-hold':
+   case 'on-hold':
 
-            if (role === 'backOffice' || role === 'backOfficeSupervisor') {
-              link = 'process-application/review-application--horizontal-labels--on-hold?patientID=' + patient.id;
-            } else if (role === 'qualityControl') {
-              link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
-            } else {
-              link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
-            }
+  if (role === 'backOffice' || role === 'backOfficeSupervisor') {
+    link = 'process-application/on-hold?patientID=' + patient.id;
+  } else if (role === 'qualityControl') {
+    link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
+  } else {
+    link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
+  }
 
-            break;
+  break;
 
           case 'rejected':
 
