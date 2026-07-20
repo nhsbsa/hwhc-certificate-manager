@@ -1,0 +1,71 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Manual application' %}
+
+{% block beforeContent %}
+{{ backLink({
+href: '../../dashboard',
+html: '<span data-ak="B">Return to your dashboard</span>'
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-one-half">
+    <h1 class="nhsuk-heading-m">{{ pageName }}
+      {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}
+      {{ 'accepted' | getStatusTextOrTag( true ) | safe }}</h1>
+  </div>
+
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+
+
+
+
+
+    <div class="nhsuk-panel">
+      <h1 class="nhsuk-panel__title ">
+        Application processed
+      </h1>
+
+      <p class="nhsuk-body">
+        This application will be accepted and a certificate issued.
+      </p>
+      <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Name:</p>
+      <h2 class="nhsuk-u-padding-top-0">
+        {{ data.approvedFirstName }} {{ data.approvedLastName }}
+      </h2>
+
+      <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Certificate number:</p>
+      <h2 class="nhsuk-u-padding-top-0">
+        {{ data.certNumber }}
+      </h2>
+    </div>
+
+    <div class="nhsuk-button-group">
+      {{ button({
+      html: '<span data-ak="I">New manual application</span>',
+      href: '/v1/process-application/new-application'
+      }) }}
+
+
+      {{ button({
+      html: '<span data-ak="K">Return to dashboard</span>',
+      classes: 'nhsuk-button--secondary',
+      href: '/v1/dashboard'
+      }) }}
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+{% endblock %}

@@ -56,6 +56,30 @@ module.exports = {
 
     patientFixtures: [
       {
+        firstName: 'Booby',
+        lastName: 'Lemur',
+        certificateType: 'matex',
+        channel: 'Paper',
+        nhsNumber: '1232 567 987',
+        dateOfBirth: {
+          day: ' ',
+          month: ' ',
+          year: '1995'
+        },
+        address: {
+          buildingNumber: '12',
+          streetName: 'Crown Passage',
+          addressLine2: '',
+          postTown: 'Birmingham',
+          county: '',
+          postcode: 'B14 9QX'
+        },
+        confidence: {
+          lastName: 50,      // Medium
+          firstName: 50,     // Medium
+          childDOB: 4       // Low (blank)
+        }
+      },      {
         firstName: 'Sorah',
         lastName: 'Jaaahnson',
         certificateType: 'matex',

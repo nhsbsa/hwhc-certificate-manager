@@ -15,7 +15,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
     <div class="nhsuk-grid-column-one-half">
         <h1 class="nhsuk-heading-m">{{ pageName }}
             {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}
-          {{ 'rejected' | getStatusTextOrTag( true ) | safe }}</h1>
+          {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
     </div>
     <div class="nhsuk-grid-column-one-half">
         {% set insetTextHtml %}
@@ -122,8 +122,8 @@ html: '<span data-ak="B">Return to your dashboard</span>'
                 <div class="nhsuk-button-group">
                     {{ button({ html: '<span data-ak="I">Next application</span>', attributes: { type: 'submit' } }) }}
                     {{ button({
-                    html: '<span data-ak="K">Finish processing</span>',
-                    href: '/v1/dashboard',
+                    html: '<span data-ak="K">Edit application</span>',
+                    href: 'javascript:history.go(-1)',
                     classes: 'nhsuk-button--secondary'
                     }) }}
                 </div>

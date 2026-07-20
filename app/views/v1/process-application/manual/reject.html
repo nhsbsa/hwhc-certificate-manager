@@ -1,0 +1,131 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Manual application' %}
+
+{% block beforeContent %}
+{{ backLink({
+href: '../../dashboard',
+html: '<span data-ak="B">Return to your dashboard</span>'
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-one-half">
+    <h1 class="nhsuk-heading-m">{{ pageName }}
+      {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}
+      {{ 'rejected' | getStatusTextOrTag( true ) | safe }}</h1>
+  </div>
+
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+
+
+
+
+
+    <div class="nhsuk-card nhsuk-card--grey">
+      <div class="nhsuk-card__content">
+
+        <h2 class="nhsuk-heading-m">Why is this application being rejected</h2>
+
+        <!-- REASON FOR REJECTION -->
+
+        <form method="post" action="/v1/process-application/manual/reject" novalidate>
+
+          {% if data.certificateType == 'matex' %}
+          {{ radios({
+          idPrefix: "rejectReason",
+          name: "rejectReason",
+          value: data.rejectReason or "Child has already reached their first birthday",
+          fieldset: {
+          legend: {
+          text: "Why is this application being rejected?"
+          }
+          },
+          items: [
+          {
+          value: "Child has already reached their first birthday",
+          text: "Child has already reached their first birthday"
+          },
+          {
+          value: "Patient is under 14",
+          text: "Patient is under 14"
+          },
+          {
+          value: "Patient is over 60",
+          text: "Patient is over 60"
+          },
+          {
+          value: "Application is not on a Matex form",
+          text: "Application is not on a Matex form"
+          }
+          ]
+          }) }}
+          {% else %}
+          {{ radios({
+          idPrefix: "rejectReason",
+          name: "rejectReason",
+          value: data.rejectReason or "Medical condition is not covered",
+          fieldset: {
+          legend: {
+          text: "Why is this application being rejected?"
+          }
+          },
+          items: [
+          {
+          value: "Medical condition is not covered",
+          text: "Medical condition is not covered"
+          },
+          {
+          value: "Patient is under 14",
+          text: "Patient is under 14"
+          },
+          {
+          value: "Patient is over 60",
+          text: "Patient is over 60"
+          },
+          {
+          value: "Application is not on a Medex form",
+          text: "Application is not on a Medex form"
+          }
+          ]
+          }) }}
+          {% endif %}
+
+
+
+      </div>
+    </div>
+
+
+
+    <div class="nhsuk-button-group">
+      {{ button({
+      html: '<span data-ak="I">New manual application</span>',
+      href: '/v1/process-application/new-application'
+      }) }}
+
+
+      {{ button({
+      html: '<span data-ak="K">Return to dashboard</span>',
+      classes: 'nhsuk-button--secondary',
+      href: '/v1/dashboard'
+      }) }}
+
+    </div>
+
+
+    </form>
+
+  </div>
+
+</div>
+
+
+
+{% endblock %}

@@ -1,183 +1,187 @@
 {% extends 'layout-fullscreen.html' %}
 
-  {% if data.patientID %}
-    {% set patient = data.patientID | getPatientData %}
-  {% endif %}
+{% if data.patientID %}
+{% set patient = data.patientID | getPatientData %}
+{% endif %}
 
-  {% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
+{% set pageName = patient.status | isApplicationOrCertificate | capitalize %}
 
 {% block beforeContent %}
-  {{ backLink({
-    href: 'javascript:history.go(-1)',
-    html: '<span data-ak="B">Back</span>'
-  }) }}
+{{ backLink({
+href: 'javascript:history.go(-1)',
+html: '<span data-ak="B">Back</span>'
+}) }}
 {% endblock %}
 
 {% block content %}
 
-  {% if data.patientID %}
-    {% set patient = data.patientID | getPatientData %}
-  {% endif %}
+{% if data.patientID %}
+{% set patient = data.patientID | getPatientData %}
+{% endif %}
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
 
-      <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
-        {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
-        {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
-      </h1>
+    <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
+      {{ (patient.certificateType or 'matex') | getCertificateTypeTextOrTag( true ) | safe }}
+      {{ (patient.status or 'processing') | getStatusTextOrTag( true ) | safe }}{% if patient.checking === true %} {{
+      'checking' | getStatusTextOrTag( true ) | safe }}{% endif %}
+    </h1>
 
-    </div>
   </div>
+</div>
 
-  {% if data.editMATEX.addressLineOne is defined %}
-  {% set addressValue1 = data.editMATEX.addressLineOne %}
-  {% else %}
-    {% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
-  {% endif %}
+{% if data.editMATEX.addressLineOne is defined %}
+{% set addressValue1 = data.editMATEX.addressLineOne %}
+{% else %}
+{% set addressValue1 = patient.address.buildingNumber + " " + patient.address.streetName %}
+{% endif %}
 
-  {% if data.editMATEX.addressLineTwo is defined %}
-    {% set addressValue2 = data.editMATEX.addressLineTwo %}
-  {% else %}
-    {% set addressValue2 = patient.address.locality %}
-  {% endif %}
+{% if data.editMATEX.addressLineTwo is defined %}
+{% set addressValue2 = data.editMATEX.addressLineTwo %}
+{% else %}
+{% set addressValue2 = patient.address.locality %}
+{% endif %}
 
-  {% if data.editMATEX.town is defined %}
-    {% set townValue = data.editMATEX.town %}
-  {% else %}
-    {% set townValue = patient.address.postTown %}
-  {% endif %}
+{% if data.editMATEX.town is defined %}
+{% set townValue = data.editMATEX.town %}
+{% else %}
+{% set townValue = patient.address.postTown %}
+{% endif %}
 
-  {% if data.editMATEX.county is defined %}
-    {% set countyValue = data.editMATEX.county %}
-  {% else %}
-    {% set countyValue = patient.address.county %}
-  {% endif %}
+{% if data.editMATEX.county is defined %}
+{% set countyValue = data.editMATEX.county %}
+{% else %}
+{% set countyValue = patient.address.county %}
+{% endif %}
 
-  {% if data.editMATEX.postcode is defined %}
-  {% set postcodeValue = data.editMATEX.postcode %}
-  {% else %}
-    {% set postcodeValue = patient.address.postcode %}
-  {% endif %}
+{% if data.editMATEX.postcode is defined %}
+{% set postcodeValue = data.editMATEX.postcode %}
+{% else %}
+{% set postcodeValue = patient.address.postcode %}
+{% endif %}
 
-  {% set address %}
-  {{ addressValue1 | trim }}<br>
-  {% if addressValue2 and addressValue2 | trim %}{{ addressValue2 | trim }}<br>{% endif %}
-  {{ townValue | trim }}<br>
-  {% if countyValue and countyValue | trim %}{{ countyValue | trim }}{% endif %}
-  {% endset %}
-  
-  {% if address | trim == '' %}
-    {% set address = '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS' %}
-  {% endif %}
+{% set address %}
+{{ addressValue1 | trim }}<br>
+{% if addressValue2 and addressValue2 | trim %}{{ addressValue2 | trim }}<br>{% endif %}
+{{ townValue | trim }}<br>
+{% if countyValue and countyValue | trim %}{{ countyValue | trim }}{% endif %}
+{% endset %}
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+{% if address | trim == '' %}
+{% set address = '101 Test Road<br>Goldcrest Way<br>Newcastle<br>TR1 0TS' %}
+{% endif %}
 
-          <div class="nhsuk-grid-row">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
 
-            <!-- TWO THIRDS -->
-            <div class="nhsuk-grid-column-two-thirds">
+    <div class="nhsuk-grid-row">
 
-               <div class="nhsuk-card nhsuk-card--grey">
-                    <div class="nhsuk-card__content">
+      <!-- TWO THIRDS -->
+      <div class="nhsuk-grid-column-two-thirds">
 
-                        {{ table({
-                            panel: false,
-                            caption: 'Application processing comparison',
-                            captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
-                            firstCellIsHeader: true,
-                            head: [
-                                { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
-                                { text: 'Proposed value' },
-                                { text: 'Accepted value' }
-                            ],
-                            rows: [
-                                [
-                                    { text: 'First name' },
-                                    { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
-                                    { text: patient.firstName or 'Sarah' }
-                                ],
-                                [
-                                    { text: 'Last name' },
-                                    { text: 'Adam' },
-                                    { text: patient.lastName or 'Jahnson' }
-                                ],
-                                [
-                                    { text: 'Date of birth' },
-                                    { text: '2 July 1995' },
-                                    { text: '2 July 1995' }
-                                ],
-                                [
-                                    { text: 'NHS number' },
-                                    { text: '1252 567 987' },
-                                    { text: '1252 567 987' }
-                                ],
-                                [
-                                    { text: 'Address' },
-                                    { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
-                                    { html: address or '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
-                                ],
-                                [
-                                    { text: 'Phone number' },
-                                    { html: '07911 123456' },
-                                    { html: '07911 123456' }
-                                ],
-                                [
-                                    { text: 'Email address' },
-                                    { html: '' },
-                                    { html: '' }
-                                ],
-                                [
-                                    { text: "Child's due or birth date" },
-                                    { html: '10 January 2026' },
-                                    { html: '10 January 2026' }
-                                ]
-                            ]
-                            }) }}
+        <div class="nhsuk-card nhsuk-card--grey">
+          <div class="nhsuk-card__content">
 
-
-                            {% if data.role === 'callCentre' %}
-
-                                  {{ textarea({
-                                        name: 'notes',
-                                        id: 'notes',
-                                        classes: 'nhsuk-u-width-two-thirds',
-                                        label: {
-                                            text: 'Notes (optional)',
-                                            isPageHeading: false
-                                        }
-                                  }) }}
-
-                                  {{ button({
-                                    href: 'case',
-                                    text: 'Add note'
-                                }) }}
-
-                                
-                            {% endif %}
-
-                    </div>
-                </div>
-                
-
-            </div>
+            {{ table({
+            panel: false,
+            caption: 'Application processing comparison',
+            captionClasses: 'nhsuk-u-font-size-26 nhsuk-u-margin-bottom-4',
+            firstCellIsHeader: true,
+            head: [
+            { html: '<span class="nhsuk-u-visually-hidden">Field</span>' },
+            { text: 'Proposed value' },
+            { text: 'Accepted value' }
+            ],
+            rows: [
+            [
+            { text: 'First name' },
+            { text: ( patient.firstName | changeOneLetter ) or 'Sorah' },
+            { text: patient.firstName or 'Sarah' }
+            ],
+            [
+            { text: 'Last name' },
+            { text: 'Adam' },
+            { text: patient.lastName or 'Jahnson' }
+            ],
+            [
+            { text: 'Date of birth' },
+            { text: '2 July 1995' },
+            { text: '2 July 1995' }
+            ],
+            [
+            { text: 'NHS number' },
+            { text: '1252 567 987' },
+            { text: '1252 567 987' }
+            ],
+            [
+            { text: 'Address' },
+            { html: '12 Crown Passage, <br>Birmingham, <br>B14 9QX' },
+            { html: address or '12 Crown Passage, <br>Birmingham, <br>B14 9QX' }
+            ],
+            [
+            { text: 'Phone number' },
+            { html: '07911 123456' },
+            { html: '07911 123456' }
+            ],
+            [
+            { text: 'Email address' },
+            { html: '' },
+            { html: '' }
+            ],
+            [
+            { text: "Child's due or birth date" },
+            { html: '10 January 2026' },
+            { html: '10 January 2026' }
+            ]
+            ]
+            }) }}
 
 
-            <!-- ONE THIRD -->
-            <div class="nhsuk-grid-column-one-third sticky-column">
+            {% if data.role === 'callCentre' %}
 
-              {% from '../macros/image.njk' import image %}
-              {{ image() }}
+            {{ textarea({
+            name: 'notes',
+            id: 'notes',
+            classes: 'nhsuk-u-width-two-thirds',
+            label: {
+            text: 'Notes (optional)',
+            isPageHeading: false
+            },
+            hint: {
+            text: "For internal use only. This will not be sent to the patient or healthcare practitioner."
+            }
+            }) }}
 
-              {% from '../macros/notes.njk' import notes %}
-              {{ notes( patient ) }}
+            {{ button({
+            href: 'case',
+            text: 'Add note'
+            }) }}
 
-            </div>
+
+            {% endif %}
 
           </div>
+        </div>
+
+
+      </div>
+
+
+      <!-- ONE THIRD -->
+      <div class="nhsuk-grid-column-one-third sticky-column">
+
+        {% from '../macros/image.njk' import image %}
+        {{ image() }}
+
+        {% from '../macros/notes.njk' import notes %}
+        {{ notes( patient ) }}
+
+      </div>
 
     </div>
+
   </div>
+</div>
 
 {% endblock %}

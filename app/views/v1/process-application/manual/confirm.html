@@ -1,0 +1,74 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Manual application' %}
+
+{% block beforeContent %}
+{{ backLink({
+href: '../../dashboard',
+html: '<span data-ak="B">Return to your dashboard</span>'
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-one-half">
+        <h1 class="nhsuk-heading-m">{{ pageName }}
+            {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}</h1>
+    </div>
+
+</div>
+
+<div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+
+
+        {% if data.confirmationType == 'further-information' %}
+        <div class="nhsuk-panel nhsuk-panel--interruption">
+            <h1 class="nhsuk-panel__title nhsuk-panel__title--l">
+                Application processed
+            </h1>
+            <div class="nhsuk-panel__body">
+                <p>This application will be put on hold until further information is received and processed.</p>
+
+            </div>
+        </div>
+        {% endif %}
+
+        {% if data.confirmationType == 'reject' %}
+        <div class="nhsuk-card nhsuk-card--warning">
+            <div class="nhsuk-card__content">
+                <h3 class="nhsuk-card__heading">
+                    <span role="text">
+                        <span class="nhsuk-u-visually-hidden">Important:</span> Application processed
+                    </span>
+                </h3>
+                <p class="nhsuk-card__description">This application will be rejected.</p>
+            </div>
+        </div>
+        {% endif %}
+
+
+
+
+        <div class="nhsuk-button-group">
+      {{ button({
+      html: '<span data-ak="I">New manual application</span>',
+      href: '/v1/process-application/new-application'
+      }) }}
+
+
+      {{ button({
+      html: '<span data-ak="K">Return to dashboard</span>',
+      classes: 'nhsuk-button--secondary',
+      href: '/v1/dashboard'
+      }) }}
+
+    </div>
+
+
+    </div>
+</div>
+
+{% endblock %}
