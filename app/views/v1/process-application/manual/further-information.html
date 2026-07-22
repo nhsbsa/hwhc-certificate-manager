@@ -186,19 +186,13 @@ html: '<span data-ak="B">Return to your dashboard</span>'
         {% endset %}
 
 
-        {% if data.certificateType == 'matex' %}
-        {% set typeSpecificItem = {
-        value: "Child's due or birth date",
-        text: "Child's due or birth date",
-        attributes: { "data-focus-image": "childsDueOrBirthDate" }
-        } %}
-        {% else %}
-        {% set typeSpecificItem = {
-        value: "Medical conditions",
-        text: "Medical conditions",
-        attributes: { "data-focus-image": "permanentFistula" }
-        } %}
-        {% endif %}
+     {% if data.certificateType == 'matex' %}
+  {% set typeSpecificItem = {
+    value: "Child's due or birth date",
+    text: "Child's due or birth date",
+    attributes: { "data-focus-image": "childsDueOrBirthDate" }
+  } %}
+{% endif %}
 
         <form method="post" action="/v1/process-application/manual/further-information" novalidate>
 
@@ -217,19 +211,9 @@ html: '<span data-ak="B">Return to your dashboard</span>'
           },
           items: [
           {
-          value: "Patient's signature",
-          text: "Patient's signature",
-          attributes: { "data-focus-image": "patientSignature" }
-          },
-          {
-          value: "Healthcare practitioner's signature",
-          text: "Healthcare practitioner's signature",
-          attributes: { "data-focus-image": "healthcarePractitionerSignature" }
-          },
-          {
-          value: "Healthcare practitioner's contact information",
-          text: "Healthcare practitioner's contact information",
-          attributes: { "data-focus-image": "healthcarePractitionerDetails" }
+          value: "Patient's full name",
+          text: "Patient's full name",
+          attributes: { "data-focus-image": "firstName" }
           },
           {
           value: "Date of birth",
@@ -241,10 +225,16 @@ html: '<span data-ak="B">Return to your dashboard</span>'
           text: "Full address including postcode",
           attributes: { "data-focus-image": "address" }
           },
+        
           {
           value: "Email address",
           text: "Email address",
           attributes: { "data-focus-image": "emailAddress" }
+          },
+           {
+          value: "Healthcare practitioner's contact information",
+          text: "Healthcare practitioner's contact information",
+          attributes: { "data-focus-image": "healthcarePractitionerDetails" }
           },
           {
           value: "NHS number",
@@ -301,8 +291,10 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
 
           <div class="nhsuk-button-group">
-            {{ button({ html: '<span data-ak="I">Send request</span>', href: '/v1/process-application/manual/confirm' })
-            }}
+  {{ button({
+  html: '<span data-ak="I">Send request</span>',
+  href: '/v1/process-application/manual/confirm?confirmationType=further-information'
+}) }}
             {{ button({
             html: '<span data-ak="K">Edit application</span>',
             href: 'javascript:history.go(-1)',

@@ -4,6 +4,7 @@ const router = express.Router();
 const axios = require('axios');
 
 
+
 function initPaperMatexQueue(req) {
   if (req.session.data.paperMatexQueue) return;
 
@@ -83,6 +84,11 @@ function processMedexApplication(req) {
   hydrateImageFields(req, queue[req.session.data.medexIndex]);
 }
 
+
+
+
+
+
 router.post(/index/, function (req, res) {
     
     let destination = 'search';
@@ -129,25 +135,25 @@ router.post(/search/, function (req, res) {
     res.redirect( destination );
 });
 
-router.post(/process-application\/experimental--single/, function (req, res) {
-    const destination = 'review-application';
-    res.redirect( destination );
-});
+// router.post(/process-application\/experimental--single/, function (req, res) {
+//     const destination = 'review-application';
+//     res.redirect( destination );
+// });
 
-router.post(/process-application\/cannot-process-application--horizontal-labels-fil/, function (req, res) {
+// router.post(/process-application\/cannot-process-application--horizontal-labels-fil/, function (req, res) {
 
-    initPaperMatexQueue(req);
+//     initPaperMatexQueue(req);
 
-    const stats = req.session.data.applicationStats;
+//     const stats = req.session.data.applicationStats;
 
-    stats.onHold += 1;
-    stats.total += 1;
+//     stats.onHold += 1;
+//     stats.total += 1;
 
-    processCurrentApplication(req);
+//     processCurrentApplication(req);
 
-    return res.redirect('/v1/process-application/matex');
+//     return res.redirect('/v1/process-application/matex');
 
-});
+// });
 
 router.get(/process-application\/matex/, function (req, res) {
 
@@ -298,9 +304,9 @@ router.get(/process-application\/scenarios\/further-information/, function (req,
 
 
 router.post(/process-application\/scenarios\/reject/, function (req, res) {
-  const idx = req.session.data.scenarioIndex || 0;
-  const nextType = idx % 2 === 0 ? 'matex' : 'medex';
-  return res.redirect('/v1/process-application/' + nextType);
+  req.session.data.confirmationType = 'reject';
+
+  return res.redirect('/v1/process-application/scenarios/confirm');
 });
 
 router.post(/process-application\/scenarios\/further-information/, function (req, res) {

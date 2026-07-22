@@ -15,7 +15,7 @@
     <div class="nhsuk-grid-column-full">
 
       <h1 class="nhsuk-heading-m">{{ pageName }}
-        {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
+        {{ 'hrtppc' | getCertificateTypeTextOrTag( true ) | safe }}
         {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
 
     </div>
@@ -43,8 +43,8 @@
                     </div>
 
 
-              <form class="horizontal-labels" method="post" novalidate>
-
+     <form class="horizontal-labels" method="post" >
+<input type="hidden" name="certificateType" value="hrtppc">
                 <!-- FULL NAME -->
                 {% call fieldset({
                   legend: {
@@ -59,7 +59,8 @@
                     },
                     id: 'imageLastName',
                     name: 'imageLastName',
-                    classes: 'nhsuk-input--width-20'
+                    classes: 'nhsuk-input--width-20',
+                    value: data.imageLastName or 'Smith'
                   }) }}
 
                   {{ input({
@@ -68,7 +69,8 @@
                     },
                     id: 'imageFirstName',
                     name: 'imageFirstName',
-                    classes: 'nhsuk-input--width-20'
+                    classes: 'nhsuk-input--width-20',
+                     value: data.imageFirstName or 'John'
                   }) }}
 
                   
@@ -77,29 +79,32 @@
 
 
 
-                {{ dateInput({
-                  id: 'imageDateOfBirth',
-                  namePrefix: 'imageDateOfBirth',
-                  fieldset: {
-                    legend: {
-                      html: 'Date of birth'
-                    }
-                  },
-                  items: [
-                    {
-                      name: 'day',
-                      classes: 'nhsuk-input--width-2'
-                    },
-                    {
-                      name: 'month',
-                      classes: 'nhsuk-input--width-2'
-                    },
-                    {
-                      name: 'year',
-                      classes: 'nhsuk-input--width-4'
-                    }
-                  ]
-                }) }}
+             {{ dateInput({
+  id: 'imageDateOfBirth',
+  namePrefix: 'imageDateOfBirth',
+  fieldset: {
+    legend: {
+      html: 'Date of birth'
+    }
+  },
+  items: [
+    {
+      name: 'day',
+      classes: 'nhsuk-input--width-2',
+      value: data.imageDateOfBirth.day or '15'
+    },
+    {
+      name: 'month',
+      classes: 'nhsuk-input--width-2',
+      value: data.imageDateOfBirth.month or '03'
+    },
+    {
+      name: 'year',
+      classes: 'nhsuk-input--width-4',
+      value: data.imageDateOfBirth.year or '1990'
+    }
+  ]
+}) }}
 
 
                 {{ input({
@@ -108,7 +113,8 @@
                     },
                     id: 'imageNHSNumber',
                     name: 'imageNHSNumber',
-                    classes: 'nhsuk-input--width-10'
+                    classes: 'nhsuk-input--width-10',
+                    value: data.imageNHSNumber or '9434765919'
                   }) }}
 
 
@@ -129,7 +135,7 @@
                       id: 'imageBuildingNumberOrName',
                       name: 'imageBuildingNumberOrName',
                       classes: 'nhsuk-input--width-10',
-                      value: data.lookupAddress.buildingNumber
+                      value: data.lookupAddress.buildingNumber or '42'
                     }) }}
 
                     {{ input({
@@ -139,7 +145,7 @@
                       classes: 'nhsuk-input--width-20',
                       id: 'imageAddressLine1',
                       name: 'imageAddressLine1',
-                      value: data.lookupAddress.streetName
+                      value: data.lookupAddress.streetName or 'High Street'
                     }) }}
 
                     {{ input({
@@ -159,7 +165,7 @@
                       classes: 'nhsuk-input--width-20',
                       id: 'imageTown',
                       name: 'imageTown',
-                      value: data.lookupAddress.town
+                      value: data.lookupAddress.town or 'London'
                     }) }}
 
                     {{ input({
@@ -169,7 +175,7 @@
                       classes: 'nhsuk-input--width-10',
                       id: 'imageCounty',
                       name: 'imageCounty',
-                      value: data.lookupAddress.county
+                      value: data.lookupAddress.county or 'London'
                     }) }}
 
                     {{ input({
@@ -179,7 +185,7 @@
                       classes: 'nhsuk-input--width-10',
                       id: 'imagePostcode',
                       name: 'imagePostcode',
-                      value: data.lookupAddress.postcode
+                      value: data.lookupAddress.postcode or 'SW1A 1AA'
                     }) }}
 
                   {% endcall %}
@@ -341,10 +347,10 @@
 
                 <div class="nhsuk-button-group">
 
-                  {{ button({
-                    html : '<span data-ak="I">Submit application</span>',
-                    href: '../dashboard'
-                  }) }}
+                         {{ button({
+                html: '<span data-ak="I">Submit application</span>',
+                type: 'submit'
+                }) }}
 
                 </div>
 

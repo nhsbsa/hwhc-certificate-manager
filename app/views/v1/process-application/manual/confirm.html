@@ -10,7 +10,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 {% endblock %}
 
 {% block content %}
-
+{% set confirmationType = data.confirmationType %}
 <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-one-half">
         <h1 class="nhsuk-heading-m">{{ pageName }}
@@ -23,20 +23,24 @@ html: '<span data-ak="B">Return to your dashboard</span>'
     <div class="nhsuk-grid-column-two-thirds">
 
 
+        {% if confirmationType == 'further-information' %}
 
-        {% if data.confirmationType == 'further-information' %}
         <div class="nhsuk-panel nhsuk-panel--interruption">
             <h1 class="nhsuk-panel__title nhsuk-panel__title--l">
                 Application processed
             </h1>
             <div class="nhsuk-panel__body">
+    <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Name:</p>
+      <h2 class="nhsuk-u-padding-top-0">
+        {{ data.approvedFirstName }} {{ data.approvedLastName }}
+      </h2>
                 <p>This application will be put on hold until further information is received and processed.</p>
 
             </div>
         </div>
         {% endif %}
 
-        {% if data.confirmationType == 'reject' %}
+        {% if confirmationType == 'reject' %}
         <div class="nhsuk-card nhsuk-card--warning">
             <div class="nhsuk-card__content">
                 <h3 class="nhsuk-card__heading">
@@ -44,7 +48,13 @@ html: '<span data-ak="B">Return to your dashboard</span>'
                         <span class="nhsuk-u-visually-hidden">Important:</span> Application processed
                     </span>
                 </h3>
-                <p class="nhsuk-card__description">This application will be rejected.</p>
+               
+                 <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Name:</p>
+      <h2 class="nhsuk-u-padding-top-0">
+        {{ data.approvedFirstName }} {{ data.approvedLastName }}
+      </h2>
+
+       <p class="nhsuk-card__description">This application will be rejected.</p>
             </div>
         </div>
         {% endif %}
@@ -53,19 +63,19 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
 
         <div class="nhsuk-button-group">
-      {{ button({
-      html: '<span data-ak="I">New manual application</span>',
-      href: '/v1/process-application/new-application'
-      }) }}
+            {{ button({
+            html: '<span data-ak="I">New manual application</span>',
+            href: '/v1/process-application/new-application'
+            }) }}
 
 
-      {{ button({
-      html: '<span data-ak="K">Return to dashboard</span>',
-      classes: 'nhsuk-button--secondary',
-      href: '/v1/dashboard'
-      }) }}
+            {{ button({
+            html: '<span data-ak="K">Return to dashboard</span>',
+            classes: 'nhsuk-button--secondary',
+            href: '/v1/dashboard'
+            }) }}
 
-    </div>
+        </div>
 
 
     </div>

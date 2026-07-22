@@ -206,12 +206,7 @@
                         text: "Child's due or birth date",
                         attributes: { "data-focus-image": "childsDueOrBirthDate" }
                       } %}
-                    {% else %}
-                      {% set typeSpecificItem = {
-                        value: "Medical conditions",
-                        text: "Medical conditions",
-                        attributes: { "data-focus-image": "permanentFistula" }
-                      } %}
+                    
                     {% endif %}
                       
                     <form method="post" action="/v1/process-application/scenarios/further-information" novalidate>
@@ -231,20 +226,11 @@
                         },
                         items: [
                           {
-                            value: "Patient's signature",
-                            text: "Patient's signature",
-                            attributes: { "data-focus-image": "patientSignature" }
+                            value: "Patient's full name",
+                            text: "Patient's full name",
+                            attributes: { "data-focus-image": "firstName" }
                           },
-                          {
-                            value: "Healthcare practitioner's signature",
-                            text: "Healthcare practitioner's signature",
-                            attributes: { "data-focus-image": "healthcarePractitionerSignature" }
-                          },
-                          {
-                            value: "Healthcare practitioner's contact information",
-                            text: "Healthcare practitioner's contact information",
-                            attributes: { "data-focus-image": "healthcarePractitionerDetails" }
-                          },
+                         
                           {
                             value: "Date of birth",
                             text: "Date of birth",
@@ -259,6 +245,11 @@
                             value: "Email address",
                             text: "Email address",
                             attributes: { "data-focus-image": "emailAddress" }
+                          },
+                           {
+                            value: "Healthcare practitioner's contact information",
+                            text: "Healthcare practitioner's contact information",
+                            attributes: { "data-focus-image": "healthcarePractitionerDetails" }
                           },
                           {
                             value: "NHS number",

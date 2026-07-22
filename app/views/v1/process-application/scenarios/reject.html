@@ -56,13 +56,17 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 {{ radios({
   idPrefix: "rejectReason",
   name: "rejectReason",
-  value: data.rejectReason or "Child has already reached their first birthday",
+  value: data.rejectReason or "Healthcare practitioner or patient signature is missing",
   fieldset: {
     legend: {
       text: "Why is this application being rejected?"
     }
   },
   items: [
+           {
+      value: "Healthcare practitioner or patient signature is missing",
+      text: "Healthcare practitioner or patient signature is missing"
+    },
     {
       value: "Child has already reached their first birthday",
       text: "Child has already reached their first birthday"
@@ -85,13 +89,17 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 {{ radios({
   idPrefix: "rejectReason",
   name: "rejectReason",
-  value: data.rejectReason or "Medical condition is not covered",
+  value: data.rejectReason or "Healthcare practitioner or patient signature is missing",
   fieldset: {
     legend: {
       text: "Why is this application being rejected?"
     }
   },
   items: [
+       {
+      value: "Healthcare practitioner or patient signature is missing",
+      text: "Healthcare practitioner or patient signature is missing"
+    },
     {
       value: "Medical condition is not covered",
       text: "Medical condition is not covered"
@@ -120,7 +128,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
 
                 <div class="nhsuk-button-group">
-                    {{ button({ html: '<span data-ak="I">Next application</span>', attributes: { type: 'submit' } }) }}
+                    {{ button({ html: '<span data-ak="I">Next</span>', attributes: { type: 'submit' } }) }}
                     {{ button({
                     html: '<span data-ak="K">Edit application</span>',
                     href: 'javascript:history.go(-1)',
