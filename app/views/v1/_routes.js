@@ -155,6 +155,8 @@ router.post(/search/, function (req, res) {
 
 // });
 
+//THE NEXT GROUP OF ROUTES CONTROL THE BEHAVIOUR OF CERTIFICATES IN THE PROCESS APPLICATION JOURNEY
+//START OF GROUP
 router.get(/process-application\/matex/, function (req, res) {
 
   initPaperMatexQueue(req);
@@ -202,11 +204,12 @@ router.post(/process-application\/matex/, function (req, res) {
     req.session.data.certNumber = `${rawCertMatex.slice(0,4)} ${rawCertMatex.slice(4,7)} ${rawCertMatex.slice(7)}`;
     req.session.data.certificateType = 'matex';
 
-    processCurrentApplication(req);
+if (outcome === 'accepted') {
+  processCurrentApplication(req);
+  req.session.data.scenarioIndex = (idx + 1) % 6;
+}
 
-    req.session.data.scenarioIndex = (idx + 1) % 6;
-
-    return res.redirect('/v1/process-application/scenarios/' + outcome);
+return res.redirect('/v1/process-application/scenarios/' + outcome);
   }
 
   if (req.body.applicationDecision === 'cannotProcess') {
@@ -266,11 +269,12 @@ router.post(/process-application\/medex/, function (req, res) {
     req.session.data.certNumber = `${rawCertMedex.slice(0,4)} ${rawCertMedex.slice(4,7)} ${rawCertMedex.slice(7)}`;
     req.session.data.certificateType = 'medex';
 
-    processMedexApplication(req);
+if (outcome === 'accepted') {
+  processMedexApplication(req);
+  req.session.data.scenarioIndex = (idx + 1) % 6;
+}
 
-    req.session.data.scenarioIndex = (idx + 1) % 6;
-
-    return res.redirect('/v1/process-application/scenarios/' + outcome);
+return res.redirect('/v1/process-application/scenarios/' + outcome);
   }
 
   if (req.body.applicationDecision === 'cannotProcess') {
@@ -320,47 +324,67 @@ router.get(/process-application\/scenarios\/confirm/, function (req, res) {
   });
 });
 
+router.post(/process-application\/scenarios\/confirm/, function (req, res) {
 
-router.post(/process-application\/review-application/, function (req, res) {
-    const destination = 'confirmation?confirmationStatus=applicationApproved';
-    res.redirect( destination );
-});
+  const idx = req.session.data.scenarioIndex || 0;
 
-
-router.post(/process-application\/cannot-process-application--horizontal-labels/, function (req, res) {
-
-    const cannotProcessApplication = req.session.data.cannotProcessApplication;
-
-    const stats = req.session.data.applicationStats;
-
-    delete req.session.data.furtherInformation;
-    delete req.session.data.furtherInformationRequest;
-    delete req.session.data.furtherInformationNotes;
-
-    switch (cannotProcessApplication) {
-
-      case 'askForFurtherInformation':
-        // NOT counted here – handled in --fil
-        return res.redirect(
-          'cannot-process-application--horizontal-labels-fil'
-        );
-
-      case 'requestKFP':
-        stats.kfp += 1;
-        stats.total += 1;
-        break;
-
-      case 'rejectApplication':
-        stats.rejected += 1;
-        stats.total += 1;
-        break;
-    }
-
+  if (idx % 2 === 0) {
     processCurrentApplication(req);
-
-    res.redirect('experimental--horizontal-labels');
+  } else {
+    processMedexApplication(req);
   }
-);
+
+  req.session.data.scenarioIndex = (idx + 1) % 6;
+
+  const nextType = (req.session.data.scenarioIndex % 2 === 0)
+    ? 'matex'
+    : 'medex';
+
+  return res.redirect('/v1/process-application/' + nextType);
+});
+//END OF GROUP
+
+
+// router.post(/process-application\/review-application/, function (req, res) {
+//     const destination = 'confirmation?confirmationStatus=applicationApproved';
+//     res.redirect( destination );
+// });
+
+
+// router.post(/process-application\/cannot-process-application--horizontal-labels/, function (req, res) {
+
+//     const cannotProcessApplication = req.session.data.cannotProcessApplication;
+
+//     const stats = req.session.data.applicationStats;
+
+//     delete req.session.data.furtherInformation;
+//     delete req.session.data.furtherInformationRequest;
+//     delete req.session.data.furtherInformationNotes;
+
+//     switch (cannotProcessApplication) {
+
+//       case 'askForFurtherInformation':
+//         // NOT counted here – handled in --fil
+//         return res.redirect(
+//           'cannot-process-application--horizontal-labels-fil'
+//         );
+
+//       case 'requestKFP':
+//         stats.kfp += 1;
+//         stats.total += 1;
+//         break;
+
+//       case 'rejectApplication':
+//         stats.rejected += 1;
+//         stats.total += 1;
+//         break;
+//     }
+
+//     processCurrentApplication(req);
+
+//     res.redirect('experimental--horizontal-labels');
+//   }
+// );
 
 router.get(/process-application\/cannot-process-application--horizontal-labels-fil/, function (req, res) {
 

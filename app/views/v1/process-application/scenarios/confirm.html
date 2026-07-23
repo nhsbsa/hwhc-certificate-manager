@@ -15,7 +15,12 @@ html: '<span data-ak="B">Return to your dashboard</span>'
     <div class="nhsuk-grid-column-one-half">
         <h1 class="nhsuk-heading-m">{{ pageName }}
             {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}
-          {{ 'on-hold' | getStatusTextOrTag( true ) | safe }}</h1>
+           {% if data.confirmationType == 'reject' %}
+        {{ 'rejected' | getStatusTextOrTag( true ) | safe }}
+    {% else %}
+        {{ 'on-hold' | getStatusTextOrTag( true ) | safe }}
+    {% endif %}
+</h1>
     </div>
     <div class="nhsuk-grid-column-one-half">
         {% set insetTextHtml %}
@@ -57,32 +62,35 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
                 {% if data.confirmationType == 'reject' %}
                 <div class="nhsuk-card nhsuk-card--warning">
-  <div class="nhsuk-card__content">
-    <h3 class="nhsuk-card__heading">
-      <span role="text">
-        <span class="nhsuk-u-visually-hidden">Important:</span> Application processed
-      </span>
-    </h3>
-    <p class="nhsuk-card__description">This application will be rejected.</p>
-  </div>
-</div>
+                    <div class="nhsuk-card__content">
+                        <h3 class="nhsuk-card__heading">
+                            <span role="text">
+                                <span class="nhsuk-u-visually-hidden">Important:</span> Application processed
+                            </span>
+                        </h3>
+                        <p class="nhsuk-card__description">This application will be rejected.</p>
+                    </div>
+                </div>
                 {% endif %}
 
 
 
 
-                <div class="nhsuk-button-group">
-                    {% if data.scenarioIndex % 2 == 0 %}
-                    {{ button({ html: '<span data-ak="I">Next</span>', href: '../matex' }) }}
-                    {% else %}
-                    {{ button({ html: '<span data-ak="I">Next</span>', href: '../medex' }) }}
-                    {% endif %}
-                    {{ button({
-                    html: '<span data-ak="K">Finish processing</span>',
-                    href: '/v1/dashboard',
-                    classes: 'nhsuk-button--secondary'
-                    }) }}
-                </div>
+        <form method="post" action="/v1/process-application/scenarios/confirm">
+
+  <div class="nhsuk-button-group">
+    {{ button({
+      html: '<span data-ak="I">Next</span>'
+    }) }}
+
+    {{ button({
+      html: '<span data-ak="K">Finish processing</span>',
+      href: '/v1/dashboard',
+      classes: 'nhsuk-button--secondary'
+    }) }}
+  </div>
+
+</form>
 
             </div>
 

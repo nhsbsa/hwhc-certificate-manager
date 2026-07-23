@@ -12,136 +12,136 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 {% block content %}
 
 <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-one-half">
-        <h1 class="nhsuk-heading-m">{{ pageName }}
-            {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}
-          {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
-    </div>
-    <div class="nhsuk-grid-column-one-half">
-        {% set insetTextHtml %}
-        <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
-        {% endset %}
-        {{ insetText({
-        html: insetTextHtml,
-        classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
-        }) }}
-    </div>
+  <div class="nhsuk-grid-column-one-half">
+    <h1 class="nhsuk-heading-m">{{ pageName }}
+      {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}
+      {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
+  </div>
+  <div class="nhsuk-grid-column-one-half">
+    {% set insetTextHtml %}
+    <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
+    {% endset %}
+    {{ insetText({
+    html: insetTextHtml,
+    classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
+    }) }}
+  </div>
 </div>
 
 <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-        <div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-grid-row">
 
-            <!-- ONE HALF - IMAGE -->
-            <div class="nhsuk-grid-column-one-half sticky-column">
-                {% from '../../macros/image.njk' import image %}
-                {{ image(data.certificateType) }}
-            </div>
+      <!-- ONE HALF - IMAGE -->
+      <div class="nhsuk-grid-column-one-half sticky-column">
+        {% from '../../macros/image.njk' import image %}
+        {{ image(data.certificateType) }}
+      </div>
 
-            <!-- ONE HALF - CONTENT -->
-            <div class="nhsuk-grid-column-one-half">
-
-
-
-                <div class="nhsuk-card nhsuk-card--grey">
-                    <div class="nhsuk-card__content">
-
-                        <h2 class="nhsuk-heading-m">Application will be rejected</h2>
-
-                        <!-- REASON FOR REJECTION -->
-
-                    <form method="post" action="/v1/process-application/scenarios/reject" novalidate>
-
-{% if data.certificateType == 'matex' %}
-{{ radios({
-  idPrefix: "rejectReason",
-  name: "rejectReason",
-  value: data.rejectReason or "Healthcare practitioner or patient signature is missing",
-  fieldset: {
-    legend: {
-      text: "Why is this application being rejected?"
-    }
-  },
-  items: [
-           {
-      value: "Healthcare practitioner or patient signature is missing",
-      text: "Healthcare practitioner or patient signature is missing"
-    },
-    {
-      value: "Child has already reached their first birthday",
-      text: "Child has already reached their first birthday"
-    },
-    {
-      value: "Patient is under 14",
-      text: "Patient is under 14"
-    },
-    {
-      value: "Patient is over 60",
-      text: "Patient is over 60"
-    },
-    {
-      value: "Application is not on a Matex form",
-      text: "Application is not on a Matex form"
-    }
-  ]
-}) }}
-{% else %}
-{{ radios({
-  idPrefix: "rejectReason",
-  name: "rejectReason",
-  value: data.rejectReason or "Healthcare practitioner or patient signature is missing",
-  fieldset: {
-    legend: {
-      text: "Why is this application being rejected?"
-    }
-  },
-  items: [
-       {
-      value: "Healthcare practitioner or patient signature is missing",
-      text: "Healthcare practitioner or patient signature is missing"
-    },
-    {
-      value: "Medical condition is not covered",
-      text: "Medical condition is not covered"
-    },
-    {
-      value: "Patient is under 14",
-      text: "Patient is under 14"
-    },
-    {
-      value: "Patient is over 60",
-      text: "Patient is over 60"
-    },
-    {
-      value: "Application is not on a Medex form",
-      text: "Application is not on a Medex form"
-    }
-  ]
-}) }}
-{% endif %}
+      <!-- ONE HALF - CONTENT -->
+      <div class="nhsuk-grid-column-one-half">
 
 
 
-                    </div>
-                </div>
+        <div class="nhsuk-card nhsuk-card--grey">
+          <div class="nhsuk-card__content">
+
+            <h2 class="nhsuk-heading-m">Application will be rejected</h2>
+
+            <!-- REASON FOR REJECTION -->
+
+            <form method="post" action="/v1/process-application/scenarios/reject" novalidate>
+
+              {% if data.certificateType == 'matex' %}
+              {{ radios({
+              idPrefix: "rejectReason",
+              name: "rejectReason",
+              value: data.rejectReason or "Healthcare practitioner or patient signature is missing",
+              fieldset: {
+              legend: {
+              text: "Why is this application being rejected?"
+              }
+              },
+              items: [
+              {
+              value: "Healthcare practitioner or patient signature is missing",
+              text: "Healthcare practitioner or patient signature is missing"
+              },
+              {
+              value: "Child has already reached their first birthday",
+              text: "Child has already reached their first birthday"
+              },
+              {
+              value: "Patient is under 14",
+              text: "Patient is under 14"
+              },
+              {
+              value: "Patient is over 60",
+              text: "Patient is over 60"
+              },
+              {
+              value: "Application is not on a Matex form",
+              text: "Application is not on a Matex form"
+              }
+              ]
+              }) }}
+              {% else %}
+              {{ radios({
+              idPrefix: "rejectReason",
+              name: "rejectReason",
+              value: data.rejectReason or "Healthcare practitioner or patient signature is missing",
+              fieldset: {
+              legend: {
+              text: "Why is this application being rejected?"
+              }
+              },
+              items: [
+              {
+              value: "Healthcare practitioner or patient signature is missing",
+              text: "Healthcare practitioner or patient signature is missing"
+              },
+              {
+              value: "Medical condition is not covered",
+              text: "Medical condition is not covered"
+              },
+              {
+              value: "Patient is under 14",
+              text: "Patient is under 14"
+              },
+              {
+              value: "Patient is over 60",
+              text: "Patient is over 60"
+              },
+              {
+              value: "Application is not on a Medex form",
+              text: "Application is not on a Medex form"
+              }
+              ]
+              }) }}
+              {% endif %}
 
 
 
-                <div class="nhsuk-button-group">
-                    {{ button({ html: '<span data-ak="I">Next</span>', attributes: { type: 'submit' } }) }}
-                    {{ button({
-                    html: '<span data-ak="K">Edit application</span>',
-                    href: 'javascript:history.go(-1)',
-                    classes: 'nhsuk-button--secondary'
-                    }) }}
-                </div>
 
-                    </form>
 
-            </div>
 
+              <div class="nhsuk-button-group">
+                {{ button({ html: '<span data-ak="I">Next</span>', attributes: { type: 'submit' } }) }}
+                {{ button({
+                html: '<span data-ak="K">Edit application</span>',
+                href: 'javascript:history.go(-1)',
+                classes: 'nhsuk-button--secondary'
+                }) }}
+              </div>
+
+            </form>
+          </div>
         </div>
+
+      </div>
+
     </div>
+  </div>
 </div>
 
 {% endblock %}
