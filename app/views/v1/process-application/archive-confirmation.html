@@ -18,14 +18,9 @@
                         idPrefix: "furtherInformation",
                         name: "furtherInformation",
                         values: data.furtherInformation,
-                        fieldset: {
-                          legend: {
-                            text: "In which fields do you need further information?",
-                            isPageHeading: false
-                          }
-                        },
+                        
                         hint: {
-                          text: "Select all information that is missing or unclear."
+                          text: "Select all missing or unclear information"
                         },
                         items: [
                           {
@@ -49,8 +44,8 @@
                             attributes: { "data-focus-image": "dateOfBirth" }
                           },
                           {
-                            value: "Full address including postcode",
-                            text: "Full address including postcode",
+                            value: "Address and postcode",
+                            text: "Address and postcode",
                             attributes: { "data-focus-image": "address" }
                           },
                           {
@@ -75,7 +70,7 @@
                         value: data.furtherInformationRequest,
                         fieldset: {
                           legend: {
-                            text: 'Who will you ask for further information?'
+                            text: 'Who will we ask for further information?'
                           }
                         },
                         items: [

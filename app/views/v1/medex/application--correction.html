@@ -747,7 +747,7 @@
 
 
                 {{ button({
-                  html: '<span data-ak="K">Finish correction</span>',
+                  html: '<span data-ak="K">Finish changing records</span>',
                   classes: 'nhsuk-button--secondary',
                   href: '/v1/dashboard'
                 }) }}
@@ -809,13 +809,6 @@
     </div>
   </div>
 
-  <script>
-    window.addEventListener('pageshow', function (event) {
-      // Fired when page is restored from back/forward cache
-      if (event.persisted) {
-        window.location.reload();
-      }
-    });
-  </script>
+ 
 
 {% endblock %}

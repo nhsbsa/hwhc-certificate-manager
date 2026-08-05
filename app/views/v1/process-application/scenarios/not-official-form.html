@@ -1,0 +1,86 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = data.applicationReference or 'Application 2025 11 18 18 12 16N3000049' %}
+
+{% block beforeContent %}
+{{ backLink({
+href: '../../dashboard',
+html: '<span data-ak="B">Return to your dashboard</span>'
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-one-half">
+    <h1 class="nhsuk-heading-m">{{ pageName }}
+      {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}
+      {{ 'accepted' | getStatusTextOrTag( true ) | safe }}</h1>
+  </div>
+  <div class="nhsuk-grid-column-one-half">
+    {% set insetTextHtml %}
+    <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
+    {% endset %}
+    {{ insetText({
+    html: insetTextHtml,
+    classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
+    }) }}
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-grid-row">
+
+      <!-- ONE HALF - IMAGE -->
+      <div class="nhsuk-grid-column-one-half sticky-column">
+        {% from '../../macros/image.njk' import image %}
+        {{ image(data.certificateType) }}
+      </div>
+
+      <!-- ONE HALF - PANEL -->
+      <div class="nhsuk-grid-column-one-half">
+
+        <div class="nhsuk-card">
+
+          <span class="nhsuk-u-visually-hidden">Information: </span>
+          <div class="nhsuk-card__heading-container">
+            <h1 class="nhsuk-heading-l">
+              Application not processed
+            </h1>
+          </div>
+
+          <div class="nhsuk-card__content">
+            <p class="nhsuk-body">
+              This application will be forwarded to the case receipting team for further review.
+            </p>
+          </div>
+
+        </div>
+
+
+
+
+
+
+
+        <div class="nhsuk-button-group">
+          {% if data.scenarioIndex % 2 == 0 %}
+          {{ button({ html: '<span data-ak="I">Next</span>', href: '../matex' }) }}
+          {% else %}
+          {{ button({ html: '<span data-ak="I">Next</span>', href: '../medex' }) }}
+          {% endif %}
+          {{ button({
+          html: '<span data-ak="K">Finish processing</span>',
+          href: '/v1/dashboard',
+          classes: 'nhsuk-button--secondary'
+          }) }}
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -53,10 +53,10 @@ html: '<span data-ak="B">Return to your dashboard</span>'
             <form method="post" action="/v1/process-application/scenarios/reject" novalidate>
 
               {% if data.certificateType == 'matex' %}
-              {{ radios({
+              {{ checkboxes({
               idPrefix: "rejectReason",
               name: "rejectReason",
-              value: data.rejectReason or "Healthcare practitioner or patient signature is missing",
+              value: data.rejectReason or "Healthcare practitioner signature missing",
               fieldset: {
               legend: {
               text: "Why is this application being rejected?"
@@ -64,8 +64,16 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               },
               items: [
               {
-              value: "Healthcare practitioner or patient signature is missing",
-              text: "Healthcare practitioner or patient signature is missing"
+              value: "Healthcare practitioner signature missing",
+              text: "Healthcare practitioner signature missing"
+              },
+              {
+              value: "Healthcare practitioner details missing",
+              text: "Healthcare practitioner details missing"
+              },
+              {
+              value: "Patient signature missing",
+              text: "Patient signature missing"
               },
               {
               value: "Child has already reached their first birthday",
@@ -78,18 +86,14 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               {
               value: "Patient is over 60",
               text: "Patient is over 60"
-              },
-              {
-              value: "Application is not on a Matex form",
-              text: "Application is not on a Matex form"
               }
               ]
               }) }}
               {% else %}
-              {{ radios({
+              {{ checkboxes({
               idPrefix: "rejectReason",
               name: "rejectReason",
-              value: data.rejectReason or "Healthcare practitioner or patient signature is missing",
+              value: data.rejectReason or "Healthcare practitioner signature missing",
               fieldset: {
               legend: {
               text: "Why is this application being rejected?"
@@ -97,13 +101,18 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               },
               items: [
               {
-              value: "Healthcare practitioner or patient signature is missing",
-              text: "Healthcare practitioner or patient signature is missing"
+              value: "Healthcare practitioner signature missing",
+              text: "Healthcare practitioner signature missing"
               },
               {
-              value: "Medical condition is not covered",
-              text: "Medical condition is not covered"
+              value: "Healthcare practitioner details missing",
+              text: "Healthcare practitioner details missing"
               },
+              {
+              value: "Patient signature missing",
+              text: "Patient signature missing"
+              },
+
               {
               value: "Patient is under 14",
               text: "Patient is under 14"
@@ -113,8 +122,12 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               text: "Patient is over 60"
               },
               {
-              value: "Application is not on a Medex form",
-              text: "Application is not on a Medex form"
+              value: "No medical condition ticked",
+              text: "No medical condition ticked"
+              },
+              {
+              value: "Unlisted medical condition selected",
+              text: "Unlisted medical condition selected"
               }
               ]
               }) }}
@@ -123,10 +136,100 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
 
 
+              <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+     {% set emailConditionalHTML %}
+
+            {{ input({
+            id: 'sendRequestEmail',
+            name: 'sendRequestEmail',
+            label: {
+            text: 'Email address'
+            },
+            classes: 'nhsuk-input--width-20',
+            attributes: {
+            'data-focus-image': 'emailAddress',
+            autocomplete: 'email'
+            },
+            value: data.sendRequestEmail
+            }) }}
+
+            {% endset %}
+
+
+            {% set postHTML %}
+            <!-- PATIENT ADDRESS -->
+            <p>
+              We will send the rejection letter to:<br>
+              <strong>
+                {% if patientBuildingNumber %}
+                {{ patientBuildingNumber }}<br>
+                {% endif %}
+
+                {% if patientAddressLine1 %}
+                {{ patientAddressLine1 }}<br>
+                {% endif %}
+
+                {% if patientAddressLine2 and patientAddressLine2 | trim %}
+                {{ patientAddressLine2 }}<br>
+                {% endif %}
+
+                {% if patientTown %}
+                {{ patientTown }}<br>
+                {% endif %}
+
+                {% if patientCounty and patientCounty | trim %}
+                {{ patientCounty }}<br>
+                {% endif %}
+
+                {% if patientPostcode %}
+                {{ patientPostcode }}
+                {% endif %}
+              </strong>
+            </p>
+
+            <div class="address-button nhsuk-u-margin-top-5">
+              {{ button({
+              html: '<span data-ak="G">Use address lookup to change the address</span>',
+              classes: "nhsuk-button--secondary nhsuk-button--small",
+              href:
+              "/v1/matex/address-lookup?addressTarget=patient&returnTo=%2Fv1%2Fprocess-application%2Fcannot-process-application--horizontal-labels-fil%3FfurtherInformationRequest%3DpatientPost%23conditional-furtherInformationRequest-patientPost"
+              }) }}
+            </div>
+            {% endset %}
+  {{ radios({
+              idPrefix: 'furtherInformationRequest',
+              name: 'furtherInformationRequest',
+              value: data.furtherInformationRequest,
+              fieldset: {
+              legend: {
+              text: 'How will we send the rejection?'
+              }
+              },
+              items: [
+             
+              {
+              value: 'patientEmail',
+              text: 'Email',
+              conditional: { html: emailConditionalHTML }
+              },
+              {
+              value: 'patientPost',
+              text: 'Letter',
+              conditional: {
+              html: postHTML
+              }
+              }
+              ]
+              }) }}
+
+             
+           
+
+      
 
 
               <div class="nhsuk-button-group">
-                {{ button({ html: '<span data-ak="I">Next</span>', attributes: { type: 'submit' } }) }}
+                {{ button({ html: '<span data-ak="I">Send rejection</span>', attributes: { type: 'submit' } }) }}
                 {{ button({
                 html: '<span data-ak="K">Edit application</span>',
                 href: 'javascript:history.go(-1)',

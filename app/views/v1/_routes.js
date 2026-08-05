@@ -186,6 +186,9 @@ router.get(/process-application\/matex/, function (req, res) {
 
 router.post(/process-application\/matex/, function (req, res) {
 
+if (req.body.formVersion === 'Not MEDEXMATEX') {
+  return res.redirect('/v1/process-application/scenarios/not-official-form');
+}
   if (req.body.applicationDecision === 'approve') {
 
     const stats = req.session.data.applicationStats;
@@ -250,6 +253,10 @@ router.get(/process-application\/medex/, function (req, res) {
 
 
 router.post(/process-application\/medex/, function (req, res) {
+
+  if (req.body.formVersion === 'Not MEDEXMATEX') {
+  return res.redirect('/v1/process-application/scenarios/not-official-form');
+}
 
   if (req.body.applicationDecision === 'approve') {
 
@@ -341,6 +348,13 @@ router.post(/process-application\/scenarios\/confirm/, function (req, res) {
     : 'medex';
 
   return res.redirect('/v1/process-application/' + nextType);
+});
+
+
+router.get(/process-application\/scenarios\/not-official-form/, function (req, res) {
+  res.render('v1/process-application/not-official-form', {
+    processedToday: req.session.data.applicationStats.total
+  });
 });
 //END OF GROUP
 
@@ -1570,6 +1584,11 @@ router.post(/edit-medical-condition/, (req, res) => {
   res.redirect('/v1/medex/case--edit');
 });
 
+
+// Completed changes when checking application route
+router.get('/v1/change-complete', function (req, res) {
+  res.render('v1/change-complete');
+});
 
 
 

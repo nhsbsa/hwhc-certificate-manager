@@ -53,7 +53,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
         {% set postHTML %}
         <!-- PATIENT ADDRESS -->
         <p>
-          We will send your further information request to:<br>
+          We will send the further information request to:<br>
           <strong>
             {% if patientBuildingNumber %}
             {{ patientBuildingNumber }}<br>
@@ -83,7 +83,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
         <div class="address-button nhsuk-u-margin-top-5">
           {{ button({
-          html: '<span data-ak="G">Change address fields using address lookup</span>',
+          html: '<span data-ak="G">Use address lookup to change the address</span>',
           classes: "nhsuk-button--secondary nhsuk-button--small",
           href:
           "/v1/matex/address-lookup?addressTarget=patient&returnTo=%2Fv1%2Fprocess-application%2Fcannot-process-application--horizontal-labels-fil%3FfurtherInformationRequest%3DpatientPost%23conditional-furtherInformationRequest-patientPost"
@@ -176,7 +176,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
         <div class="address-button nhsuk-u-margin-top-5">
           {{ button({
-          html: '<span data-ak="H">Populate address fields using address lookup</span>',
+          html: '<span data-ak="H">Use address lookup to fill in the address</span>',
           classes: "nhsuk-button--secondary nhsuk-button--small",
           href:
           "/v1/matex/address-lookup?source=matex&addressTarget=hcp&returnTo=%2Fv1%2Fprocess-application%2Fcannot-process-application--horizontal-labels-fil%3FfurtherInformationRequest%3Dhcp%23address-line-1"
@@ -200,19 +200,14 @@ html: '<span data-ak="B">Return to your dashboard</span>'
           idPrefix: "furtherInformation",
           name: "furtherInformation",
           values: data.furtherInformation,
-          fieldset: {
-          legend: {
-          text: "In which fields do you need further information?",
-          isPageHeading: false
-          }
-          },
+          
           hint: {
-          text: "Select all information that is missing or unclear."
+          text: "Select all missing or unclear information"
           },
           items: [
           {
-          value: "Patient's full name",
-          text: "Patient's full name",
+          value: "Patient's name",
+          text: "Patient's name",
           attributes: { "data-focus-image": "firstName" }
           },
           {
@@ -221,26 +216,11 @@ html: '<span data-ak="B">Return to your dashboard</span>'
           attributes: { "data-focus-image": "dateOfBirth" }
           },
           {
-          value: "Full address including postcode",
-          text: "Full address including postcode",
+          value: "Address and postcode",
+          text: "Address and postcode",
           attributes: { "data-focus-image": "address" }
           },
-        
-          {
-          value: "Email address",
-          text: "Email address",
-          attributes: { "data-focus-image": "emailAddress" }
-          },
-           {
-          value: "Healthcare practitioner's contact information",
-          text: "Healthcare practitioner's contact information",
-          attributes: { "data-focus-image": "healthcarePractitionerDetails" }
-          },
-          {
-          value: "NHS number",
-          text: "NHS number",
-          attributes: { "data-focus-image": "nhsNumber" }
-          },
+    
           typeSpecificItem
           ]
           }) }}
@@ -253,7 +233,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
           value: data.furtherInformationRequest,
           fieldset: {
           legend: {
-          text: 'Who will you ask for further information?'
+          text: 'Who will we ask for further information?'
           }
           },
           items: [

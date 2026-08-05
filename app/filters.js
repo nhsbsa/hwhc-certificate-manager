@@ -1442,15 +1442,20 @@ filters.getNextCheckingUrl = function (currentPatientId) {
     p => String(p.id) === String(currentPatientId)
   );
 
+  // End the journey after the 8th checking patient
+  if (currentIndex >= 7) {
+    return '/v1/change-complete';
+  }
+
   const nextPatient = checkingPatients[currentIndex + 1];
 
   if (!nextPatient) {
-    return '/v1/dashboard';
+    return '/v1/change-complete';
   }
 
-return '/v1/' + nextPatient.certificateType +
-       '/application--correction?patientID=' +
-       nextPatient.id;
+  return '/v1/' + nextPatient.certificateType +
+         '/application--correction?patientID=' +
+         nextPatient.id;
 };
 
   //

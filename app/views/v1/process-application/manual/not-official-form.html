@@ -15,7 +15,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
   <div class="nhsuk-grid-column-one-half">
     <h1 class="nhsuk-heading-m">{{ pageName }}
       {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}
-      {{ 'accepted' | getStatusTextOrTag( true ) | safe }}</h1>
+  </h1>
   </div>
 
 </div>
@@ -26,26 +26,22 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
 
 
+<br>
 
-
-    <div class="nhsuk-panel">
-      <h1 class="nhsuk-panel__title ">
-        Application accepted
+   
+      <h1 class="nhsuk-heading-l">
+        Application not processed
       </h1>
 
       <p class="nhsuk-body">
-        This application will be accepted and a certificate issued.
+        This application will be rejected and a notification sent to the applicant.
       </p>
       <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Name:</p>
       <h2 class="nhsuk-u-padding-top-0">
         {{ data.approvedFirstName }} {{ data.approvedLastName }}
       </h2>
 
-      <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Certificate number:</p>
-      <h2 class="nhsuk-u-padding-top-0">
-       9765 136 085
-      </h2>
-    </div>
+  
 
     <div class="nhsuk-button-group">
       {{ button({

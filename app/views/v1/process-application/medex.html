@@ -3,799 +3,808 @@
 {% set pageName = 'Application 2026 11 20 19 12 16N3000049' %}
 
 {% block beforeContent %}
-  {{ backLink({
-    href: '../dashboard',
-    html: '<span data-ak="B">Return to your dashboard</span>'
-  }) }}
+{{ backLink({
+href: '../dashboard',
+html: '<span data-ak="B">Return to your dashboard</span>'
+}) }}
 {% endblock %}
 
 {% block content %}
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-one-half">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-one-half">
 
-      <h1 class="nhsuk-heading-m">{{ pageName }}
-        {{ 'medex' | getCertificateTypeTextOrTag( true ) | safe }}
-        {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
+    <h1 class="nhsuk-heading-m">{{ pageName }}
+      {{ 'medex' | getCertificateTypeTextOrTag( true ) | safe }}
+      {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
 
-    </div>
-    <div class="nhsuk-grid-column-one-half">
-      {% set insetTextHtml %}
-      <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
+  </div>
+  <div class="nhsuk-grid-column-one-half">
+    {% set insetTextHtml %}
+    <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
     {% endset %}
 
     {{ insetText({
-      html: insetTextHtml,
-      classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
+    html: insetTextHtml,
+    classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
     }) }}
-    </div>
   </div>
-  
-  {% set patientLookup = data.lookupPatientAddress or {} %}
-  
-  {% if patientLookup.buildingNumber is defined %}
-  {% set patientBuildingNumber = patientLookup.buildingNumber %}
-  {% else %}
-  {% set patientBuildingNumber = data.imageBuildingNumberOrName %}
-  {% endif %}
-  
-  {% set patientAddressLine1 = patientLookup.streetName or data.imageAddressLine1 %}
-  
-  {% if patientLookup.addressLineTwo is defined %}
-  {% set patientAddressLine2 = patientLookup.addressLineTwo %}
-  {% else %}
-  {% set patientAddressLine2 = '' or data.imageAddressLine2 %}
-  {% endif %}
-  
-  {% set patientTown = patientLookup.town or data.imageTown %}
-  
-  {% if patientCounty is defined %}
-  {% set patientCounty = patientLookup.county  or patient.address.county %}
-  {% else %}
-  {% set patientCounty = '' %}
-  {% endif %}
-  
-  {% set patientPostcode = patientLookup.postcode or data.imagePostcode %}
+</div>
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+{% set patientLookup = data.lookupPatientAddress or {} %}
 
-     
+{% if patientLookup.buildingNumber is defined %}
+{% set patientBuildingNumber = patientLookup.buildingNumber %}
+{% else %}
+{% set patientBuildingNumber = data.imageBuildingNumberOrName %}
+{% endif %}
 
-          <div class="nhsuk-grid-row">
+{% set patientAddressLine1 = patientLookup.streetName or data.imageAddressLine1 %}
 
-            <!-- ONE HALF -->
-            <div class="nhsuk-grid-column-one-half sticky-column">
+{% if patientLookup.addressLineTwo is defined %}
+{% set patientAddressLine2 = patientLookup.addressLineTwo %}
+{% else %}
+{% set patientAddressLine2 = '' or data.imageAddressLine2 %}
+{% endif %}
 
-              {% from '../macros/image.njk' import image %}
-              {{ image('medex') }}
+{% set patientTown = patientLookup.town or data.imageTown %}
+
+{% if patientCounty is defined %}
+{% set patientCounty = patientLookup.county or patient.address.county %}
+{% else %}
+{% set patientCounty = '' %}
+{% endif %}
+
+{% set patientPostcode = patientLookup.postcode or data.imagePostcode %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+
+
+    <div class="nhsuk-grid-row">
+
+      <!-- ONE HALF -->
+      <div class="nhsuk-grid-column-one-half sticky-column">
+
+        {% from '../macros/image.njk' import image %}
+        {{ image('medex') }}
+
+      </div>
+
+      <!-- ONE HALF -->
+      <div class="nhsuk-grid-column-one-half">
+
+        <div class="nhsuk-card nhsuk-card--grey">
+
+          <!-- HEADER LOCK-UP -->
+          <div class="nhsuk-card__content">
+
+            <div class="nhsuk-card__heading-container">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">Application details</h2>
+
+              <div class="nhsuk-card__actions">
+                {{ button({
+                id: 'toggleButton',
+                text: 'Show all fields',
+                classes: 'nhsuk-button--small nhsuk-button--secondary',
+                attributes: { 'aria-pressed': 'false' }
+                }) }}
+              </div>
 
             </div>
 
-            <!-- ONE HALF -->
-            <div class="nhsuk-grid-column-one-half">
 
-               <div class="nhsuk-card nhsuk-card--grey">
-
-                <!-- HEADER LOCK-UP -->
-                  <div class="nhsuk-card__content">
-
-                    <div class="nhsuk-card__heading-container">
-                      <h2 class="nhsuk-card__heading nhsuk-heading-m">Application details</h2>
-
-                      <div class="nhsuk-card__actions">
-                        {{ button({
-                          id: 'toggleButton',
-                          text: 'Show all fields',
-                          classes: 'nhsuk-button--small nhsuk-button--secondary',
-                          attributes: { 'aria-pressed': 'false' }
-                        }) }}
-                      </div>
-
-                    </div>
-
-
-                  <!-- SCRIPTS -->
-                  <script>
-
-                    document.addEventListener('DOMContentLoaded', function(){
-
-                      const toggleButton = document.querySelector('#toggleButton');
-
-                      const highlightedFields = document.querySelectorAll('.horizontal-labels .nhsuk-label:not(.nhsuk-date-input__label):has(.confidence-level), .horizontal-labels .nhsuk-fieldset__legend:not(.nhsuk-u-visually-hidden):has(.confidence-level)');
-                      const allFields = document.querySelectorAll( '.horizontal-labels .nhsuk-label:not(.nhsuk-date-input__label), .horizontal-labels .nhsuk-fieldset__legend:not(.nhsuk-u-visually-hidden)' );
-
-                      const formFields = Array.from(
-                        document.querySelectorAll(
-                          '.horizontal-labels input, .horizontal-labels select, .horizontal-labels textarea'
-                        )
-                      ).filter(field =>
-                        !field.disabled &&
-                        field.type !== 'hidden' &&
-                        field.offsetParent !== null
-                      );
-                      
-                      const hrs = document.querySelectorAll('.horizontal-labels hr');
-                      const addressButton = document.querySelector('.address-button');
-
-                      const highlightedIncludesAddress = () => {
-                        return Array.from(highlightedFields).some(label => {
-                          const formGroup = label.closest('.nhsuk-form-group');
-                          if (!formGroup) return false;
-
-                          const input = formGroup.querySelector('[data-focus-image]');
-                          if (!input) return false;
-
-                          return [
-                            'houseNumber',
-                            'street',
-                            'address',
-                            'town',
-                            'postcode'
-                          ].includes(input.getAttribute('data-focus-image'));
-                        });
-                      };
-
-                      const _showHighlightedFields = function () {
-
-                        allFields.forEach(field => {
-                          field.parentNode.classList.add('hidden');
-                        });
-
-                        highlightedFields.forEach(field => {
-                          field.parentNode.classList.remove('hidden');
-                        });
-
-                        hrs.forEach(hr => hr.classList.add('hidden'));
-
-                        if (highlightedIncludesAddress()) {
-                          addressButton.classList.remove('hidden');
-                        } else {
-                          addressButton.classList.add('hidden');
-                        }
-
-                        toggleButton.setAttribute('aria-pressed', 'false');
-                        toggleButton.textContent = 'Show all fields';
-                      };
-
-                       const _showAllFields = function(){
-
-                            allFields.forEach( function( field ){
-                              field.parentNode.classList.remove('hidden');
-                            });
-
-                            hrs.forEach( function( hr ){
-                              hr.classList.remove('hidden');
-                            } );
-
-                            toggleButton.setAttribute('aria-pressed', 'true' );
-                            toggleButton.textContent = 'Show highlighted fields';
-
-                            addressButton.classList.remove('hidden');
-
-                      };
-
-                      if( window.location.href.indexOf('showAllFields=true') > -1 ){
-                        _showAllFields();
-                      } else {
-                        _showHighlightedFields();
-                      }
-
-
-                      if( toggleButton ){
-
-                        toggleButton.addEventListener( 'click', function(e){ 
-
-                          if( toggleButton.getAttribute('aria-pressed') === 'false' ){
-                            
-                            // SHOWING ALL FIELDS
-                            _showAllFields();
-
-                          } else {
-
-                            // SHOWING HIGHLIGHTED FIELDS
-                            _showHighlightedFields();
-
-                          }
-
-                          e.preventDefault();
-                          e.stopPropagation();
-
-                        });
-
-                      }
-
-                      
-                      document.querySelectorAll('.horizontal-labels input, .horizontal-labels select')
-                        .forEach(input => {
-
-                          input.addEventListener('keydown', event => {
-                            if (event.key === 'Enter') {
-                              event.preventDefault();
-
-                              // Confirm current field
-                              markFieldConfirmed(input);
-
-                              // Move focus to the next field
-                              const visibleFields = Array.from(
-                                document.querySelectorAll('.horizontal-labels input, .horizontal-labels select, .horizontal-labels textarea')
-                              ).filter(field => !field.disabled && field.type !== 'hidden' && field.offsetParent !== null);
-
-                              const currentIndex = visibleFields.indexOf(input);
-                              const nextField = visibleFields[currentIndex + 1];
-
-                              if (nextField) {
-                                nextField.focus();
-                              }
-                            }
-                          });
-
-                        });
-
-
-
-                    });
-
-
-                    const isShortInput = input =>
-                      input.classList.contains('nhsuk-input--width-2') ||
-                      input.classList.contains('nhsuk-input--width-3') ||
-                      input.classList.contains('nhsuk-input--width-4') ||
-                      input.classList.contains('nhsuk-input--width-5') ||
-                      input.classList.contains('nhsuk-input--width-10');
-
-                      function markFieldConfirmed(input) {
-                        // Short inputs: inline tick
-                        if (isShortInput(input)) {
-                          if (input.nextElementSibling?.classList.contains('input-confirmed-inline')) return;
-
-                          const tickTemplate = document.getElementById('nhs-confirm-tick');
-                          if (!tickTemplate) return;
-
-                          const tick = tickTemplate.firstElementChild.cloneNode(true);
-                          const wrapper = document.createElement('span');
-
-                          wrapper.className = 'input-confirmed-inline';
-                          wrapper.appendChild(tick);
-
-                          input.insertAdjacentElement('afterend', wrapper);
-                          return;
-                        }
-
-                        // Long inputs: keep existing group-level tick
-                        const formGroup = input.closest('.nhsuk-form-group');
-                        if (!formGroup || formGroup.querySelector('.field-confirmed')) return;
-
-                        const tickTemplate = document.getElementById('nhs-confirm-tick');
-                        if (!tickTemplate) return;
-
-                        const tickIcon = tickTemplate.firstElementChild.cloneNode(true);
-                        const tickWrapper = document.createElement('span');
-
-                        tickWrapper.className = 'field-confirmed';
-                        tickWrapper.appendChild(tickIcon);
-
-                        formGroup.appendChild(tickWrapper);
-                      }
-
-                    [
-                      'imageBuildingNumberOrName',
-                      'imageAddressLine1',
-                      'imageAddressLine2',
-                      'imageTown',
-                      'imageCounty',
-                      'imagePostcode'
-                    ].forEach(id => {
-                      const field = document.getElementById(id);
-                      if (field && field.value) {
-                        markFieldConfirmed(field);
-                      }
-                    });
-
-
-                  </script>
-
-
-
-              <form class="horizontal-labels" method="post" novalidate>
-
-                <input type="hidden" name="applicationReference" value="{{ pageName }}">
-
-                <!-- FORM TYPE -->
-
-  {% set versions = [
-  'FP92A0104',
-  'FP92A0406',
-  'FP92A0702',
-  'FP92A0710',
-  'FP92A0803',
-  'FP92A0911',
-  'FP92A1114',
-  'FP92A1207',
-  'FP92A1208',
-
-  'FW80104',
-  'FW80110',
-  'FW80211',
-  'FW80215',
-  'FW80406',
-  'FW80702',
-  'FW80710',
-  'FW80803',
-  'FW81207',
- 'FW81217',
-  'Not MEDEX/MATEX'
-] %}
-
-{{ select({
-  label: {
-    text: 'Form version'
-  },
-  id: 'formVersion',
-  name: 'formVersion',
-  value: 'FW80215',
-  items: [
-  { value: 'FP92A0104', text: 'FP92A0104' },
-  { value: 'FP92A0406', text: 'FP92A0406' },
-  { value: 'FP92A0702', text: 'FP92A0702' },
-  { value: 'FP92A0710', text: 'FP92A0710' },
-  { value: 'FP92A0803', text: 'FP92A0803' },
-  { value: 'FP92A0911', text: 'FP92A0911' },
-  { value: 'FP92A1114', text: 'FP92A1114' },
-  { value: 'FP92A1207', text: 'FP92A1207' },
-  { value: 'FP92A1208', text: 'FP92A1208' },
-  { value: 'FW80104', text: 'FW80104' },
-  { value: 'FW80110', text: 'FW80110' },
-  { value: 'FW80211', text: 'FW80211' },
-  { value: 'FW80215', text: 'FW80215' },
-  { value: 'FW80406', text: 'FW80406' },
-  { value: 'FW80702', text: 'FW80702' },
-  { value: 'FW80710', text: 'FW80710' },
-  { value: 'FW80803', text: 'FW80803' },
-  { value: 'FW81207', text: 'FW81207' },
-  { value: 'FW81217', text: 'FW81217' },
-  { value: 'Not MEDEXMATEX', text: 'Not MEDEX/MATEX' }
-]
-}) }}
-
-                <!-- FULL NAME -->
-                {% call fieldset({
-                  legend: {
-                    text: 'Name',
-                    classes: 'nhsuk-u-visually-hidden'
+            <!-- SCRIPTS -->
+            <script>
+
+              document.addEventListener('DOMContentLoaded', function () {
+
+                const toggleButton = document.querySelector('#toggleButton');
+
+                const highlightedFields = document.querySelectorAll('.horizontal-labels .nhsuk-label:not(.nhsuk-date-input__label):has(.confidence-level), .horizontal-labels .nhsuk-fieldset__legend:not(.nhsuk-u-visually-hidden):has(.confidence-level)');
+                const allFields = document.querySelectorAll('.horizontal-labels .nhsuk-label:not(.nhsuk-date-input__label), .horizontal-labels .nhsuk-fieldset__legend:not(.nhsuk-u-visually-hidden)');
+
+                const formFields = Array.from(
+                  document.querySelectorAll(
+                    '.horizontal-labels input, .horizontal-labels select, .horizontal-labels textarea'
+                  )
+                ).filter(field =>
+                  !field.disabled &&
+                  field.type !== 'hidden' &&
+                  field.offsetParent !== null
+                );
+
+                const hrs = document.querySelectorAll('.horizontal-labels hr');
+                const addressButton = document.querySelector('.address-button');
+
+                const highlightedIncludesAddress = () => {
+                  return Array.from(highlightedFields).some(label => {
+                    const formGroup = label.closest('.nhsuk-form-group');
+                    if (!formGroup) return false;
+
+                    const input = formGroup.querySelector('[data-focus-image]');
+                    if (!input) return false;
+
+                    return [
+                      'houseNumber',
+                      'street',
+                      'address',
+                      'town',
+                      'postcode'
+                    ].includes(input.getAttribute('data-focus-image'));
+                  });
+                };
+
+                const _showHighlightedFields = function () {
+
+                  allFields.forEach(field => {
+                    field.parentNode.classList.add('hidden');
+                  });
+
+                  highlightedFields.forEach(field => {
+                    field.parentNode.classList.remove('hidden');
+                  });
+
+                  hrs.forEach(hr => hr.classList.add('hidden'));
+
+                  if (highlightedIncludesAddress()) {
+                    addressButton.classList.remove('hidden');
+                  } else {
+                    addressButton.classList.add('hidden');
                   }
-                }) %}
 
-                {{ input({
-                    label: {
-                      html: 'Last name ' + (data.confidence.lastName | default(null)) | getConfidenceTag
-                    },
-                    id: 'imageLastName',
-                    name: 'imageLastName',
-                    attributes: { 'data-focus-image' : 'lastName' },
-                    classes: 'nhsuk-input--width-20',
-                    value: data.imageLastName
-                  }) }}
+                  toggleButton.setAttribute('aria-pressed', 'false');
+                  toggleButton.textContent = 'Show all fields';
+                };
 
-                  {{ input({
-                    label: {
-                      html: 'First name ' + (data.confidence.firstName | default(null)) | getConfidenceTag
-                    },
-                    id: 'imageFirstName',
-                    name: 'imageFirstName',
-                    attributes: { 'data-focus-image' : 'firstName' },
-                    value: data.imageFirstName,
-                    classes: 'nhsuk-input--width-20'
-                  }) }}
+                const _showAllFields = function () {
 
-                  
+                  allFields.forEach(function (field) {
+                    field.parentNode.classList.remove('hidden');
+                  });
 
-                {% endcall %}
+                  hrs.forEach(function (hr) {
+                    hr.classList.remove('hidden');
+                  });
 
-                {% set dobConfidence = data.confidence.dateOfBirth | default(null) %}
+                  toggleButton.setAttribute('aria-pressed', 'true');
+                  toggleButton.textContent = 'Show highlighted fields';
 
-                {{ dateInput({
-                  id: 'imageDateOfBirth',
-                  namePrefix: 'imageDateOfBirth',
-                  fieldset: {
-                    legend: {
-                      html: 'Date of birth ' + dobConfidence | getConfidenceTag
+                  addressButton.classList.remove('hidden');
+
+                };
+
+                if (window.location.href.indexOf('showAllFields=true') > -1) {
+                  _showAllFields();
+                } else {
+                  _showHighlightedFields();
+                }
+
+
+                if (toggleButton) {
+
+                  toggleButton.addEventListener('click', function (e) {
+
+                    if (toggleButton.getAttribute('aria-pressed') === 'false') {
+
+                      // SHOWING ALL FIELDS
+                      _showAllFields();
+
+                    } else {
+
+                      // SHOWING HIGHLIGHTED FIELDS
+                      _showHighlightedFields();
+
                     }
-                  },
-                  items: [
-                    {
-                      name: 'day',
-                      classes: 'nhsuk-input--width-2',
-                      value: data.imageDateOfBirth.day,
-                      attributes: { 'data-focus-image' : 'dateOfBirth' }
-                    },
-                    {
-                      name: 'month',
-                      classes: 'nhsuk-input--width-2',
-                      value: data.imageDateOfBirth.month,
-                      attributes: { 'data-focus-image' : 'dateOfBirth' }
-                    },
-                    {
-                      name: 'year',
-                      classes: 'nhsuk-input--width-4',
-                      value: data.imageDateOfBirth.year,
-                      attributes: { 'data-focus-image' : 'dateOfBirth' }
-                    }
-                  ]
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                  });
+
+                }
+
+
+                document.querySelectorAll('.horizontal-labels input, .horizontal-labels select')
+                  .forEach(input => {
+
+                    input.addEventListener('keydown', event => {
+                      if (event.key === 'Enter') {
+                        event.preventDefault();
+
+                        // Confirm current field
+                        markFieldConfirmed(input);
+
+                        // Move focus to the next field
+                        const visibleFields = Array.from(
+                          document.querySelectorAll('.horizontal-labels input, .horizontal-labels select, .horizontal-labels textarea')
+                        ).filter(field => !field.disabled && field.type !== 'hidden' && field.offsetParent !== null);
+
+                        const currentIndex = visibleFields.indexOf(input);
+                        const nextField = visibleFields[currentIndex + 1];
+
+                        if (nextField) {
+                          nextField.focus();
+                        }
+                      }
+                    });
+
+                  });
+
+
+
+              });
+
+
+              const isShortInput = input =>
+                input.classList.contains('nhsuk-input--width-2') ||
+                input.classList.contains('nhsuk-input--width-3') ||
+                input.classList.contains('nhsuk-input--width-4') ||
+                input.classList.contains('nhsuk-input--width-5') ||
+                input.classList.contains('nhsuk-input--width-10');
+
+              function markFieldConfirmed(input) {
+                // Short inputs: inline tick
+                if (isShortInput(input)) {
+                  if (input.nextElementSibling?.classList.contains('input-confirmed-inline')) return;
+
+                  const tickTemplate = document.getElementById('nhs-confirm-tick');
+                  if (!tickTemplate) return;
+
+                  const tick = tickTemplate.firstElementChild.cloneNode(true);
+                  const wrapper = document.createElement('span');
+
+                  wrapper.className = 'input-confirmed-inline';
+                  wrapper.appendChild(tick);
+
+                  input.insertAdjacentElement('afterend', wrapper);
+                  return;
+                }
+
+                // Long inputs: keep existing group-level tick
+                const formGroup = input.closest('.nhsuk-form-group');
+                if (!formGroup || formGroup.querySelector('.field-confirmed')) return;
+
+                const tickTemplate = document.getElementById('nhs-confirm-tick');
+                if (!tickTemplate) return;
+
+                const tickIcon = tickTemplate.firstElementChild.cloneNode(true);
+                const tickWrapper = document.createElement('span');
+
+                tickWrapper.className = 'field-confirmed';
+                tickWrapper.appendChild(tickIcon);
+
+                formGroup.appendChild(tickWrapper);
+              }
+
+              [
+                'imageBuildingNumberOrName',
+                'imageAddressLine1',
+                'imageAddressLine2',
+                'imageTown',
+                'imageCounty',
+                'imagePostcode'
+              ].forEach(id => {
+                const field = document.getElementById(id);
+                if (field && field.value) {
+                  markFieldConfirmed(field);
+                }
+              });
+
+
+            </script>
+
+
+
+            <form class="horizontal-labels" method="post" novalidate>
+
+              <input type="hidden" name="applicationReference" value="{{ pageName }}">
+
+              <!-- FORM TYPE -->
+
+              {% set versions = [
+              'FP92A0104',
+              'FP92A0406',
+              'FP92A0702',
+              'FP92A0710',
+              'FP92A0803',
+              'FP92A0911',
+              'FP92A1114',
+              'FP92A1207',
+              'FP92A1208',
+
+              'FW80104',
+              'FW80110',
+              'FW80211',
+              'FW80215',
+              'FW80406',
+              'FW80702',
+              'FW80710',
+              'FW80803',
+              'FW81207',
+              'FW81217',
+              'Not MEDEX/MATEX'
+              ] %}
+
+              {{ select({
+              label: {
+              text: 'Form version'
+              },
+              id: 'formVersion',
+              name: 'formVersion',
+              value: 'FP92A1208',
+              items: [
+              { value: 'FP92A0104', text: 'FP92A0104' },
+              { value: 'FP92A0406', text: 'FP92A0406' },
+              { value: 'FP92A0702', text: 'FP92A0702' },
+              { value: 'FP92A0710', text: 'FP92A0710' },
+              { value: 'FP92A0803', text: 'FP92A0803' },
+              { value: 'FP92A0911', text: 'FP92A0911' },
+              { value: 'FP92A1114', text: 'FP92A1114' },
+              { value: 'FP92A1207', text: 'FP92A1207' },
+              { value: 'FP92A1208', text: 'FP92A1208' },
+              { value: 'FW80104', text: 'FW80104' },
+              { value: 'FW80110', text: 'FW80110' },
+              { value: 'FW80211', text: 'FW80211' },
+              { value: 'FW80215', text: 'FW80215' },
+              { value: 'FW80406', text: 'FW80406' },
+              { value: 'FW80702', text: 'FW80702' },
+              { value: 'FW80710', text: 'FW80710' },
+              { value: 'FW80803', text: 'FW80803' },
+              { value: 'FW81207', text: 'FW81207' },
+              { value: 'FW81217', text: 'FW81217' },
+              { value: 'Not MEDEXMATEX', text: 'Not MEDEX/MATEX' }
+              ]
+              }) }}
+
+              <!-- FULL NAME -->
+              {% call fieldset({
+              legend: {
+              text: 'Name',
+              classes: 'nhsuk-u-visually-hidden'
+              }
+              }) %}
+
+              {{ input({
+              label: {
+              html: 'Last name ' + (data.confidence.lastName | default(null)) | getConfidenceTag
+              },
+              id: 'imageLastName',
+              name: 'imageLastName',
+              attributes: { 'data-focus-image' : 'lastName' },
+              classes: 'nhsuk-input--width-20',
+              value: data.imageLastName
+              }) }}
+
+              {{ input({
+              label: {
+              html: 'First name ' + (data.confidence.firstName | default(null)) | getConfidenceTag
+              },
+              id: 'imageFirstName',
+              name: 'imageFirstName',
+              attributes: { 'data-focus-image' : 'firstName' },
+              value: data.imageFirstName,
+              classes: 'nhsuk-input--width-20'
+              }) }}
+
+
+
+              {% endcall %}
+
+              {% set dobConfidence = data.confidence.dateOfBirth | default(null) %}
+
+              {{ dateInput({
+              id: 'imageDateOfBirth',
+              namePrefix: 'imageDateOfBirth',
+              fieldset: {
+              legend: {
+              html: 'Date of birth ' + dobConfidence | getConfidenceTag
+              }
+              },
+              items: [
+              {
+              name: 'day',
+              classes: 'nhsuk-input--width-2',
+              value: data.imageDateOfBirth.day,
+              attributes: { 'data-focus-image' : 'dateOfBirth' }
+              },
+              {
+              name: 'month',
+              classes: 'nhsuk-input--width-2',
+              value: data.imageDateOfBirth.month,
+              attributes: { 'data-focus-image' : 'dateOfBirth' }
+              },
+              {
+              name: 'year',
+              classes: 'nhsuk-input--width-4',
+              value: data.imageDateOfBirth.year,
+              attributes: { 'data-focus-image' : 'dateOfBirth' }
+              }
+              ]
+              }) }}
+
+
+              {{ input({
+              label: {
+              html: 'NHS number ' + (data.confidence.nhsNumber | default(null)) | getConfidenceTag
+              },
+              id: 'imageNHSNumber',
+              name: 'imageNHSNumber',
+              attributes: { 'data-focus-image' : 'nhsNumber' },
+              classes: 'nhsuk-input--width-10',
+              value: data.imageNHSNumber
+              }) }}
+
+
+              <hr />
+
+              <!-- ADDRESS -->
+
+              {% set addrConf = data.confidence.address | default({}) %}
+
+              {% call fieldset({
+              legend: {
+              html: 'Address',
+              classes: 'nhsuk-u-visually-hidden'
+              }
+              }) %}
+
+              {{ input({
+              label: {
+              html: 'House number or name ' + (addrConf.buildingNumber | default(null)) | getConfidenceTag
+              },
+              id: 'imageBuildingNumberOrName',
+              name: 'imageBuildingNumberOrName',
+              attributes: { 'data-focus-image' : 'houseNumber' },
+              classes: 'nhsuk-input--width-10',
+              value: patientBuildingNumber
+              }) }}
+
+              {{ input({
+              label: {
+              html: 'Address line 1 ' + (addrConf.streetName | default(null)) | getConfidenceTag
+              },
+              classes: 'nhsuk-input--width-20',
+              id: 'imageAddressLine1',
+              name: 'imageAddressLine1',
+              attributes: { 'data-focus-image' : 'street' },
+              value: patientAddressLine1
+              }) }}
+
+              {{ input({
+              label: {
+              html: 'Address line 2 ' + (addrConf.addressLine2 | default(null)) | getConfidenceTag + ' (optional)'
+              },
+              classes: 'nhsuk-input--width-20',
+              id: 'imageAddressLine2',
+              name: 'imageAddressLine2',
+              attributes: { 'data-focus-image' : 'address' },
+              value: patientAddressLine2
+              }) }}
+
+              {{ input({
+              label: {
+              html: 'Town or city ' + (addrConf.postTown | default(null)) | getConfidenceTag
+              },
+              classes: 'nhsuk-input--width-20',
+              id: 'imageTown',
+              name: 'imageTown',
+              attributes: { 'data-focus-image' : 'town' },
+              value: patientTown
+              }) }}
+
+              {{ input({
+              label: {
+              html: 'County ' + (addrConf.county | default(null)) | getConfidenceTag + ' (optional)'
+              },
+              classes: 'nhsuk-input--width-10',
+              id: 'imageCounty',
+              name: 'imageCounty',
+              attributes: { 'data-focus-image' : 'address' },
+              value: patientCounty
+              }) }}
+
+              {{ input({
+              label: {
+              html: 'Postcode ' + (addrConf.postcode | default(null)) | getConfidenceTag
+              },
+              classes: 'nhsuk-input--width-10',
+              id: 'imagePostcode',
+              name: 'imagePostcode',
+              attributes: { 'data-focus-image' : 'postcode' },
+              value: patientPostcode
+              }) }}
+
+              {% endcall %}
+
+              <div class="nhsuk-button-group address-button">
+                {{ button({
+                html: '<span data-ak="G">Change address fields using address lookup</span>',
+                classes: "nhsuk-button--secondary nhsuk-button--small",
+                href:
+                "/v1/matex/address-lookup?source=matex&addressTarget=patient&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dfalse%23postcode"
                 }) }}
+              </div>
 
-
-                {{ input({
-                    label: {
-                      html: 'NHS number ' + (data.confidence.nhsNumber | default(null)) | getConfidenceTag
-                    },
-                    id: 'imageNHSNumber',
-                    name: 'imageNHSNumber',
-                    attributes: { 'data-focus-image' : 'nhsNumber' },
-                    classes: 'nhsuk-input--width-10',
-                    value: data.imageNHSNumber
-                  }) }}
-
-
-                <hr />
-
-                <!-- ADDRESS -->
-
-                {% set addrConf = data.confidence.address | default({}) %}
-
-                {% call fieldset({
-                  legend: {
-                    html: 'Address',
-                    classes: 'nhsuk-u-visually-hidden'
-                  }
-                }) %}
-
-                    {{ input({
-                      label: {
-                        html: 'House number or name ' + (addrConf.buildingNumber | default(null)) | getConfidenceTag
-                      },
-                      id: 'imageBuildingNumberOrName',
-                      name: 'imageBuildingNumberOrName',
-                      attributes: { 'data-focus-image' : 'houseNumber' },
-                      classes: 'nhsuk-input--width-10',
-                      value: patientBuildingNumber
-                    }) }}
-
-                    {{ input({
-                      label: {
-                        html: 'Address line 1 ' + (addrConf.streetName | default(null)) | getConfidenceTag                        
-                      },
-                      classes: 'nhsuk-input--width-20',
-                      id: 'imageAddressLine1',
-                      name: 'imageAddressLine1',
-                      attributes: { 'data-focus-image' : 'street' },
-                      value: patientAddressLine1
-                    }) }}
-
-                    {{ input({
-                      label: {
-                        html: 'Address line 2 ' + (addrConf.addressLine2 | default(null)) | getConfidenceTag + ' (optional)'
-                      },
-                      classes: 'nhsuk-input--width-20',
-                      id: 'imageAddressLine2',
-                      name: 'imageAddressLine2',
-                      attributes: { 'data-focus-image' : 'address' },
-                      value: patientAddressLine2
-                    }) }}
-
-                    {{ input({
-                      label: {
-                        html: 'Town or city ' + (addrConf.postTown | default(null)) | getConfidenceTag                        
-                      },
-                      classes: 'nhsuk-input--width-20',
-                      id: 'imageTown',
-                      name: 'imageTown',
-                      attributes: { 'data-focus-image' : 'town' },
-                      value: patientTown
-                    }) }}
-
-                    {{ input({
-                      label: {
-                        html: 'County ' + (addrConf.county | default(null)) | getConfidenceTag + ' (optional)'
-                      },
-                      classes: 'nhsuk-input--width-10',
-                      id: 'imageCounty',
-                      name: 'imageCounty',
-                      attributes: { 'data-focus-image' : 'address' },
-                      value: patientCounty
-                    }) }}
-
-                    {{ input({
-                      label: {
-                        html: 'Postcode ' + (addrConf.postcode | default(null)) | getConfidenceTag
-                      },
-                      classes: 'nhsuk-input--width-10',
-                      id: 'imagePostcode',
-                      name: 'imagePostcode',
-                      attributes: { 'data-focus-image' : 'postcode' },
-                      value: patientPostcode
-                    }) }}
-
-                  {% endcall %}
-
-                  <div class="nhsuk-button-group address-button">
-                    {{ button({
-                      html: '<span data-ak="G">Change address fields using address lookup</span>',
-                      classes: "nhsuk-button--secondary nhsuk-button--small",
-                      href: "/v1/matex/address-lookup?source=matex&addressTarget=patient&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dfalse%23postcode"
-                    }) }}
-                  </div>
-
-                <hr />
+              <hr />
 
 
               <!-- CONTACT DETAILS -->
-              
-
-                {{ input({
-                      label: {
-                        html: 'Phone number ' + 87 | getConfidenceTag + ' (optional)'
-                      },
-                      attributes: { type: 'tel', autocomplete: 'off', 'data-focus-image' : 'telephoneNumber' },
-                      classes: 'nhsuk-input--width-10',
-                      id: 'imagePhoneNumber',
-                      name: 'imagePhoneNumber',
-                      value: data.imagePhoneNumber or '07911 123456'
-                  }) }}
 
 
-                   {{ input({
-                      label: {
-                        html: 'Email address ' + (data.confidence.email | default(null)) | getConfidenceTag + ' (optional)'
-                      },
-                      attributes: { type: 'email', autocomplete: 'off' },
-                      classes: 'nhsuk-input--width-20',
-                      id: 'imageEmailAddress',
-                      name: 'imageEmailAddress',
-                      attributes: { 'data-focus-image' : 'emailAddress' },
-                      value: data.imageEmailAddress
-                  }) }}
+              {{ input({
+              label: {
+              html: 'Phone number ' + 87 | getConfidenceTag + ' (optional)'
+              },
+              attributes: { type: 'tel', autocomplete: 'off', 'data-focus-image' : 'telephoneNumber' },
+              classes: 'nhsuk-input--width-10',
+              id: 'imagePhoneNumber',
+              name: 'imagePhoneNumber',
+              value: data.imagePhoneNumber or '07911 123456'
+              }) }}
 
 
+              {{ input({
+              label: {
+              html: 'Email address ' + (data.confidence.email | default(null)) | getConfidenceTag + ' (optional)'
+              },
+              attributes: { type: 'email', autocomplete: 'off' },
+              classes: 'nhsuk-input--width-20',
+              id: 'imageEmailAddress',
+              name: 'imageEmailAddress',
+              attributes: { 'data-focus-image' : 'emailAddress' },
+              value: data.imageEmailAddress
+              }) }}
 
 
 
-              
-
-                <div class="nhsuk-form-group">
-
-                    {{ checkboxes({
-                      idPrefix: "medicalCondition",
-                      name: "editMEDEX.medicalCondition",
-                      classes: "medex-checkboxes",
-                      fieldset: {
-                        legend: {
-                          html: '<span data-ak="Y">Medical condition</span>',
-                          size: "s",
-                          isPageHeading: false
-                        }
-                      },
-                      items: [
-                      {
-                        value: "(1) Permanent fistula",
-                        text: "A permanent fistula",
-                    
-                        attributes: { "data-focus-image": "permanentFistula" }
-                      },
-                      {
-                        value: "(2) Epilepsy",
-                        text: "Epilepsy",
-             
-                        attributes: { "data-focus-image": "epilepsy" }
-                      },
-                      {
-                        value: "(3) Diabetes mellitus",
-                        text: "Diabetes mellitus",
-               
-                        attributes: { "data-focus-image": "diabetesMellitus" }
-                      },
-                      {
-                        value: "(4) Myxoedema",
-                        text: "Myxoedema",
-                 
-                        attributes: { "data-focus-image": "myxoedema" }
-                      },
-                      {
-                        value: "(5) Hypoparathyroidism",
-                        text: "Hypoparathyroidism",
-                   
-                        attributes: { "data-focus-image": "hypoparathyroidism" }
-                      },
-                      {
-                        value: "(6) Diabetes insipidus",
-                        text: "Diabetes insipidus",
-             
-                        attributes: { "data-focus-image": "diabetesInsipidus" }
-                      },
-                      {
-                        value: "(7) Forms of hypoadrenalism",
-                        text: "Forms of hypoadrenalism",
-      
-                        attributes: { "data-focus-image": "formsOfHypoadrenalism" }
-                      },
-                      {
-                        value: "(8) Myasthenia gravis",
-                        text: "Myasthenia gravis",
-                 
-                        attributes: { "data-focus-image": "myastheniaGravis" }
-                      },
-                      {
-                        value: "(9) Continuing physical disability",
-                        text: "Continuing physical disability",
-               
-                        attributes: { "data-focus-image": "continuingPhysicalDisability" }
-                      },
-                      {
-                        value: "(10) Cancer treatments",
-                        text: "Cancer treatments",
-                
-                        attributes: { "data-focus-image": "Cancer treatments" }
-                      }
-                    ]
-                    }) }}
-
-                </div>                  
-
-                <style>
-
-                  .medex-checkboxes {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                  }
-
-                  .medex-checkboxes .nhsuk-checkboxes__label {
-                    font-weight: 400 !important;
-                  }
-
-                  @media (max-width: 1024px) {
-                    .medex-checkboxes {
-                      grid-template-columns: 1fr;
-                    }
-                  }
-
-                </style>
 
 
-                <hr />
 
 
-                <!-- SIGNATURES -->
-                {{ radios({
-                  idPrefix: 'imagePatientSignature',
-                  name: 'imagePatientSignature',
-                  value: data.imagePatientSignature or 'yes',
-                  attributes: { 'data-focus-image' : 'patientSignature' },
-                  classes: 'nhsuk-radios--inline',
-                  fieldset: {
-                    legend: {
-                      text: 'Is the patient signature present?',
-                      isPageHeading: false
-                    }
-                  },
-                  items: [
-                    { value: 'yes', text: 'Yes' },
-                    { value: 'no', text: 'No' }
-                  ]
+              <div class="nhsuk-form-group">
+
+                {{ checkboxes({
+                idPrefix: "medicalCondition",
+                name: "editMEDEX.medicalCondition",
+                classes: "medex-checkboxes",
+                fieldset: {
+                legend: {
+                html: '<span data-ak="Y">Medical condition</span>',
+                size: "s",
+                isPageHeading: false
+                }
+                },
+                items: [
+                {
+                value: "(1) Permanent fistula",
+                text: "A permanent fistula",
+
+                attributes: { "data-focus-image": "permanentFistula" }
+                },
+                {
+                value: "(2) Epilepsy",
+                text: "Epilepsy",
+
+                attributes: { "data-focus-image": "epilepsy" }
+                },
+                {
+                value: "(3) Diabetes mellitus",
+                text: "Diabetes mellitus",
+
+                attributes: { "data-focus-image": "diabetesMellitus" }
+                },
+                {
+                value: "(4) Myxoedema",
+                text: "Myxoedema",
+
+                attributes: { "data-focus-image": "myxoedema" }
+                },
+                {
+                value: "(5) Hypoparathyroidism",
+                text: "Hypoparathyroidism",
+
+                attributes: { "data-focus-image": "hypoparathyroidism" }
+                },
+                {
+                value: "(6) Diabetes insipidus",
+                text: "Diabetes insipidus",
+
+                attributes: { "data-focus-image": "diabetesInsipidus" }
+                },
+                {
+                value: "(7) Forms of hypoadrenalism",
+                text: "Forms of hypoadrenalism",
+
+                attributes: { "data-focus-image": "formsOfHypoadrenalism" }
+                },
+                {
+                value: "(8) Myasthenia gravis",
+                text: "Myasthenia gravis",
+
+                attributes: { "data-focus-image": "myastheniaGravis" }
+                },
+                {
+                value: "(9) Continuing physical disability",
+                text: "Continuing physical disability",
+
+                attributes: { "data-focus-image": "continuingPhysicalDisability" }
+                },
+                {
+                value: "(10) Cancer treatments",
+                text: "Cancer treatments",
+
+                attributes: { "data-focus-image": "Cancer treatments" }
+                },
+                {
+                value: "None selected ",
+                text: "None selected ",
+                exclusive: true
+                },
+                {
+                value: "Unlisted condition selected",
+                text: "Unlisted condition selected",
+                exclusive: true
+                }
+                ]
                 }) }}
 
-
-                 {{ radios({
-                  idPrefix: 'imageHealthcarePractitionerSignature',
-                  name: 'imageHealthcarePractitionerSignature',
-                  value: data.imageHealthcarePractitionerSignature or 'yes',
-                  attributes: { 'data-focus-image' : 'healthcarePractitionerSignature' },
-                  classes: 'nhsuk-radios--inline',
-                  fieldset: {
-                    legend: {
-                      text: 'Is the healthcare practitioner signature present?',
-                      isPageHeading: false
-                    }
-                  },
-                  items: [
-                    { value: 'yes', text: 'Yes' },
-                    { value: 'no', text: 'No' }
-                  ]
-                }) }}
-
-                {{ radios({
-                  idPrefix: 'imageHealthcarePractitionerDetails',
-                  name: 'imageHealthcarePractitionerDetails',
-                  value: data.imageHealthcarePractitionerDetails or 'yes',
-                  attributes: { 'data-focus-image' : 'healthcarePractitionerDetails' },
-                  classes: 'nhsuk-radios--inline',
-                  fieldset: {
-                    legend: {
-                      text: 'Are the healthcare practitioner\'s details present?',
-                      isPageHeading: false
-                    }
-                  },
-                  items: [
-                    { value: 'yes', text: 'Yes' },
-                    { value: 'no', text: 'No' }
-                  ]
-                }) }}
-
-
-
-                <div class="nhsuk-button-group">
-                {{ button({
-                  html: '<span data-ak="I">Next</span>',
-                  attributes: {
-                    name: 'applicationDecision',
-                    value: 'approve'
-                  }
-                }) }}
-
-
-             {{ button({
-  html: '<span data-ak="K">Key from Paper (KFP)</span>',
-  classes: 'nhsuk-button--secondary',
-  href: '/v1/process-application/key-from-paper'
-}) }}
-               
               </div>
-                
-
-              </form>
-
-              {% from "nhsuk/macros/icon.njk" import nhsukIcon %}
-              <div class="nhsuk-u-visually-hidden">
-                <span id="nhs-confirm-tick">
-                  {{ nhsukIcon("tick") }}
-                </span>
-              </div>
-
 
               <style>
-                .field-confirmed {
-                  right: 3.5rem;
-                  align-items: center;
+                .medex-checkboxes {
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
                 }
 
-                /* Size the NHS icon nicely */
-                .field-confirmed .nhsuk-icon {
-                  width: 1.5rem;
-                  height: 1.5rem;
-                  color: #007f3b;
-                  fill: currentColor;
+                .medex-checkboxes .nhsuk-checkboxes__label {
+                  font-weight: 400 !important;
                 }
 
-                /* Inline tick right next to short inputs */
-                .input-confirmed-inline {
-                  display: inline-flex;
-                  align-items: center;
-                  margin-left: 0.25rem;
-                }
-
-                /* NHS green tick */
-                .input-confirmed-inline .nhsuk-icon {
-                  width: 1.5rem;
-                  height: 1.5rem;
-                  color: #007f3b;
-                  fill: currentColor;
+                @media (max-width: 1024px) {
+                  .medex-checkboxes {
+                    grid-template-columns: 1fr;
+                  }
                 }
               </style>
 
+
+              <hr />
+
+
+              <!-- SIGNATURES -->
+              {{ radios({
+              idPrefix: 'imagePatientSignature',
+              name: 'imagePatientSignature',
+              value: data.imagePatientSignature or 'yes',
+              attributes: { 'data-focus-image' : 'patientSignature' },
+              classes: 'nhsuk-radios--inline',
+              fieldset: {
+              legend: {
+              text: 'Is the patient signature present?',
+              isPageHeading: false
+              }
+              },
+              items: [
+              { value: 'yes', text: 'Yes' },
+              { value: 'no', text: 'No' }
+              ]
+              }) }}
+
+
+              {{ radios({
+              idPrefix: 'imageHealthcarePractitionerSignature',
+              name: 'imageHealthcarePractitionerSignature',
+              value: data.imageHealthcarePractitionerSignature or 'yes',
+              attributes: { 'data-focus-image' : 'healthcarePractitionerSignature' },
+              classes: 'nhsuk-radios--inline',
+              fieldset: {
+              legend: {
+              text: 'Is the healthcare practitioner signature present?',
+              isPageHeading: false
+              }
+              },
+              items: [
+              { value: 'yes', text: 'Yes' },
+              { value: 'no', text: 'No' }
+              ]
+              }) }}
+
+              {{ radios({
+              idPrefix: 'imageHealthcarePractitionerDetails',
+              name: 'imageHealthcarePractitionerDetails',
+              value: data.imageHealthcarePractitionerDetails or 'yes',
+              attributes: { 'data-focus-image' : 'healthcarePractitionerDetails' },
+              classes: 'nhsuk-radios--inline',
+              fieldset: {
+              legend: {
+              text: 'Are the healthcare practitioner\'s details present?',
+              isPageHeading: false
+              }
+              },
+              items: [
+              { value: 'yes', text: 'Yes' },
+              { value: 'no', text: 'No' }
+              ]
+              }) }}
+
+
+
+              <div class="nhsuk-button-group">
+                {{ button({
+                html: '<span data-ak="I">Next</span>',
+                attributes: {
+                name: 'applicationDecision',
+                value: 'approve'
+                }
+                }) }}
+
+
+                {{ button({
+                html: '<span data-ak="K">Ask for paper form</span>',
+                classes: 'nhsuk-button--secondary',
+                href: '/v1/process-application/key-from-paper'
+                }) }}
+
               </div>
-              </div>
 
 
+            </form>
 
+            {% from "nhsuk/macros/icon.njk" import nhsukIcon %}
+            <div class="nhsuk-u-visually-hidden">
+              <span id="nhs-confirm-tick">
+                {{ nhsukIcon("tick") }}
+              </span>
             </div>
 
-          </div>
 
-     
+            <style>
+              .field-confirmed {
+                right: 3.5rem;
+                align-items: center;
+              }
+
+              /* Size the NHS icon nicely */
+              .field-confirmed .nhsuk-icon {
+                width: 1.5rem;
+                height: 1.5rem;
+                color: #007f3b;
+                fill: currentColor;
+              }
+
+              /* Inline tick right next to short inputs */
+              .input-confirmed-inline {
+                display: inline-flex;
+                align-items: center;
+                margin-left: 0.25rem;
+              }
+
+              /* NHS green tick */
+              .input-confirmed-inline .nhsuk-icon {
+                width: 1.5rem;
+                height: 1.5rem;
+                color: #007f3b;
+                fill: currentColor;
+              }
+            </style>
+
+          </div>
+        </div>
+
+
+
+      </div>
 
     </div>
-  </div>
 
-  <!-- <script>
+
+
+  </div>
+</div>
+
+<!-- <script>
     window.addEventListener('pageshow', function (event) {
       // Fired when page is restored from back/forward cache
       if (event.persisted) {

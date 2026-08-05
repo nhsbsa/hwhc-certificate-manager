@@ -3,12 +3,22 @@
 {% set pageName = 'Search for a certificate' %}
 
 {% block beforeContent %}
-  {% if data.role === 'backOffice' or data.role === 'backOfficeSupervisor' or data.role === 'qualityControl' %}
-    {{ backLink({
-      href: 'javascript:history.go(-1)',
-      html: '<span data-ak="B">Back</span>'
-    }) }}
-  {% endif %}
+ {% if data.role === 'backOffice' %}
+  {{ backLink({
+    href: 'dashboard',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% elif data.role === 'backOfficeSupervisor' %}
+  {{ backLink({
+    href: 'dashboard--supervisor',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% elif data.role === 'qualityControl' %}
+  {{ backLink({
+    href: 'dashboard--quality-control',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endif %}
 {% endblock %}
 
 

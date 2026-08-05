@@ -45,6 +45,8 @@
 
      <form class="horizontal-labels" method="post" >
 <input type="hidden" name="certificateType" value="hrtppc">
+
+
                 <!-- FULL NAME -->
                 {% call fieldset({
                   legend: {
@@ -324,7 +326,7 @@
                   namePrefix: "applicationDate",
                   fieldset: {
                     legend: {
-                      text: "Application date"
+                      text: "Case receipted date"
                     }
                   },
                   items: [
@@ -348,7 +350,7 @@
                 <div class="nhsuk-button-group">
 
                          {{ button({
-                html: '<span data-ak="I">Submit application</span>',
+                html: '<span data-ak="I">Next</span>',
                 type: 'submit'
                 }) }}
 

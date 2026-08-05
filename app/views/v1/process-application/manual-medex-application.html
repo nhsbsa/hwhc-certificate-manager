@@ -45,6 +45,63 @@ html: '<span data-ak="B">Back</span>'
 
              <form class="horizontal-labels" method="post" >
 <input type="hidden" name="certificateType" value="medex">
+<!--FORM VERSION-->
+
+              {% set versions = [
+              'FP92A0104',
+              'FP92A0406',
+              'FP92A0702',
+              'FP92A0710',
+              'FP92A0803',
+              'FP92A0911',
+              'FP92A1114',
+              'FP92A1207',
+              'FP92A1208',
+
+              'FW80104',
+              'FW80110',
+              'FW80211',
+              'FW80215',
+              'FW80406',
+              'FW80702',
+              'FW80710',
+              'FW80803',
+              'FW81207',
+              'FW81217',
+              'Not an official '
+              ] %}
+
+              {{ select({
+              label: {
+              text: 'Form version'
+              },
+              id: 'formVersion',
+              name: 'formVersion',
+              value: 'FP92A1208',
+              items: [
+              { value: 'FP92A0104', text: 'FP92A0104' },
+              { value: 'FP92A0406', text: 'FP92A0406' },
+              { value: 'FP92A0702', text: 'FP92A0702' },
+              { value: 'FP92A0710', text: 'FP92A0710' },
+              { value: 'FP92A0803', text: 'FP92A0803' },
+              { value: 'FP92A0911', text: 'FP92A0911' },
+              { value: 'FP92A1114', text: 'FP92A1114' },
+              { value: 'FP92A1207', text: 'FP92A1207' },
+              { value: 'FP92A1208', text: 'FP92A1208' },
+              { value: 'FW80104', text: 'FW80104' },
+              { value: 'FW80110', text: 'FW80110' },
+              { value: 'FW80211', text: 'FW80211' },
+              { value: 'FW80215', text: 'FW80215' },
+              { value: 'FW80406', text: 'FW80406' },
+              { value: 'FW80702', text: 'FW80702' },
+              { value: 'FW80710', text: 'FW80710' },
+              { value: 'FW80803', text: 'FW80803' },
+              { value: 'FW81207', text: 'FW81207' },
+              { value: 'FW81217', text: 'FW81217' },
+              { value: 'Not an official form', text: 'Not an official form' }
+              ]
+              }) }}
+
               <!-- FULL NAME -->
               {% call fieldset({
               legend: {
@@ -377,7 +434,7 @@ html: '<span data-ak="B">Back</span>'
               namePrefix: "applicationDate",
               fieldset: {
               legend: {
-              text: "Application date"
+              text: "Case receipted date"
               }
               },
               items: [
@@ -401,7 +458,7 @@ html: '<span data-ak="B">Back</span>'
               <div class="nhsuk-button-group">
 
                           {{ button({
-                html: '<span data-ak="I">Submit application</span>',
+                html: '<span data-ak="I">Next</span>',
                 type: 'submit'
                 }) }}
 
