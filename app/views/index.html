@@ -98,1373 +98,246 @@
           <p class="nhsuk-body"><a class="nhsuk-link" href="/v1/data-patients">View patient test data, roles and statuses</a></p>
 
         {% endset %}
+{% set pageListV1TabHTML %}
 
-        {% set pageListV1TabHTML %}
+<details class="nhsuk-details">
+  <summary class="nhsuk-details__summary">
+    <span class="nhsuk-details__summary-text">General/common pages</span>
+  </summary>
+  <div class="nhsuk-details__text">
+    <ul class="nhsuk-list nhsuk-list--bullet">
+      <li><a class="nhsuk-link" href="/v1/search?role=callCentre">Search/Start page</a></li>
+      <li><a class="nhsuk-link" href="/v1/search-results">Search results</a></li>
+      <li><a class="nhsuk-link" href="/v1/search-results?searchCertificateType=none">No search results</a></li>
+      <li><a class="nhsuk-link" href="/v1/access-keys">Access keys</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/address-lookup">Address lookup - Find an address</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/address-lookup?addressSearchPostcode=NE15%208NY">Address lookup result - Select an address</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/address-lookup-result?addressSearchPostcode=ZZ1%201ZZ">Address lookup result - No address found</a></li>
+    </ul>
+  </div>
+</details>
 
-        <h2 class="nhsuk-heading-m">Customer contact adviser screens</h2>
-        {{ table({
-          caption: "General/common pages",
-          head: [
-            {
-              text: "Description"
-            },
-            {
-              text: "Prototype link"
-            }
-          ],
-          rows: [
-            [
-              {
-                text: "Search/Start page"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/search?role=callCentre">Search page</a>'
-              }
-            ],
-            [
-              {
-                text: "Search results"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/search-results">Search results found</a>'
-              }
-            ],
-            [
-              {
-                text: "No search results"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/search-results?searchCertificateType=none">No search results found</a>'
-              }
-            ],
-            [
-              {
-                text: "Access keys"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/access-keys">Access keys</a>'
-              }
-            ],
-            [
-              {
-                text: "Address lookup - Find an address"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/address-lookup">Find an address</a>'
-              }
-            ],
-            [
-              {
-                text: "Address lookup result - Select an address"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/address-lookup?addressSearchPostcode=NE15%208NY">Select an address</a>'
-              }
-            ],
-            [
-              {
-                text: "Address lookup result - No address found"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/address-lookup-result?addressSearchPostcode=ZZ1 1ZZ">No address found</a>'
-              }
-            ]
-          ]
-        }) }}
+<details class="nhsuk-details">
+  <summary class="nhsuk-details__summary">
+    <span class="nhsuk-details__summary-text">General/common error pages</span>
+  </summary>
+  <div class="nhsuk-details__text">
+    <ul class="nhsuk-list nhsuk-list--bullet">
+      <li><a class="nhsuk-link" href="/v1/errors/blank-fields">Search - Blank fields error</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/dob-invalid-characters">Date of birth - Invalid date of birth fields</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/dob-future">Date of birth - Date of birth in the future</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-day">Date of birth - Blank day</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-month">Date of birth - Blank month</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-year">Date of birth - Blank year</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-day-month">Date of birth - Blank day and month</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-day-year">Date of birth - Blank day and year</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-month-year">Date of birth - Blank month and year</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-year-numbers">Date of birth - Year does not have 4 numbers</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/dob-invalid-date">Date of birth - Invalid date</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/dob-far-past">Date of birth - Date of birth is too far in the past</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/postcode-invalid">Postcode - Invalid postcode format</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/first-name-invalid">First name - Invalid characters in first name</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/first-name-too-long">First name - Input too long (more than 50 characters)</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/last-name-invalid">Last name - Invalid characters in last name</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/last-name-too-long">Last name - Input too long (more than 50 characters)</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/certificate-reference-invalid">Certificate reference - Invalid characters in certificate reference</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/certificate-reference-too-long">Certificate reference - Too long (more than 11 characters)</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/address-lookup-postcode-blank">Address lookup - Blank postcode field</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/address-lookup-postcode-invalid-characters">Address lookup - Invalid character in postcode</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/address-postcode-lookup-api-error">Address lookup - Error from address API call</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/address-lookup-postcode-invalid-characters-building">Address lookup - Invalid character in building name or number field</a></li>
+      <li><a class="nhsuk-link" href="/v1/errors/address-lookup-result-select-address">Address lookup result - No address selected</a></li>
+    </ul>
+  </div>
+</details>
 
-        {{ table({
-          caption: "General/common error pages",
-          head: [
-            {
-              text: "Description"
-            },
-            {
-              text: "Prototype link"
-            }
-          ],
-          rows: [
-          [
-            {
-              text: "Search - Blank fields error"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/blank-fields">Enter at least one field</a>'
-            }
-          ],
-          [
-            {
-              text: "Date of birth - Invalid date of birth fields"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/dob-invalid-characters">Date of birth date must only include numbers</a>'
-            }
-          ],
-          [
-            {
-              text: "Date of birth - Date of birth in the future"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/dob-future">Date of birth must be in the past</a>'
-            }
-          ],
-          [
-            {
-              text: "Date of birth - Blank day"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/dob-blank-day">Date of birth must include a day</a>'
-            }
-          ],
-          [
-            {
-              text: "Date of birth - Blank month"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/dob-blank-month">Date of birth must include a month</a>'
-            }
-          ],
-          [
-            {
-              text: "Date of birth - Blank year"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/dob-blank-year">Date of birth must include a year</a>'
-            }
-          ],
-          [
-            {
-              text: "Date of birth - Blank day and month"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/dob-blank-day-month">Date of birth must include a day and month</a>'
-            }
-          ],
-          [
-            {
-              text: "Date of birth - Blank day and year"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/dob-blank-day-year">Date of birth must include a day and year</a>'
-            }
-          ],
-          [
-            {
-              text: "Date of birth - Blank month and year"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/dob-blank-month-year">Date of birth must include a month and year</a>'
-            }
-          ],
-          [
-            {
-              text: "Date of birth - Year does not have 4 numbers"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/dob-blank-year-numbers">Year must include 4 numbers</a>'
-            }
-          ],
-          [
-            {
-              text: "Date of birth - Invalid date"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/dob-invalid-date">Date of birth must be a real date</a>'
-            }
-          ],
-          [
-            {
-              text: "Date of birth - Date of birth is too far in the past"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/dob-far-past">Date of birth must be on or after 1 January 1900</a>'
-            }
-          ],
-          [
-            {
-              text: "Postcode - Invalid postcode format"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/postcode-invalid">Enter a full UK postcode, like NE1 6SN</a>'
-            }
-          ],
-          [
-            {
-              text: "First name - Invalid characters in first name"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/first-name-invalid">First name must only include letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-            }
-          ],
-          [
-            {
-              text: "First name - Input too long (more than 50 characters)"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/first-name-too-long">First name must be 50 characters or less</a>'
-            }
-          ],
-          [
-            {
-              text: "Last name - Invalid characters in last name"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/last-name-invalid">Last name must only include letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-            }
-          ],
-          [
-            {
-              text: "Last name - Input too long (more than 50 characters)"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/last-name-too-long">Last name must be 50 characters or less</a>'
-            }
-          ],
-          [
-            {
-              text: "Certificate reference - Invalid characters in certificate reference"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/certificate-reference-invalid">Certificate reference must only include numbers 0 to 9</a>'
-            }
-          ],
-          [
-            {
-              text: "Certificate reference - Too long (more than 11 characters)"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/certificate-reference-too-long">Certificate reference must be 11 characters or less</a>'
-            }
-          ],
-          [
-              {
-                text: "Address lookup - Blank postcode field"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/address-lookup-postcode-blank">Enter postcode</a>'
-              }
-            ],
-            [
-              {
-                text: "Address lookup - Invalid character in postcode"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/address-lookup-postcode-invalid-characters">Enter a full UK postcode, like NE1 6SN</a>'
-              }
-            ],
-            [
-              {
-                text: "Address lookup - Error from address API call"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/address-postcode-lookup-api-error">Postcode search failed. Check the postcode and try again, or enter the address manually.</a>'
-              }
-            ],
-            [
-              {
-                text: "Address lookup - Invalid character in building name or number field"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/address-lookup-postcode-invalid-characters-building">Building number or name must only include numbers 0 to 9, letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Address lookup result - No address selected"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/errors/address-lookup-result-select-address">Select address or enter the address manually</a>'
-              }
-            ]
-          ]
-        }) }}
+<details class="nhsuk-details">
+  <summary class="nhsuk-details__summary">
+    <span class="nhsuk-details__summary-text">Matex certificate pages</span>
+  </summary>
+  <div class="nhsuk-details__text">
+    <ul class="nhsuk-list nhsuk-list--bullet">
+      <li><a class="nhsuk-link" href="/v1/matex/case?patientID=6">Certificate summary - Active - Digital application</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/case?patientID=89">Certificate summary - Active - Paper application</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=58">Certificate summary - On hold</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=50">Certificate summary - Rejected</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/case?patientID=31">Certificate summary - Deleted/Expired</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=36">Certificate summary - Processing</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=85">Certificate summary - Checking</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/view-application-image">View image of scanned application form</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/add-note">Add note</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/case--edit">Edit application (for on-hold or rejected cases)</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/edit-or-reissue?patientID=6">Edit certificate details or reissue - Digital application</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/edit-or-reissue?patientID=89">Edit certificate details or reissue - Paper application</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/reissue-complete?patientID=9">Reissue complete - Post</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/reissue-complete?patientID=55">Reissue complete - Email</a></li>
+    </ul>
+  </div>
+</details>
 
-        {{ table({
-          caption: "Matex certificate pages",
-          head: [
-            {
-              text: "Description"
-            },
-            {
-              text: "Prototype link"
-            }
-          ],
-          rows: [
-            [
-              {
-                text: "Certificate summary - Active - Digital application"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/case?patientID=6">Certificate summary</a>'
-              }
-            ],
-            [
-              {
-                text: "Certificate summary - Active - Paper application"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/case?patientID=89">Certificate summary</a>'
-              }
-            ],
-            [
-              {
-                text: "Certificate summary - On hold"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/case--view--can-edit?patientID=58">Certificate summary</a>'
-              }
-            ],
-            [
-              {
-                text: "Certificate summary - Rejected"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/case--view--can-edit?patientID=50">Certificate summary</a>'
-              }
-            ],
-            [
-            {
-              text: "Certificate summary - Deleted/Expired"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/case?patientID=31">Certificate summary</a>'
-            }
-          ],
-          [
-            {
-              text: "Certificate summary - Processing"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/case--view--can-edit?patientID=36">Certificate summary</a>'
-            }
-          ],
-          [
-            {
-              text: "Certificate summary - Checking"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/case--view--can-edit?patientID=85">Certificate summary</a>'
-            }
-          ],
-          [
-            {
-              text: "View image of scanned application form"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/view-application-image">View application</a>'
-            }
-          ],
-          [
-            {
-              text: "Add note"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/add-note">Add note</a>'
-            }
-          ],
-          [
-            {
-              text: "Edit application (for on-hold or rejected cases)"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/case--edit">Edit application</a>'
-            }
-          ],
-          [
-            {
-              text: "Edit certificate details or reissue - Digital application"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/edit-or-reissue?patientID=6">Edit or reissue</a>'
-            }
-          ],
-          [
-            {
-              text: "Edit certificate details or reissue - Paper application"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/edit-or-reissue?patientID=89">Edit or reissue</a>'
-            }
-          ],
-          [
-            {
-              text: "Reissue complete - Post"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/reissue-complete?patientID=9">Reissue complete</a>'
-            }
-          ],
-          [
-            {
-              text: "Reissue complete - Email"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/reissue-complete?patientID=55">Reissue complete</a>'
-            }
-          ]
-          ]
-        }) }}
+<details class="nhsuk-details">
+  <summary class="nhsuk-details__summary">
+    <span class="nhsuk-details__summary-text">Matex error pages</span>
+  </summary>
+  <div class="nhsuk-details__text">
+    <ul class="nhsuk-list nhsuk-list--bullet">
+      <li><a class="nhsuk-link" href="/v1/matex/errors/first-name-too-long">Edit or reissue - First name too long</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/first-name-invalid">Edit or reissue - Invalid characters in first name</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/first-name-blank">Edit or reissue - Blank first name field</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/last-name-too-long">Edit or reissue - Last name too long</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/last-name-invalid">Edit or reissue - Invalid characters in last name</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/last-name-blank">Edit or reissue - Last name blank</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/address-line-1-blank">Edit or reissue - Blank address line 1</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/town-blank">Edit or reissue - Blank town</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/postcode-blank">Edit or reissue - Blank postcode</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/address-line-1-invalid">Edit or reissue - Invalid characters in address line 1</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/address-line-2-invalid">Edit or reissue - Invalid characters in address line 2</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/town-invalid">Edit or reissue - Invalid characters in town</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/county-invalid">Edit or reissue - Invalid characters in county</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/postcode-invalid">Edit or reissue - Invalid characters in postcode</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank">Edit or reissue - Blank date of birth</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-future">Edit or reissue - Date of birth in the future</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-day">Edit or reissue - Date of birth - Blank day</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-month">Edit or reissue - Date of birth - Blank month</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-year">Edit or reissue - Date of birth - Blank year</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-day-month">Edit or reissue - Date of birth - Blank day and month</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-day-year">Edit or reissue - Date of birth - Blank day and year</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-month-year">Edit or reissue - Date of birth - Blank month and year</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-year-numbers">Edit or reissue - Date of birth - Year does not have 4 numbers</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-invalid">Edit or reissue - Date of birth - Invalid date</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-invalid-characters">Edit or reissue - Date of birth - Invalid characters in date of birth fields</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-far-past">Edit or reissue - Date of birth - Date of birth is too far in the past</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/nhs-number-blank">Edit or reissue - Blank NHS number</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/nhs-number-invalid">Edit or reissue - Invalid characters in NHS number</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/nhs-number-too-long">Edit or reissue - NHS number too long</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/nhs-number-too-short">Edit or reissue - NHS number too short</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/telephone-number-blank">Edit or reissue - Blank telephone number</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/telephone-number-invalid">Edit or reissue - Invalid characters in telephone number</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank">Edit or reissue - Blank child's due or birth date</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-future">Edit or reissue - Child's due or birth date too far in the future</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-day">Edit or reissue - Child's due or birth date - Blank day</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-month">Edit or reissue - Child's due or birth date - Blank month</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-year">Edit or reissue - Child's due or birth date - Blank year</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-day-month">Edit or reissue - Child's due or birth date - Blank day and month</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-day-year">Edit or reissue - Child's due or birth date - Blank day and year</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-month-year">Edit or reissue - Child's due or birth date - Blank month and year</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-year-numbers">Edit or reissue - Child's due or birth date - Year does not have 4 numbers</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-invalid">Edit or reissue - Child's due or birth date - Invalid date</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-invalid-characters">Edit or reissue - Child's due or birth date - Invalid characters in date of birth fields</a></li>
+      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-far-past">Edit or reissue - Child's due or birth date - Child's due or birth date too far in the past</a></li>
+    </ul>
+  </div>
+</details>
 
-        {{ table({
-          caption: "Matex error pages",
-          head: [
-            {
-              text: "Description"
-            },
-            {
-              text: "Prototype link"
-            }
-          ],
-          rows: [
-            [
-              {
-                text: "Edit or reissue - First name too long"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/first-name-too-long">First name must be 50 characters or less</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in first name"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/first-name-invalid">First name must only include letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank first name field"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/first-name-blank">Enter first name</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Last name too long"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/last-name-too-long">Last name must be 50 characters or less</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in last name"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/last-name-invalid">Last name must only include letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Last name blank"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/last-name-blank">Enter last name</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank address line 1"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/address-line-1-blank">Enter address line 1, usually the building and street</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank town"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/town-blank">Enter town or city</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank postcode"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/postcode-blank">Enter postcode</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in address line 1"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/address-line-1-invalid">Address line 1 must only include numbers 0 to 9, letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in address line 2"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/address-line-2-invalid">Address line 2 must only include numbers 0 to 9, letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in last name"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/last-name-invalid">Last name must only include letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in town"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/town-invalid">Town or city must only include numbers 0 to 9, letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in county"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/county-invalid">County must only include numbers 0 to 9, letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in postcode"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/postcode-invalid">Postcode must only include letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank date of birth"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/dob-blank">Enter the certificate holder\'s date of birth</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth in the future"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/dob-future">Date of birth must be in the past</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Blank day"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/dob-blank-day">Date of birth must include a day</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Blank month"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/dob-blank-month">Date of birth must include a month</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Blank year"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/dob-blank-year">Date of birth must include a year</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Blank day and month"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/dob-blank-day-month">Date of birth must include a day and month</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Blank day and year"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/dob-blank-day-year">Date of birth must include a day and year</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Blank month and year"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/dob-blank-month-year">Date of birth must include a month and year</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Year does not have 4 numbers"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/dob-blank-year-numbers">Year must include 4 numbers</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Invalid date"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/dob-invalid">Date of birth must be a real date</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Invalid characters in date of birth fields"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/dob-invalid-characters">Date of birth date must only include numbers</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Date of birth is too far in the past"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/dob-far-past">Date of birth must be on or after 1 January 1900</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank NHS number"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/nhs-number-blank">Enter the certificate holder\'s NHS number</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in NHS number"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/nhs-number-invalid">NHS number must only include numbers and spaces</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - NHS number too long"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/nhs-number-too-long">NHS number is too long</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - NHS number too short"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/nhs-number-too-short">NHS number is too short</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank telephone number"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/telephone-number-blank">Enter a UK phone number</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in telephone number"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/telephone-number-invalid">Enter a phone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank child\'s due or birth date"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/childs-dob-blank">Enter the child\'s due or birth date</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Child\'s due or birth date too far in the future (today\'s date plus 92 weeks)"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/childs-dob-future">Child\'s due of birth date must be the same as or before [d Month yyyy]</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Child\'s due or birth date - Blank day"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/childs-dob-blank-day">Child\'s due or birth date must include a day</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Child\'s due or birth date - Blank month"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/childs-dob-blank-month">Child\'s due or birth date must include a month</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Child\'s due or birth date - Blank year"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/childs-dob-blank-year">Child\'s due or birth date must include a year</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Child\'s due or birth date - Blank day and month"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/childs-dob-blank-day-month">Child\'s due or birth date must include a day and month</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Child\'s due or birth date - Blank day and year"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/childs-dob-blank-day-year">Child\'s due or birth date must include a day and year</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Child\'s due or birth date - Blank month and year"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/childs-dob-blank-month-year">Child\'s due or birth date must include a month and year</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Child\'s due or birth date - Year does not have 4 numbers"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/childs-dob-blank-year-numbers">Year must include 4 numbers</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Child\'s due or birth date - Invalid date"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/childs-dob-invalid">Child\'s due or birth date must be a real date</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Child\'s due or birth date - Invalid characters in date of birth fields"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/childs-dob-invalid-characters">Child\'s due or birth date must only include numbers</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Child\'s due or birth date - Child\'s due or birth date too far in the past (more than a year ago)"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/matex/errors/childs-dob-far-past">Child\'s due of birth date is more than a year in the past</a>'
-              }
-            ]
-            ]
-        }) }}
+<details class="nhsuk-details">
+  <summary class="nhsuk-details__summary">
+    <span class="nhsuk-details__summary-text">Medex certificate pages</span>
+  </summary>
+  <div class="nhsuk-details__text">
+    <ul class="nhsuk-list nhsuk-list--bullet">
+      <li><a class="nhsuk-link" href="/v1/medex/case?patientID=21">Certificate summary - Active - Digital application</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/case?patientID=93">Certificate summary - Active - Paper application</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/case--view--can-edit?patientID=34">Certificate summary - On hold</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/case--view--can-edit?patientID=43">Certificate summary - Rejected</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/case?patientID=92">Certificate summary - Deleted/Expired</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/case--view--can-edit?patientID=15">Certificate summary - Processing</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/view-application-image">View image of scanned application form</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/add-note">Add note</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/case--edit">Edit application (for on-hold or rejected cases)</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/edit-or-reissue?patientID=21">Edit certificate details or reissue - Digital application</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/edit-or-reissue?patientID=93">Edit certificate details or reissue - Paper application</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/address-lookup">Address lookup - Find an address</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/address-lookup?addressSearchPostcode=NE15%208NY">Address lookup result - Select an address</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/address-lookup-result?addressSearchPostcode=ZZ1%201ZZ">Address lookup result - No address found</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/reissue-complete?patientID=93">Reissue complete - Post</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/reissue-complete?patientID=21">Reissue complete - Email</a></li>
+    </ul>
+  </div>
+</details>
 
+<details class="nhsuk-details">
+  <summary class="nhsuk-details__summary">
+    <span class="nhsuk-details__summary-text">Medex error pages</span>
+  </summary>
+  <div class="nhsuk-details__text">
+    <ul class="nhsuk-list nhsuk-list--bullet">
+      <li><a class="nhsuk-link" href="/v1/medex/errors/blank-medical-conditions?patientID=93">Edit certificate - Paper application - Blank medical conditions</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/first-name-too-long">Edit or reissue - First name too long</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/first-name-invalid">Edit or reissue - Invalid characters in first name</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/first-name-blank">Edit or reissue - Blank first name field</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/last-name-too-long">Edit or reissue - Last name too long</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/last-name-invalid">Edit or reissue - Invalid characters in last name</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/last-name-blank">Edit or reissue - Last name blank</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/address-line-1-blank">Edit or reissue - Blank address line 1</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/town-blank">Edit or reissue - Blank town</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/postcode-blank">Edit or reissue - Blank postcode</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/address-line-1-invalid">Edit or reissue - Invalid characters in address line 1</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/address-line-2-invalid">Edit or reissue - Invalid characters in address line 2</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/town-invalid">Edit or reissue - Invalid characters in town</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/county-invalid">Edit or reissue - Invalid characters in county</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/postcode-invalid">Edit or reissue - Invalid characters in postcode</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank">Edit or reissue - Blank date of birth</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-future">Edit or reissue - Date of birth in the future</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-day">Edit or reissue - Date of birth - Blank day</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-month">Edit or reissue - Date of birth - Blank month</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-year">Edit or reissue - Date of birth - Blank year</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-day-month">Edit or reissue - Date of birth - Blank day and month</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-day-year">Edit or reissue - Date of birth - Blank day and year</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-month-year">Edit or reissue - Date of birth - Blank month and year</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-year-numbers">Edit or reissue - Date of birth - Year does not have 4 numbers</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-invalid">Edit or reissue - Date of birth - Invalid date</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-invalid-characters">Edit or reissue - Date of birth - Invalid characters in date of birth fields</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-far-past">Edit or reissue - Date of birth - Date of birth is too far in the past</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/nhs-number-blank">Edit or reissue - Blank NHS number</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/nhs-number-invalid">Edit or reissue - Invalid characters in NHS number</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/nhs-number-too-long">Edit or reissue - NHS number too long</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/nhs-number-too-short">Edit or reissue - NHS number too short</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/telephone-number-blank">Edit or reissue - Blank telephone number</a></li>
+      <li><a class="nhsuk-link" href="/v1/medex/errors/telephone-number-invalid">Edit or reissue - Invalid characters in telephone number</a></li>
+    </ul>
+  </div>
+</details>
 
-        {{ table({
-          caption: "Medex certificate pages",
-          head: [
-            {
-              text: "Description"
-            },
-            {
-              text: "Prototype link"
-            }
-          ],
-          rows: [
-            [
-              {
-                text: "Certificate summary - Active - Digital application"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case?patientID=21">Certificate summary</a>'
-              }
-            ],
-            [
-              {
-                text: "Certificate summary - Active - Paper application"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case?patientID=93">Certificate summary</a>'
-              }
-            ],
-            [
-              {
-                text: "Certificate summary - On hold"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case--view--can-edit?patientID=34">Certificate summary</a>'
-              }
-            ],
-            [
-              {
-                text: "Certificate summary - Rejected"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case--view--can-edit?patientID=43">Certificate summary</a>'
-              }
-            ],
-            [
-            {
-              text: "Certificate summary - Deleted/Expired"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case?patientID=92">Certificate summary</a>'
-            }
-          ],
-          [
-            {
-              text: "Certificate summary - Processing"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case--view--can-edit?patientID=15">Certificate summary</a>'
-            }
-          ],
-          [
-            {
-              text: "View image of scanned application form"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/view-application-image">View application</a>'
-            }
-          ],
-          [
-            {
-              text: "Add note"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/add-note">Add note</a>'
-            }
-          ],
-          [
-            {
-              text: "Edit application (for on-hold or rejected cases)"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/case--edit">Edit application</a>'
-            }
-          ],
-          [
-            {
-              text: "Edit certificate details or reissue - Digital application"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/edit-or-reissue?patientID=21">Edit or reissue</a>'
-            }
-          ],
-          [
-            {
-              text: "Edit certificate details or reissue - Paper application"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/edit-or-reissue?patientID=93">Edit or reissue</a>'
-            }
-          ],
-          [
-            {
-              text: "Address lookup - Find an address"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/address-lookup">Find an address</a>'
-            }
-          ],
-          [
-            {
-              text: "Address lookup result - Select an address"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/address-lookup?addressSearchPostcode=NE15%208NY">Select an address</a>'
-            }
-          ],
-          [
-            {
-              text: "Address lookup result - No address found"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/address-lookup-result?addressSearchPostcode=ZZ1 1ZZ">No address found</a>'
-            }
-          ],
-          [
-            {
-              text: "Reissue complete - Post"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/reissue-complete?patientID=93">Reissue complete</a>'
-            }
-          ],
-          [
-            {
-              text: "Reissue complete - Email"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/reissue-complete?patientID=21">Reissue complete</a>'
-            }
-          ]
-          ]
-        }) }}
+<details class="nhsuk-details">
+  <summary class="nhsuk-details__summary">
+    <span class="nhsuk-details__summary-text">HRT PPC certificate pages</span>
+  </summary>
+  <div class="nhsuk-details__text">
+    <ul class="nhsuk-list nhsuk-list--bullet">
+      <li><a class="nhsuk-link" href="/v1/hrtppc/case?patientID=30">Certificate summary - Active</a></li>
+      <li><a class="nhsuk-link" href="/v1/hrtppc/case?patientID=80">Certificate summary - Deleted/Expired</a></li>
+      <li><a class="nhsuk-link" href="/v1/hrtppc/add-note">Add note</a></li>
+      <li><a class="nhsuk-link" href="/v1/hrtppc/edit-or-reissue?patientID=8">Edit certificate details or reissue</a></li>
+      <li><a class="nhsuk-link" href="/v1/hrtppc/address-lookup">Address lookup - Find an address</a></li>
+      <li><a class="nhsuk-link" href="/v1/hrtppc/address-lookup?addressSearchPostcode=NE15%208NY">Address lookup result - Select an address</a></li>
+      <li><a class="nhsuk-link" href="/v1/hrtppc/address-lookup-result?addressSearchPostcode=ZZ1%201ZZ">Address lookup result - No address found</a></li>
+      <li><a class="nhsuk-link" href="/v1/hrtppc/reissue-complete?patientID=99">Reissue complete - Post</a></li>
+      <li><a class="nhsuk-link" href="/v1/hrtppc/reissue-complete?patientID=30">Reissue complete - Email</a></li>
+      <li><a class="nhsuk-link" href="/v1/hrtppc/new-application">New application - Applicant details</a></li>
+      <li><a class="nhsuk-link" href="/v1/hrtppc/check-their-answers">New application - Check their details</a></li>
+      <li><a class="nhsuk-link" href="/v1/hrtppc/card-payment">New application - Card payment call</a></li>
+      <li><a class="nhsuk-link" href="/v1/hrtppc/retry-payment">Retry payment</a></li>
+    </ul>
+  </div>
+</details>
 
-        {{ table({
-          caption: "Medex error pages",
-          head: [
-            {
-              text: "Description"
-            },
-            {
-              text: "Prototype link"
-            }
-          ],
-          rows: [
-            [
-              {
-                text: "Edit certificate - Paper application - Blank medical conditions"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/blank-medical-conditions?patientID=93">Edit or reissue</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - First name too long"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/first-name-too-long">First name must be 50 characters or less</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in first name"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/first-name-invalid">First name must only include letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank first name field"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/first-name-blank">Enter first name</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Last name too long"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/last-name-too-long">Last name must be 50 characters or less</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in last name"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/last-name-invalid">Last name must only include letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Last name blank"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/last-name-blank">Enter last name</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank address line 1"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/address-line-1-blank">Enter address line 1, usually the building and street</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank town"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/town-blank">Enter town or city</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank postcode"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/postcode-blank">Enter postcode</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in address line 1"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/address-line-1-invalid">Address line 1 must only include numbers 0 to 9, letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in address line 2"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/address-line-2-invalid">Address line 2 must only include numbers 0 to 9, letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in last name"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/last-name-invalid">Last name must only include letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in town"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/town-invalid">Town or city must only include numbers 0 to 9, letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in county"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/county-invalid">County must only include numbers 0 to 9, letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in postcode"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/postcode-invalid">Postcode must only include letters a to z, and special characters such as hyphens, spaces and apostrophes</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank date of birth"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/dob-blank">Enter the certificate holder\'s date of birth</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth in the future"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/dob-future">Date of birth must be in the past</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Blank day"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/dob-blank-day">Date of birth must include a day</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Blank month"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/dob-blank-month">Date of birth must include a month</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Blank year"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/dob-blank-year">Date of birth must include a year</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Blank day and month"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/dob-blank-day-month">Date of birth must include a day and month</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Blank day and year"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/dob-blank-day-year">Date of birth must include a day and year</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Blank month and year"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/dob-blank-month-year">Date of birth must include a month and year</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Year does not have 4 numbers"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/dob-blank-year-numbers">Year must include 4 numbers</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Invalid date"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/dob-invalid">Date of birth must be a real date</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Invalid characters in date of birth fields"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/dob-invalid-characters">Date of birth date must only include numbers</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Date of birth - Date of birth is too far in the past"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/dob-far-past">Date of birth must be on or after 1 January 1900</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank NHS number"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/nhs-number-blank">Enter the certificate holder\'s NHS number</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in NHS number"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/nhs-number-invalid">NHS number must only include numbers and spaces</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - NHS number too long"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/nhs-number-too-long">NHS number is too long</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - NHS number too short"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/nhs-number-too-short">NHS number is too short</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Blank telephone number"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/telephone-number-blank">Enter a UK phone number</a>'
-              }
-            ],
-            [
-              {
-                text: "Edit or reissue - Invalid characters in telephone number"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/medex/errors/telephone-number-invalid">Enter a phone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192</a>'
-              }
-            ]
-          ]        
-        }) }}
+<details class="nhsuk-details">
+  <summary class="nhsuk-details__summary">
+    <span class="nhsuk-details__summary-text">Application processing screens</span>
+  </summary>
+  <div class="nhsuk-details__text">
+    <ul class="nhsuk-list nhsuk-list--bullet">
+      <li><a class="nhsuk-link" href="/v1/process-application/matex?scenario=accepted">Matex application accepted</a></li>
+      <li><a class="nhsuk-link" href="/v1/process-application/matex?scenario=reject">Matex application rejected</a></li>
+      <li><a class="nhsuk-link" href="/v1/process-application/matex?scenario=further-information">Matex application further information</a></li>
+      <li><a class="nhsuk-link" href="/v1/process-application/medex?scenario=accepted">Medex application accepted</a></li>
+      <li><a class="nhsuk-link" href="/v1/process-application/medex?scenario=reject">Medex application rejected</a></li>
+      <li><a class="nhsuk-link" href="/v1/process-application/medex?scenario=further-information">Medex application further information</a></li>
+    </ul>
+  </div>
+</details>
 
-        {{ table({
-          caption: "HRT PPC certificate pages",
-          head: [
-            {
-              text: "Description"
-            },
-            {
-              text: "Prototype link"
-            }
-          ],
-          rows: [
-            [
-              {
-                text: "Certificate summary - Active"
-              },
-              {
-                html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/case?patientID=30">Certificate summary</a>'
-              }
-            ],
-            [
-            {
-              text: "Certificate summary - Deleted/Expired"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/case?patientID=80">Certificate summary</a>'
-            }
-          ],
-          [
-            {
-              text: "Add note"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/add-note">Add note</a>'
-            }
-          ],
-          [
-            {
-              text: "Edit certificate details or reissue"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/edit-or-reissue?patientID=8">Edit or reissue</a>'
-            }
-          ],
-          [
-            {
-              text: "Address lookup - Find an address"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/address-lookup">Find an address</a>'
-            }
-          ],
-          [
-            {
-              text: "Address lookup result - Select an address"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/address-lookup?addressSearchPostcode=NE15%208NY">Select an address</a>'
-            }
-          ],
-          [
-            {
-              text: "Address lookup result - No address found"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/address-lookup-result?addressSearchPostcode=ZZ1 1ZZ">No address found</a>'
-            }
-          ],
-          [
-            {
-              text: "Reissue complete - Post"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/reissue-complete?patientID=99">Reissue complete</a>'
-            }
-          ],
-          [
-            {
-              text: "Reissue complete - Email"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/reissue-complete?patientID=30">Reissue complete</a>'
-            }
-          ],
-          [
-            {
-              text: "New application - Applicant details"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/new-application">Start HRT PPC application</a>'
-            }
-          ],
-          [
-            {
-              text: "New application - Check their details"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/check-their-answers">Check their answers</a>'
-            }
-          ],
-          [
-            {
-              text: "New application - Card payment call"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/card-payment">Card payment</a>'
-            }
-          ],
-          [
-            {
-              text: "Retry payment"
-            },
-            {
-              html: '<a class="nhsuk-link--no-visited-state" href="https://hwhc-certificate-manager-7712c842a62f.herokuapp.com/v1/hrtppc/retry-payment">Retry payment</a>'
-            }
-          ]
-          ]
-        }) }}
-
-
-        <h2 class="nhsuk-heading-m">Customer contact adviser screens</h2>
-        <ul class="nhsuk-list">
-          <li>
-            <p class="nhsuk-body"><a href="/v1/errors/blank-fields">Blank fields error</a></p>
-            <p class="nhsuk-hint">All fields have red borders but only one field is linked to the error summary. The errors do not affect the certificate type selection as it always has an 'input'.</p>  
-          </li>
-        </ul>
-
-            <h2 class="nhsuk-heading-m">Application processing screens</h2>
-            <ul class="nhsuk-list">
-              <li>
-                <p class="nhsuk-body"><a href="/v1/process-application/matex?scenario=accepted">Matex accepted</a></p>
-                <p class="nhsuk-hint">Matex application accepted scenario</p>  
-              </li>
-              <li>
-                <p class="nhsuk-body"><a href="/v1/process-application/matex?scenario=reject">Matex application rejected</a></p>
-                <p class="nhsuk-hint">Matex application rejected scenario</p>  
-              </li>
-              <li>
-                <p class="nhsuk-body"><a href="/v1/process-application/matex?scenario=further-information">Matex further information</a></p>
-                <p class="nhsuk-hint">Matex application further information scenario</p>  
-              </li>
-              <li>
-                <p class="nhsuk-body"><a href="/v1/process-application/medex?scenario=accepted">Medex accepted</a></p>
-                <p class="nhsuk-hint">Medex application accepted scenario</p>  
-              </li>
-                <li>
-                <p class="nhsuk-body"><a href="/v1/process-application/medex?scenario=reject">Medex rejected</a></p>
-                <p class="nhsuk-hint">Medex application rejected scenario</p>  
-              </li>
-                <li>
-                <p class="nhsuk-body"><a href="/v1/process-application/medex?scenario=further-information">Medex further information</a></p>
-                <p class="nhsuk-hint">Medex application further information scenario</p>  
-              </li>
-            </ul>
-            
-
-
-        {% endset %}
+{% endset %}
 
 
     <h2 class="nhsuk-heading-l">Version 1</h2>

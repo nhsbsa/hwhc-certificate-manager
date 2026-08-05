@@ -1,0 +1,80 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'Paper application processing' %}
+
+{% set checkingRows = '' | getPatientData | getCheckingTableRows %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+
+    <div class="nhsuk-card">
+      <div class="nhsuk-card__content">
+
+
+        <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
+
+
+        {% set insetTextHtml %}
+        <p>386 forms awaiting processing</p>
+        {% endset %}
+
+        {{ insetText({
+        html: insetTextHtml,
+        classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-top-0'
+        }) }}
+
+
+        <div class="nhsuk-heading-s">Applications you have processed today</div>
+        {% from './macros/stats.njk' import stats %}
+        {{ stats
+        ([
+        data.applicationStats.accepted or '0',
+        data.applicationStats.onHold or '0',
+        data.applicationStats.rejected or '0',
+        data.applicationStats.kfp or '0',
+        data.applicationStats.total or '0'
+        ])
+        }}
+        <div class="nhsuk-button-group">
+
+          {{ button({
+          html: '<span data-ak="I">Process an application</span>',
+          href: 'process-application/matex'
+          }) }}
+
+          {{ button({
+          html: '<span data-ak="K">Enter application manually</span>',
+          href: 'process-application/new-application',
+          classes: 'nhsuk-button--secondary'
+          }) }}
+
+          {{ button({
+          html: '<span data-ak="M">Search for a certificate</span>',
+          href: 'reset-search',
+          classes: 'nhsuk-button--secondary'
+          }) }}
+
+        </div>
+
+        <hr>
+
+        <div>
+          <h2 class="nhsuk-heading-m"> Applications you need to change</h2>
+          <div class="nhsuk-hint">
+            Some applications may be checked by a supervisor. After the checks you might need to make some
+            changes.
+          </div>
+          
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+{% endblock %}
