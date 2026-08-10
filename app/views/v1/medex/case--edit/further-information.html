@@ -1,0 +1,321 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = data.applicationReference or 'Application 12 866 355 086' %}
+
+{% block beforeContent %}
+{{ backLink({
+href: '../../dashboard',
+html: '<span data-ak="B">Return to your dashboard</span>'
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-one-half">
+    <h1 class="nhsuk-heading-m">{{ pageName }}
+      {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}
+      {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
+  </div>
+  <div class="nhsuk-grid-column-one-half">
+    {% set insetTextHtml %}
+    <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
+    {% endset %}
+    {{ insetText({
+    html: insetTextHtml,
+    classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
+    }) }}
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-grid-row">
+
+      <!-- ONE HALF - IMAGE -->
+      <div class="nhsuk-grid-column-one-half sticky-column">
+        {% from '../../macros/image.njk' import image %}
+        {{ image(data.certificateType) }}
+      </div>
+
+      <!-- ONE HALF - CONTENT -->
+      <div class="nhsuk-grid-column-one-half">
+
+        <div class="nhsuk-card nhsuk-card--grey">
+          <div class="nhsuk-card__content">
+
+            <h2 class="nhsuk-heading-m">Ask for further information</h2>
+
+
+            {% set emailConditionalHTML %}
+
+            {{ input({
+            id: 'sendRequestEmail',
+            name: 'sendRequestEmail',
+            label: {
+            text: 'Email address'
+            },
+            classes: 'nhsuk-input--width-20',
+            attributes: {
+            'data-focus-image': 'emailAddress',
+            autocomplete: 'email'
+            },
+            value: data.sendRequestEmail
+            }) }}
+
+            {% endset %}
+
+
+            {% set postHTML %}
+            <!-- PATIENT ADDRESS -->
+            <p>
+              We will send the further information request to:<br>
+              <strong>
+                {% if patientBuildingNumber %}
+                {{ patientBuildingNumber }}<br>
+                {% endif %}
+
+                {% if patientAddressLine1 %}
+                {{ patientAddressLine1 }}<br>
+                {% endif %}
+
+                {% if patientAddressLine2 and patientAddressLine2 | trim %}
+                {{ patientAddressLine2 }}<br>
+                {% endif %}
+
+                {% if patientTown %}
+                {{ patientTown }}<br>
+                {% endif %}
+
+                {% if patientCounty and patientCounty | trim %}
+                {{ patientCounty }}<br>
+                {% endif %}
+
+                {% if patientPostcode %}
+                {{ patientPostcode }}
+                {% endif %}
+              </strong>
+            </p>
+
+            <div class="address-button nhsuk-u-margin-top-5">
+              {{ button({
+              html: '<span data-ak="G">Use address lookup to change the address</span>',
+              classes: "nhsuk-button--secondary nhsuk-button--small",
+              href:
+              "/v1/matex/address-lookup?addressTarget=patient&returnTo=%2Fv1%2Fprocess-application%2Fcannot-process-application--horizontal-labels-fil%3FfurtherInformationRequest%3DpatientPost%23conditional-furtherInformationRequest-patientPost"
+              }) }}
+            </div>
+            {% endset %}
+
+
+            {% set hcpPostConditionalHTML %}
+
+            {{ input({
+            id: "full-name",
+            name: "fullName",
+            attributes: { 'data-focus-image' : 'healthcarePractitionerName' },
+            label: {
+            text: "Healthcare practitioner's name"
+            }
+            }) }}
+
+            <hr>
+
+            <h3 class="nhsuk-heading-xs">Healthcare practitioner's postal address</h3>
+
+            {% call fieldset({
+            legend: {
+            html: 'Address',
+            classes: 'nhsuk-u-visually-hidden'
+            }
+            }) %}
+
+            {{ input({
+            label: {
+            text: "Address line 1"
+            },
+            attributes: { 'data-focus-image' : 'healthcarePractitionerAddress' },
+            id: "address-line-1",
+            name: "addressLine1",
+            autocomplete: "address-line1",
+            value: hcpAddressLine1
+            }) }}
+
+            {{ input({
+            label: {
+            text: "Address line 2 (optional)"
+            },
+            attributes: { 'data-focus-image' : 'healthcarePractitionerAddress' },
+            id: "address-line-2",
+            name: "addressLine2",
+            autocomplete: "address-line2",
+            value: hcpAddressLine2
+            }) }}
+
+            {{ input({
+            label: {
+            text: "Town or city"
+            },
+            classes: "nhsuk-u-width-two-thirds",
+            attributes: { 'data-focus-image' : 'healthcarePractitionerAddress' },
+            id: "address-town",
+            name: "addressTown",
+            autocomplete: "address-level2",
+            value: hcpTown
+            }) }}
+
+            {{ input({
+            label: {
+            html: 'County (optional)'
+            },
+            classes: 'nhsuk-u-width-two-thirds',
+            attributes: { 'data-focus-image' : 'healthcarePractitionerAddress' },
+            id: 'address-county',
+            name: 'addressCounty',
+            value: hcpCounty
+            }) }}
+
+            {{ input({
+            label: {
+            text: "Postcode"
+            },
+            classes: "nhsuk-input--width-10",
+            attributes: { 'data-focus-image' : 'healthcarePractitionerAddress' },
+            id: "address-postcode",
+            name: "addressPostcode",
+            autocomplete: "postal-code",
+            spellcheck: false,
+            value: hcpPostcode
+            }) }}
+
+            {% endcall %}
+
+            <div class="address-button nhsuk-u-margin-top-5">
+              {{ button({
+              html: '<span data-ak="H">Use address lookup to fill in the address</span>',
+              classes: "nhsuk-button--secondary nhsuk-button--small",
+              href:
+              "/v1/matex/address-lookup?source=matex&addressTarget=hcp&returnTo=%2Fv1%2Fprocess-application%2Fcannot-process-application--horizontal-labels-fil%3FfurtherInformationRequest%3Dhcp%23address-line-1"
+              }) }}
+            </div>
+
+            {% endset %}
+
+
+            {% if data.certificateType == 'matex' %}
+            {% set typeSpecificItem = {
+            value: "Child's due or birth date",
+            text: "Child's due or birth date",
+            attributes: { "data-focus-image": "childsDueOrBirthDate" }
+            } %}
+
+            {% endif %}
+
+            <form method="post" action="/v1/process-application/scenarios/further-information" novalidate>
+
+              {{ checkboxes({
+              idPrefix: "furtherInformation",
+              name: "furtherInformation",
+              values: data.furtherInformation,
+
+              hint: {
+              text: "Select all missing or unclear information"
+              },
+              items: [
+              {
+              value: "Patient's name",
+              text: "Patient's name",
+              attributes: { "data-focus-image": "firstName" }
+              },
+
+              {
+              value: "Date of birth",
+              text: "Date of birth",
+              attributes: { "data-focus-image": "dateOfBirth" }
+              },
+              {
+              value: "Address and postcode",
+              text: "Address and postcode",
+              attributes: { "data-focus-image": "address" }
+              },
+
+
+
+              typeSpecificItem
+              ]
+              }) }}
+
+              <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+              {{ radios({
+              idPrefix: 'furtherInformationRequest',
+              name: 'furtherInformationRequest',
+              value: data.furtherInformationRequest,
+              fieldset: {
+              legend: {
+              text: 'Who will we ask for further information?'
+              }
+              },
+              items: [
+              {
+              value: 'hcp',
+              text: 'Send to healthcare practitioner',
+              conditional: { html: hcpPostConditionalHTML }
+              },
+              {
+              value: 'patientEmail',
+              text: 'Send to patient by email',
+              conditional: { html: emailConditionalHTML }
+              },
+              {
+              value: 'patientPost',
+              text: 'Send to patient by post',
+              conditional: {
+              html: postHTML
+              }
+              }
+              ]
+              }) }}
+
+              {{ textarea({
+              name: 'furtherInformationNotes',
+              id: 'furtherInformationNotes',
+              value: data.furtherInformationNotes,
+              label: {
+              text: 'Notes (optional)'
+              },
+              hint: {
+              text: "For internal use only. This will not be sent to the patient or healthcare practitioner."
+              }
+              }) }}
+
+              <div class="nhsuk-button-group">
+
+                {{ button({
+                html : '<span data-ak="I">Send request</span>',
+                href: '/v1/medex/case--edit/confirmation--on-hold'
+                }) }}
+
+                {{ button
+                ({ classes: "nhsuk-button--secondary",
+                html: '<span data-ak="M">Cancel</span>',
+                href: "../search"
+                })
+                }}
+
+              </div>
+
+
+
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

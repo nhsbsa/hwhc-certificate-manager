@@ -1542,14 +1542,16 @@ router.get(/^\/v1\/(matex|medex)\/case--edit$/, function(req, res){
 });
 
 
-router.post(/^\/v1\/(matex|medex)\/case--edit$/, function(req, res){
+// router.post(/^\/v1\/(matex|medex)\/case--edit$/, function(req, res){
 
-  const match = req.url.match(/^\/v1\/(matex|medex)\/case--edit$/);
-  const type = match ? match[1] : 'matex';
+//   const match = req.url.match(/^\/v1\/(matex|medex)\/case--edit$/);
+//   const type = match ? match[1] : 'matex';
 
-  return res.redirect(`/v1/${type}/case--view--can-edit`);
+//   return res.redirect(`/v1/${type}/case--view--can-edit`);
 
-});
+// });
+
+
 
 //
 // COMPARISON EDIT SCREEN
@@ -1590,6 +1592,83 @@ router.get('/v1/change-complete', function (req, res) {
   res.render('v1/change-complete');
 });
 
+//outomes when editing an on-hold application
+// router.post(/^\/v1\/(matex|medex)\/case--edit$/, function (req, res) {
+//   const match = req.url.match(/^\/v1\/(matex|medex)\/case--edit$/)
+//   const type = match ? match[1] : 'matex'
 
+//   const dobDay =
+//     req.body['imageDateOfBirth-day'] ||
+//     req.body.imageDateOfBirth?.day
+
+//   const dobMonth =
+//     req.body['imageDateOfBirth-month'] ||
+//     req.body.imageDateOfBirth?.month
+
+//   const dobYear =
+//     req.body['imageDateOfBirth-year'] ||
+//     req.body.imageDateOfBirth?.year
+
+//   const postcode = (req.body.imagePostcode || '').trim()
+
+//   if (!dobDay || !dobMonth || !dobYear) {
+//     return res.redirect(`/v1/${type}/case--edit/reject`)
+//   }
+
+//   if (!postcode) {
+//     return res.redirect(`/v1/${type}/case--edit/further-information`)
+//   }
+
+//   return res.redirect(`/v1/${type}/case--edit/confirmation--approved`)
+// })
+
+// router.get(/^\/v1\/(matex|medex)\/case--edit\/reject$/, (req, res) => {
+//   res.render(`v1/${req.params[0]}/case--edit/reject`, req.session.data);
+// });
+
+// router.get(/^\/v1\/(matex|medex)\/case--edit\/further-information$/, (req, res) => {
+//   res.render(`v1/${req.params[0]}/case--edit/further-information`, req.session.data);
+// });
+
+// router.get(/^\/v1\/(matex|medex)\/case--edit\/confirmation--approved$/, (req, res) => {
+//   res.render(`v1/${req.params[0]}/case--edit/confirmation--approved`, req.session.data);
+// });
+
+
+router.get(/^\/(matex|medex)\/case--edit$/, function(req, res) {
+  const type = req.url.match(/^\/(matex|medex)\/case--edit$/)?.[1] || 'matex'
+
+  res.render(`v1/${type}/case--edit`, {
+    ...req.session.data
+  })
+})
+
+router.post(/^\/(matex|medex)\/case--edit$/, function(req, res) {
+  const type = req.url.match(/^\/(matex|medex)\/case--edit$/)?.[1] || 'matex'
+
+  const dobDay =
+    req.body['imageDateOfBirth-day'] ||
+    req.body.imageDateOfBirth?.day
+
+  const dobMonth =
+    req.body['imageDateOfBirth-month'] ||
+    req.body.imageDateOfBirth?.month
+
+  const dobYear =
+    req.body['imageDateOfBirth-year'] ||
+    req.body.imageDateOfBirth?.year
+
+  const postcode = (req.body.imagePostcode || '').trim()
+
+  if (!dobDay || !dobMonth || !dobYear) {
+    return res.redirect(`/v1/${type}/case--edit/reject`)
+  }
+
+  if (!postcode) {
+    return res.redirect(`/v1/${type}/case--edit/further-information`)
+  }
+
+  return res.redirect(`/v1/${type}/case--edit/confirmation--approved`)
+})
 
 module.exports = router;

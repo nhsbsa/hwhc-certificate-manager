@@ -1,0 +1,63 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% if data.patientID %}
+{% set patient = data.patientID | getPatientData %}
+{% endif %}
+
+{% set pageName = 'Application on hold' %}
+
+{% block content %}
+
+
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- APPLICATION PROCESSED - ON HOLD -->         
+      {{ panel({
+        titleText: pageName,
+        classes: "nhsuk-panel--interruption",
+        html: '<p>This application is on hold</p>'
+      }) }}
+
+      {% set firstName = patient.firstName or data['editMATEX.firstName'] or 'Jane' %}
+      {% set lastName  = patient.lastName  or data['editMATEX.lastName'] or 'Smith' %}
+
+
+
+      {{ summaryList({
+        rows: [
+          {
+            key: { text: 'Name' },
+            value: { text: firstName + ' ' + lastName }
+          },
+          {
+            key: { text: 'Reference' },
+            value: { text: patient.certificateReference or '8436 810 379' }
+          }
+        ]
+      }) }}
+
+
+        <!-- NO CHECK -->
+        <h2 class="nhsuk-heading-s">What happens next?</h2>
+        <p class="nhsuk-body">You do not need to do anything else with this application.</p>
+
+
+          <div class="nhsuk-button-group">
+            {{ button({
+              html: '<span data-ak="S">New search</span>',
+              href: "../search"
+            }) }}
+
+       {{ button({
+              html: '<span data-ak="I">Return to dashboard</span>',
+              classes: "nhsuk-button--secondary",
+              href: "../../dashboard"
+            }) }}
+            </div>
+
+    </div>
+  </div>
+
+{% endblock %}

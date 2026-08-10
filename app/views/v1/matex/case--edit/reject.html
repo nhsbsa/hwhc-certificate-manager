@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen.html' %}
 
-{% set pageName = data.applicationReference or 'Application 2025 11 18 18 12 16N3000049' %}
+{% set pageName = data.applicationReference or 'Application 12 866 355 086' %}
 
 {% block beforeContent %}
 {{ backLink({
@@ -232,14 +232,22 @@ html: '<span data-ak="B">Return to your dashboard</span>'
       
 
 
-              <div class="nhsuk-button-group">
-                {{ button({ html: '<span data-ak="I">Send rejection</span>', attributes: { type: 'submit' } }) }}
+  <div class="nhsuk-button-group">
+
                 {{ button({
-                html: '<span data-ak="K">Edit application</span>',
-                href: 'javascript:history.go(-1)',
-                classes: 'nhsuk-button--secondary'
+                html : '<span data-ak="I">Send rejection</span>',
+                href: '/v1/matex/case--edit/confirmation--reject'
                 }) }}
+
+                {{ button
+                ({ classes: "nhsuk-button--secondary",
+                html: '<span data-ak="M">Cancel</span>',
+                href: "../search"
+                })
+                }}
+
               </div>
+
 
             </form>
           </div>
