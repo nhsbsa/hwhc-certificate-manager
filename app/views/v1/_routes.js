@@ -352,7 +352,7 @@ router.post(/process-application\/scenarios\/confirm/, function (req, res) {
 
 
 router.get(/process-application\/scenarios\/not-official-form/, function (req, res) {
-  res.render('v1/process-application/not-official-form', {
+  res.render('v1/process-application/scenarios/not-official-form', {
     processedToday: req.session.data.applicationStats.total
   });
 });
