@@ -4,58 +4,49 @@
 {% set patient = data.patientID | getPatientData %}
 {% endif %}
 
-{% set pageName = 'Certificate issued' %}
+{% set pageName = 'Application accepted' %}
 
 {% block content %}
+ 
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
+{% set firstName = patient.firstName or data['editMEDEX.firstName'] or 'Jane' %}
+{% set lastName = patient.lastName or data['editMEDEX.lastName'] or 'Smith' %}
+{% set fullName = firstName ~ ' ' ~ lastName %}
+{% set certificateReference = patient.certificateReference or '8436 810 379' %}
 
-      <!-- APPLICATION PROCESSED - APPROVED -->        
-      {{ panel({
-        titleText: pageName,
-        html: '<p>You have approved this application</p>'
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    {{ panel({
+      titleText: pageName,
+      html: '
+        <p>This application will be accepted and a certificate issued.</p>
+
+        <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Name:</p>
+        <h2 class="nhsuk-u-padding-top-0">' ~ fullName ~ '</h2>
+
+        <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Certificate number:</p>
+        <h2 class="nhsuk-u-padding-top-0">' ~ certificateReference ~ '</h2>
+      '
+    }) }}
+
+
+
+
+    <div class="nhsuk-button-group">
+      {{ button({
+        html: '<span data-ak="S">New search</span>',
+        href: "../search"
       }) }}
 
-      {% set firstName = patient.firstName or data['editMEDEX.firstName'] or 'Jane' %}
-      {% set lastName  = patient.lastName  or data['editMEDEX.lastName']  or 'Smith' %}
-
-      {% set buttonText = "<span data-ak='V'>View " ~ firstName + ' ' + lastName ~ "'s certificate</span>" %}
-
-      {{ summaryList({
-        rows: [
-          {
-            key: { text: 'Name' },
-            value: { text: firstName + ' ' + lastName }
-          },
-          {
-            key: { text: 'Reference' },
-            value: { text: patient.certificateReference or '8436 810 379' }
-          }
-        ]
+      {{ button({
+        html: '<span data-ak="V">View ' ~ fullName ~ '\'s certificate</span>',
+        classes: "nhsuk-button--secondary",
+        href: "case?patientID=" ~ patient.id ~ "&certMode=yes"
       }) }}
-
-
-        <!-- NO CHECK -->
-        <h2 class="nhsuk-heading-s">What happens next?</h2>
-        <p class="nhsuk-body">You do not need to do anything else with this application.</p>
-
-
-          <div class="nhsuk-button-group">
-            {{ button({
-              html: '<span data-ak="S">New search</span>',
-              href: "../search"
-            }) }}
-
-            {{ button({
-              html: buttonText,
-              classes: "nhsuk-button--secondary",
-              href: "case?patientID=" + patient.id + "&certMode=yes"
-            }) }}
-
-            </div>
-
     </div>
+
   </div>
+</div>
 
 {% endblock %}

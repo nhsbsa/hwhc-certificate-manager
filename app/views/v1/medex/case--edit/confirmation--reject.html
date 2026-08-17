@@ -8,7 +8,9 @@
 
 {% block content %}
 
-
+{% set firstName = patient.firstName or data['editMEDEX.firstName'] or 'Jane' %}
+{% set lastName = patient.lastName or data['editMEDEX.lastName'] or 'Smith' %}
+{% set fullName = firstName ~ ' ' ~ lastName %}
 
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-two-thirds">
@@ -25,32 +27,17 @@
 
 
         <p class="nhsuk-card__description">This application will be rejected.</p>
+
+        <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Name:</p>
+        <h2 class="nhsuk-u-padding-top-0">' ~ fullName ~ '</h2>
       </div>
     </div>
 
 
-    {% set firstName = patient.firstName or data['editMATEX.firstName'] or 'Jane' %}
-    {% set lastName = patient.lastName or data['editMATEX.lastName'] or 'Smith' %}
+  
 
 
 
-    {{ summaryList({
-    rows: [
-    {
-    key: { text: 'Name' },
-    value: { text: firstName + ' ' + lastName }
-    },
-    {
-    key: { text: 'Reference' },
-    value: { text: patient.certificateReference or '8436 810 379' }
-    }
-    ]
-    }) }}
-
-
-    <!-- NO CHECK -->
-    <h2 class="nhsuk-heading-s">What happens next?</h2>
-    <p class="nhsuk-body">You do not need to do anything else with this application.</p>
 
 
     <div class="nhsuk-button-group">
