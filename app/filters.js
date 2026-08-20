@@ -176,6 +176,19 @@ module.exports = function (env) {
 
   }
 
+  //
+  // GET REFERENCE HTML FUNCTION
+  //
+  function _getReferenceHtml(reference) {
+    const hasReference = reference && String(reference).trim();
+
+    if (!hasReference) {
+      return '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">Not available</span>';
+    }
+
+    return reference;
+  }
+
   // 
   // GET CERTIFICATE TYPE TAG FILTER
   //
@@ -626,7 +639,8 @@ module.exports = function (env) {
         { text: 'Date of birth' },
         { text: 'Type' },
         { text: 'Status' },
-        { text: 'Reference' },
+        { text: 'Application reference' },
+        { text: 'Certificate reference' },
         { text: 'Check type' }
       ];
 
@@ -640,7 +654,8 @@ module.exports = function (env) {
         { text: 'Date of birth' },
         { text: 'Type' },
         { text: 'Status' },
-        { text: 'Reference' },
+        { text: 'Application reference' },
+        { text: 'Certificate reference' },
         { text: 'Start date' },
         { text: 'Expiry date' }
       ];
@@ -781,7 +796,8 @@ case 'rejected':
           { html: patient.dateOfBirth.display },
           { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
           { html: (patient.checking === true) ? _getStatusTextOrTag(patient.status, true) + ' ' + _getStatusTextOrTag('checking', true) : _getStatusTextOrTag(patient.status, true) },
-          { html: patient.certificateReference },
+          { html: patient.applicationReference || 'Not available' },
+          { html: _getReferenceHtml(patient.certificateReference) },
           { text: checkedBy }
         ];
 
@@ -794,7 +810,8 @@ case 'rejected':
           { html: patient.dateOfBirth.display },
           { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
           { html: (patient.checking === true) ? _getStatusTextOrTag('checking', true) : _getStatusTextOrTag(patient.status, true) },
-          { html: patient.certificateReference },
+          { html: patient.applicationReference || 'Not available' },
+          { html: _getReferenceHtml(patient.certificateReference) },
           { text: patient.startDate.display },
           { text: patient.endDate.display }
         ];
@@ -878,14 +895,8 @@ case 'rejected':
                 ' ' +
                 _getStatusTextOrTag('checking', true)
             },
-            {
-              html:
-                patient.status === 'processing'
-                  ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' +
-                  patient.certificateReference +
-                  '</span>'
-                  : patient.certificateReference
-            }
+            { html: patient.applicationReference || 'Not available' },
+            { html: _getReferenceHtml(patient.certificateReference) }
           ]);
         }
 
@@ -1039,7 +1050,8 @@ case 'rejected':
             { html: patient.address.postcode },
             { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
             { html: _getStatusTextOrTag(patient.status, true) + ' ' + _getStatusTextOrTag('checking', true) },
-            { html: (patient.status === 'processing') ? '<span class="nhsuk-body-s nhsuk-u-secondary-text-colour">' + patient.certificateReference + '</span>' : patient.certificateReference }
+            { html: patient.applicationReference || 'Not available' },
+            { html: _getReferenceHtml(patient.certificateReference) }
           ];
 
           rows.push(obj);

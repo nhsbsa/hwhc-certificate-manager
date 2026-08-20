@@ -542,6 +542,23 @@
 
               };
 
+//
+// GENERATE APPLICATION REFERENCE FUNCTION
+//
+function _generateApplicationReference() {
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  const randomNum = String(Math.floor(Math.random() * 1_000_000_000)).padStart(9, '0');
+
+  return `Application ${year} ${month} ${day} ${hours} ${minutes} ${seconds}N${randomNum}`;
+}
+
               //
               // GENERATE NHS NUMBER FUNCTION
               //
@@ -884,7 +901,13 @@ else {
 
                     
                     
-                    obj.certificateReference = _generateCertificateReference( obj.certificateType, obj.status );
+                  obj.applicationReference = _generateApplicationReference();
+
+                  if (['accepted', 'active', 'expired', 'deleted'].indexOf(obj.status) > -1) {
+                    obj.certificateReference = _generateCertificateReference(obj.certificateType, obj.status);
+                  } else {
+                    obj.certificateReference = '';
+                  }
                     
                     obj.channel = _generateChannel( obj.certificateType, obj.status );
                     if( ( obj.certificateType === 'matex' || obj.certificateType === 'medex') && obj.channel === 'Paper' ){
