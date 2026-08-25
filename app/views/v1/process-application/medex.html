@@ -751,7 +751,50 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
 
             </form>
+<div id="note">
 
+  <button type="button" id="add-note-button" class="nhsuk-button nhsuk-button--secondary">
+    Add a note
+  </button>
+
+  <div id="note-content" class="hidden">
+
+    {{ textarea({
+      name: 'furtherInformationNotes',
+      id: 'furtherInformationNotes',
+      value: data.furtherInformationNotes,
+      label: {
+        text: 'Notes (optional)'
+      },
+      hint: {
+        text: 'For internal use only. This will not be sent to the patient or healthcare practitioner.'
+      }
+    }) }}
+
+    <button type="button" id="save-note" class="nhsuk-button nhsuk-button--small">
+      Save note
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+  const addNoteButton = document.getElementById('add-note-button');
+  const noteContent = document.getElementById('note-content');
+  const saveNote = document.getElementById('save-note');
+
+  addNoteButton.addEventListener('click', function () {
+    noteContent.classList.remove('hidden');
+    addNoteButton.classList.add('hidden');
+  });
+
+  saveNote.addEventListener('click', function () {
+    noteContent.classList.add('hidden');
+    addNoteButton.classList.remove('hidden');
+  });
+</script>
+  
             {% from "nhsuk/macros/icon.njk" import nhsukIcon %}
             <div class="nhsuk-u-visually-hidden">
               <span id="nhs-confirm-tick">

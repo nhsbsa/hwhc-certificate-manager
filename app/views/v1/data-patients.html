@@ -4,1009 +4,1024 @@
 
 {% block content %}
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
 
-          <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
 
-    </div>
   </div>
+</div>
 
-  <div class="nhsuk-grid-row">
+<div class="nhsuk-grid-row">
 
-    <div class="nhsuk-grid-column-two-thirds">
-        <h2 class="nhsuk-heading-s">Certificate types</h2>
-        {{ summaryList({
-           rows: [
-             {
-               key: { text: 'matex' | getCertificateTypeTextOrTag },
-               value: { html: 'matex' | getCertificateTypeTextOrTag( true ) }
-             },
-             {
-               key: { text: 'hrtppc' | getCertificateTypeTextOrTag },
-               value: { html: 'hrtppc' | getCertificateTypeTextOrTag( true ) }
-             },
-             {
-              key: { text: 'medex' | getCertificateTypeTextOrTag },
-              value: { html: 'medex' | getCertificateTypeTextOrTag( true ) }
-            }
-           ]
-         }) }}
-    </div>
-    </div>
+  <div class="nhsuk-grid-column-two-thirds">
+    <h2 class="nhsuk-heading-s">Certificate types</h2>
+    {{ summaryList({
+    rows: [
+    {
+    key: { text: 'matex' | getCertificateTypeTextOrTag },
+    value: { html: 'matex' | getCertificateTypeTextOrTag( true ) }
+    },
+    {
+    key: { text: 'hrtppc' | getCertificateTypeTextOrTag },
+    value: { html: 'hrtppc' | getCertificateTypeTextOrTag( true ) }
+    },
+    {
+    key: { text: 'medex' | getCertificateTypeTextOrTag },
+    value: { html: 'medex' | getCertificateTypeTextOrTag( true ) }
+    }
+    ]
+    }) }}
+  </div>
+</div>
 
-    <div class="nhsuk-grid-row">
+<div class="nhsuk-grid-row">
 
-    <div class="nhsuk-grid-column-one-half">
+  <div class="nhsuk-grid-column-one-half">
 
-        {{ table({
-          panel: false,
-          caption: 'Statuses',
-          firstCellIsHeader: true,
-        
-          rows: [
-              [
-                { html: 'processing' | getStatusTextOrTag( true ) },
-                { html: '<span class="nhsuk-u-font-size-14">Application scanned and added to system</span>' }
-              ],
-              [
-                { html: 'on-hold' | getStatusTextOrTag( true ) },
-                { html: '<span class="nhsuk-u-font-size-14">Application is on hold while more information is requested from either the patient, the GP, or a paper key-in</span>' }
-              ],
-              [
-                { html: 'accepted' | getStatusTextOrTag( true ) },
-                { html: '<span class="nhsuk-u-font-size-14">Application has been successfully processed and is awaiting production</span>' }
-              ],
-              [
-                { html: 'rejected' | getStatusTextOrTag( true ) },
-                { html: '<span class="nhsuk-u-font-size-14">The application has been rejected</span>' }
-              ],
-              [
-                { html: 'checking' | getStatusTextOrTag( true ) },
-                { html: '<span class="nhsuk-u-font-size-14">Application has been processed and is awaiting a quality control check</span>' }
-              ],
-              [
-                { html: 'active' | getStatusTextOrTag( true ) },
-                { html: '<span class="nhsuk-u-font-size-14">Certificate is active</span>' }
-              ],
-              [
-                { html: 'expired' | getStatusTextOrTag( true ) },
-                { html: '<span class="nhsuk-u-font-size-14">Certificate has expired</span>' }
-              ],
-              [
-                { html: 'deleted' | getStatusTextOrTag( true ) },
-                { html: '<span class="nhsuk-u-font-size-14">A request has been made to delete the certificate</span>' }
-              ]
-           ]
-        }) }}
+    {{ table({
+    panel: false,
+    caption: 'Statuses',
+    firstCellIsHeader: true,
+
+    rows: [
+    [
+    { html: 'processing' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">Application scanned and added to system</span>' }
+    ],
+    [
+    { html: 'on-hold' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">Application is on hold while more information is requested from either
+      the patient, the GP, or a paper key-in</span>' }
+    ],
+    [
+    { html: 'accepted' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">Application has been successfully processed and is awaiting
+      production</span>' }
+    ],
+    [
+    { html: 'rejected' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">The application has been rejected</span>' }
+    ],
+    [
+    { html: 'checking' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">Application has been processed and is awaiting a quality control
+      check</span>' }
+    ],
+    [
+    { html: 'active' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">Certificate is active</span>' }
+    ],
+    [
+    { html: 'expired' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">Certificate has expired</span>' }
+    ],
+    [
+    { html: 'deleted' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">A request has been made to delete the certificate</span>' }
+    ]
+    ]
+    }) }}
 
 
-        
-    </div>
+
+  </div>
 
 
   <div class="nhsuk-grid-column-one-half">
 
-        {{ table({
-          panel: false,
-          caption: 'Roles',
-          firstCellIsHeader: true,
-        
-          rows: [
-              [
-                { text: 'callCentre' | getJobTitle },
-                { html: '<span class="nhsuk-u-font-size-14">Help patients calling and emailing regarding their application</span>' }
-              ],
-              [
-                { text: 'backOffice' | getJobTitle },
-                { html: '<span class="nhsuk-u-font-size-14">Process scanned applications, correct mistakes and request further information</span>' }
-              ],
-              [
-                { text: 'backOfficeSupervisor' | getJobTitle },
-                { html: '<span class="nhsuk-u-font-size-14">Monitor the work of the application processors</span>' }
-              ],
-              [
-                { text: 'qualityControl' | getJobTitle },
-                { html: '<span class="nhsuk-u-font-size-14">Perform quality checks on a fixed number of applications</span>' }
-              ]
-           ]
-        }) }}
+    {{ table({
+    panel: false,
+    caption: 'Roles',
+    firstCellIsHeader: true,
 
+    rows: [
+    [
+    { text: 'callCentre' | getJobTitle },
+    { html: '<span class="nhsuk-u-font-size-14">Help patients calling and emailing regarding their application</span>' }
+    ],
+    [
+    { text: 'backOffice' | getJobTitle },
+    { html: '<span class="nhsuk-u-font-size-14">Process scanned applications, correct mistakes and request further
+      information</span>' }
+    ],
+    [
+    { text: 'backOfficeSupervisor' | getJobTitle },
+    { html: '<span class="nhsuk-u-font-size-14">Monitor the work of the application processors</span>' }
+    ],
+    [
+    { text: 'qualityControl' | getJobTitle },
+    { html: '<span class="nhsuk-u-font-size-14">Perform quality checks on a fixed number of applications</span>' }
+    ]
+    ]
+    }) }}
 
-        
-    </div>
 
 
   </div>
 
 
-
-
-
-
-           
-
-  
-
-          
-
-          
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-
-
-          {% set filteredRows = '' | getPatientData | getTableRows %}
-
-          {% if ( filteredRows.length > 0 ) %}
-
-            {{ table({
-              panel: false,
-              caption: 'Exemptions',
-              firstCellIsHeader: false,
-              responsive: true,
-              tableClasses: 'patient-table',
-              head: '' | getTableHeadRows,
-              rows: filteredRows
-            }) }}
-
-            {{ pagination( '' | getPaginationLinks ) }}
-
-          {% else %}
-
-            {{ insetText({
-              text: 'No exemptions found'
-            }) }}
-
-          {% endif %}
-
-
-          <p id="certificateTypes" class="nhsuk-u-visually-hidden">{% for type in data[version].certificateTypes %}{% if loop.index0 !== 0 %},{% endif %}{{ type }}{% endfor %}</p>
-          <p id="processors" class="nhsuk-u-visually-hidden">{% for cipher, processor in data.processors %}{% if loop.index0 !== 0 %},{% endif %}{{ cipher + '|' + processor.name }}{% endfor %}</p>
-
-
-          <script>
-
-            const DataGenerator = (function(){
-
-              //
-              // NAMES
-              // Not real names
-              //
-              const names = [
-                { firstName: 'Olivia', lastName: 'Smith' },
-                { firstName: 'Amelia', lastName: 'Jones' },
-                { firstName: 'Isla', lastName: 'Taylor' },
-                { firstName: 'Ava', lastName: 'Brown' },
-                { firstName: 'Emily', lastName: 'Williams' },
-                { firstName: 'Sophia', lastName: 'Wilson' },
-                { firstName: 'Mia', lastName: 'Davies' },
-                { firstName: 'Ella', lastName: 'Evans' },
-                { firstName: 'Grace', lastName: 'Thomas' },
-                { firstName: 'Lily', lastName: 'Roberts' },
-                { firstName: 'Freya', lastName: 'Johnson' },
-                { firstName: 'Charlotte', lastName: 'Lewis' },
-                { firstName: 'Isabella', lastName: 'Walker' },
-                { firstName: 'Daisy', lastName: 'Hall' },
-                { firstName: 'Evie', lastName: 'Clarke' },
-                { firstName: 'Phoebe', lastName: 'Allen' },
-                { firstName: 'Sophie', lastName: 'Young' },
-                { firstName: 'Harper', lastName: 'King' },
-                { firstName: 'Millie', lastName: 'Wright' },
-                { firstName: 'Ella-Rose', lastName: 'Green' },
-                { firstName: 'Poppy', lastName: 'Baker' },
-                { firstName: 'Ruby', lastName: 'Adams' },
-                { firstName: 'Chloe', lastName: 'Mitchell' },
-                { firstName: 'Sienna', lastName: 'Turner' },
-                { firstName: 'Willow', lastName: 'Carter' },
-                { firstName: 'Jessica', lastName: 'Morris' },
-                { firstName: 'Matilda', lastName: 'Hughes' },
-                { firstName: 'Elsie', lastName: 'Ward' },
-                { firstName: 'Rosie', lastName: 'Price' },
-                { firstName: 'Aria', lastName: 'Cooper' },
-                { firstName: 'Layla', lastName: 'Bailey' },
-                { firstName: 'Luna', lastName: 'Parker' },
-                { firstName: 'Hannah', lastName: 'Phillips' },
-                { firstName: 'Zara', lastName: 'Bennett' },
-                { firstName: 'Florence', lastName: 'Cox' },
-                { firstName: 'Maya', lastName: 'Richardson' },
-                { firstName: 'Esme', lastName: 'Gray' },
-                { firstName: 'Ivy', lastName: 'Ross' },
-                { firstName: 'Arabella', lastName: 'Bell' },
-                { firstName: 'Evelyn', lastName: 'Cook' },
-                { firstName: 'Thea', lastName: 'Watson' },
-                { firstName: 'Alice', lastName: 'Sanders' },
-                { firstName: 'Emma', lastName: 'Harrison' },
-                { firstName: 'Lottie', lastName: 'Coleman' },
-                { firstName: 'Amber', lastName: 'Murphy' },
-                { firstName: 'Scarlett', lastName: 'Graham' },
-                { firstName: 'Bonnie', lastName: 'Stevens' },
-                { firstName: 'Imogen', lastName: 'Simpson' },
-                { firstName: 'Harriet', lastName: 'Butler' },
-                { firstName: 'Eleanor', lastName: 'Chapman' },
-                { firstName: 'Aisha', lastName: 'Ali' },
-                { firstName: 'Sofia', lastName: 'Hussain' },
-                { firstName: 'Amira', lastName: 'Khan' },
-                { firstName: 'Leah', lastName: 'Begum' },
-                { firstName: 'Niamh', lastName: 'O’Connor' },
-                { firstName: 'Aoife', lastName: 'Kelly' },
-                { firstName: 'Erin', lastName: 'McCarthy' },
-                { firstName: 'Orla', lastName: 'Doyle' },
-                { firstName: 'Cerys', lastName: 'Griffiths' },
-                { firstName: 'Megan', lastName: 'Rees' },
-                { firstName: 'Ffion', lastName: 'Evans' },
-                { firstName: 'Eilidh', lastName: 'MacDonald' },
-                { firstName: 'Skye', lastName: 'Fraser' },
-                { firstName: 'Maisie', lastName: 'Armstrong' },
-                { firstName: 'Penelope', lastName: 'Hunter' },
-                { firstName: 'Clara', lastName: 'Lawrence' },
-                { firstName: 'Beatrice', lastName: 'Spencer' },
-                { firstName: 'Nancy', lastName: 'Rogers' },
-                { firstName: 'Annabelle', lastName: 'Watts' },
-                { firstName: 'Heidi', lastName: 'Henderson' },
-                { firstName: 'Rose', lastName: 'Palmer' },
-                { firstName: 'Lara', lastName: 'Nicholson' },
-                { firstName: 'Julia', lastName: 'Gardner' },
-                { firstName: 'Ada', lastName: 'Newton' },
-                { firstName: 'Summer', lastName: 'Reed' },
-                { firstName: 'Victoria', lastName: 'Harvey' },
-                { firstName: 'Maria', lastName: 'Fernandez' },
-                { firstName: 'Elena', lastName: 'Silva' },
-                { firstName: 'Leila', lastName: 'Patel' },
-                { firstName: 'Fatima', lastName: 'Iqbal' },
-                { firstName: 'Jasmine', lastName: 'Ahmed' },
-                { firstName: 'Nadia', lastName: 'Rashid' },
-                { firstName: 'Tara', lastName: 'Paterson' },
-                { firstName: 'Bethany', lastName: 'Foster' },
-                { firstName: 'Lauren', lastName: 'Fox' },
-                { firstName: 'Georgia', lastName: 'Grant' },
-                { firstName: 'Abigail', lastName: 'Murray' },
-                { firstName: 'Ella-May', lastName: 'West' },
-                { firstName: 'Robyn', lastName: 'Matthews' },
-                { firstName: 'Kayla', lastName: 'Holmes' },
-                { firstName: 'Lydia', lastName: 'Walsh' },
-                { firstName: 'Alexandra', lastName: 'Page' },
-                { firstName: 'Natalie', lastName: 'Jordan' },
-                { firstName: 'Beth', lastName: 'Barrett' },
-                { firstName: 'Mollie', lastName: 'Hayes' },
-                { firstName: 'Francesca', lastName: 'Cunningham' },
-                { firstName: 'Amelie', lastName: 'Barber' },
-                { firstName: 'Lucia', lastName: 'Knight' },
-                { firstName: 'Eden', lastName: 'Parsons' },
-                { firstName: 'Tilly', lastName: 'Bates' },
-                { firstName: 'Holly', lastName: 'Day' },
-                { firstName: 'Indie', lastName: 'Francis' },
-                { firstName: 'Hope', lastName: 'Burton' }
-              ];
-
-              //
-              // ADDRESSES
-              // They're entirely fake
-              //
-              const addresses = [
-                {"buildingNumber":"12","streetName":"Maple Grove","locality":"Ashford Hill","postTown":"Reading","county":"Berkshire","postcode":"RG4 8ZT"},
-                {"buildingNumber":"44","streetName":"Bramley Road","locality":"East Mere","postTown":"Norwich","county":"Norfolk","postcode":"NR3 5QN"},
-                {"buildingNumber":"7","streetName":"Kestrel Close","locality":"Winterfold","postTown":"Guildford","county":"Surrey","postcode":"GU3 9LP"},
-                {"buildingNumber":"82","streetName":"Oakfield Lane","locality":"Hilltop View","postTown":"Exeter","county":"Devon","postcode":"EX2 7SJ"},
-                {"buildingNumber":"19","streetName":"Crown Street","locality":"Millbridge","postTown":"Plymouth","county":"Devon","postcode":"PL6 1TD"},
-                {"buildingNumber":"5","streetName":"Linton Walk","locality":"Southgate Park","postTown":"Crawley","county":"West Sussex","postcode":"RH11 4XW"},
-                {"buildingNumber":"63","streetName":"Riverstone Court","locality":"Longmead","postTown":"Taunton","county":"Somerset","postcode":"TA2 3UP"},
-                {"buildingNumber":"28","streetName":"Birch Avenue","locality":"Northcrest","postTown":"Leicester","county":"Leicestershire","postcode":"LE5 8YU"},
-                {"buildingNumber":"90","streetName":"Fernbrook Drive","locality":"Westerleigh","postTown":"Bath","county":"Somerset","postcode":"BA2 9PF"},
-                {"buildingNumber":"14","streetName":"Windsor Rise","locality":"Redford","postTown":"Derby","county":"Derbyshire","postcode":"DE1 4SX"},
-
-                {"buildingNumber":"51","streetName":"Hawthorne Road","locality":"Claymere","postTown":"Chester","county":"Cheshire","postcode":"CH4 2MB"},
-                {"buildingNumber":"3","streetName":"Mallow Street","locality":"Eastwood Vale","postTown":"Nottingham","county":"Nottinghamshire","postcode":"NG5 3JU"},
-                {"buildingNumber":"76","streetName":"Peach Tree Way","locality":"Brookfell","postTown":"York","county":"North Yorkshire","postcode":"YO3 6AP"},
-                {"buildingNumber":"24","streetName":"Millstream Row","locality":"Havenfield","postTown":"Lincoln","county":"Lincolnshire","postcode":"LN2 8FP"},
-                {"buildingNumber":"37","streetName":"Weavers Lane","locality":"Northgate","postTown":"Wolverhampton","county":"West Midlands","postcode":"WV4 3TT"},
-                {"buildingNumber":"11","streetName":"Rose Mews","locality":"Kingswell","postTown":"Oxford","county":"Oxfordshire","postcode":"OX3 9DQ"},
-                {"buildingNumber":"8","streetName":"Elmbrook Gardens","locality":"Gransfield","postTown":"Peterborough","county":"Cambridgeshire","postcode":"PE2 7QF"},
-                {"buildingNumber":"65","streetName":"Pine Hollow","locality":"Northbrook","postTown":"Cheltenham","county":"Gloucestershire","postcode":"GL3 4HT"},
-                {"buildingNumber":"29","streetName":"Falcon Street","locality":"Ridgebury","postTown":"Worcester","county":"Worcestershire","postcode":"WR1 6JS"},
-                {"buildingNumber":"16","streetName":"Harrier Way","locality":"Loxwood Green","postTown":"Horsham","county":"West Sussex","postcode":"RH13 7BN"},
-
-                {"buildingNumber":"33","streetName":"Yew Tree Court","locality":"Silverbrook","postTown":"Shrewsbury","county":"Shropshire","postcode":"SY2 8RR"},
-                {"buildingNumber":"4","streetName":"Osprey Road","locality":"Heathwick","postTown":"Birmingham","county":"West Midlands","postcode":"B15 8RT"},
-                {"buildingNumber":"22","streetName":"Stonemill Drive","locality":"Hawkinge Vale","postTown":"Canterbury","county":"Kent","postcode":"CT3 6LW"},
-                {"buildingNumber":"9","streetName":"Willowbank Way","locality":"East Harling","postTown":"Ipswich","county":"Suffolk","postcode":"IP5 0YN"},
-                {"buildingNumber":"56","streetName":"Sandpiper Crescent","locality":"Cove Hill","postTown":"Southampton","county":"Hampshire","postcode":"SO9 7MC"},
-                {"buildingNumber":"15","streetName":"Beacon Lane","locality":"Craybourne","postTown":"Maidstone","county":"Kent","postcode":"ME16 2RS"},
-                {"buildingNumber":"101","streetName":"Elm Walk","locality":"Hillford","postTown":"Harlow","county":"Essex","postcode":"CM19 6JQ"},
-                {"buildingNumber":"2","streetName":"Clearwater Road","locality":"Riverside","postTown":"Colchester","county":"Essex","postcode":"CO5 3LP"},
-                {"buildingNumber":"48","streetName":"Lavender Street","locality":"Westford","postTown":"Cambridge","county":"Cambridgeshire","postcode":"CB3 9UE"},
-                {"buildingNumber":"72","streetName":"Greyfriars Way","locality":"Bellstead","postTown":"Bedford","county":"Bedfordshire","postcode":"MK41 1RF"},
-
-                {"buildingNumber":"36","streetName":"Highcliff Road","locality":"Marshgate","postTown":"Grimsby","county":"Lincolnshire","postcode":"DN3 7NS"},
-                {"buildingNumber":"88","streetName":"Fenton Close","locality":"Broadwood","postTown":"Sheffield","county":"South Yorkshire","postcode":"S11 6TB"},
-                {"buildingNumber":"41","streetName":"Tansy Court","locality":"Littlebourne","postTown":"Canterbury","county":"Kent","postcode":"CT4 1JX"},
-                {"buildingNumber":"97","streetName":"Sunnyside Avenue","locality":"Greenleigh","postTown":"Leeds","county":"West Yorkshire","postcode":"LS7 2PQ"},
-                {"buildingNumber":"30","streetName":"Larch Lane","locality":"Warren Hill","postTown":"Hull","county":"East Yorkshire","postcode":"HU6 4ZY"},
-                {"buildingNumber":"62","streetName":"Poppyfield Way","locality":"Marston Ridge","postTown":"Oxford","county":"Oxfordshire","postcode":"OX4 7GE"},
-                {"buildingNumber":"21","streetName":"Ivywood Street","locality":"Southmere","postTown":"Cardiff","county":"South Glamorgan","postcode":"CF5 2JD"},
-                {"buildingNumber":"14","streetName":"Oakridge Row","locality":"Firrendown","postTown":"Swansea","county":"West Glamorgan","postcode":"SA6 8PP"},
-                {"buildingNumber":"81","streetName":"Bridgewater Drive","locality":"Lancot Green","postTown":"Luton","county":"Bedfordshire","postcode":"LU4 9WB"},
-                {"buildingNumber":"26","streetName":"Primrose Lane","locality":"Wickford Heath","postTown":"Basildon","county":"Essex","postcode":"SS14 3SR"},
-
-                {"buildingNumber":"59","streetName":"Regent Gardens","locality":"Kingsreach","postTown":"Coventry","county":"West Midlands","postcode":"CV3 1BN"},
-                {"buildingNumber":"18","streetName":"Myrtle Row","locality":"Oldacre","postTown":"Warrington","county":"Cheshire","postcode":"WA3 2XT"},
-                {"buildingNumber":"6","streetName":"Wisteria Court","locality":"Cresthaven","postTown":"St Albans","county":"Hertfordshire","postcode":"AL4 8FJ"},
-                {"buildingNumber":"85","streetName":"Sparrow Lane","locality":"Northwood Vale","postTown":"Watford","county":"Hertfordshire","postcode":"WD24 6PH"},
-                {"buildingNumber":"11","streetName":"Ashen Close","locality":"Brookhill","postTown":"Slough","county":"Berkshire","postcode":"SL2 9MT"},
-                {"buildingNumber":"53","streetName":"Laurel Drive","locality":"Kingswood Park","postTown":"Bristol","county":"Bristol","postcode":"BS16 4DX"},
-                {"buildingNumber":"7","streetName":"Thornfield Way","locality":"Greenhollow","postTown":"Gloucester","county":"Gloucestershire","postcode":"GL1 5UP"},
-                {"buildingNumber":"40","streetName":"Cedar Brook","locality":"Ashvale","postTown":"High Wycombe","county":"Buckinghamshire","postcode":"HP12 8PD"},
-                {"buildingNumber":"98","streetName":"Stag Lane","locality":"Marbleham","postTown":"Brighton","county":"East Sussex","postcode":"BN2 1WE"},
-                {"buildingNumber":"27","streetName":"Whistler Road","locality":"East Densford","postTown":"Portsmouth","county":"Hampshire","postcode":"PO4 7JF"},
-
-                {"buildingNumber":"75","streetName":"Gorse Way","locality":"Heathrow End","postTown":"Hounslow","county":"Greater London","postcode":"TW4 5ZA"},
-                {"buildingNumber":"3","streetName":"Juniper Walk","locality":"Woodleigh","postTown":"Enfield","county":"Greater London","postcode":"EN3 1TP"},
-                {"buildingNumber":"58","streetName":"Chapel Row","locality":"Millthorpe","postTown":"Wakefield","county":"West Yorkshire","postcode":"WF3 8KD"},
-                {"buildingNumber":"13","streetName":"Stonewall Lane","locality":"Northbridge","postTown":"Bradford","county":"West Yorkshire","postcode":"BD7 5TE"},
-                {"buildingNumber":"60","streetName":"Queensbury Court","locality":"Palmstead","postTown":"Blackpool","county":"Lancashire","postcode":"FY2 9AH"},
-                {"buildingNumber":"17","streetName":"Buttercup Close","locality":"Little Havers","postTown":"Stevenage","county":"Hertfordshire","postcode":"SG2 0YG"},
-                {"buildingNumber":"92","streetName":"Meadowbank Road","locality":"Harefield Park","postTown":"Liverpool","county":"Merseyside","postcode":"L8 6FP"},
-                {"buildingNumber":"39","streetName":"Arbour Road","locality":"Phoenix Rise","postTown":"Manchester","county":"Greater Manchester","postcode":"M14 2YQ"},
-                {"buildingNumber":"4","streetName":"Cherrytree Court","locality":"Stonemoor","postTown":"Stockport","county":"Greater Manchester","postcode":"SK4 3EW"},
-                {"buildingNumber":"66","streetName":"Fieldhouse Lane","locality":"Greywood","postTown":"Bolton","county":"Greater Manchester","postcode":"BL3 9HB"},
-
-                {"buildingNumber":"20","streetName":"Honeysuckle Way","locality":"Oakwood Hill","postTown":"Preston","county":"Lancashire","postcode":"PR3 8LN"},
-                {"buildingNumber":"95","streetName":"Old Forge Street","locality":"Daleham","postTown":"Carlisle","county":"Cumbria","postcode":"CA2 5NJ"},
-                {"buildingNumber":"43","streetName":"Nightingale Row","locality":"Brambleton","postTown":"Durham","county":"County Durham","postcode":"DH1 3GP"},
-                {"buildingNumber":"10","streetName":"Redwood Close","locality":"Southholm","postTown":"Sunderland","county":"Tyne and Wear","postcode":"SR3 1FQ"},
-                {"buildingNumber":"86","streetName":"Copse Lane","locality":"Hillmead","postTown":"Newcastle","county":"Tyne and Wear","postcode":"NE5 2PA"},
-                {"buildingNumber":"31","streetName":"Wildflower Road","locality":"Whitestone","postTown":"Darlington","county":"County Durham","postcode":"DL2 6MX"},
-                {"buildingNumber":"47","streetName":"Cloverbank Court","locality":"Iverston","postTown":"Middlesbrough","county":"North Yorkshire","postcode":"TS4 1WW"},
-                {"buildingNumber":"6","streetName":"Brookview Way","locality":"Langwood","postTown":"Harrogate","county":"North Yorkshire","postcode":"HG3 9QL"},
-                {"buildingNumber":"52","streetName":"Warren Terrace","locality":"Elmwick","postTown":"Scarborough","county":"North Yorkshire","postcode":"YO14 2JG"},
-                {"buildingNumber":"1","streetName":"Foxglove Lane","locality":"Brindlehurst","postTown":"Lancaster","county":"Lancashire","postcode":"LA3 7UH"}
-              ];
-
-              //
-              // PHONE NUMBERS
-              //
-              const phoneNumbers = [
-                "07031 284 591","07049 823 716","07062 395 184","07071 528 439","07083 916 275",
-                "07092 475 318","07015 648 293","07028 751 964","07036 592 817","07047 813 256",
-                "07051 294 783","07063 418 592","07075 928 341","07084 372 659","07091 837 426",
-                "07014 385 927","07027 639 485","07035 821 749","07048 952 613","07052 719 384",
-                "07064 837 295","07073 491 826","07085 623 941","07096 718 235","07018 273 945",
-                "07029 384 756","07031 572 948","07042 619 583","07053 847 261","07064 928 137",
-                "07075 283 916","07086 419 375","07097 531 284","07018 642 597","07029 753 861",
-                "07031 864 729","07042 987 513","07054 129 876","07065 238 741","07076 391 825",
-                "07087 512 936","07098 631 427","07019 742 835","07020 853 749","07031 984 625",
-                "07042 195 783","07053 268 917","07064 371 528","07075 482 936","07086 593 147",
-                "07097 614 258","07018 725 369","07029 836 471","07030 947 582","07042 058 693",
-                "07053 169 784","07064 271 895","07075 382 916","07086 493 127","07097 514 238",
-                "07018 625 349","07029 736 458","07030 847 569","07041 958 672","07052 069 783",
-                "07063 171 894","07074 282 915","07085 393 126","07096 414 237","07017 525 348",
-                "07028 636 459","07039 747 561","07040 858 673","07051 969 782","07062 071 893",
-                "07073 182 914","07084 293 125","07095 314 236","07016 425 347","07027 536 458",
-                "07038 647 569","07049 758 671","07050 869 782","07061 971 893","07072 082 914",
-                "07083 193 125","07094 214 236","07015 325 347","07026 436 458","07037 547 569",
-                "07048 658 671","07059 769 782","07060 871 893","07071 982 914","07082 093 125",
-                "07093 114 236","07014 225 347","07025 336 458","07036 447 569","07047 558 671"
-              ];
-
-
-              //
-              // MEDICAL CONDITION
-              //
-              const medicalCondition = [
-                '(1) Permanent fistula',
-                '(2) Epilepsy',
-                '(3) Diabetes mellitus',
-                '(4) Myxoedema',
-                '(5) Hypoparathyroidism',
-                '(6) Diabetes insipidus',
-                '(7) Forms of hypoadrenalism',
-                '(8) Myasthenia gravis',
-                '(9) Continuing physical disability',
-                '(10) Cancer'
-              ];
-              
-
-              //
-              // INIT FUNCTION
-              //
-              function _init(){
-
-                const patientsButton = document.querySelector('#patientsButton');
-                const patientsTextarea = document.querySelector('#patientsTextarea');
-
-                patientsButton.addEventListener('click',function( e ){
-                  
-                  console.log('Button clicked');
-
-                  patientsTextarea.value = _generatePatientData();
-
-                  e.preventDefault();
-                  e.stopPropagation();
-
-                });
-
-              };
-
-              
-
-              
-
-              //
-              // GENERATE CHANNEL FUNCTION
-              //
-              function _generateChannel( certificateType, certificateStatus ){
-
-                let channel = 'Digital';
-
-                switch( certificateType ){
-
-                  case 'hrtppc':
-                    
-                    const rand = Math.round(Math.random()*100);
-                    if( rand < 10 ){
-                      channel = 'Pharmacy';
-                    }
-                    if( rand < 2 ) {
-                      channel = 'Telephony';
-                    }
-
-                    break;
-
-                  case 'matex':
-                    case 'medex':
-
-                    if( ['processing','on-hold','accepted','rejected'].indexOf(certificateStatus) > -1 ){
-                      channel = 'Paper';
-                    } else {
-                      const rand = Math.round(Math.random()*100);
-                      if( rand < 40 ){
-                        channel = 'Paper';
-                      }
-                    }
-
-                    break;
-
-                }
-
-                return channel;
-
-              }
-
-              //
-              // GENERATE IMAGE REFERENCE FUNCTION
-              //
-              function _generateImageReference(){
-
-                const now = new Date();
-
-                const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, "0");
-                const day = String(now.getDate()).padStart(2, "0");
-                const hours = String(now.getHours()).padStart(2, "0");
-                const minutes = String(now.getMinutes()).padStart(2, "0");
-                const seconds = String(now.getSeconds()).padStart(2, "0");
-
-                // Generate a 9-digit random number (like 3000049 in your example, but fixed to 9 digits)
-                const randomNum = String(Math.floor(Math.random() * 1_000_000_000)).padStart(9, "0");
-
-                return `${year} ${month} ${day} ${hours} ${minutes} ${seconds}N${randomNum}`;
-
-              }
-
-              //
-              // GENERATE CERTIFICATE REFERENCE FUNCTION
-              //
-              function _generateCertificateReference( certificateType, certificateStatus ){
-
-                let chars = [];
-                let loop = 0;
-                let spaces = [];
-                let char = '';
-                let az09 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
-
-                switch( certificateType ) {
-                  
-                  case 'matex':
-                  case 'medex':
-
-                    loop = (12 + 3)-1; // 12 digits and 3 spaces
-                    spaces = [2,6,10];
-
-                    for( let i = 0; i < loop; i++ ){  
-                      char = ( spaces.indexOf(i) > -1 ) ? ' ' : Math.floor( Math.random() * 10 );
-                      chars.push( char );
-                    }
-                    
-                    break;
-
-                  case 'hrtppc':
-
-                    chars = ['HRT ']; // Always start with HRT
-                    loop = ( 8 + 1 ); // 8 characters and 1 space
-                    spaces = [4];
-
-                    
-
-                    for( let i = 0; i < loop; i++ ){ 
-                      char = ( spaces.indexOf(i) > -1 ) ? ' ' : az09[Math.round(Math.random()*(az09.length-1))];
-                      chars.push( char );
-                    }
-
-
-                    break;
-
-                }
-
-                let ref = chars.join('');
-              
-               return ref;
-
-              };
-
-//
-// GENERATE APPLICATION REFERENCE FUNCTION
-//
-function _generateApplicationReference() {
-  const now = new Date();
-
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const seconds = String(now.getSeconds()).padStart(2, '0');
-  const randomNum = String(Math.floor(Math.random() * 1_000_000_000)).padStart(9, '0');
-
-  return `Application ${year} ${month} ${day} ${hours} ${minutes} ${seconds}N${randomNum}`;
-}
-
-              //
-              // GENERATE NHS NUMBER FUNCTION
-              //
-              function _generateNHSNumber() {
-
-                // Format 000 000 0000
-                const digits = [];
-                const loop = (10 + 2); // 10 digits and 2 spaces
-
-                for( let i = 0; i < loop; i++ ){
-                  
-                  const spaces = [3,7];
-                  const char = ( spaces.indexOf(i) > -1 ) ? ' ' : Math.floor( Math.random() * 10 );
-                  digits.push( char );
-
-                }
-
-                return digits.join('');
-
-              };
-
-              //
-              // GENERATE START DATE
-              //
-              function _generateStartDate(){
-
-                const minMonths = -12;
-                const maxMonths = -6;
-
-                const minDate = new Date();
-                minDate.setMonth(minDate.getMonth() + minMonths);
-                minDate.setHours(0, 0, 0, 0);
-
-                const maxDate = new Date();
-                maxDate.setMonth(maxDate.getMonth() + maxMonths);
-                maxDate.setHours(0, 0, 0, 0);
-
-                const randomTime = minDate.getTime() + Math.random() * (maxDate.getTime() - minDate.getTime());
-                const randomDate = new Date(randomTime);
-
-                const day = randomDate.getDate();
-                const month = randomDate.toLocaleString('en-GB', { month: 'long' });
-                const year = randomDate.getFullYear();
-
-                return {
-                  display: day + ' ' + month + ' ' + year,
-                  day: day,
-                  month: randomDate.getMonth(),
-                  year: year
-                };
-
-                }
-
-              //
-              // GENERATE END DATE FUNCTION
-              //
-              function _generateEndDate(startDate, medicalCondition) {
-
-                const start = new Date(
-                  startDate.year,
-                  startDate.month,
-                  startDate.day
-                );
-
-                const end = new Date(start);
-
-                // Medex end date logic 
-                if (medicalCondition && medicalCondition.length) {
-                  const hasCancer = medicalCondition.includes("(10) Cancer treatments");
-                  const isCancerOnly = hasCancer && medicalCondition.length === 1;
-
-                  if (isCancerOnly) {
-                    end.setFullYear(end.getFullYear() + 5);
-                  } else {
-                    end.setFullYear(end.getFullYear() + 10);
-                  }
-                
-                } else {
-                  //Existing defualt 1 year end date
-                  end.setFullYear(end.getFullYear() + 1);
-                }
-
-                end.setDate(end.getDate() - 1);
-
-                const day = end.getDate();
-                const month = end.toLocaleString('en-GB', { month: 'long' });
-                const year = end.getFullYear();
-
-                return {
-                  display: day + ' ' + month + ' ' + year,
-                  day: day,
-                  month: end.getMonth(),
-                  year: year
-                };
-              }
-
-              //
-              // GENERATE DATE OF BIRTH FUNCTION
-              //
-              function _generateDateOfBirth( certificateType ){
-
-                const dateOfBirth = new Date();
-                dateOfBirth.setDate( Math.round(Math.random()*27 )+1 );
-                dateOfBirth.setMonth( Math.round(Math.random()*12) );
-
-                if( certificateType === 'matex' ){
-                  dateOfBirth.setYear( dateOfBirth.getFullYear()-18-( Math.round( Math.random()*20 ) ) );
-                } else {
-                  dateOfBirth.setYear( dateOfBirth.getFullYear()-30-( Math.round( Math.random()*30 ) ) );
-                }
-                
-                dateOfBirth.setHours(0, 0, 0, 0);
-
-                const day = dateOfBirth.getDate();
-                const month = dateOfBirth.toLocaleString('en-GB', { month: 'long' });
-                const year = dateOfBirth.getFullYear();
-
-
-                const obj = {
-                  display: day + ' ' + month + ' ' + year,
-                  day: day,
-                  month: dateOfBirth.getMonth(),
-                  year: year
-                }
-
-                return obj;
-
-              };
-
-
-
-              //
-              // GENERATE EMAIL ADDRESS FUNCTION
-              //
-              function _generateEmailAddress( obj ){
-
-                let emailAddress;
-                let numbers;
-
-                const providers = ['outlook.com','googlemail.com','gmail.com','hotmail.com','blueyonder.co.uk','aol.com'];
-                const provider = providers[Math.round(Math.random()*(providers.length-1))];
-
-                let check = true;
-                if( obj.channel === 'Paper' && ( Math.round(Math.random()*2) === 2 ) ){
-                  check = false;
-                }
-
-                if( check ){
-
-                  switch( Math.round( Math.random()*3 ) ) {
-
-                    case 0: 
-                      // lattimore943@outlook.com
-                      emailAddress = obj.lastName + ( Math.floor(Math.random() * 900) + 100 ) + '@' + provider;
-                      break;
-                    
-                    case 1:
-                      // james.lattimore@gmail.com
-                      numbers = ( Math.round(Math.random()*3) === 0 ) ? Math.floor(Math.random() * 900) + 100 + '' : '';
-                      emailAddress = obj.firstName.toLowerCase() + '.' + obj.lastName.toLowerCase() + numbers + '@' + provider;
-                      break;
-
-                    case 2:
-                      // j.lattimore@googlemail.com
-                      numbers = ( Math.round(Math.random()*3) === 0 ) ? Math.floor(Math.random() * 900) + 100 + '' : '';
-                      emailAddress = obj.firstName.charAt(0).toLowerCase() + '.' + obj.lastName.toLowerCase() + numbers + '@' + provider;
-                      break;
-                    
-                    case 3:
-                      // lattimore.j@googlemail.com
-                      emailAddress = obj.lastName.toLowerCase() + '.' + obj.firstName.charAt(0).toLowerCase() + '@' + provider;
-                      break;
-
-                  }
-
-                }
-
-                return emailAddress;
-
-              }
-
-              //
-              // GENERATE CHILD'S DATE OF BIRTH
-              //
-              function _generateChildsDOB(startDate) {
-
-                const date = new Date(
-                  startDate.year,
-                  startDate.month,
-                  startDate.day
-                );
-
-                const day = date.getDate();
-                const month = date.toLocaleString('en-GB', { month: 'long' });
-                const year = date.getFullYear();
-
-                return {
-                  display: day + ' ' + month + ' ' + year,
-                  day: day,
-                  month: date.getMonth(),
-                  year: year
-                };
-                
-              }
-
-
-              //
-              // GENERATE MEDICAL CONDITION FUNCTION
-              //
-              function _generateMedicalCondition() {
-
-                const maxConditions = 3;
-
-                // 60% single-condition, 40% multi-condition
-                const count = Math.random() < 0.6
-                            ? 1
-                            : Math.floor(Math.random() * 3) + 1;
-
-                const shuffled = [...medicalCondition].sort(() => 0.5 - Math.random());
-
-                const selected = shuffled.slice(0, count);
-
-                // Sort back into numeric order after shuffle
-                const ordered = selected.sort((a, b) => {
-                  const numA = parseInt(a.match(/\d+/)[0]);
-                  const numB = parseInt(b.match(/\d+/)[0]);
-                  return numA - numB;
-                });
-
-                return ordered;
-              }
-
-
-              //
-              // GENERATE PATIENT DATA FUNCTION
-              //
-              function _generatePatientData(){
-
-                const patients = [];
-
-                const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',').map(type => type.trim());
-                const statusesMatex = ['processing','on-hold','rejected','active','deleted','expired'];
-                const statusesHRTPPC = ['active','deleted','expired'];
-                const fulfilment = ['email', 'post'];
-                
-                const processors = [];
-                /* Now generated from session data
-                const processors = [
-                  { key: 'AICOL', AICOL: false },
-                  { key: 'DATHO', DATHO: false },
-                  { key: 'PRPAT', PRPAT: false },
-                  { key: 'ZAKHA', ZAKHA: false },
-                  { key: 'JASMI', JASMI: false }
-                ];
-                */
-
-                const processorsP = document.querySelector('#processors').innerHTML.split(',');
-                processorsP.forEach( function( p ){
-                  const cipher = p.split('|')[0];
-                  const name = p.split('|')[1];
-                  const obj = { key: cipher, name: name }
-                  obj[cipher] = false;
-                  processors.push( obj );
-                });
-
-                
-
-                names.forEach( function( name, i ){
-
-                    const obj = name;
-
-                    obj.id = i;
-                    obj.nhsNumber = _generateNHSNumber();
-
-                    const processor = processors[Math.round(Math.random()*(processors.length-1))];
-                    obj.processor = processor.key;
-                    obj.processorName = processor.name;
-                    
-                 const weightedTypes = [
-  'matex','matex',
-  'medex','medex','medex','medex',
-  'hrtppc',
-];
-
-obj.certificateType =
-  weightedTypes[Math.floor(Math.random() * weightedTypes.length)];
-                    console.log(obj.certificateType);
-
-                    obj.status = ( obj.certificateType === 'hrtppc' ) ? statusesHRTPPC[Math.round(Math.random()*(statusesHRTPPC.length-1))] : statusesMatex[Math.round(Math.random()*(statusesMatex.length-1))];
-                    
-                    // Generate more active results for Matex
-                    if( (obj.certificateType === 'matex' || obj.certificateType === 'medex') && obj.status !== 'active' ){
-                      obj.status = ( Math.round(Math.random()*2) === 2 ) ? 'active' : obj.status;
-                    }
-
-// Force some MEDEX records into checking
-if (obj.certificateType === 'medex' && Math.random() < 0.4) {
-  obj.status = ['accepted', 'on-hold', 'rejected'][
-    Math.floor(Math.random() * 3)
-  ];
-  obj.checking = true;
-  obj.checkType = 'quality';
-}
-                    obj.dateOfBirth = _generateDateOfBirth();
-
-                    obj.checking = false;
-
-
-
-                    //
-                    // This bit of code overwrites the random values for JASMI (the trainee)
-                    // The part in the else statement selects just one record for a quality check...
-                    //
-if( obj.processor === 'JASMI' ){
-  obj.checking = true;
-  obj.checkType = 'supervisor';
-
-  obj.certificateType = Math.random() < 0.5
-    ? 'matex'
-    : 'medex';
-
-  const checkingStatuses = ['on-hold','accepted','rejected'];
-
-  obj.status = checkingStatuses[
-    Math.floor(Math.random() * checkingStatuses.length)
-  ];
-}
-else {
-  if (
-    !obj.checking &&
-    (obj.certificateType === 'matex' || obj.certificateType === 'medex') &&
-    ['accepted','on-hold','rejected'].indexOf(obj.status) > -1 &&
-    !processors[obj.processor]
-  ) {
-    obj.checking = true;
-    obj.checkType = 'quality';
-    processors[obj.processor] = true;
-  }
-}
-
-                    
-                    
-                  obj.applicationReference = _generateApplicationReference();
-
-                  if (['accepted', 'active', 'expired', 'deleted'].indexOf(obj.status) > -1) {
-                    obj.certificateReference = _generateCertificateReference(obj.certificateType, obj.status);
-                  } else {
-                    obj.certificateReference = '';
-                  }
-                    
-                    obj.channel = _generateChannel( obj.certificateType, obj.status );
-                    if( ( obj.certificateType === 'matex' || obj.certificateType === 'medex') && obj.channel === 'Paper' ){
-                      obj.imageReference = _generateImageReference();
-                    }
-
-                    if( obj.certificateType === 'matex' ){
-
-                      obj.startDate = _generateStartDate();
-                      obj.dueDate = _generateStartDate();
-                      obj.endDate = _generateEndDate( obj.startDate );
-                      obj.childsDOB = _generateChildsDOB(obj.startDate);
-
-                    } else if ( obj.certificateType === 'medex' ) {
-
-                      obj.startDate = _generateStartDate();
-                      obj.medicalCondition = _generateMedicalCondition();
-                      obj.endDate = _generateEndDate( obj.startDate, obj.medicalCondition );
-
-                    } else {
-
-                      obj.startDate = _generateStartDate();
-                      obj.endDate = _generateEndDate(obj.startDate);
-                      
-                    }
-
-                    //Certificate fulfilment
-                    if (obj.certificateType === 'hrtppc') {
-
-                      obj.certificateFulfilment = ['email', 'post'][
-                        Math.floor(Math.random() * 2)
-                      ];
-
-                      } else if (obj.channel === 'Digital') {
-
-                      obj.certificateFulfilment = 'email';
-
-                      } else {
-
-                      obj.certificateFulfilment = 'post';
-
-                      }
-                    
-
-                    obj.address = ( addresses.length > i ) ? addresses[i] : addresses[Math.round(Math.random()*(addresses.length-1))];
-                    obj.dateOfBirth = _generateDateOfBirth( obj.certificateType );
-
-                    obj.phoneNumber = ( phoneNumbers.length > i ) ? phoneNumbers[i] : phoneNumbers[Math.round(Math.random()*(phoneNumbers.length-1))];
-                    obj.emailAddress = _generateEmailAddress( obj );
-
-                    patients.push(obj);
-
-                });
-
-                return JSON.stringify( patients );
-
-              };
-              
-
-              return {
-                init: _init
-              }
-
-            })();
-
-            document.addEventListener('DOMContentLoaded',function(){
-              DataGenerator.init();
-            });
-
-          </script>
-
-</div>
 </div>
 
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
 
 
 
-          {{ textarea({
-            id: 'patientsTextarea',
-            label: {
-              text: 'Patient data',
-              classes: 'nhsuk-label--m'
-            },
-            hint: {
-              html: '
-                <p>Press the button below to generate a fresh set of patient data with JS, that can be copy/pasted and added into the static patientData variable held in the nunjucks on this page.</p>
-                <p>This is then used to populate the dynamic results table above, and imported into other prototype pages.</p>'
+
+
+
+
+
+
+
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+
+    {% set filteredRows = '' | getPatientData | getTableRows %}
+
+    {% if ( filteredRows.length > 0 ) %}
+
+    {{ table({
+    panel: false,
+    caption: 'Exemptions',
+    firstCellIsHeader: false,
+    responsive: true,
+    tableClasses: 'patient-table',
+    head: '' | getTableHeadRows,
+    rows: filteredRows
+    }) }}
+
+    {{ pagination( '' | getPaginationLinks ) }}
+
+    {% else %}
+
+    {{ insetText({
+    text: 'No exemptions found'
+    }) }}
+
+    {% endif %}
+
+
+    <p id="certificateTypes" class="nhsuk-u-visually-hidden">{% for type in data[version].certificateTypes %}{% if
+      loop.index0 !== 0 %},{% endif %}{{ type }}{% endfor %}</p>
+    <p id="processors" class="nhsuk-u-visually-hidden">{% for cipher, processor in data.processors %}{% if loop.index0
+      !== 0 %},{% endif %}{{ cipher + '|' + processor.name }}{% endfor %}</p>
+
+
+    <script>
+
+      const DataGenerator = (function () {
+
+        //
+        // NAMES
+        // Not real names
+        //
+        const names = [
+          { firstName: 'Olivia', lastName: 'Smith' },
+          { firstName: 'Amelia', lastName: 'Jones' },
+          { firstName: 'Isla', lastName: 'Taylor' },
+          { firstName: 'Ava', lastName: 'Brown' },
+          { firstName: 'Emily', lastName: 'Williams' },
+          { firstName: 'Sophia', lastName: 'Wilson' },
+          { firstName: 'Mia', lastName: 'Davies' },
+          { firstName: 'Ella', lastName: 'Evans' },
+          { firstName: 'Grace', lastName: 'Thomas' },
+          { firstName: 'Lily', lastName: 'Roberts' },
+          { firstName: 'Freya', lastName: 'Johnson' },
+          { firstName: 'Charlotte', lastName: 'Lewis' },
+          { firstName: 'Isabella', lastName: 'Walker' },
+          { firstName: 'Daisy', lastName: 'Hall' },
+          { firstName: 'Evie', lastName: 'Clarke' },
+          { firstName: 'Phoebe', lastName: 'Allen' },
+          { firstName: 'Sophie', lastName: 'Young' },
+          { firstName: 'Harper', lastName: 'King' },
+          { firstName: 'Millie', lastName: 'Wright' },
+          { firstName: 'Ella-Rose', lastName: 'Green' },
+          { firstName: 'Poppy', lastName: 'Baker' },
+          { firstName: 'Ruby', lastName: 'Adams' },
+          { firstName: 'Chloe', lastName: 'Mitchell' },
+          { firstName: 'Sienna', lastName: 'Turner' },
+          { firstName: 'Willow', lastName: 'Carter' },
+          { firstName: 'Jessica', lastName: 'Morris' },
+          { firstName: 'Matilda', lastName: 'Hughes' },
+          { firstName: 'Elsie', lastName: 'Ward' },
+          { firstName: 'Rosie', lastName: 'Price' },
+          { firstName: 'Aria', lastName: 'Cooper' },
+          { firstName: 'Layla', lastName: 'Bailey' },
+          { firstName: 'Luna', lastName: 'Parker' },
+          { firstName: 'Hannah', lastName: 'Phillips' },
+          { firstName: 'Zara', lastName: 'Bennett' },
+          { firstName: 'Florence', lastName: 'Cox' },
+          { firstName: 'Maya', lastName: 'Richardson' },
+          { firstName: 'Esme', lastName: 'Gray' },
+          { firstName: 'Ivy', lastName: 'Ross' },
+          { firstName: 'Arabella', lastName: 'Bell' },
+          { firstName: 'Evelyn', lastName: 'Cook' },
+          { firstName: 'Thea', lastName: 'Watson' },
+          { firstName: 'Alice', lastName: 'Sanders' },
+          { firstName: 'Emma', lastName: 'Harrison' },
+          { firstName: 'Lottie', lastName: 'Coleman' },
+          { firstName: 'Amber', lastName: 'Murphy' },
+          { firstName: 'Scarlett', lastName: 'Graham' },
+          { firstName: 'Bonnie', lastName: 'Stevens' },
+          { firstName: 'Imogen', lastName: 'Simpson' },
+          { firstName: 'Harriet', lastName: 'Butler' },
+          { firstName: 'Eleanor', lastName: 'Chapman' },
+          { firstName: 'Aisha', lastName: 'Ali' },
+          { firstName: 'Sofia', lastName: 'Hussain' },
+          { firstName: 'Amira', lastName: 'Khan' },
+          { firstName: 'Leah', lastName: 'Begum' },
+          { firstName: 'Niamh', lastName: 'O’Connor' },
+          { firstName: 'Aoife', lastName: 'Kelly' },
+          { firstName: 'Erin', lastName: 'McCarthy' },
+          { firstName: 'Orla', lastName: 'Doyle' },
+          { firstName: 'Cerys', lastName: 'Griffiths' },
+          { firstName: 'Megan', lastName: 'Rees' },
+          { firstName: 'Ffion', lastName: 'Evans' },
+          { firstName: 'Eilidh', lastName: 'MacDonald' },
+          { firstName: 'Skye', lastName: 'Fraser' },
+          { firstName: 'Maisie', lastName: 'Armstrong' },
+          { firstName: 'Penelope', lastName: 'Hunter' },
+          { firstName: 'Clara', lastName: 'Lawrence' },
+          { firstName: 'Beatrice', lastName: 'Spencer' },
+          { firstName: 'Nancy', lastName: 'Rogers' },
+          { firstName: 'Annabelle', lastName: 'Watts' },
+          { firstName: 'Heidi', lastName: 'Henderson' },
+          { firstName: 'Rose', lastName: 'Palmer' },
+          { firstName: 'Lara', lastName: 'Nicholson' },
+          { firstName: 'Julia', lastName: 'Gardner' },
+          { firstName: 'Ada', lastName: 'Newton' },
+          { firstName: 'Summer', lastName: 'Reed' },
+          { firstName: 'Victoria', lastName: 'Harvey' },
+          { firstName: 'Maria', lastName: 'Fernandez' },
+          { firstName: 'Elena', lastName: 'Silva' },
+          { firstName: 'Leila', lastName: 'Patel' },
+          { firstName: 'Fatima', lastName: 'Iqbal' },
+          { firstName: 'Jasmine', lastName: 'Ahmed' },
+          { firstName: 'Nadia', lastName: 'Rashid' },
+          { firstName: 'Tara', lastName: 'Paterson' },
+          { firstName: 'Bethany', lastName: 'Foster' },
+          { firstName: 'Lauren', lastName: 'Fox' },
+          { firstName: 'Georgia', lastName: 'Grant' },
+          { firstName: 'Abigail', lastName: 'Murray' },
+          { firstName: 'Ella-May', lastName: 'West' },
+          { firstName: 'Robyn', lastName: 'Matthews' },
+          { firstName: 'Kayla', lastName: 'Holmes' },
+          { firstName: 'Lydia', lastName: 'Walsh' },
+          { firstName: 'Alexandra', lastName: 'Page' },
+          { firstName: 'Natalie', lastName: 'Jordan' },
+          { firstName: 'Beth', lastName: 'Barrett' },
+          { firstName: 'Mollie', lastName: 'Hayes' },
+          { firstName: 'Francesca', lastName: 'Cunningham' },
+          { firstName: 'Amelie', lastName: 'Barber' },
+          { firstName: 'Lucia', lastName: 'Knight' },
+          { firstName: 'Eden', lastName: 'Parsons' },
+          { firstName: 'Tilly', lastName: 'Bates' },
+          { firstName: 'Holly', lastName: 'Day' },
+          { firstName: 'Indie', lastName: 'Francis' },
+          { firstName: 'Hope', lastName: 'Burton' }
+        ];
+
+        //
+        // ADDRESSES
+        // They're entirely fake
+        //
+        const addresses = [
+          { "buildingNumber": "12", "streetName": "Maple Grove", "locality": "Ashford Hill", "postTown": "Reading", "county": "Berkshire", "postcode": "RG4 8ZT" },
+          { "buildingNumber": "44", "streetName": "Bramley Road", "locality": "East Mere", "postTown": "Norwich", "county": "Norfolk", "postcode": "NR3 5QN" },
+          { "buildingNumber": "7", "streetName": "Kestrel Close", "locality": "Winterfold", "postTown": "Guildford", "county": "Surrey", "postcode": "GU3 9LP" },
+          { "buildingNumber": "82", "streetName": "Oakfield Lane", "locality": "Hilltop View", "postTown": "Exeter", "county": "Devon", "postcode": "EX2 7SJ" },
+          { "buildingNumber": "19", "streetName": "Crown Street", "locality": "Millbridge", "postTown": "Plymouth", "county": "Devon", "postcode": "PL6 1TD" },
+          { "buildingNumber": "5", "streetName": "Linton Walk", "locality": "Southgate Park", "postTown": "Crawley", "county": "West Sussex", "postcode": "RH11 4XW" },
+          { "buildingNumber": "63", "streetName": "Riverstone Court", "locality": "Longmead", "postTown": "Taunton", "county": "Somerset", "postcode": "TA2 3UP" },
+          { "buildingNumber": "28", "streetName": "Birch Avenue", "locality": "Northcrest", "postTown": "Leicester", "county": "Leicestershire", "postcode": "LE5 8YU" },
+          { "buildingNumber": "90", "streetName": "Fernbrook Drive", "locality": "Westerleigh", "postTown": "Bath", "county": "Somerset", "postcode": "BA2 9PF" },
+          { "buildingNumber": "14", "streetName": "Windsor Rise", "locality": "Redford", "postTown": "Derby", "county": "Derbyshire", "postcode": "DE1 4SX" },
+
+          { "buildingNumber": "51", "streetName": "Hawthorne Road", "locality": "Claymere", "postTown": "Chester", "county": "Cheshire", "postcode": "CH4 2MB" },
+          { "buildingNumber": "3", "streetName": "Mallow Street", "locality": "Eastwood Vale", "postTown": "Nottingham", "county": "Nottinghamshire", "postcode": "NG5 3JU" },
+          { "buildingNumber": "76", "streetName": "Peach Tree Way", "locality": "Brookfell", "postTown": "York", "county": "North Yorkshire", "postcode": "YO3 6AP" },
+          { "buildingNumber": "24", "streetName": "Millstream Row", "locality": "Havenfield", "postTown": "Lincoln", "county": "Lincolnshire", "postcode": "LN2 8FP" },
+          { "buildingNumber": "37", "streetName": "Weavers Lane", "locality": "Northgate", "postTown": "Wolverhampton", "county": "West Midlands", "postcode": "WV4 3TT" },
+          { "buildingNumber": "11", "streetName": "Rose Mews", "locality": "Kingswell", "postTown": "Oxford", "county": "Oxfordshire", "postcode": "OX3 9DQ" },
+          { "buildingNumber": "8", "streetName": "Elmbrook Gardens", "locality": "Gransfield", "postTown": "Peterborough", "county": "Cambridgeshire", "postcode": "PE2 7QF" },
+          { "buildingNumber": "65", "streetName": "Pine Hollow", "locality": "Northbrook", "postTown": "Cheltenham", "county": "Gloucestershire", "postcode": "GL3 4HT" },
+          { "buildingNumber": "29", "streetName": "Falcon Street", "locality": "Ridgebury", "postTown": "Worcester", "county": "Worcestershire", "postcode": "WR1 6JS" },
+          { "buildingNumber": "16", "streetName": "Harrier Way", "locality": "Loxwood Green", "postTown": "Horsham", "county": "West Sussex", "postcode": "RH13 7BN" },
+
+          { "buildingNumber": "33", "streetName": "Yew Tree Court", "locality": "Silverbrook", "postTown": "Shrewsbury", "county": "Shropshire", "postcode": "SY2 8RR" },
+          { "buildingNumber": "4", "streetName": "Osprey Road", "locality": "Heathwick", "postTown": "Birmingham", "county": "West Midlands", "postcode": "B15 8RT" },
+          { "buildingNumber": "22", "streetName": "Stonemill Drive", "locality": "Hawkinge Vale", "postTown": "Canterbury", "county": "Kent", "postcode": "CT3 6LW" },
+          { "buildingNumber": "9", "streetName": "Willowbank Way", "locality": "East Harling", "postTown": "Ipswich", "county": "Suffolk", "postcode": "IP5 0YN" },
+          { "buildingNumber": "56", "streetName": "Sandpiper Crescent", "locality": "Cove Hill", "postTown": "Southampton", "county": "Hampshire", "postcode": "SO9 7MC" },
+          { "buildingNumber": "15", "streetName": "Beacon Lane", "locality": "Craybourne", "postTown": "Maidstone", "county": "Kent", "postcode": "ME16 2RS" },
+          { "buildingNumber": "101", "streetName": "Elm Walk", "locality": "Hillford", "postTown": "Harlow", "county": "Essex", "postcode": "CM19 6JQ" },
+          { "buildingNumber": "2", "streetName": "Clearwater Road", "locality": "Riverside", "postTown": "Colchester", "county": "Essex", "postcode": "CO5 3LP" },
+          { "buildingNumber": "48", "streetName": "Lavender Street", "locality": "Westford", "postTown": "Cambridge", "county": "Cambridgeshire", "postcode": "CB3 9UE" },
+          { "buildingNumber": "72", "streetName": "Greyfriars Way", "locality": "Bellstead", "postTown": "Bedford", "county": "Bedfordshire", "postcode": "MK41 1RF" },
+
+          { "buildingNumber": "36", "streetName": "Highcliff Road", "locality": "Marshgate", "postTown": "Grimsby", "county": "Lincolnshire", "postcode": "DN3 7NS" },
+          { "buildingNumber": "88", "streetName": "Fenton Close", "locality": "Broadwood", "postTown": "Sheffield", "county": "South Yorkshire", "postcode": "S11 6TB" },
+          { "buildingNumber": "41", "streetName": "Tansy Court", "locality": "Littlebourne", "postTown": "Canterbury", "county": "Kent", "postcode": "CT4 1JX" },
+          { "buildingNumber": "97", "streetName": "Sunnyside Avenue", "locality": "Greenleigh", "postTown": "Leeds", "county": "West Yorkshire", "postcode": "LS7 2PQ" },
+          { "buildingNumber": "30", "streetName": "Larch Lane", "locality": "Warren Hill", "postTown": "Hull", "county": "East Yorkshire", "postcode": "HU6 4ZY" },
+          { "buildingNumber": "62", "streetName": "Poppyfield Way", "locality": "Marston Ridge", "postTown": "Oxford", "county": "Oxfordshire", "postcode": "OX4 7GE" },
+          { "buildingNumber": "21", "streetName": "Ivywood Street", "locality": "Southmere", "postTown": "Cardiff", "county": "South Glamorgan", "postcode": "CF5 2JD" },
+          { "buildingNumber": "14", "streetName": "Oakridge Row", "locality": "Firrendown", "postTown": "Swansea", "county": "West Glamorgan", "postcode": "SA6 8PP" },
+          { "buildingNumber": "81", "streetName": "Bridgewater Drive", "locality": "Lancot Green", "postTown": "Luton", "county": "Bedfordshire", "postcode": "LU4 9WB" },
+          { "buildingNumber": "26", "streetName": "Primrose Lane", "locality": "Wickford Heath", "postTown": "Basildon", "county": "Essex", "postcode": "SS14 3SR" },
+
+          { "buildingNumber": "59", "streetName": "Regent Gardens", "locality": "Kingsreach", "postTown": "Coventry", "county": "West Midlands", "postcode": "CV3 1BN" },
+          { "buildingNumber": "18", "streetName": "Myrtle Row", "locality": "Oldacre", "postTown": "Warrington", "county": "Cheshire", "postcode": "WA3 2XT" },
+          { "buildingNumber": "6", "streetName": "Wisteria Court", "locality": "Cresthaven", "postTown": "St Albans", "county": "Hertfordshire", "postcode": "AL4 8FJ" },
+          { "buildingNumber": "85", "streetName": "Sparrow Lane", "locality": "Northwood Vale", "postTown": "Watford", "county": "Hertfordshire", "postcode": "WD24 6PH" },
+          { "buildingNumber": "11", "streetName": "Ashen Close", "locality": "Brookhill", "postTown": "Slough", "county": "Berkshire", "postcode": "SL2 9MT" },
+          { "buildingNumber": "53", "streetName": "Laurel Drive", "locality": "Kingswood Park", "postTown": "Bristol", "county": "Bristol", "postcode": "BS16 4DX" },
+          { "buildingNumber": "7", "streetName": "Thornfield Way", "locality": "Greenhollow", "postTown": "Gloucester", "county": "Gloucestershire", "postcode": "GL1 5UP" },
+          { "buildingNumber": "40", "streetName": "Cedar Brook", "locality": "Ashvale", "postTown": "High Wycombe", "county": "Buckinghamshire", "postcode": "HP12 8PD" },
+          { "buildingNumber": "98", "streetName": "Stag Lane", "locality": "Marbleham", "postTown": "Brighton", "county": "East Sussex", "postcode": "BN2 1WE" },
+          { "buildingNumber": "27", "streetName": "Whistler Road", "locality": "East Densford", "postTown": "Portsmouth", "county": "Hampshire", "postcode": "PO4 7JF" },
+
+          { "buildingNumber": "75", "streetName": "Gorse Way", "locality": "Heathrow End", "postTown": "Hounslow", "county": "Greater London", "postcode": "TW4 5ZA" },
+          { "buildingNumber": "3", "streetName": "Juniper Walk", "locality": "Woodleigh", "postTown": "Enfield", "county": "Greater London", "postcode": "EN3 1TP" },
+          { "buildingNumber": "58", "streetName": "Chapel Row", "locality": "Millthorpe", "postTown": "Wakefield", "county": "West Yorkshire", "postcode": "WF3 8KD" },
+          { "buildingNumber": "13", "streetName": "Stonewall Lane", "locality": "Northbridge", "postTown": "Bradford", "county": "West Yorkshire", "postcode": "BD7 5TE" },
+          { "buildingNumber": "60", "streetName": "Queensbury Court", "locality": "Palmstead", "postTown": "Blackpool", "county": "Lancashire", "postcode": "FY2 9AH" },
+          { "buildingNumber": "17", "streetName": "Buttercup Close", "locality": "Little Havers", "postTown": "Stevenage", "county": "Hertfordshire", "postcode": "SG2 0YG" },
+          { "buildingNumber": "92", "streetName": "Meadowbank Road", "locality": "Harefield Park", "postTown": "Liverpool", "county": "Merseyside", "postcode": "L8 6FP" },
+          { "buildingNumber": "39", "streetName": "Arbour Road", "locality": "Phoenix Rise", "postTown": "Manchester", "county": "Greater Manchester", "postcode": "M14 2YQ" },
+          { "buildingNumber": "4", "streetName": "Cherrytree Court", "locality": "Stonemoor", "postTown": "Stockport", "county": "Greater Manchester", "postcode": "SK4 3EW" },
+          { "buildingNumber": "66", "streetName": "Fieldhouse Lane", "locality": "Greywood", "postTown": "Bolton", "county": "Greater Manchester", "postcode": "BL3 9HB" },
+
+          { "buildingNumber": "20", "streetName": "Honeysuckle Way", "locality": "Oakwood Hill", "postTown": "Preston", "county": "Lancashire", "postcode": "PR3 8LN" },
+          { "buildingNumber": "95", "streetName": "Old Forge Street", "locality": "Daleham", "postTown": "Carlisle", "county": "Cumbria", "postcode": "CA2 5NJ" },
+          { "buildingNumber": "43", "streetName": "Nightingale Row", "locality": "Brambleton", "postTown": "Durham", "county": "County Durham", "postcode": "DH1 3GP" },
+          { "buildingNumber": "10", "streetName": "Redwood Close", "locality": "Southholm", "postTown": "Sunderland", "county": "Tyne and Wear", "postcode": "SR3 1FQ" },
+          { "buildingNumber": "86", "streetName": "Copse Lane", "locality": "Hillmead", "postTown": "Newcastle", "county": "Tyne and Wear", "postcode": "NE5 2PA" },
+          { "buildingNumber": "31", "streetName": "Wildflower Road", "locality": "Whitestone", "postTown": "Darlington", "county": "County Durham", "postcode": "DL2 6MX" },
+          { "buildingNumber": "47", "streetName": "Cloverbank Court", "locality": "Iverston", "postTown": "Middlesbrough", "county": "North Yorkshire", "postcode": "TS4 1WW" },
+          { "buildingNumber": "6", "streetName": "Brookview Way", "locality": "Langwood", "postTown": "Harrogate", "county": "North Yorkshire", "postcode": "HG3 9QL" },
+          { "buildingNumber": "52", "streetName": "Warren Terrace", "locality": "Elmwick", "postTown": "Scarborough", "county": "North Yorkshire", "postcode": "YO14 2JG" },
+          { "buildingNumber": "1", "streetName": "Foxglove Lane", "locality": "Brindlehurst", "postTown": "Lancaster", "county": "Lancashire", "postcode": "LA3 7UH" }
+        ];
+
+        //
+        // PHONE NUMBERS
+        //
+        const phoneNumbers = [
+          "07031 284 591", "07049 823 716", "07062 395 184", "07071 528 439", "07083 916 275",
+          "07092 475 318", "07015 648 293", "07028 751 964", "07036 592 817", "07047 813 256",
+          "07051 294 783", "07063 418 592", "07075 928 341", "07084 372 659", "07091 837 426",
+          "07014 385 927", "07027 639 485", "07035 821 749", "07048 952 613", "07052 719 384",
+          "07064 837 295", "07073 491 826", "07085 623 941", "07096 718 235", "07018 273 945",
+          "07029 384 756", "07031 572 948", "07042 619 583", "07053 847 261", "07064 928 137",
+          "07075 283 916", "07086 419 375", "07097 531 284", "07018 642 597", "07029 753 861",
+          "07031 864 729", "07042 987 513", "07054 129 876", "07065 238 741", "07076 391 825",
+          "07087 512 936", "07098 631 427", "07019 742 835", "07020 853 749", "07031 984 625",
+          "07042 195 783", "07053 268 917", "07064 371 528", "07075 482 936", "07086 593 147",
+          "07097 614 258", "07018 725 369", "07029 836 471", "07030 947 582", "07042 058 693",
+          "07053 169 784", "07064 271 895", "07075 382 916", "07086 493 127", "07097 514 238",
+          "07018 625 349", "07029 736 458", "07030 847 569", "07041 958 672", "07052 069 783",
+          "07063 171 894", "07074 282 915", "07085 393 126", "07096 414 237", "07017 525 348",
+          "07028 636 459", "07039 747 561", "07040 858 673", "07051 969 782", "07062 071 893",
+          "07073 182 914", "07084 293 125", "07095 314 236", "07016 425 347", "07027 536 458",
+          "07038 647 569", "07049 758 671", "07050 869 782", "07061 971 893", "07072 082 914",
+          "07083 193 125", "07094 214 236", "07015 325 347", "07026 436 458", "07037 547 569",
+          "07048 658 671", "07059 769 782", "07060 871 893", "07071 982 914", "07082 093 125",
+          "07093 114 236", "07014 225 347", "07025 336 458", "07036 447 569", "07047 558 671"
+        ];
+
+
+        //
+        // MEDICAL CONDITION
+        //
+        const medicalCondition = [
+          '(1) Permanent fistula',
+          '(2) Epilepsy',
+          '(3) Diabetes mellitus',
+          '(4) Myxoedema',
+          '(5) Hypoparathyroidism',
+          '(6) Diabetes insipidus',
+          '(7) Forms of hypoadrenalism',
+          '(8) Myasthenia gravis',
+          '(9) Continuing physical disability',
+          '(10) Cancer'
+        ];
+
+
+        //
+        // INIT FUNCTION
+        //
+        function _init() {
+
+          const patientsButton = document.querySelector('#patientsButton');
+          const patientsTextarea = document.querySelector('#patientsTextarea');
+
+          patientsButton.addEventListener('click', function (e) {
+
+            console.log('Button clicked');
+
+            patientsTextarea.value = _generatePatientData();
+
+            e.preventDefault();
+            e.stopPropagation();
+
+          });
+
+        };
+
+
+
+
+
+        //
+        // GENERATE CHANNEL FUNCTION
+        //
+        function _generateChannel(certificateType, certificateStatus) {
+
+          let channel = 'Digital';
+
+          switch (certificateType) {
+
+            case 'hrtppc':
+
+              const rand = Math.round(Math.random() * 100);
+              if (rand < 10) {
+                channel = 'Pharmacy';
+              }
+              if (rand < 2) {
+                channel = 'Telephony';
+              }
+
+              break;
+
+            case 'matex':
+            case 'medex':
+
+              if (['processing', 'on-hold', 'accepted', 'rejected'].indexOf(certificateStatus) > -1) {
+                channel = 'Paper';
+              } else {
+                const rand = Math.round(Math.random() * 100);
+                if (rand < 40) {
+                  channel = 'Paper';
+                }
+              }
+
+              break;
+
+          }
+
+          return channel;
+
+        }
+
+        //
+        // GENERATE IMAGE REFERENCE FUNCTION
+        //
+        function _generateImageReference() {
+
+          const now = new Date();
+
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, "0");
+          const day = String(now.getDate()).padStart(2, "0");
+          const hours = String(now.getHours()).padStart(2, "0");
+          const minutes = String(now.getMinutes()).padStart(2, "0");
+          const seconds = String(now.getSeconds()).padStart(2, "0");
+
+          // Generate a 9-digit random number (like 3000049 in your example, but fixed to 9 digits)
+          const randomNum = String(Math.floor(Math.random() * 1_000_000_000)).padStart(9, "0");
+
+          return `${year} ${month} ${day} ${hours} ${minutes} ${seconds}N${randomNum}`;
+
+        }
+
+        //
+        // GENERATE CERTIFICATE REFERENCE FUNCTION
+        //
+        function _generateCertificateReference(certificateType, certificateStatus) {
+
+          let chars = [];
+          let loop = 0;
+          let spaces = [];
+          let char = '';
+          let az09 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
+
+          switch (certificateType) {
+
+            case 'matex':
+            case 'medex':
+
+              loop = (12 + 3) - 1; // 12 digits and 3 spaces
+              spaces = [2, 6, 10];
+
+              for (let i = 0; i < loop; i++) {
+                char = (spaces.indexOf(i) > -1) ? ' ' : Math.floor(Math.random() * 10);
+                chars.push(char);
+              }
+
+              break;
+
+            case 'hrtppc':
+
+              chars = ['HRT ']; // Always start with HRT
+              loop = (8 + 1); // 8 characters and 1 space
+              spaces = [4];
+
+
+
+              for (let i = 0; i < loop; i++) {
+                char = (spaces.indexOf(i) > -1) ? ' ' : az09[Math.round(Math.random() * (az09.length - 1))];
+                chars.push(char);
+              }
+
+
+              break;
+
+          }
+
+          let ref = chars.join('');
+
+          return ref;
+
+        };
+
+        //
+        // GENERATE APPLICATION REFERENCE FUNCTION
+        //
+        function _generateApplicationReference() {
+          const now = new Date();
+
+          const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+          const randomTime =
+            sevenDaysAgo.getTime() +
+            Math.random() * (now.getTime() - sevenDaysAgo.getTime());
+
+          const randomDate = new Date(randomTime);
+
+          const year = randomDate.getFullYear();
+          const month = String(randomDate.getMonth() + 1).padStart(2, '0');
+          const day = String(randomDate.getDate()).padStart(2, '0');
+          const hours = String(randomDate.getHours()).padStart(2, '0');
+          const minutes = String(randomDate.getMinutes()).padStart(2, '0');
+          const seconds = String(randomDate.getSeconds()).padStart(2, '0');
+          const randomNum = String(Math.floor(Math.random() * 1_000)).padStart(4, '0');
+
+          return ` ${year}${month}${day} ${hours}${minutes}${seconds} N${randomNum}`;
+        }
+
+        //
+        // GENERATE NHS NUMBER FUNCTION
+        //
+        function _generateNHSNumber() {
+
+          // Format 000 000 0000
+          const digits = [];
+          const loop = (10 + 2); // 10 digits and 2 spaces
+
+          for (let i = 0; i < loop; i++) {
+
+            const spaces = [3, 7];
+            const char = (spaces.indexOf(i) > -1) ? ' ' : Math.floor(Math.random() * 10);
+            digits.push(char);
+
+          }
+
+          return digits.join('');
+
+        };
+
+        //
+        // GENERATE START DATE
+        //
+        function _generateStartDate() {
+
+          const minMonths = -12;
+          const maxMonths = -6;
+
+          const minDate = new Date();
+          minDate.setMonth(minDate.getMonth() + minMonths);
+          minDate.setHours(0, 0, 0, 0);
+
+          const maxDate = new Date();
+          maxDate.setMonth(maxDate.getMonth() + maxMonths);
+          maxDate.setHours(0, 0, 0, 0);
+
+          const randomTime = minDate.getTime() + Math.random() * (maxDate.getTime() - minDate.getTime());
+          const randomDate = new Date(randomTime);
+
+          const day = randomDate.getDate();
+          const month = randomDate.toLocaleString('en-GB', { month: 'long' });
+          const year = randomDate.getFullYear();
+
+          return {
+            display: day + ' ' + month + ' ' + year,
+            day: day,
+            month: randomDate.getMonth(),
+            year: year
+          };
+
+        }
+
+        //
+        // GENERATE END DATE FUNCTION
+        //
+        function _generateEndDate(startDate, medicalCondition) {
+
+          const start = new Date(
+            startDate.year,
+            startDate.month,
+            startDate.day
+          );
+
+          const end = new Date(start);
+
+          // Medex end date logic 
+          if (medicalCondition && medicalCondition.length) {
+            const hasCancer = medicalCondition.includes("(10) Cancer treatments");
+            const isCancerOnly = hasCancer && medicalCondition.length === 1;
+
+            if (isCancerOnly) {
+              end.setFullYear(end.getFullYear() + 5);
+            } else {
+              end.setFullYear(end.getFullYear() + 10);
             }
-          }) }}
 
-          {{ button({
-            id: 'patientsButton',
-            text: 'Generate new data'
-          }) }}
+          } else {
+            //Existing defualt 1 year end date
+            end.setFullYear(end.getFullYear() + 1);
+          }
 
-      </div>
+          end.setDate(end.getDate() - 1);
+
+          const day = end.getDate();
+          const month = end.toLocaleString('en-GB', { month: 'long' });
+          const year = end.getFullYear();
+
+          return {
+            display: day + ' ' + month + ' ' + year,
+            day: day,
+            month: end.getMonth(),
+            year: year
+          };
+        }
+
+        //
+        // GENERATE DATE OF BIRTH FUNCTION
+        //
+        function _generateDateOfBirth(certificateType) {
+
+          const dateOfBirth = new Date();
+          dateOfBirth.setDate(Math.round(Math.random() * 27) + 1);
+          dateOfBirth.setMonth(Math.round(Math.random() * 12));
+
+          if (certificateType === 'matex') {
+            dateOfBirth.setYear(dateOfBirth.getFullYear() - 18 - (Math.round(Math.random() * 20)));
+          } else {
+            dateOfBirth.setYear(dateOfBirth.getFullYear() - 30 - (Math.round(Math.random() * 30)));
+          }
+
+          dateOfBirth.setHours(0, 0, 0, 0);
+
+          const day = dateOfBirth.getDate();
+          const month = dateOfBirth.toLocaleString('en-GB', { month: 'long' });
+          const year = dateOfBirth.getFullYear();
+
+
+          const obj = {
+            display: day + ' ' + month + ' ' + year,
+            day: day,
+            month: dateOfBirth.getMonth(),
+            year: year
+          }
+
+          return obj;
+
+        };
+
+
+
+        //
+        // GENERATE EMAIL ADDRESS FUNCTION
+        //
+        function _generateEmailAddress(obj) {
+
+          let emailAddress;
+          let numbers;
+
+          const providers = ['outlook.com', 'googlemail.com', 'gmail.com', 'hotmail.com', 'blueyonder.co.uk', 'aol.com'];
+          const provider = providers[Math.round(Math.random() * (providers.length - 1))];
+
+          let check = true;
+          if (obj.channel === 'Paper' && (Math.round(Math.random() * 2) === 2)) {
+            check = false;
+          }
+
+          if (check) {
+
+            switch (Math.round(Math.random() * 3)) {
+
+              case 0:
+                // lattimore943@outlook.com
+                emailAddress = obj.lastName + (Math.floor(Math.random() * 900) + 100) + '@' + provider;
+                break;
+
+              case 1:
+                // james.lattimore@gmail.com
+                numbers = (Math.round(Math.random() * 3) === 0) ? Math.floor(Math.random() * 900) + 100 + '' : '';
+                emailAddress = obj.firstName.toLowerCase() + '.' + obj.lastName.toLowerCase() + numbers + '@' + provider;
+                break;
+
+              case 2:
+                // j.lattimore@googlemail.com
+                numbers = (Math.round(Math.random() * 3) === 0) ? Math.floor(Math.random() * 900) + 100 + '' : '';
+                emailAddress = obj.firstName.charAt(0).toLowerCase() + '.' + obj.lastName.toLowerCase() + numbers + '@' + provider;
+                break;
+
+              case 3:
+                // lattimore.j@googlemail.com
+                emailAddress = obj.lastName.toLowerCase() + '.' + obj.firstName.charAt(0).toLowerCase() + '@' + provider;
+                break;
+
+            }
+
+          }
+
+          return emailAddress;
+
+        }
+
+        //
+        // GENERATE CHILD'S DATE OF BIRTH
+        //
+        function _generateChildsDOB(startDate) {
+
+          const date = new Date(
+            startDate.year,
+            startDate.month,
+            startDate.day
+          );
+
+          const day = date.getDate();
+          const month = date.toLocaleString('en-GB', { month: 'long' });
+          const year = date.getFullYear();
+
+          return {
+            display: day + ' ' + month + ' ' + year,
+            day: day,
+            month: date.getMonth(),
+            year: year
+          };
+
+        }
+
+
+        //
+        // GENERATE MEDICAL CONDITION FUNCTION
+        //
+        function _generateMedicalCondition() {
+
+          const maxConditions = 3;
+
+          // 60% single-condition, 40% multi-condition
+          const count = Math.random() < 0.6
+            ? 1
+            : Math.floor(Math.random() * 3) + 1;
+
+          const shuffled = [...medicalCondition].sort(() => 0.5 - Math.random());
+
+          const selected = shuffled.slice(0, count);
+
+          // Sort back into numeric order after shuffle
+          const ordered = selected.sort((a, b) => {
+            const numA = parseInt(a.match(/\d+/)[0]);
+            const numB = parseInt(b.match(/\d+/)[0]);
+            return numA - numB;
+          });
+
+          return ordered;
+        }
+
+
+        //
+        // GENERATE PATIENT DATA FUNCTION
+        //
+        function _generatePatientData() {
+
+          const patients = [];
+
+          const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',').map(type => type.trim());
+          const statusesMatex = ['processing', 'on-hold', 'rejected', 'active', 'deleted', 'expired'];
+          const statusesHRTPPC = ['active', 'deleted', 'expired'];
+          const fulfilment = ['email', 'post'];
+
+          const processors = [];
+          /* Now generated from session data
+          const processors = [
+            { key: 'AICOL', AICOL: false },
+            { key: 'DATHO', DATHO: false },
+            { key: 'PRPAT', PRPAT: false },
+            { key: 'ZAKHA', ZAKHA: false },
+            { key: 'JASMI', JASMI: false }
+          ];
+          */
+
+          const processorsP = document.querySelector('#processors').innerHTML.split(',');
+          processorsP.forEach(function (p) {
+            const cipher = p.split('|')[0];
+            const name = p.split('|')[1];
+            const obj = { key: cipher, name: name }
+            obj[cipher] = false;
+            processors.push(obj);
+          });
+
+
+
+          names.forEach(function (name, i) {
+
+            const obj = name;
+
+            obj.id = i;
+            obj.nhsNumber = _generateNHSNumber();
+
+            const processor = processors[Math.round(Math.random() * (processors.length - 1))];
+            obj.processor = processor.key;
+            obj.processorName = processor.name;
+
+            const weightedTypes = [
+              'matex', 'matex',
+              'medex', 'medex', 'medex', 'medex',
+              'hrtppc',
+            ];
+
+            obj.certificateType =
+              weightedTypes[Math.floor(Math.random() * weightedTypes.length)];
+            console.log(obj.certificateType);
+
+            obj.status = (obj.certificateType === 'hrtppc') ? statusesHRTPPC[Math.round(Math.random() * (statusesHRTPPC.length - 1))] : statusesMatex[Math.round(Math.random() * (statusesMatex.length - 1))];
+
+            // Generate more active results for Matex
+            if ((obj.certificateType === 'matex' || obj.certificateType === 'medex') && obj.status !== 'active') {
+              obj.status = (Math.round(Math.random() * 2) === 2) ? 'active' : obj.status;
+            }
+
+            // Force some MEDEX records into checking
+            if (obj.certificateType === 'medex' && Math.random() < 0.4) {
+              obj.status = ['accepted', 'on-hold', 'rejected'][
+                Math.floor(Math.random() * 3)
+              ];
+              obj.checking = true;
+              obj.checkType = 'quality';
+            }
+            obj.dateOfBirth = _generateDateOfBirth();
+
+            obj.checking = false;
+
+
+
+            //
+            // This bit of code overwrites the random values for JASMI (the trainee)
+            // The part in the else statement selects just one record for a quality check...
+            //
+            if (obj.processor === 'JASMI') {
+              obj.checking = true;
+              obj.checkType = 'supervisor';
+
+              obj.certificateType = Math.random() < 0.5
+                ? 'matex'
+                : 'medex';
+
+              const checkingStatuses = ['on-hold', 'accepted', 'rejected'];
+
+              obj.status = checkingStatuses[
+                Math.floor(Math.random() * checkingStatuses.length)
+              ];
+            }
+            else {
+              if (
+                !obj.checking &&
+                (obj.certificateType === 'matex' || obj.certificateType === 'medex') &&
+                ['accepted', 'on-hold', 'rejected'].indexOf(obj.status) > -1 &&
+                !processors[obj.processor]
+              ) {
+                obj.checking = true;
+                obj.checkType = 'quality';
+                processors[obj.processor] = true;
+              }
+            }
+
+
+
+            obj.applicationReference = _generateApplicationReference();
+
+            if (['accepted', 'active', 'expired', 'deleted'].indexOf(obj.status) > -1) {
+              obj.certificateReference = _generateCertificateReference(obj.certificateType, obj.status);
+            } else {
+              obj.certificateReference = '';
+            }
+
+            obj.channel = _generateChannel(obj.certificateType, obj.status);
+            if ((obj.certificateType === 'matex' || obj.certificateType === 'medex') && obj.channel === 'Paper') {
+              obj.imageReference = _generateImageReference();
+            }
+
+            if (obj.certificateType === 'matex') {
+
+              obj.startDate = _generateStartDate();
+              obj.dueDate = _generateStartDate();
+              obj.endDate = _generateEndDate(obj.startDate);
+              obj.childsDOB = _generateChildsDOB(obj.startDate);
+
+            } else if (obj.certificateType === 'medex') {
+
+              obj.startDate = _generateStartDate();
+              obj.medicalCondition = _generateMedicalCondition();
+              obj.endDate = _generateEndDate(obj.startDate, obj.medicalCondition);
+
+            } else {
+
+              obj.startDate = _generateStartDate();
+              obj.endDate = _generateEndDate(obj.startDate);
+
+            }
+
+            //Certificate fulfilment
+            if (obj.certificateType === 'hrtppc') {
+
+              obj.certificateFulfilment = ['email', 'post'][
+                Math.floor(Math.random() * 2)
+              ];
+
+            } else if (obj.channel === 'Digital') {
+
+              obj.certificateFulfilment = 'email';
+
+            } else {
+
+              obj.certificateFulfilment = 'post';
+
+            }
+
+
+            obj.address = (addresses.length > i) ? addresses[i] : addresses[Math.round(Math.random() * (addresses.length - 1))];
+            obj.dateOfBirth = _generateDateOfBirth(obj.certificateType);
+
+            obj.phoneNumber = (phoneNumbers.length > i) ? phoneNumbers[i] : phoneNumbers[Math.round(Math.random() * (phoneNumbers.length - 1))];
+            obj.emailAddress = _generateEmailAddress(obj);
+
+            patients.push(obj);
+
+          });
+
+          return JSON.stringify(patients);
+
+        };
+
+
+        return {
+          init: _init
+        }
+
+      })();
+
+      document.addEventListener('DOMContentLoaded', function () {
+        DataGenerator.init();
+      });
+
+    </script>
+
   </div>
+</div>
+
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+
+
+    {{ textarea({
+    id: 'patientsTextarea',
+    label: {
+    text: 'Patient data',
+    classes: 'nhsuk-label--m'
+    },
+    hint: {
+    html: '
+    <p>Press the button below to generate a fresh set of patient data with JS, that can be copy/pasted and added into
+      the static patientData variable held in the nunjucks on this page.</p>
+    <p>This is then used to populate the dynamic results table above, and imported into other prototype pages.</p>'
+    }
+    }) }}
+
+    {{ button({
+    id: 'patientsButton',
+    text: 'Generate new data'
+    }) }}
+
+  </div>
+</div>
 
 {% endblock %}
