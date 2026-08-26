@@ -108,11 +108,16 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               value: "Healthcare practitioner details missing",
               text: "Healthcare practitioner details missing"
               },
+
               {
               value: "Patient signature missing",
               text: "Patient signature missing"
               },
 
+              {
+              value: "Child has already reached their first birthday",
+              text: "Child has already reached their first birthday"
+              },
               {
               value: "Patient is under 14",
               text: "Patient is under 14"
@@ -120,14 +125,6 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               {
               value: "Patient is over 60",
               text: "Patient is over 60"
-              },
-              {
-              value: "No medical condition ticked",
-              text: "No medical condition ticked"
-              },
-              {
-              value: "Unlisted medical condition selected",
-              text: "Unlisted medical condition selected"
               }
               ]
               }) }}
@@ -242,7 +239,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
                 {{ button
                 ({ classes: "nhsuk-button--secondary",
                 html: '<span data-ak="M">Cancel</span>',
-                href: "../search"
+                href: "../../search"
                 })
                 }}
 

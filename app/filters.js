@@ -809,7 +809,7 @@ case 'rejected':
           { html: patient.address.postcode },
           { html: patient.dateOfBirth.display },
           { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
-          { html: (patient.checking === true) ? _getStatusTextOrTag('checking', true) : _getStatusTextOrTag(patient.status, true) },
+          { html: (patient.checking === true) ? _getStatusTextOrTag(patient.status, true) + '  ' + _getStatusTextOrTag('checking', true) : _getStatusTextOrTag(patient.status, true) },
           { html: patient.applicationReference || 'Not available' },
           { html: _getReferenceHtml(patient.certificateReference) },
           { text: patient.startDate.display },
