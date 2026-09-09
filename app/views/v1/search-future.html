@@ -30,13 +30,6 @@
 
     <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
-                    {{ button({
-                html: '<span data-ak="M">Enter an application manually</span>',
-                classes: 'nhsuk-u-float-right nhsuk-u-margin-left-2',
-                small: true,
-                variant: 'secondary',
-                href: "/v1/process-application/new-application"
-              }) }}
 
           {{ button({
                 html: '<span data-ak="Y">Start HRT PPC application</span>',
@@ -129,12 +122,62 @@
 
                   {% if data.role === 'callCentre' %}
 
-                  
+                    {{ select({
+                      label: {
+                        html: '<span data-ak="T">Certificate type</span>'
+                      },
+                      id: 'searchCertificateType',
+                      name: 'searchCertificateType',
+                      value: data.searchCertificateType,
+                      items: [
+                        {
+                          value: '',
+                          text: 'All certificate types'
+                        },
+                        {
+                          value: 'hrtppc',
+                          text: 'HRT PPC'
+                        },
+                        {
+                          value: 'matex',
+                          text: 'Maternity exemption'
+                        },
+                        {
+                          value: 'medex',
+                          text: 'Medical exemption'
+                        }
+                      ]
+                    }) }}
 
                     <input type="hidden" name="searchStatus" value="" />
 
                   {% elif data.role === 'backOffice' %}
-
+{{ select({
+  label: {
+    html: '<span data-ak="T">Certificate type</span>'
+  },
+  id: 'searchCertificateType',
+  name: 'searchCertificateType',
+  value: data.searchCertificateType,
+  items: [
+    {
+      value: '',
+      text: 'All certificate types'
+    },
+    {
+      value: 'hrtppc',
+      text: 'HRT PPC'
+    },
+    {
+      value: 'matex',
+      text: 'Maternity exemption'
+    },
+    {
+      value: 'medex',
+      text: 'Medical exemption'
+    }
+  ]
+}) }}
 
                   {% else %}
 
@@ -155,7 +198,33 @@
                       ]
                     }) }}
 
-          
+             {{ select({
+  label: {
+    html: '<span data-ak="T">Certificate type</span>'
+  },
+  id: 'searchCertificateType',
+  name: 'searchCertificateType',
+  value: data.searchCertificateType,
+  items: [
+    {
+      value: '',
+      text: 'All certificate types'
+    },
+    {
+      value: 'hrtppc',
+      text: 'HRT PPC'
+    },
+    {
+      value: 'matex',
+      text: 'Maternity exemption'
+    },
+    {
+      value: 'medex',
+      text: 'Medical exemption'
+    }
+  ]
+}) }}
+
                   {% endif %}
 
                 </div>

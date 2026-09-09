@@ -6,363 +6,481 @@
 {% endblock %}
 
 {% block content %}
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
 
-      <h1>{{ serviceName }}</h1>
-
-
-        {% set prototypeV1TabHTML %}
-
-          <!-- PROTOTYPE TAB V1 -->
-
-          <p>An initial prototype for Help with Health Costs (HwHC) telesales. This first iteration will handle Maternity exemption (Matex), Medical exemption (Medex), and HRT PPC cases.</p>
+    <h1>{{ serviceName }}</h1>
 
 
-          <h2 class="nhsuk-heading-m">{{ 'callCentre' | getJobTitle }}</h2>
-          <p class="nhsuk-body">Help patients calling and emailing regarding their application</p>
+    {% set prototypeV1TabHTML %}
 
-          <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
-            <li>Field calls from patients</li>
-            <li>Answer emails from patients</li>
-            <li>Find records for patients</li>
-            <li>Amend records for patients</li>
-          </ul>         
+    <!-- PROTOTYPE TAB V1 -->
 
-          {{ button({
-              text: 'callCentre' | getJobTitle,
-              href: '/v1/search?role=callCentre'
-          }) }}
+    <p>An initial prototype for Help with Health Costs (HwHC) telesales. This first iteration will handle Maternity
+      exemption (Matex), Medical exemption (Medex), and HRT PPC cases.</p>
 
 
-          <hr class="nhsuk-section-break--m" />
+    <h2 class="nhsuk-heading-m">{{ 'callCentre' | getJobTitle }}</h2>
+    <p class="nhsuk-body">Help patients calling and emailing regarding their application</p>
 
-
-
-          <h2 class="nhsuk-heading-m">{{ 'backOffice' | getJobTitle }}</h2>
-          <p class="nhsuk-body">Process scanned applications, correct mistakes and request further information</p>
-
-          <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
-            <li>Process Matex and Medex paper applications</li>
-            <li>Answer letters from patients</li>
-            <li>Find records for patients</li>
-            <li>Amend records for patients</li>
-          </ul>         
-
-          {{ button({
-              text: 'backOffice' | getJobTitle,
-              href: '/v1/dashboard?role=backOffice'
-            }) }}
-
-
-          <hr class="nhsuk-section-break--m" />
-
-
-           <h2 class="nhsuk-heading-m">{{ 'backOfficeSupervisor' | getJobTitle }}</h2>
-          <p class="nhsuk-body">Monitor the work of the application processors</p>
-
-          <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
-            <li>Check processing of other applications processors</li>
-            <li>Process Matex and Medex paper applications</li>
-            <li>Answer letters from patients</li>
-            <li>Find records for patients</li>
-            <li>Amend records for patients</li>
-          </ul>         
-
-          {{ button({
-              text: 'backOfficeSupervisor' | getJobTitle,
-              href: '/v1/dashboard--supervisor?role=backOfficeSupervisor'
-            }) }}
-
-
-          <hr class="nhsuk-section-break--m" />
-
-
-          <h2 class="nhsuk-heading-m">{{ 'qualityControl' | getJobTitle }}</h2>
-          <p class="nhsuk-body">Perform quality checks on a fixed number of applications</p>
-
-          <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
-            <li>Check processing of other applications processors</li>
-            <li>Find records</li>
-            <li>Amend records</li>
-          </ul>         
-
-           {{ button({
-              text: 'qualityControl' | getJobTitle,
-              href: '/v1/dashboard--quality-control?role=qualityControl'
-            }) }}
-
-
-
-
-          <p class="nhsuk-body"><a class="nhsuk-link" href="/v1/data-patients">View patient test data, roles and statuses</a></p>
-
-        {% endset %}
-{% set pageListV1TabHTML %}
-
-<details class="nhsuk-details">
-  <summary class="nhsuk-details__summary">
-    <span class="nhsuk-details__summary-text">General/common pages</span>
-  </summary>
-  <div class="nhsuk-details__text">
-    <ul class="nhsuk-list nhsuk-list--bullet">
-      <li><a class="nhsuk-link" href="/v1/search?role=callCentre">Search/Start page</a></li>
-      <li><a class="nhsuk-link" href="/v1/search-results">Search results</a></li>
-      <li><a class="nhsuk-link" href="/v1/search-results?searchCertificateType=none">No search results</a></li>
-      <li><a class="nhsuk-link" href="/v1/access-keys">Access keys</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/address-lookup">Address lookup - Find an address</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/address-lookup?addressSearchPostcode=NE15%208NY">Address lookup result - Select an address</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/address-lookup-result?addressSearchPostcode=ZZ1%201ZZ">Address lookup result - No address found</a></li>
-     
+    <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
+      <li>Field calls from patients</li>
+      <li>Answer emails from patients</li>
+      <li>Find records for patients</li>
+      <li>Amend records for patients</li>
     </ul>
-  </div>
-</details>
 
-<details class="nhsuk-details">
-  <summary class="nhsuk-details__summary">
-    <span class="nhsuk-details__summary-text">General/common error pages</span>
-  </summary>
-  <div class="nhsuk-details__text">
-    <ul class="nhsuk-list nhsuk-list--bullet">
-      <li><a class="nhsuk-link" href="/v1/errors/blank-fields">Search - Blank fields error</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/dob-invalid-characters">Date of birth - Invalid date of birth fields</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/dob-future">Date of birth - Date of birth in the future</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-day">Date of birth - Blank day</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-month">Date of birth - Blank month</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-year">Date of birth - Blank year</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-day-month">Date of birth - Blank day and month</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-day-year">Date of birth - Blank day and year</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-month-year">Date of birth - Blank month and year</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/dob-blank-year-numbers">Date of birth - Year does not have 4 numbers</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/dob-invalid-date">Date of birth - Invalid date</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/dob-far-past">Date of birth - Date of birth is too far in the past</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/postcode-invalid">Postcode - Invalid postcode format</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/first-name-invalid">First name - Invalid characters in first name</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/first-name-too-long">First name - Input too long (more than 50 characters)</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/last-name-invalid">Last name - Invalid characters in last name</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/last-name-too-long">Last name - Input too long (more than 50 characters)</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/certificate-reference-invalid">Certificate reference - Invalid characters in certificate reference</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/certificate-reference-too-long">Certificate reference - Too long (more than 11 characters)</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/address-lookup-postcode-blank">Address lookup - Blank postcode field</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/address-lookup-postcode-invalid-characters">Address lookup - Invalid character in postcode</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/address-postcode-lookup-api-error">Address lookup - Error from address API call</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/address-lookup-postcode-invalid-characters-building">Address lookup - Invalid character in building name or number field</a></li>
-      <li><a class="nhsuk-link" href="/v1/errors/address-lookup-result-select-address">Address lookup result - No address selected</a></li>
+    {{ button({
+    text: 'callCentre' | getJobTitle,
+    href: '/v1/search?role=callCentre'
+    }) }}
+
+
+    <hr class="nhsuk-section-break--m" />
+
+
+
+    <h2 class="nhsuk-heading-m">{{ 'backOffice' | getJobTitle }}</h2>
+    <p class="nhsuk-body">Process scanned applications, correct mistakes and request further information</p>
+
+    <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
+      <li>Process Matex and Medex paper applications</li>
+      <li>Answer letters from patients</li>
+      <li>Find records for patients</li>
+      <li>Amend records for patients</li>
     </ul>
-  </div>
-</details>
 
-<details class="nhsuk-details">
-  <summary class="nhsuk-details__summary">
-    <span class="nhsuk-details__summary-text">Matex certificate pages</span>
-  </summary>
-  <div class="nhsuk-details__text">
-    <ul class="nhsuk-list nhsuk-list--bullet">
-      <li><a class="nhsuk-link" href="/v1/matex/case?patientID=6">Certificate summary - Active - Digital application</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/case?patientID=89">Certificate summary - Active - Paper application</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=58">Certificate summary - On hold</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=50">Certificate summary - Rejected</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/case?patientID=31">Certificate summary - Deleted/Expired</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=36">Certificate summary - Processing</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=85">Certificate summary - Checking</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/view-application-image">View image of scanned application form</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/add-note">Add note</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/case--edit">Edit application (for on-hold or rejected cases)</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/edit-or-reissue?patientID=6">Edit certificate details or reissue - Digital application</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/edit-or-reissue?patientID=89">Edit certificate details or reissue - Paper application</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/reissue-complete?patientID=9">Reissue complete - Post</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/reissue-complete?patientID=55">Reissue complete - Email</a></li>
+    {{ button({
+    text: 'backOffice' | getJobTitle,
+    href: '/v1/dashboard?role=backOffice'
+    }) }}
+
+
+    <hr class="nhsuk-section-break--m" />
+
+
+    <h2 class="nhsuk-heading-m">{{ 'backOfficeSupervisor' | getJobTitle }}</h2>
+    <p class="nhsuk-body">Monitor the work of the application processors</p>
+
+    <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
+      <li>Check processing of other applications processors</li>
+      <li>Process Matex and Medex paper applications</li>
+      <li>Answer letters from patients</li>
+      <li>Find records for patients</li>
+      <li>Amend records for patients</li>
     </ul>
-  </div>
-</details>
 
-<details class="nhsuk-details">
-  <summary class="nhsuk-details__summary">
-    <span class="nhsuk-details__summary-text">Matex error pages</span>
-  </summary>
-  <div class="nhsuk-details__text">
-    <ul class="nhsuk-list nhsuk-list--bullet">
-      <li><a class="nhsuk-link" href="/v1/matex/errors/first-name-too-long">Edit or reissue - First name too long</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/first-name-invalid">Edit or reissue - Invalid characters in first name</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/first-name-blank">Edit or reissue - Blank first name field</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/last-name-too-long">Edit or reissue - Last name too long</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/last-name-invalid">Edit or reissue - Invalid characters in last name</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/last-name-blank">Edit or reissue - Last name blank</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/address-line-1-blank">Edit or reissue - Blank address line 1</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/town-blank">Edit or reissue - Blank town</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/postcode-blank">Edit or reissue - Blank postcode</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/address-line-1-invalid">Edit or reissue - Invalid characters in address line 1</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/address-line-2-invalid">Edit or reissue - Invalid characters in address line 2</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/town-invalid">Edit or reissue - Invalid characters in town</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/county-invalid">Edit or reissue - Invalid characters in county</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/postcode-invalid">Edit or reissue - Invalid characters in postcode</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank">Edit or reissue - Blank date of birth</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-future">Edit or reissue - Date of birth in the future</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-day">Edit or reissue - Date of birth - Blank day</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-month">Edit or reissue - Date of birth - Blank month</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-year">Edit or reissue - Date of birth - Blank year</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-day-month">Edit or reissue - Date of birth - Blank day and month</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-day-year">Edit or reissue - Date of birth - Blank day and year</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-month-year">Edit or reissue - Date of birth - Blank month and year</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-year-numbers">Edit or reissue - Date of birth - Year does not have 4 numbers</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-invalid">Edit or reissue - Date of birth - Invalid date</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-invalid-characters">Edit or reissue - Date of birth - Invalid characters in date of birth fields</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/dob-far-past">Edit or reissue - Date of birth - Date of birth is too far in the past</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/nhs-number-blank">Edit or reissue - Blank NHS number</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/nhs-number-invalid">Edit or reissue - Invalid characters in NHS number</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/nhs-number-too-long">Edit or reissue - NHS number too long</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/nhs-number-too-short">Edit or reissue - NHS number too short</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/telephone-number-blank">Edit or reissue - Blank telephone number</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/telephone-number-invalid">Edit or reissue - Invalid characters in telephone number</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank">Edit or reissue - Blank child's due or birth date</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-future">Edit or reissue - Child's due or birth date too far in the future</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-day">Edit or reissue - Child's due or birth date - Blank day</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-month">Edit or reissue - Child's due or birth date - Blank month</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-year">Edit or reissue - Child's due or birth date - Blank year</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-day-month">Edit or reissue - Child's due or birth date - Blank day and month</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-day-year">Edit or reissue - Child's due or birth date - Blank day and year</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-month-year">Edit or reissue - Child's due or birth date - Blank month and year</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-year-numbers">Edit or reissue - Child's due or birth date - Year does not have 4 numbers</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-invalid">Edit or reissue - Child's due or birth date - Invalid date</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-invalid-characters">Edit or reissue - Child's due or birth date - Invalid characters in date of birth fields</a></li>
-      <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-far-past">Edit or reissue - Child's due or birth date - Child's due or birth date too far in the past</a></li>
+    {{ button({
+    text: 'backOfficeSupervisor' | getJobTitle,
+    href: '/v1/dashboard--supervisor?role=backOfficeSupervisor'
+    }) }}
+
+
+    <hr class="nhsuk-section-break--m" />
+
+
+    <h2 class="nhsuk-heading-m">{{ 'qualityControl' | getJobTitle }}</h2>
+    <p class="nhsuk-body">Perform quality checks on a fixed number of applications</p>
+
+    <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-font-size-14">
+      <li>Check processing of other applications processors</li>
+      <li>Find records</li>
+      <li>Amend records</li>
     </ul>
-  </div>
-</details>
 
-<details class="nhsuk-details">
-  <summary class="nhsuk-details__summary">
-    <span class="nhsuk-details__summary-text">Medex certificate pages</span>
-  </summary>
-  <div class="nhsuk-details__text">
-    <ul class="nhsuk-list nhsuk-list--bullet">
-      <li><a class="nhsuk-link" href="/v1/medex/case?patientID=21">Certificate summary - Active - Digital application</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/case?patientID=93">Certificate summary - Active - Paper application</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/case--view--can-edit?patientID=34">Certificate summary - On hold</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/case--view--can-edit?patientID=43">Certificate summary - Rejected</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/case?patientID=92">Certificate summary - Deleted/Expired</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/case--view--can-edit?patientID=15">Certificate summary - Processing</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/view-application-image">View image of scanned application form</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/add-note">Add note</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/case--edit">Edit application (for on-hold or rejected cases)</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/edit-or-reissue?patientID=21">Edit certificate details or reissue - Digital application</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/edit-or-reissue?patientID=93">Edit certificate details or reissue - Paper application</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/address-lookup">Address lookup - Find an address</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/address-lookup?addressSearchPostcode=NE15%208NY">Address lookup result - Select an address</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/address-lookup-result?addressSearchPostcode=ZZ1%201ZZ">Address lookup result - No address found</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/reissue-complete?patientID=93">Reissue complete - Post</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/reissue-complete?patientID=21">Reissue complete - Email</a></li>
-    </ul>
-  </div>
-</details>
+    {{ button({
+    text: 'qualityControl' | getJobTitle,
+    href: '/v1/dashboard--quality-control?role=qualityControl'
+    }) }}
 
-<details class="nhsuk-details">
-  <summary class="nhsuk-details__summary">
-    <span class="nhsuk-details__summary-text">Medex error pages</span>
-  </summary>
-  <div class="nhsuk-details__text">
-    <ul class="nhsuk-list nhsuk-list--bullet">
-      <li><a class="nhsuk-link" href="/v1/medex/errors/blank-medical-conditions?patientID=93">Edit certificate - Paper application - Blank medical conditions</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/first-name-too-long">Edit or reissue - First name too long</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/first-name-invalid">Edit or reissue - Invalid characters in first name</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/first-name-blank">Edit or reissue - Blank first name field</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/last-name-too-long">Edit or reissue - Last name too long</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/last-name-invalid">Edit or reissue - Invalid characters in last name</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/last-name-blank">Edit or reissue - Last name blank</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/address-line-1-blank">Edit or reissue - Blank address line 1</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/town-blank">Edit or reissue - Blank town</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/postcode-blank">Edit or reissue - Blank postcode</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/address-line-1-invalid">Edit or reissue - Invalid characters in address line 1</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/address-line-2-invalid">Edit or reissue - Invalid characters in address line 2</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/town-invalid">Edit or reissue - Invalid characters in town</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/county-invalid">Edit or reissue - Invalid characters in county</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/postcode-invalid">Edit or reissue - Invalid characters in postcode</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank">Edit or reissue - Blank date of birth</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-future">Edit or reissue - Date of birth in the future</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-day">Edit or reissue - Date of birth - Blank day</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-month">Edit or reissue - Date of birth - Blank month</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-year">Edit or reissue - Date of birth - Blank year</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-day-month">Edit or reissue - Date of birth - Blank day and month</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-day-year">Edit or reissue - Date of birth - Blank day and year</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-month-year">Edit or reissue - Date of birth - Blank month and year</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-year-numbers">Edit or reissue - Date of birth - Year does not have 4 numbers</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-invalid">Edit or reissue - Date of birth - Invalid date</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-invalid-characters">Edit or reissue - Date of birth - Invalid characters in date of birth fields</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/dob-far-past">Edit or reissue - Date of birth - Date of birth is too far in the past</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/nhs-number-blank">Edit or reissue - Blank NHS number</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/nhs-number-invalid">Edit or reissue - Invalid characters in NHS number</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/nhs-number-too-long">Edit or reissue - NHS number too long</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/nhs-number-too-short">Edit or reissue - NHS number too short</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/telephone-number-blank">Edit or reissue - Blank telephone number</a></li>
-      <li><a class="nhsuk-link" href="/v1/medex/errors/telephone-number-invalid">Edit or reissue - Invalid characters in telephone number</a></li>
-    </ul>
-  </div>
-</details>
 
-<details class="nhsuk-details">
-  <summary class="nhsuk-details__summary">
-    <span class="nhsuk-details__summary-text">HRT PPC certificate pages</span>
-  </summary>
-  <div class="nhsuk-details__text">
-    <ul class="nhsuk-list nhsuk-list--bullet">
-      <li><a class="nhsuk-link" href="/v1/hrtppc/case?patientID=30">Certificate summary - Active</a></li>
-      <li><a class="nhsuk-link" href="/v1/hrtppc/case?patientID=80">Certificate summary - Deleted/Expired</a></li>
-      <li><a class="nhsuk-link" href="/v1/hrtppc/add-note">Add note</a></li>
-      <li><a class="nhsuk-link" href="/v1/hrtppc/edit-or-reissue?patientID=8">Edit certificate details or reissue</a></li>
-      <li><a class="nhsuk-link" href="/v1/hrtppc/address-lookup">Address lookup - Find an address</a></li>
-      <li><a class="nhsuk-link" href="/v1/hrtppc/address-lookup?addressSearchPostcode=NE15%208NY">Address lookup result - Select an address</a></li>
-      <li><a class="nhsuk-link" href="/v1/hrtppc/address-lookup-result?addressSearchPostcode=ZZ1%201ZZ">Address lookup result - No address found</a></li>
-      <li><a class="nhsuk-link" href="/v1/hrtppc/reissue-complete?patientID=99">Reissue complete - Post</a></li>
-      <li><a class="nhsuk-link" href="/v1/hrtppc/reissue-complete?patientID=30">Reissue complete - Email</a></li>
-      <li><a class="nhsuk-link" href="/v1/hrtppc/new-application">New application - Applicant details</a></li>
-      <li><a class="nhsuk-link" href="/v1/hrtppc/check-their-answers">New application - Check their details</a></li>
-      <li><a class="nhsuk-link" href="/v1/hrtppc/card-payment">New application - Card payment call</a></li>
-      <li><a class="nhsuk-link" href="/v1/hrtppc/retry-payment">Retry payment</a></li>
-    </ul>
-  </div>
-</details>
 
-<details class="nhsuk-details">
-  <summary class="nhsuk-details__summary">
-    <span class="nhsuk-details__summary-text">Application processing screens</span>
-  </summary>
-  <div class="nhsuk-details__text">
-    <ul class="nhsuk-list nhsuk-list--bullet">
-      <li><a class="nhsuk-link" href="/v1/process-application/matex?scenario=accepted">Matex application accepted</a></li>
-      <li><a class="nhsuk-link" href="/v1/process-application/matex?scenario=reject">Matex application rejected</a></li>
-      <li><a class="nhsuk-link" href="/v1/process-application/matex?scenario=further-information">Matex application further information</a></li>
-      <li><a class="nhsuk-link" href="/v1/process-application/medex?scenario=accepted">Medex application accepted</a></li>
-      <li><a class="nhsuk-link" href="/v1/process-application/medex?scenario=reject">Medex application rejected</a></li>
-      <li><a class="nhsuk-link" href="/v1/process-application/medex?scenario=further-information">Medex application further information</a></li>
-       <li><a class="nhsuk-link" href="/v1/dashboard-no-checking">Dashboard - no pending changes - variation 1</a></li>
-          <li><a class="nhsuk-link" href="/v1/dashboard-no-checking-alt">Dashboard - no pending changes - variation 2</a></li>
-    </ul>
-  </div>
-</details>
 
-{% endset %}
+    <p class="nhsuk-body"><a class="nhsuk-link" href="/v1/data-patients">View patient test data, roles and statuses</a>
+    </p>
+
+    {% endset %}
+    {% set pageListV1TabHTML %}
+
+    <details class="nhsuk-details">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">General/common pages</span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          <li><a class="nhsuk-link" href="/v1/search?role=callCentre">MVP Search/Start page</a></li>
+          <li><a class="nhsuk-link" href="/v1/search-future?role=callCentre">Future Search/Start page</a></li>
+          <li><a class="nhsuk-link" href="/v1/search-results">Search results</a></li>
+          <li><a class="nhsuk-link" href="/v1/search-results?searchCertificateType=none">No search results</a></li>
+          <li><a class="nhsuk-link" href="/v1/access-keys">Access keys</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/address-lookup">Address lookup - Find an address</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/address-lookup?addressSearchPostcode=NE15%208NY">Address lookup
+              result - Select an address</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/address-lookup-result?addressSearchPostcode=ZZ1%201ZZ">Address
+              lookup result - No address found</a></li>
+
+        </ul>
+      </div>
+    </details>
+
+    <details class="nhsuk-details">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">General/common error pages</span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          <li><a class="nhsuk-link" href="/v1/errors/blank-fields">Search - Blank fields error</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/dob-invalid-characters">Date of birth - Invalid date of birth
+              fields</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/dob-future">Date of birth - Date of birth in the future</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/dob-blank-day">Date of birth - Blank day</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/dob-blank-month">Date of birth - Blank month</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/dob-blank-year">Date of birth - Blank year</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/dob-blank-day-month">Date of birth - Blank day and month</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/dob-blank-day-year">Date of birth - Blank day and year</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/dob-blank-month-year">Date of birth - Blank month and year</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/dob-blank-year-numbers">Date of birth - Year does not have 4
+              numbers</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/dob-invalid-date">Date of birth - Invalid date</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/dob-far-past">Date of birth - Date of birth is too far in the
+              past</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/postcode-invalid">Postcode - Invalid postcode format</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/first-name-invalid">First name - Invalid characters in first
+              name</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/first-name-too-long">First name - Input too long (more than 50
+              characters)</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/last-name-invalid">Last name - Invalid characters in last name</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/errors/last-name-too-long">Last name - Input too long (more than 50
+              characters)</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/certificate-reference-invalid">Certificate reference - Invalid
+              characters in certificate reference</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/certificate-reference-too-long">Certificate reference - Too long
+              (more than 11 characters)</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/address-lookup-postcode-blank">Address lookup - Blank postcode
+              field</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/address-lookup-postcode-invalid-characters">Address lookup -
+              Invalid character in postcode</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/address-postcode-lookup-api-error">Address lookup - Error from
+              address API call</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/address-lookup-postcode-invalid-characters-building">Address lookup
+              - Invalid character in building name or number field</a></li>
+          <li><a class="nhsuk-link" href="/v1/errors/address-lookup-result-select-address">Address lookup result - No
+              address selected</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="nhsuk-details">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">Matex certificate pages</span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          <li><a class="nhsuk-link" href="/v1/matex/case?patientID=6">Certificate summary - Active - Digital
+              application</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/case?patientID=89">Certificate summary - Active - Paper
+              application</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=58">Certificate summary - On hold</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=50">Certificate summary -
+              Rejected</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/case?patientID=31">Certificate summary - Deleted/Expired</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=36">Certificate summary -
+              Processing</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=85">Certificate summary -
+              Checking</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/view-application-image">View image of scanned application form</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/matex/add-note">Add note</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/case--edit">Edit application (for on-hold or rejected cases)</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/matex/edit-or-reissue?patientID=6">Edit certificate details or reissue -
+              Digital application</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/edit-or-reissue?patientID=89">Edit certificate details or reissue -
+              Paper application</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/reissue-complete?patientID=9">Reissue complete - Post</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/reissue-complete?patientID=55">Reissue complete - Email</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="nhsuk-details">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">Matex error pages</span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          <li><a class="nhsuk-link" href="/v1/matex/errors/first-name-too-long">Edit or reissue - First name too
+              long</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/first-name-invalid">Edit or reissue - Invalid characters in
+              first name</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/first-name-blank">Edit or reissue - Blank first name
+              field</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/last-name-too-long">Edit or reissue - Last name too long</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/last-name-invalid">Edit or reissue - Invalid characters in
+              last name</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/last-name-blank">Edit or reissue - Last name blank</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/address-line-1-blank">Edit or reissue - Blank address line
+              1</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/town-blank">Edit or reissue - Blank town</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/postcode-blank">Edit or reissue - Blank postcode</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/address-line-1-invalid">Edit or reissue - Invalid characters
+              in address line 1</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/address-line-2-invalid">Edit or reissue - Invalid characters
+              in address line 2</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/town-invalid">Edit or reissue - Invalid characters in
+              town</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/county-invalid">Edit or reissue - Invalid characters in
+              county</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/postcode-invalid">Edit or reissue - Invalid characters in
+              postcode</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank">Edit or reissue - Blank date of birth</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/dob-future">Edit or reissue - Date of birth in the future</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-day">Edit or reissue - Date of birth - Blank
+              day</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-month">Edit or reissue - Date of birth - Blank
+              month</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-year">Edit or reissue - Date of birth - Blank
+              year</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-day-month">Edit or reissue - Date of birth - Blank
+              day and month</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-day-year">Edit or reissue - Date of birth - Blank
+              day and year</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-month-year">Edit or reissue - Date of birth - Blank
+              month and year</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/dob-blank-year-numbers">Edit or reissue - Date of birth -
+              Year does not have 4 numbers</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/dob-invalid">Edit or reissue - Date of birth - Invalid
+              date</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/dob-invalid-characters">Edit or reissue - Date of birth -
+              Invalid characters in date of birth fields</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/dob-far-past">Edit or reissue - Date of birth - Date of birth
+              is too far in the past</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/nhs-number-blank">Edit or reissue - Blank NHS number</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/nhs-number-invalid">Edit or reissue - Invalid characters in
+              NHS number</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/nhs-number-too-long">Edit or reissue - NHS number too
+              long</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/nhs-number-too-short">Edit or reissue - NHS number too
+              short</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/telephone-number-blank">Edit or reissue - Blank telephone
+              number</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/telephone-number-invalid">Edit or reissue - Invalid
+              characters in telephone number</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank">Edit or reissue - Blank child's due or
+              birth date</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-future">Edit or reissue - Child's due or birth
+              date too far in the future</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-day">Edit or reissue - Child's due or birth
+              date - Blank day</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-month">Edit or reissue - Child's due or
+              birth date - Blank month</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-year">Edit or reissue - Child's due or birth
+              date - Blank year</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-day-month">Edit or reissue - Child's due or
+              birth date - Blank day and month</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-day-year">Edit or reissue - Child's due or
+              birth date - Blank day and year</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-month-year">Edit or reissue - Child's due or
+              birth date - Blank month and year</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-blank-year-numbers">Edit or reissue - Child's due
+              or birth date - Year does not have 4 numbers</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-invalid">Edit or reissue - Child's due or birth
+              date - Invalid date</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-invalid-characters">Edit or reissue - Child's due
+              or birth date - Invalid characters in date of birth fields</a></li>
+          <li><a class="nhsuk-link" href="/v1/matex/errors/childs-dob-far-past">Edit or reissue - Child's due or birth
+              date - Child's due or birth date too far in the past</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="nhsuk-details">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">Medex certificate pages</span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          <li><a class="nhsuk-link" href="/v1/medex/case?patientID=21">Certificate summary - Active - Digital
+              application</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/case?patientID=93">Certificate summary - Active - Paper
+              application</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/case--view--can-edit?patientID=34">Certificate summary - On hold</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/medex/case--view--can-edit?patientID=43">Certificate summary -
+              Rejected</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/case?patientID=92">Certificate summary - Deleted/Expired</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/case--view--can-edit?patientID=15">Certificate summary -
+              Processing</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/view-application-image">View image of scanned application form</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/medex/add-note">Add note</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/case--edit">Edit application (for on-hold or rejected cases)</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/medex/edit-or-reissue?patientID=21">Edit certificate details or reissue -
+              Digital application</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/edit-or-reissue?patientID=93">Edit certificate details or reissue -
+              Paper application</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/address-lookup">Address lookup - Find an address</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/address-lookup?addressSearchPostcode=NE15%208NY">Address lookup
+              result - Select an address</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/address-lookup-result?addressSearchPostcode=ZZ1%201ZZ">Address
+              lookup result - No address found</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/reissue-complete?patientID=93">Reissue complete - Post</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/reissue-complete?patientID=21">Reissue complete - Email</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="nhsuk-details">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">Medex error pages</span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          <li><a class="nhsuk-link" href="/v1/medex/errors/blank-medical-conditions?patientID=93">Edit certificate -
+              Paper application - Blank medical conditions</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/first-name-too-long">Edit or reissue - First name too
+              long</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/first-name-invalid">Edit or reissue - Invalid characters in
+              first name</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/first-name-blank">Edit or reissue - Blank first name
+              field</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/last-name-too-long">Edit or reissue - Last name too long</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/last-name-invalid">Edit or reissue - Invalid characters in
+              last name</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/last-name-blank">Edit or reissue - Last name blank</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/address-line-1-blank">Edit or reissue - Blank address line
+              1</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/town-blank">Edit or reissue - Blank town</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/postcode-blank">Edit or reissue - Blank postcode</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/address-line-1-invalid">Edit or reissue - Invalid characters
+              in address line 1</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/address-line-2-invalid">Edit or reissue - Invalid characters
+              in address line 2</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/town-invalid">Edit or reissue - Invalid characters in
+              town</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/county-invalid">Edit or reissue - Invalid characters in
+              county</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/postcode-invalid">Edit or reissue - Invalid characters in
+              postcode</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank">Edit or reissue - Blank date of birth</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/dob-future">Edit or reissue - Date of birth in the future</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-day">Edit or reissue - Date of birth - Blank
+              day</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-month">Edit or reissue - Date of birth - Blank
+              month</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-year">Edit or reissue - Date of birth - Blank
+              year</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-day-month">Edit or reissue - Date of birth - Blank
+              day and month</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-day-year">Edit or reissue - Date of birth - Blank
+              day and year</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-month-year">Edit or reissue - Date of birth - Blank
+              month and year</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/dob-blank-year-numbers">Edit or reissue - Date of birth -
+              Year does not have 4 numbers</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/dob-invalid">Edit or reissue - Date of birth - Invalid
+              date</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/dob-invalid-characters">Edit or reissue - Date of birth -
+              Invalid characters in date of birth fields</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/dob-far-past">Edit or reissue - Date of birth - Date of birth
+              is too far in the past</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/nhs-number-blank">Edit or reissue - Blank NHS number</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/nhs-number-invalid">Edit or reissue - Invalid characters in
+              NHS number</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/nhs-number-too-long">Edit or reissue - NHS number too
+              long</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/nhs-number-too-short">Edit or reissue - NHS number too
+              short</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/telephone-number-blank">Edit or reissue - Blank telephone
+              number</a></li>
+          <li><a class="nhsuk-link" href="/v1/medex/errors/telephone-number-invalid">Edit or reissue - Invalid
+              characters in telephone number</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="nhsuk-details">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">HRT PPC certificate pages</span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          <li><a class="nhsuk-link" href="/v1/hrtppc/case?patientID=30">Certificate summary - Active</a></li>
+          <li><a class="nhsuk-link" href="/v1/hrtppc/case?patientID=80">Certificate summary - Deleted/Expired</a></li>
+          <li><a class="nhsuk-link" href="/v1/hrtppc/add-note">Add note</a></li>
+          <li><a class="nhsuk-link" href="/v1/hrtppc/edit-or-reissue?patientID=8">Edit certificate details or
+              reissue</a></li>
+          <li><a class="nhsuk-link" href="/v1/hrtppc/address-lookup">Address lookup - Find an address</a></li>
+          <li><a class="nhsuk-link" href="/v1/hrtppc/address-lookup?addressSearchPostcode=NE15%208NY">Address lookup
+              result - Select an address</a></li>
+          <li><a class="nhsuk-link" href="/v1/hrtppc/address-lookup-result?addressSearchPostcode=ZZ1%201ZZ">Address
+              lookup result - No address found</a></li>
+          <li><a class="nhsuk-link" href="/v1/hrtppc/reissue-complete?patientID=99">Reissue complete - Post</a></li>
+          <li><a class="nhsuk-link" href="/v1/hrtppc/reissue-complete?patientID=30">Reissue complete - Email</a></li>
+          <li><a class="nhsuk-link" href="/v1/hrtppc/new-application">New application - Applicant details</a></li>
+          <li><a class="nhsuk-link" href="/v1/hrtppc/check-their-answers">New application - Check their details</a></li>
+          <li><a class="nhsuk-link" href="/v1/hrtppc/card-payment">New application - Card payment call</a></li>
+          <li><a class="nhsuk-link" href="/v1/hrtppc/retry-payment">Retry payment</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="nhsuk-details">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">Application processing screens</span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          <li><a class="nhsuk-link" href="/v1/process-application/matex?scenario=accepted">Matex application
+              accepted</a></li>
+          <li><a class="nhsuk-link" href="/v1/process-application/matex?scenario=reject">Matex application rejected</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/process-application/matex?scenario=further-information">Matex application
+              further information</a></li>
+          <li><a class="nhsuk-link" href="/v1/process-application/medex?scenario=accepted">Medex application
+              accepted</a></li>
+          <li><a class="nhsuk-link" href="/v1/process-application/medex?scenario=reject">Medex application rejected</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/process-application/medex?scenario=further-information">Medex application
+              further information</a></li>
+          <li><a class="nhsuk-link" href="/v1/dashboard-no-checking">Dashboard - no pending changes - variation 1</a>
+          </li>
+          <li><a class="nhsuk-link" href="/v1/dashboard-no-checking-alt">Dashboard - no pending changes - variation
+              2</a></li>
+        </ul>
+      </div>
+    </details>
+
+    {% endset %}
 
 
     <h2 class="nhsuk-heading-l">Version 1</h2>
 
     {{ tabs({
-      id: 'v1Tabs',
-      items: [
-        {
-          label: 'Prototype',
-          id: 'prototypeV1Tab',
-          panel: { html: prototypeV1TabHTML }
-        },
-        {
-          label: 'Page list',
-          id: 'pageListV1Tab',
-          panel: { html: pageListV1TabHTML }
-        }
-      ]
+    id: 'v1Tabs',
+    items: [
+    {
+    label: 'Prototype',
+    id: 'prototypeV1Tab',
+    panel: { html: prototypeV1TabHTML }
+    },
+    {
+    label: 'Page list',
+    id: 'pageListV1Tab',
+    panel: { html: pageListV1TabHTML }
+    }
+    ]
     }) }}
 
 
 
-    </div>
   </div>
+</div>
 {% endblock %}

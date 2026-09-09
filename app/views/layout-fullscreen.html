@@ -17,6 +17,16 @@
 {% endblock %}
 
 {% block header %}
+{# TODO: Re-enable job title:
+   { text: jobTitle },
+   
+   TODO: Re-enable sign out:
+   {
+     html: '<span data-ak="W">Sign out</span>',
+     href: '#'
+   }
+#}
+
 
   {% set jobTitle = data.role | getJobTitle %}
 
@@ -26,14 +36,10 @@
             text: data.name or 'John Smith',
             icon: true
           },
-          { text: jobTitle },
+         
           { 
             html: '<span data-ak="T">Access keys: ' ~ (data.accessKeys or "off") ~ '</span>',
             href: '/'+version+'/access-keys?returnURL=' + ( currentURL | urlencode )
-          },
-          {
-            html: '<span data-ak="W">Sign out</span>',
-            href: '#'
           }
         ]
     } %}

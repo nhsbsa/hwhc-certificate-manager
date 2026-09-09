@@ -3,10 +3,10 @@
 {% set pageName = 'New HRT PPC application' %}
 
 {% block beforeContent %}
- {{ backLink({
-    href: 'javascript:history.go(-1)',
-    html: '<span data-ak="B">Back</span>'
-  }) }}
+{{ backLink({
+href: 'javascript:history.go(-1)',
+html: '<span data-ak="B">Back</span>'
+}) }}
 {% endblock %}
 
 {% block content %}
@@ -20,11 +20,27 @@
 
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-card nhsuk-card--warning">
+      <div class="nhsuk-card__content">
+        <h3 class="nhsuk-card__heading">
+          <span role="text">
+            <span class="nhsuk-u-visually-hidden">Important: </span>Important information
+          </span>
+        </h3>
+        <p class="nhsuk-card__description">This PPC only covers certain Hormone Replacement Therapy (HRT) medication.</p>
+        <br>
+        <p>If the customer requires prescription medication for something other than HRT, a Prescription Prepayment Certificate (PPC) may be better for them.</p>
+        <p>Advise the customer that payments for a 12 month HRT PPC can only be made in a single credit or debit card payment of £19.80 at this time.</p>
+      </div>
+    </div>
+
+
+
     <div class="nhsuk-card nhsuk-card--grey">
       <div class="nhsuk-card__content">
 
         <h2 class="nhsuk-heading-m">Applicant's details</h2>
-        
+
         <h3 class="nhsuk-heading-s">Applicant's name</h3>
 
         {% call fieldset({
@@ -32,21 +48,21 @@
         }) %}
 
         {{ input({
-          classes: "nhsuk-u-width-two-thirds",
-          id: "first-name",
-          name: "newHRT.firstName",
-          label: {
-            html: '<span data-ak="S">First name</span>'
-          }
+        classes: "nhsuk-u-width-two-thirds",
+        id: "first-name",
+        name: "newHRT.firstName",
+        label: {
+        html: '<span data-ak="S">First name</span>'
+        }
         }) }}
 
         {{ input({
-          classes: "nhsuk-u-width-two-thirds",
-          id: "last-name",
-          name: "newHRT.lastName",
-          label: {
-            html: '<span data-ak="A">Last name</span>'
-          }
+        classes: "nhsuk-u-width-two-thirds",
+        id: "last-name",
+        name: "newHRT.lastName",
+        label: {
+        html: '<span data-ak="A">Last name</span>'
+        }
         }) }}
 
 
@@ -54,71 +70,73 @@
 
         <h3 class="nhsuk-heading-s">Applicant's address</h3>
 
-          {{ input({
-            classes: "nhsuk-u-width-two-thirds",
-            label: {
-              html: '<span data-ak="1">Address line 1</span>'
-            },
-            id: "new-hrt-address-line-one",
-            name: "newHRT.addressLineOne",
-            value: data.newHRT.addressLineOne or ''
-          }) }}
+        {{ input({
+        classes: "nhsuk-u-width-two-thirds",
+        label: {
+        html: '<span data-ak="1">Address line 1</span>'
+        },
+        id: "new-hrt-address-line-one",
+        name: "newHRT.addressLineOne",
+        value: data.newHRT.addressLineOne or ''
+        }) }}
 
-          {{ input({
-            classes: "nhsuk-u-width-two-thirds",
-            label: {
-              html: '<span data-ak="2">Address line 2 (optional)</span>'
-            },
-            id: "new-hrt-address-line-two",
-            name: "newHRT.addressLineTwo",
-            value: data.newHRT.addressLineTwo or ''
-          }) }}
+        {{ input({
+        classes: "nhsuk-u-width-two-thirds",
+        label: {
+        html: '<span data-ak="2">Address line 2 (optional)</span>'
+        },
+        id: "new-hrt-address-line-two",
+        name: "newHRT.addressLineTwo",
+        value: data.newHRT.addressLineTwo or ''
+        }) }}
 
-          {{ input({
-            classes: "nhsuk-u-width-one-half",
-            label: {
-              html: '<span data-ak="U">Town or city</span>' 
-            },
-            id: "new-hrt-town",
-            name: "newHRT.town",
-            value: data.newHRT.town or ''
-          }) }}
+        {{ input({
+        classes: "nhsuk-u-width-one-half",
+        label: {
+        html: '<span data-ak="U">Town or city</span>'
+        },
+        id: "new-hrt-town",
+        name: "newHRT.town",
+        value: data.newHRT.town or ''
+        }) }}
 
-          {{ input({
-            classes: "nhsuk-u-width-one-half",
-            label: {
-              html: '<span data-ak="R">County (optional)</span>' 
-            },
-            id: "new-county",
-            name: "newHRT.county",
-            value: data.newHRT.county or ''
-          }) }}
+        {{ input({
+        classes: "nhsuk-u-width-one-half",
+        label: {
+        html: '<span data-ak="R">County (optional)</span>'
+        },
+        id: "new-county",
+        name: "newHRT.county",
+        value: data.newHRT.county or ''
+        }) }}
 
-          {{ input({
-            label: {
-              html: '<span data-ak="Z">Postcode</span>' 
-            },
-            classes: "nhsuk-input--width-10",            
-            id: "new-postcode",
-            name: "newHRT.postcode",
-            value: data.newHRT.postcode or ''
-          }) }}
+        {{ input({
+        label: {
+        html: '<span data-ak="Z">Postcode</span>'
+        },
+        classes: "nhsuk-input--width-10",
+        id: "new-postcode",
+        name: "newHRT.postcode",
+        value: data.newHRT.postcode or ''
+        }) }}
 
-          {{ button({
-            html: '<span data-ak="G">Populate address fields using address lookup</span>',
-            classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-10",
-            href: "/v1/hrtppc/address-lookup?source=newHRT&returnTo=/v1/hrtppc/new-application"
-          }) }}
+        {{ button({
+        html: '<span data-ak="G">Populate address fields using address lookup</span>',
+        classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-10",
+        href: "/v1/hrtppc/address-lookup?source=newHRT&returnTo=/v1/hrtppc/new-application"
+        }) }}
 
-          {% call details({
-            summaryText: "They don't know which address to use?"
-          }) %}
-            <h4 class="nhsuk-heading-s">If they have more than one address</h4>
-            <p>They should use the address that their GP or dentist holds for them. For example, if they're a student living away from home, this could be their home or term time address.</p>
-            
-            <h4 class="nhsuk-heading-s">If they don't have a permanent address</h4>
-            <p>If they're homeless and living in temporary accommodation (for example, a long term hostel), they should use the address that their GP holds for them.</p>
-          {% endcall %}
+        {% call details({
+        summaryText: "They don't know which address to use?"
+        }) %}
+        <h4 class="nhsuk-heading-s">If they have more than one address</h4>
+        <p>They should use the address that their GP or dentist holds for them. For example, if they're a student living
+          away from home, this could be their home or term time address.</p>
+
+        <h4 class="nhsuk-heading-s">If they don't have a permanent address</h4>
+        <p>If they're homeless and living in temporary accommodation (for example, a long term hostel), they should use
+          the address that their GP holds for them.</p>
+        {% endcall %}
 
         {% endcall %}
 
@@ -128,24 +146,24 @@
         <p class="nhsuk-label" for="app-dob"><span data-ak="X">Date of birth</span></p>
 
         {{ dateInput({
-          id: "date-of-birth",
-          namePrefix: "newHRT.dateOfBirth",
-          fieldset: {
-          },
-          items: [
-            {
-              name: "day",
-              classes: "nhsuk-input--width-2"
-            },
-            {
-              name: "month",
-              classes: "nhsuk-input--width-2"
-            },
-            {
-              name: "year",
-              classes: "nhsuk-input--width-4"
-            }
-          ]
+        id: "date-of-birth",
+        namePrefix: "newHRT.dateOfBirth",
+        fieldset: {
+        },
+        items: [
+        {
+        name: "day",
+        classes: "nhsuk-input--width-2"
+        },
+        {
+        name: "month",
+        classes: "nhsuk-input--width-2"
+        },
+        {
+        name: "year",
+        classes: "nhsuk-input--width-4"
+        }
+        ]
         }) }}
 
 
@@ -154,12 +172,12 @@
         <h3 class="nhsuk-heading-m">NHS number (Optional)</h3>
 
         {{ input({
-          classes: "nhsuk-u-width-one-third",
-          id: "nhs-number",
-          name: "newHRT.nhsNumber",
-          label: {
-            html: '<span data-ak="V">NHS number</span>'
-          }
+        classes: "nhsuk-u-width-one-third",
+        id: "nhs-number",
+        name: "newHRT.nhsNumber",
+        label: {
+        html: '<span data-ak="V">NHS number</span>'
+        }
         }) }}
 
 
@@ -168,12 +186,12 @@
         <h3 class="nhsuk-heading-m">Email address</h3>
 
         {{ input({
-          classes: "nhsuk-u-width-two-thirds",
-          id: "email-address",
-          name: "newHRT.emailAddress",
-          label: {
-            html: '<span data-ak="J">Email address</span>' 
-          }
+        classes: "nhsuk-u-width-two-thirds",
+        id: "email-address",
+        name: "newHRT.emailAddress",
+        label: {
+        html: '<span data-ak="J">Email address</span>'
+        }
         }) }}
 
 
@@ -183,27 +201,27 @@
         <p class="nhsuk-label" for="app-start-date"><span data-ak="H">Start date</span></p>
 
         {{ dateInput({
-          id: "start-date",
-          namePrefix: "newHRT.startDate",
-          fieldset: {
-          },
-          hint: {
-            text: "The start date of the HRT PPC must be 30 days in the past or the future."
-          },
-          items: [
-            {
-              name: "day",
-              classes: "nhsuk-input--width-2"
-            },
-            {
-              name: "month",
-              classes: "nhsuk-input--width-2"
-            },
-            {
-              name: "year",
-              classes: "nhsuk-input--width-4"
-            }
-          ]
+        id: "start-date",
+        namePrefix: "newHRT.startDate",
+        fieldset: {
+        },
+        hint: {
+        text: "The start date of the HRT PPC must be 30 days in the past or the future."
+        },
+        items: [
+        {
+        name: "day",
+        classes: "nhsuk-input--width-2"
+        },
+        {
+        name: "month",
+        classes: "nhsuk-input--width-2"
+        },
+        {
+        name: "year",
+        classes: "nhsuk-input--width-4"
+        }
+        ]
         }) }}
 
 
@@ -212,28 +230,28 @@
         <h3 class="nhsuk-heading-m">Certificate fulfilment</h3>
 
         {{ radios({
-          name: "newHRT.certificateFulfilment",
-          fieldset: {
-            legend: {
-              text: "How do they want to receive their HRT PPC?",
-                size: "s",
-              isPageHeading: false
-            }
-          },
-          hint: {
-            text: "We'll send them a renewal reminder one month before their HRT PPC is due to expire."
-          },
-          classes: "nhsuk-radios--inline inline-radios nhsuk-u-margin-top-3",
-          items: [
-            {
-              value: "email",
-              html: '<span data-ak="L">Email</span>'
-            },
-            {
-              value: "post",
-              html: '<span data-ak="N">Post</span>'
-            }
-          ]
+        name: "newHRT.certificateFulfilment",
+        fieldset: {
+        legend: {
+        text: "How do they want to receive their HRT PPC?",
+        size: "s",
+        isPageHeading: false
+        }
+        },
+        hint: {
+        text: "We'll send them a renewal reminder one month before their HRT PPC is due to expire."
+        },
+        classes: "nhsuk-radios--inline inline-radios nhsuk-u-margin-top-3",
+        items: [
+        {
+        value: "email",
+        html: '<span data-ak="L">Email</span>'
+        },
+        {
+        value: "post",
+        html: '<span data-ak="N">Post</span>'
+        }
+        ]
         }) }}
 
 
@@ -242,9 +260,10 @@
         <h3 class="nhsuk-heading-m">Payment</h3>
 
         {{ warningCallout({
-          heading: "Important information",
-          headingLevel: 4,
-          text: "Advise the customer that payments for a 12 month HRT PPC can only be made in a single credit or debit card payment of " + data.HRTPPCCost + " at this time."
+        heading: "Important information",
+        headingLevel: 4,
+        text: "Advise the customer that payments for a 12 month HRT PPC can only be made in a single credit or debit
+        card payment of " + data.HRTPPCCost + " at this time."
         }) }}
 
 
@@ -253,50 +272,49 @@
         <h3 class="nhsuk-heading-m">Notes</h3>
 
         {{ textarea({
-          name: "newHRT.notes",
-          id: "notes",
-          label: {
-            html: '<span data-ak="C">Add note</span>',
-            size: "s"
-          }
+        name: "newHRT.notes",
+        id: "notes",
+        label: {
+        html: '<span data-ak="C">Add note</span>',
+        size: "s"
+        }
         }) }}
-        
+
 
         <div class="nhsuk-button-group">
           {{ button
-            ({ 
-              html: '<span data-ak="I">Submit</span>',
-              href: "check-their-answers"
-            })
+          ({
+          html: '<span data-ak="I">Submit</span>',
+          href: "check-their-answers"
+          })
           }}
           {{ button
-            ({ classes: "nhsuk-button--secondary", 
-            html: '<span data-ak="M">Cancel</span>',
-            href: "../search"
-            }) 
+          ({ classes: "nhsuk-button--secondary",
+          html: '<span data-ak="M">Cancel</span>',
+          href: "../search"
+          })
           }}
         </div>
       </div>
-      </div>
     </div>
+  </div>
 </div>
 
 <style>
   .inline-radios {
-      display: flex;
-      align-items: last baseline;
-      white-space: nowrap;
-    }
-    .postcode-block {
-      display: flex;
-      flex-direction: column;
-    }
+    display: flex;
+    align-items: last baseline;
+    white-space: nowrap;
+  }
 
-    .postcode-button .nhsuk-button {
-      padding: 8px 16px;
-    }
+  .postcode-block {
+    display: flex;
+    flex-direction: column;
+  }
 
-
+  .postcode-button .nhsuk-button {
+    padding: 8px 16px;
+  }
 </style>
 
 

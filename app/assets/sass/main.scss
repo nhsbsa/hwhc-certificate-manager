@@ -43,9 +43,15 @@
   background-color: nhsuk-colour("grey-5");
 }
 
+  .nhsuk-card--warning {
+    @include nhsuk-panel-with-label(nhsuk-colour("pale-yellow"), $nhsuk-text-colour, nhsuk-colour("yellow"));
+  }
+  
 .nhsuk-card--grey .nhsuk-card__heading-container {
   padding: 0;
 }
+
+
 
 .nhsuk-tag--dark-grey {
   color: nhsuk-colour("grey-5");
