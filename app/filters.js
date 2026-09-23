@@ -697,9 +697,9 @@ module.exports = function (env) {
           case 'qualityControl':
 
             if (patient.checkType === 'quality') {
-              link = patient.certificateType + '/comparison--leave-feedback?patientID=' + patient.id;
-            } else {
               link = patient.certificateType + '/comparison--has-feedback?patientID=' + patient.id;
+            } else {
+              link = patient.certificateType + '/comparison--no-feedback?patientID=' + patient.id;
             }
             break;
 
@@ -1043,8 +1043,11 @@ case 'rejected':
           //{ html: ( checked ) ?  tick + ' Checked' : cross + ' To check' },
           const checked = false; // Forcing everything to be checked on QC view
 
-          const url = (checked) ? patient.certificateType + '/comparison--has-feedback?patientID=' + patient.id : patient.certificateType + '/comparison--leave-feedback?patientID=' + patient.id;
+          const url = (patient.checkType === 'quality' || patient.feedbackPresent === true)
+  ? patient.certificateType + '/comparison--has-feedback?patientID=' + patient.id
+  : patient.certificateType + '/comparison--no-feedback?patientID=' + patient.id;
 
+  
           const obj = [
             { html: '<a class="nhsuk-link nhsuk-link--no-visited-state" href="' + url + '"><strong>' + patient.firstName + ' ' + patient.lastName + '</strong></a><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
             { html: patient.address.postcode },

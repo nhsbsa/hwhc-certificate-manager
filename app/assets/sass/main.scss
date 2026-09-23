@@ -1,6 +1,5 @@
 // Import NHS.UK frontend library
 @import "nhsuk-frontend/dist/nhsuk";
-@import "nhsapp-frontend/dist/nhsapp";
 
 // Add your custom CSS/Sass styles below.
 
@@ -886,68 +885,6 @@ body::before {
 .nhsuk-checkboxes .nhsuk-checkboxes__input:focus:hover + .nhsuk-checkboxes__label::before,
 .nhsuk-checkboxes .nhsuk-checkboxes__input:focus + .nhsuk-checkboxes__label:hover::before {
   box-shadow: 0 0 0 4px #ffeb3b, 0 0 0 4px #aeb7bd;
-}
-
-
-/* SMALL RADIOS TEMP FIX */
-
-.nhsuk-radios--small .nhsuk-radios__item {
-  margin-top: 0;
-}
-.nhsuk-radios--small .nhsuk-radios__input {
-  margin-left: -0.625rem;
-}
-.nhsuk-radios--small .nhsuk-radios__label {
-  padding-left: 1px;
-}
-.nhsuk-radios--small .nhsuk-radios__label::before {
-  top: 0.625rem;
-  left: 0;
-  width: 1.5rem;
-  height: 1.5rem;
-}
-.nhsuk-radios--small .nhsuk-radios__label::after {
-  top: 1.0625rem;
-  left: 0.4375rem;
-  border-width: 0.3125rem;
-}
-.nhsuk-radios--small .nhsuk-radios__hint {
-  padding-left: 2.125rem;
-}
-.nhsuk-radios--small .nhsuk-radios__conditional {
-  margin-left: 0.625rem;
-  padding-left: 1.25rem;
-}
-.nhsuk-radios--small .nhsuk-radios__divider {
-  width: 1.5rem;
-  margin: 2px 0;
-  padding: 0;
-}
-.nhsuk-radios--small .nhsuk-radios__input:not(:disabled):hover + .nhsuk-radios__label::before,
-.nhsuk-radios--small .nhsuk-radios__input:not(:disabled) + .nhsuk-radios__label:hover::before {
-  outline: 0.3125rem dashed transparent;
-  outline-offset: 1px;
-  box-shadow: 0 0 0 10px #aeb7bd;
-}
-.nhsuk-radios--small .nhsuk-radios__input:focus:hover + .nhsuk-radios__label::before,
-.nhsuk-radios--small .nhsuk-radios__input:focus + .nhsuk-radios__label:hover::before {
-  box-shadow: 0 0 0 0.3125rem #ffeb3b, 0 0 0 10px #aeb7bd;
-}
-@media screen and (forced-colors: active), (-ms-high-contrast: active) {
-  .nhsuk-radios--small .nhsuk-radios__input:focus:hover + .nhsuk-radios__label::before,
-  .nhsuk-radios--small .nhsuk-radios__input:focus + .nhsuk-radios__label:hover::before {
-    outline-color: Highlight;
-  }
-}
-@media (hover: none), (pointer: coarse) {
-  .nhsuk-radios--small .nhsuk-radios__input:not(:disabled):hover + .nhsuk-radios__label::before,
-  .nhsuk-radios--small .nhsuk-radios__input:not(:disabled) + .nhsuk-radios__label:hover::before {
-    box-shadow: initial;
-  }
-  .nhsuk-radios--small .nhsuk-radios__input:focus:hover + .nhsuk-radios__label::before,
-  .nhsuk-radios--small .nhsuk-radios__input:focus + .nhsuk-radios__label:hover::before {
-    box-shadow: 0 0 0 0.3125rem #ffeb3b;
-  }
 }
 
 

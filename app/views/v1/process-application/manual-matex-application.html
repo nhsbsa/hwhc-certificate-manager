@@ -59,16 +59,16 @@ html: '<span data-ak="B">Back</span>'
 
               {{ select({
               label: {
-              text: 'Form version'
+              text: 'Is this an official form?'
               },
               id: 'formVersion',
               name: 'formVersion',
               value: 'MEDEX',
               items: [
-              { value: 'MATEX', text: 'MATEX' },
+              { value: 'yes', text: 'Yes' },
               
-              { value: 'MEDEX', text: 'MEDEX' },
-              { value: 'Not an official form', text: 'Not an official form' }
+            
+              { value: 'Not an official form', text: 'No' }
               ]
               }) }}
               <!-- FULL NAME -->
