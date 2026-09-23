@@ -6,7 +6,7 @@
     {% set today = 0 | alterTodaysDateByNumberOfDays %}
     {% set processorFullName = patient.processorName + ' (' + patient.processor + ')' %}
 
-    {% if patient.certificateType === 'matex' or 'medex' %}
+    {% if patient.certificateType == 'matex' or patient.certificateType == 'medex' %}
 
         {% if patient.channel === 'Paper' %}
 
@@ -372,15 +372,15 @@
                 html += '<li><button class="nhsuk-u-font-size-16" aria-pressed="false"><span>Notes</span></button></li>';
                 html += '<li><button class="nhsuk-u-font-size-16" aria-pressed="false"><span>Events</span></button></li>';
                 html += '</ul>';
-
+ 
                 menu.innerHTML = html;
 
                 const eventsLog = document.querySelector('.events-log');
                 eventsLog.insertAdjacentElement('afterbegin',menu);
 
                 document.querySelectorAll('.events-log button').forEach(function(button){
-                    button.addEventListener('click',function(e){
-                        _toggleMenu( e.target );
+                    button.addEventListener('click', function(event){
+                        _toggleMenu(event.currentTarget);
                     });
                 });
 
@@ -404,7 +404,7 @@
                 const notes = document.querySelectorAll('.events-log .nhsapp-timeline__item:not(.nhsapp-timeline__item--past)');
                 const events = document.querySelectorAll('.events-log .nhsapp-timeline__item--past');
               
-                switch( button.innerText ){
+                switch( button.textContent.trim() ){
 
                     case 'Notes':
                         all.forEach(function(item){
@@ -414,7 +414,9 @@
                                 item.classList.remove('hidden');
                             }
                         });
-                        notes[notes.length-1].classList.add('last-of-type');
+                        if (notes.length) {
+                            notes[notes.length - 1].classList.add('last-of-type');
+                        }
                         break;
 
                     case 'Events':
@@ -424,8 +426,10 @@
                             if( item.classList.contains('nhsapp-timeline__item--past') ){
                                 item.classList.remove('hidden');
                             }
-                            events[events.length-1].classList.add('last-of-type');
                         });
+                        if (events.length) {
+                            events[events.length - 1].classList.add('last-of-type');
+                        }
                         break;
 
                     default: 

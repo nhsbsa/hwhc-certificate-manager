@@ -521,7 +521,7 @@ body:has(.expandable-image[open]) .expandable-image[open] *:not(.closed) {
     height: calc(100vh - 1.25rem - 150px - 4rem - 2px - 0.5rem - 1.25rem - 4px - 0.625rem);
     /*background-color: yellow;*/
   }
-
+ 
   .events-log {
     position: relative;
   }
@@ -706,16 +706,128 @@ td .nhsuk-icon {
 
 /* TIMELINE APPLICATION */
 
-#timeline-application .nhsapp-timeline__item:not(:last-child):before {
-  border-left: 2px solid #aeb7bd;
+#timeline-application {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#timeline-application .nhsapp-timeline__item {
+  position: relative;
+  margin: 0;
+  padding: 0 0 2.5rem 3rem;
+  min-height: 3rem;
+}
+
+#timeline-application .nhsapp-timeline__item:last-child {
+  padding-bottom: 0;
+}
+
+#timeline-application .nhsapp-timeline__item:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 0.75rem;
+  top: 0.5rem;
+  bottom: -0.5rem;
+  width: 2px;
+  background: #d8dde0;
+}
+
+#timeline-application .nhsapp-timeline__badge {
+  position: absolute;
+  left: 0;
+  top: 0.375rem;
+  width: 1.625rem;
+  height: 1.625rem;
+  display: block;
+  z-index: 1;
+}
+
+#timeline-application .nhsapp-timeline__badge circle {
+  fill: #ffffff;
+  stroke: #aeb7bd;
+  stroke-width: 2;
+}
+
+#timeline-application .nhsapp-timeline__item--past .nhsapp-timeline__badge circle {
+  fill: #005eb8;
+  stroke: #005eb8;
+}
+
+#timeline-application .nhsapp-timeline__content {
+  padding-top: 0.125rem;
 }
 
 #timeline-application .nhsapp-timeline__header {
+  margin: 0 0 0.5rem;
+  font-size: 1.1875rem;
+  line-height: 1.4210526316;
+  letter-spacing: normal;
+  font-weight: 600;
+  color: #212b32;
+}
+
+@media (min-width: 40.0625em) {
+  #timeline-application .nhsapp-timeline__header {
+    font-size: 1.375rem;
+    line-height: 1.3636363636;
+  }
+}
+
+#timeline-application .nhsapp-timeline__item--past .nhsapp-timeline__header {
   font-weight: 600;
 }
 
-#timeline-application .nhsapp-timeline__item:not(:first-child):not(.nhsapp-timeline__item--past) .nhsapp-timeline__header {
-  color: $nhsuk-secondary-text-colour;
+#timeline-application .nhsapp-timeline__item:not(.nhsapp-timeline__item--past) .nhsapp-timeline__header {
+  font-weight: 600;
+  color: #212b32;
+}
+
+#timeline-application .nhsapp-timeline__description,
+#timeline-application .nhsapp-timeline__content p,
+#timeline-application .nhsapp-timeline__content span {
+  color: #212b32;
+}
+
+#timeline-application .nhsapp-timeline__content .nhsuk-body,
+#timeline-application .nhsapp-timeline__content p,
+#timeline-application .nhsapp-timeline__content span {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+#timeline-application .nhsapp-timeline__content p + span,
+#timeline-application .nhsapp-timeline__content .nhsuk-body + span {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+#timeline-application .nhsapp-timeline__item--past .nhsapp-timeline__content .nhsuk-body,
+#timeline-application .nhsapp-timeline__item--past .nhsapp-timeline__content p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+#timeline-application .nhsapp-timeline__item--past .nhsapp-timeline__content span,
+#timeline-application .nhsapp-timeline__content span {
+  font-size: 1rem;
+  color: #4c6272;
+}
+
+#timeline-application .nhsapp-timeline__content .nhsuk-u-font-size-14 {
+  font-size: 1rem !important;
+}
+
+#timeline-application .nhsapp-timeline__item--past .nhsapp-timeline__badge--small {
+  width: 1.625rem;
+  height: 1.625rem;
+}
+
+@media (min-width: 40.0625em) {
+  #timeline-application .nhsapp-timeline__header {
+    font-size: 1.5rem;
+  }
 }
 
 

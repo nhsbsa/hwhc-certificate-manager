@@ -43,76 +43,70 @@
                 </div>
               </div>
 
-            <form method="post" novalidate>
+       <form method="post" novalidate>
 
-              {% set yesHTML %}
-                <!-- CHECKING LEVEL -->
-                {{ input({
-                  label: {
-                    text: 'How many do you want to check?'
-                  },
-                  hint: {
-                    text: "Enter a percentage between 1 and 100. Any changes will take effect from the processor's next working day.",
-                    classes: 'nhsuk-u-width-two-thirds'
-                  },
-                  id: 'checkingLevel',
-                  name: 'checkingLevel',
-                  value: processor.checkingLevel or '100',
-                  classes: 'nhsuk-input--width-3',
-                  suffix: '%'
-                }) }}
-              {% endset %}
+  {{ select({
+    label: {
+      text: 'What percentage of this processor’s work do you want to check?'
+    },
+    hint: {
+      text: "Select a percentage from the list. Any changes will take effect from the processor's next working day.",
+      classes: 'nhsuk-u-width-two-thirds'
+    },
+    id: 'checkingLevel',
+    name: 'checkingLevel',
+    value: processor.checkingLevel or '0',
+    items: [
+      {
+        value: '0',
+        text: 'None (0%)'
+      },
+      {
+        value: '25',
+        text: 'Quarter (25%)'
+      },
+      {
+        value: '50',
+        text: 'Half (50%)'
+      },
+      {
+        value: '75',
+        text: 'Three quarters (75%)'
+      },
+      {
+        value: '100',
+        text: 'All (100%)'
+      }
+    ]
+  }) }}
 
-              <!-- IS TRAINEE -->
-              {{ radios({
-                idPrefix: 'processorLevel',
-                name: 'processorLevel',
-                value: processor.level or 'trainee',
-                classes: '',
-                fieldset: {
-                  legend: {
-                    text: "Do you want to check this processor's applications?",
-                    isPageHeading: false
-                  }
-                },
-                items: [
-                  {
-                    value: 'trainee',
-                    html: '<span data-ak="L">Yes</span>',
-                    conditional: {
-                      html: yesHTML
-                    }
-                  },
-                  {
-                    value: 'standard',
-                    html: '<span data-ak="N">No</span>'
-                  }
-                ]
-              }) }}
+  <input type="hidden" id="processorLevel" name="processorLevel" value="{{ processor.level or 'standard' }}">
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const selectInput = document.querySelector('#checkingLevel');
+      const processorLevelInput = document.querySelector('#processorLevel');
 
-              <script>
-                document.addEventListener('DOMContentLoaded',function(){
-                  
-                  const textInput = document.querySelector('#checkingLevel');
+      function syncProcessorLevel() {
+        if (!selectInput || !processorLevelInput) {
+          return;
+        }
 
-                  document.querySelectorAll('.nhsuk-radios input[type="radio"]').forEach(function( input ){
-                    input.addEventListener('change',function(e){
-                      if( e.target.value !== 'trainee' ){
-                        textInput.value = '0';
-                      }
-                    });
-                  });
+        processorLevelInput.value = (selectInput.value && selectInput.value !== '0')
+          ? 'trainee'
+          : 'standard';
+      }
 
-                });
-              </script>
-              
+      syncProcessorLevel();
+      selectInput.addEventListener('change', syncProcessorLevel);
+    });
+  </script>
 
-              {{ button({
-                html: '<span data-ak="I">Submit</span>'
-              }) }}
+  {{ button({
+    html: '<span data-ak="I">Submit</span>'
+  }) }}
 
-            </form>
+</form>
 
 
             

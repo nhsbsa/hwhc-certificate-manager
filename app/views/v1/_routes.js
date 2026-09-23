@@ -704,17 +704,25 @@ router.get(/postcode-handler/, function (req, res) {
 //
 // PROCESSOR EDIT
 //
-router.post(/processor-edit/, function (req, res) {
+router.post('/processor-edit/', function (req, res) {
+  const newCheckingLevel = req.session.data.checkingLevel;
+  const newLevel = (newCheckingLevel && newCheckingLevel !== '0') ? 'trainee' : 'standard';
 
-    const newLevel = req.session.data.processorLevel;
-    const newCheckingLevel = req.session.data.checkingLevel;
+  req.session.data.processors[req.session.data.searchProcessor].level = newLevel;
+  req.session.data.processors[req.session.data.searchProcessor].checkingLevel = newCheckingLevel;
 
-    req.session.data.processors[req.session.data.searchProcessor].level = newLevel;
-    req.session.data.processors[req.session.data.searchProcessor].checkingLevel = newCheckingLevel;
-    
-    const destination = 'processor?changesMade=true';
-    res.redirect( destination );
+  req.session.data.changesMade = 'true';
+  res.redirect('processor');
+});
 
+router.get('/processor', function (req, res) {
+  const changesMade = req.session.data.changesMade;
+  delete req.session.data.changesMade;
+
+  res.render('v1/processor', {
+    ...req.session.data,
+    changesMade
+  });
 });
 
 //

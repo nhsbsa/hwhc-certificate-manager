@@ -345,6 +345,23 @@ module.exports = function (env) {
         { html: (processor.level === 'trainee') ? '<strong>10</strong> <span class="nhsuk-u-font-size-14">(' + processor.checkingLevel + '%)</span></strong>' : '<strong>0</strong>' }
       ];
 
+//      const checkingValue = (processor.level === 'trainee')
+//   ? '<strong>10</strong> <span class="nhsuk-u-font-size-14">(' + processor.checkingLevel + '%)</span>'
+//   : '<strong>0</strong>';
+
+// const checkingText = checkingValue + ' <a class="nhsuk-link nhsuk-link--no-visited-state" href="processor-edit?searchProcessor=' + p[0] + '">change percentage</a>';
+
+// const arr = [
+//   { html: '<a class="nhsuk-link nhsuk-link--no-visited-state" href="processor?searchChecking=true&searchProcessor=' + p[0] + '">' + processor.name + '</a>' },
+//   { text: p[0] },
+//   { text: processor.stats[0] },
+//   { text: processor.stats[1] },
+//   { text: processor.stats[2] },
+//   { text: processor.stats[3] },
+//   { text: processor.stats[4] },
+//   { html: checkingText }
+// ];
+
       rows.push(arr);
 
     });
@@ -733,27 +750,27 @@ module.exports = function (env) {
 
             break;
 
-   case 'on-hold':
+          case 'on-hold':
 
-  if (role === 'backOffice' || role === 'backOfficeSupervisor') {
-    link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
-  } else if (role === 'qualityControl') {
-    link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
-  } else {
-    link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
-  }
+            if (role === 'backOffice' || role === 'backOfficeSupervisor') {
+              link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
+            } else if (role === 'qualityControl') {
+              link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
+            } else {
+              link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
+            }
 
-  break;
+            break;
 
-case 'rejected':
+          case 'rejected':
 
-  if (role === 'qualityControl') {
-    link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
-  } else {
-    link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
-  }
+            if (role === 'qualityControl') {
+              link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
+            } else {
+              link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
+            }
 
-  break;
+            break;
 
 
         }
@@ -1044,10 +1061,10 @@ case 'rejected':
           const checked = false; // Forcing everything to be checked on QC view
 
           const url = (patient.checkType === 'quality' || patient.feedbackPresent === true)
-  ? patient.certificateType + '/comparison--has-feedback?patientID=' + patient.id
-  : patient.certificateType + '/comparison--no-feedback?patientID=' + patient.id;
+            ? patient.certificateType + '/comparison--has-feedback?patientID=' + patient.id
+            : patient.certificateType + '/comparison--no-feedback?patientID=' + patient.id;
 
-  
+
           const obj = [
             { html: '<a class="nhsuk-link nhsuk-link--no-visited-state" href="' + url + '"><strong>' + patient.firstName + ' ' + patient.lastName + '</strong></a><br /><span class="nhsuk-body-s">' + patient.nhsNumber + '</span>' },
             { html: patient.address.postcode },
@@ -1443,35 +1460,35 @@ case 'rejected':
     return returnPatientData;
   };
 
-// LOAD NEXT CHECKING URL
+  // LOAD NEXT CHECKING URL
 
-filters.getNextCheckingUrl = function (currentPatientId) {
+  filters.getNextCheckingUrl = function (currentPatientId) {
 
-  const patients = JSON.parse(filters.getPatientData());
+    const patients = JSON.parse(filters.getPatientData());
 
-  const checkingPatients = patients.filter(
-    p => p.checking === true
-  );
+    const checkingPatients = patients.filter(
+      p => p.checking === true
+    );
 
-  const currentIndex = checkingPatients.findIndex(
-    p => String(p.id) === String(currentPatientId)
-  );
+    const currentIndex = checkingPatients.findIndex(
+      p => String(p.id) === String(currentPatientId)
+    );
 
-  // End the journey after the 8th checking patient
-  if (currentIndex >= 7) {
-    return '/v1/change-complete';
-  }
+    // End the journey after the 8th checking patient
+    if (currentIndex >= 7) {
+      return '/v1/change-complete';
+    }
 
-  const nextPatient = checkingPatients[currentIndex + 1];
+    const nextPatient = checkingPatients[currentIndex + 1];
 
-  if (!nextPatient) {
-    return '/v1/change-complete';
-  }
+    if (!nextPatient) {
+      return '/v1/change-complete';
+    }
 
-  return '/v1/' + nextPatient.certificateType +
-         '/application--correction?patientID=' +
-         nextPatient.id;
-};
+    return '/v1/' + nextPatient.certificateType +
+      '/application--correction?patientID=' +
+      nextPatient.id;
+  };
 
   //
   // RANDOMISE AND CONVERT TO LIST
