@@ -46,7 +46,7 @@
 
 
 
-            {{ table({
+            <!-- {{ table({
                 panel: false,
                 caption: "Certificates you need to change",
                 firstCellIsHeader: false,
@@ -64,12 +64,32 @@
                       ],
                 rows: checkingRows
               }) }}
-  
+   -->
 
+<div class="nhsuk-table__caption-wrapper nhsuk-u-margin-bottom-3">
+  <h2 id="processorTableCaption" class="nhsuk-table__caption nhsuk-heading-m nhsuk-u-display-inline-block">
+    Applications processors working today
+  </h2>
+
+  <div class="nhsuk-button-group nhsuk-button-group--small nhsuk-u-float-right">
+    {{ button({
+      text: "Show processors working today",
+      small: true,
+      attributes: { id: 'showWorkingToday', 'aria-pressed': 'true' }
+    }) }}
+
+    {{ button({
+      text: "Show all processors",
+      small: true,
+      variant: "secondary",
+      attributes: { id: 'showAllProcessors', 'aria-pressed': 'false' }
+    }) }}
+  </div>
+</div>
 
             {{ table({
                 panel: false,
-                caption: "Applications processors working today",
+                caption: " ",
                 captionClasses: 'nhsuk-u-margin-bottom-4',
                 firstCellIsHeader: true,
                 responsive: true,
@@ -97,4 +117,104 @@
       </div>
   </div>
 
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const caption = document.getElementById('processorTableCaption');
+    const buttonToday = document.getElementById('showWorkingToday');
+    const buttonAll = document.getElementById('showAllProcessors');
+    const table = document.querySelector('.patient-table');
+
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+
+const extraRows = [
+  { name: 'Jamie Lewis', cipher: 'JAMLE', accepted: '', rejected: '', onHold: '', kfp: '', total: 0, checking: '' },
+  { name: 'Nadia Ali', cipher: 'NADAL', accepted: '', rejected: '', onHold: '', kfp: '', total: 0, checking: '' },
+  { name: 'Owen Brooks', cipher: 'OWBRO', accepted: '', rejected: '', onHold: '', kfp: '', total: 0, checking: '' }
+];
+
+    extraRows.forEach(function (processor) {
+      const row = document.createElement('tr');
+      row.dataset.extraProcessor = 'true';
+      row.hidden = true;
+
+      const firstCell = document.createElement('th');
+      firstCell.setAttribute('scope', 'row');
+      firstCell.innerHTML = '<a class="nhsuk-link nhsuk-link--no-visited-state" href="#">' + processor.name + '</a>';
+      row.appendChild(firstCell);
+
+      const cipherCell = document.createElement('td');
+      cipherCell.textContent = processor.cipher;
+      row.appendChild(cipherCell);
+
+      const acceptedCell = document.createElement('td');
+      acceptedCell.textContent = processor.accepted;
+      row.appendChild(acceptedCell);
+
+      const rejectedCell = document.createElement('td');
+      rejectedCell.textContent = processor.rejected;
+      row.appendChild(rejectedCell);
+
+      const onHoldCell = document.createElement('td');
+      onHoldCell.textContent = processor.onHold;
+      row.appendChild(onHoldCell);
+
+      const kfpCell = document.createElement('td');
+      kfpCell.textContent = processor.kfp;
+      row.appendChild(kfpCell);
+
+      const totalCell = document.createElement('td');
+      totalCell.textContent = processor.total;
+      row.appendChild(totalCell);
+
+      const checkingCell = document.createElement('td');
+      checkingCell.innerHTML = '<strong>' + processor.checking + '</strong>';
+      row.appendChild(checkingCell);
+
+const totalRow = tbody.lastElementChild;
+
+if (totalRow) {
+  tbody.insertBefore(row, totalRow);
+} else {
+  tbody.appendChild(row);
+}
+    });
+
+    function setMode(showAll) {
+      if (caption) {
+        caption.textContent = showAll ? 'All application processors' : 'Applications processors working today';
+      }
+
+      if (buttonToday) {
+        buttonToday.setAttribute('aria-pressed', String(!showAll));
+        buttonToday.classList.toggle('nhsuk-button--secondary', showAll);
+      }
+
+      if (buttonAll) {
+        buttonAll.setAttribute('aria-pressed', String(showAll));
+        buttonAll.classList.toggle('nhsuk-button--secondary', !showAll);
+      }
+
+      tbody.querySelectorAll('[data-extra-processor="true"]').forEach(function (row) {
+        row.hidden = !showAll;
+      });
+    }
+
+    if (buttonToday) {
+      buttonToday.addEventListener('click', function () {
+        setMode(false);
+      });
+    }
+
+    if (buttonAll) {
+      buttonAll.addEventListener('click', function () {
+        setMode(true);
+      });
+    }
+
+    setMode(false);
+  });
+</script>
 {% endblock %}

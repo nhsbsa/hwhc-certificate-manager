@@ -292,6 +292,10 @@
             href: "../search"
           }) }}
         {% endmacro %}
+        
+        {% macro optOutButton() %}
+          <button type="button" class="nhsuk-button nhsuk-button--secondary opt-out-button" data-action="opt-out"><span data-ak="N">Opt out of communication</span></button>
+        {% endmacro %}
             
         {% if patient.status == 'expired' or patient.status == 'deleted' %}
       
@@ -309,6 +313,7 @@
         {% endif %}
       
         {{ addNoteButton() }}
+        {{ optOutButton() }}
         {{ cancelButton() }}
       
         {% endif %}

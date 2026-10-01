@@ -12,15 +12,13 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-            <!-- TWO THIRDS -->
             <div class="nhsuk-grid-column-two-thirds">
 
 
-                       <!-- APPLICATION FAILED QUALITY CONTROL -->
+                       <!-- APPLICATION PASSED QUALITY CONTROL -->
                       {% set panelHTML %}
 
-                      <p>The application failed the quality check because of incorrect or missing information</p>
-                    
+                        <p>The application passed the quality check</p>
 
                       {% endset %}
 
@@ -31,7 +29,7 @@
 
 
                       <h2 class="nhsuk-heading-s">What happens next?</h2>
-                      <p class="nhsuk-body">We’ll tell {{ data.processors[searchProcessor].name }} what corrections they need to make and any other feedback you gave. When they have made these corrections, you’ll need to review the application again.</p>
+                      <p class="nhsuk-body">You do not need to do anything else with this application. It will continue as usual. We’ll tell {{ data.processors[searchProcessor].name }} about this successful quality check.</p>
 
                       <div class="nhsuk-button-group">
 
@@ -40,22 +38,26 @@
                           href: patient.id | getNextProcessorCheckingUrl(searchProcessor)
                         }) }}
 
-                        {{ button({
-                          text : 'Back to ' + data.processors[data.searchProcessor].name +"'s applications",
-                          href: '../processor?searchProcessor=' + data.searchProcessor,
-                          classes: 'nhsuk-button--secondary'
-                        }) }}
-
                         {% set destination = '../dashboard--quality-control' %}
+                        {% set classes = '' %}
 
                         {% if data.role === 'backOfficeSupervisor' %}
+                          
                           {% set destination = '../dashboard--supervisor' %}
+                          {% set classes = 'nhsuk-button--secondary' %}
+
+                          {{ button({
+                            text : 'Back to ' + data.processors[data.searchProcessor].name +"'s applications",
+                            href: '../processor?searchProcessor=' + data.searchProcessor,
+                            classes: 'nhsuk-button--secondary'
+                          }) }}
+
                         {% endif %}
 
                         {{ button({
                           html: '<span data-ak="B">Back to dashboard</span>',
                           href: destination,
-                          classes: 'nhsuk-button--secondary'
+                          classes: 'nhsuk-button--secondary ' + classes
                         }) }}
 
                       </div>

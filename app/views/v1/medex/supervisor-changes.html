@@ -36,20 +36,13 @@
         }]) %}
       {% endfor %}
       
-         <!-- {% if errorList | length %}
-    {{ errorSummary({
-    titleText: 'Checking outcome',
-    descriptionText: "The following fields have been marked as incorrect: ",
-    errorList: errorList
-    }) }}
-    {% endif %} -->
-
-             {% if errorList | length %}
-    {{ errorSummary({
-    titleText: 'Checking outcome',
-    errorList: errorList
-    }) }}
-    {% endif %}
+      {% if errorList | length %}
+        {{ errorSummary({
+          titleText: 'Feedback from supervisor',
+          descriptionText: "Good work so far, trainee! However, I think the last name should be " + patient.lastName + ".",
+          errorList: errorList
+        }) }}
+      {% endif %}
 
       <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
         {{ (patient.certificateType or 'medex') | getCertificateTypeTextOrTag( true ) | safe }}
@@ -742,7 +735,9 @@
                   ]
                 }) }}
 
-             
+                {{ hint({
+                  html: 'Your corrections will be sent to your supervisor for confirmation'
+                }) }}
 
                 <div class="nhsuk-button-group">
 {{ button({

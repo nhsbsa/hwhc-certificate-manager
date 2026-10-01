@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen-normal-content.html' %}
 
-{% set pageName = 'Quality check complete' %}
+{% set pageName = 'Application assigned' %}
 {% set searchProcessor = data.searchProcessor or 'JASMI' %}
 
 {% block content %}
@@ -12,15 +12,13 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-            <!-- TWO THIRDS -->
             <div class="nhsuk-grid-column-two-thirds">
 
 
-                       <!-- APPLICATION FAILED QUALITY CONTROL -->
+                       <!-- APPLICATION ASSIGNED -->
                       {% set panelHTML %}
 
-                      <p>The application failed the quality check because of incorrect or missing information</p>
-                    
+                        <p>The application has been assigned to {{ data.processors[searchProcessor].name }}</p>
 
                       {% endset %}
 
@@ -31,7 +29,7 @@
 
 
                       <h2 class="nhsuk-heading-s">What happens next?</h2>
-                      <p class="nhsuk-body">We’ll tell {{ data.processors[searchProcessor].name }} what corrections they need to make and any other feedback you gave. When they have made these corrections, you’ll need to review the application again.</p>
+                      <p class="nhsuk-body"> {{ data.processors[searchProcessor].name }} can access the application from their dashboard, and make changes highlighted.</p>
 
                       <div class="nhsuk-button-group">
 

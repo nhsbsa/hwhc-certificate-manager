@@ -33,30 +33,26 @@
 
                       <div class="nhsuk-button-group">
 
+                        {{ button({
+                          html: '<span data-ak="I">Next application to check</span>',
+                          href: patient.id | getNextProcessorCheckingUrl(searchProcessor)
+                        }) }}
+
+                        {{ button({
+                          text : 'Back to ' + data.processors[data.searchProcessor].name +"'s applications",
+                          href: '../processor?searchProcessor=' + data.searchProcessor,
+                          classes: 'nhsuk-button--secondary'
+                        }) }}
+
                         {% set destination = '../dashboard--quality-control' %}
-                        {% set classes = '' %}
 
                         {% if data.role === 'backOfficeSupervisor' %}
-                          
                           {% set destination = '../dashboard--supervisor' %}
-                          {% set classes = 'nhsuk-button--secondary' %}
-
-                          {{ button({
-                            text : 'Back to ' + data.processors[data.searchProcessor].name +"'s applications",
-                            href: '../processor?searchProcessor=' + data.searchProcessor
-                          }) }}
-
                         {% endif %}
 
                         {{ button({
                           html: '<span data-ak="B">Back to dashboard</span>',
                           href: destination,
-                          classes: classes
-                        }) }}
-
-                        {{ button({
-                          html: '<span data-ak="I">Next application to check</span>',
-                          href: '#',
                           classes: 'nhsuk-button--secondary'
                         }) }}
 

@@ -38,8 +38,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
     {% if errorList | length %}
     {{ errorSummary({
-    titleText: 'Feedback from supervisor',
-    descriptionText: "Good work so far, trainee! However, I think the last name should be " + patient.lastName + ".",
+    titleText: 'Checking outcome',
     errorList: errorList
     }) }}
     {% endif %}
@@ -670,9 +669,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               ]
               }) }}
 
-              {{ hint({
-              html: 'Your corrections will be sent to your supervisor for confirmation'
-              }) }}
+           
 
               <div class="nhsuk-button-group">
  {{ button({

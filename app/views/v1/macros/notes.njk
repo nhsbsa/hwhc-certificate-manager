@@ -455,6 +455,46 @@
             EventLog.init();
         });
 
+        // Handle opt-out button clicks and insert a timeline note
+        document.addEventListener('click', function(e){
+            const btn = e.target.closest('[data-action="opt-out"], .opt-out-button');
+            if (!btn) return;
+            e.preventDefault();
+
+            const timeline = document.querySelector('#timeline-application');
+            if (!timeline) return;
+
+            // Generate current date/time for the timeline entry
+            const now = new Date();
+            const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+            const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+            const datePart = now.toLocaleDateString('en-GB', dateOptions);
+            const timePart = now.toLocaleTimeString('en-GB', timeOptions).toLowerCase();
+            const timestamp = `${datePart}, ${timePart}`;
+
+                        // Build an <li> that matches the nhsapp timeline markup (badge + content)
+                        // Insert as a current timeline item so styles match existing 'Note' items
+                                                const noteHtml = '<li class="nhsapp-timeline__item ">' +
+                                                                '<svg class="nhsapp-timeline__badge nhsapp-timeline__badge--small" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">' +
+                                                                    '<circle cx="7" cy="7" r="6" fill="white" stroke="#AEB7BD" stroke-width="2"></circle>' +
+                                                                '</svg>' +
+                                                            '<div class="nhsapp-timeline__content">' +
+                                                                '<h3 class="nhsapp-timeline__header ">Note</h3>' +
+                                                                '<p class="nhsuk-body-s nhsuk-u-margin-bottom-2">Patient chose to opt out of communication.</p>' +
+                                                                '<span class="nhsuk-u-font-size-14">' + timestamp + '</span>' +
+                                                            '</div>' +
+                                                        '</li>';
+
+            // Prepend the note to the timeline container
+            const container = timeline.querySelector('.nhsapp-timeline__list') || timeline;
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = noteHtml;
+            container.insertBefore(wrapper.firstChild, container.firstChild);
+
+            // Optionally focus/announce
+            btn.setAttribute('aria-pressed','true');
+        });
+
     </script>
 
 

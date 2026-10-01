@@ -326,49 +326,85 @@ module.exports = function (env) {
   //
   // GET SUPERVISOR DASHBOARD ROWS FILTER
   //
-  filters.getSupervisorDashboardRows = function (processors) {
+  // filters.getSupervisorDashboardRows = function (processors) {
 
-    const rows = [];
+  //   const rows = [];
 
-    Object.entries(processors).forEach(function (p) {
+  //   Object.entries(processors).forEach(function (p) {
 
-      const processor = p[1]; // Weird quirk in how Object.entries works...
+  //     const processor = p[1]; // Weird quirk in how Object.entries works...
 
-      const arr = [
-        { html: '<a class="nhsuk-link nhsuk-link--no-visited-state" href="processor?searchChecking=true&searchProcessor=' + p[0] + '">' + processor.name + '</a>' },
-        { text: p[0] },
-        { text: processor.stats[0] },
-        { text: processor.stats[1] },
-        { text: processor.stats[2] },
-        { text: processor.stats[3] },
-        { text: processor.stats[4] },
-        { html: (processor.level === 'trainee') ? '<strong>10</strong> <span class="nhsuk-u-font-size-14">(' + processor.checkingLevel + '%)</span></strong>' : '<strong>0</strong>' }
-      ];
+  //     const arr = [
+  //       { html: '<a class="nhsuk-link nhsuk-link--no-visited-state" href="processor?searchChecking=true&searchProcessor=' + p[0] + '">' + processor.name + '</a>' },
+  //       { text: p[0] },
+  //       { text: processor.stats[0] },
+  //       { text: processor.stats[1] },
+  //       { text: processor.stats[2] },
+  //       { text: processor.stats[3] },
+  //       { text: processor.stats[4] },
+  //       { html: (processor.level === 'trainee') ? '<strong>10</strong> <span class="nhsuk-u-font-size-14">(' + processor.checkingLevel + '%)</span></strong>' : '<strong>0</strong>' }
+  //     ];
 
-//      const checkingValue = (processor.level === 'trainee')
-//   ? '<strong>10</strong> <span class="nhsuk-u-font-size-14">(' + processor.checkingLevel + '%)</span>'
-//   : '<strong>0</strong>';
 
-// const checkingText = checkingValue + ' <a class="nhsuk-link nhsuk-link--no-visited-state" href="processor-edit?searchProcessor=' + p[0] + '">change percentage</a>';
+  //     rows.push(arr);
 
-// const arr = [
-//   { html: '<a class="nhsuk-link nhsuk-link--no-visited-state" href="processor?searchChecking=true&searchProcessor=' + p[0] + '">' + processor.name + '</a>' },
-//   { text: p[0] },
-//   { text: processor.stats[0] },
-//   { text: processor.stats[1] },
-//   { text: processor.stats[2] },
-//   { text: processor.stats[3] },
-//   { text: processor.stats[4] },
-//   { html: checkingText }
-// ];
+  //   });
 
-      rows.push(arr);
+  //   return rows;
 
+  // };
+
+filters.getSupervisorDashboardRows = function (processors) {
+
+  const rows = [];
+  const totals = [0, 0, 0, 0, 0];
+  let totalForYouToCheck = 0;
+
+  Object.entries(processors).forEach(function (p) {
+
+    const processor = p[1];
+    const stats = processor.stats || [0, 0, 0, 0, 0];
+    const forYouToCheck = (processor.level === 'trainee') ? 10 : 0;
+
+    stats.forEach(function (value, index) {
+      totals[index] += Number(value || 0);
     });
 
-    return rows;
+    totalForYouToCheck += forYouToCheck;
 
-  };
+    rows.push([
+      {
+        html: '<a class="nhsuk-link nhsuk-link--no-visited-state" href="processor?searchChecking=true&searchProcessor=' + p[0] + '">' + processor.name + '</a>'
+      },
+      { text: p[0] },
+      { text: stats[0] },
+      { text: stats[1] },
+      { text: stats[2] },
+      { text: stats[3] },
+      { text: stats[4] },
+      {
+        html: (processor.level === 'trainee')
+          ? '<strong>' + forYouToCheck + '</strong> <span class="nhsuk-u-font-size-14">(' + processor.checkingLevel + '%)</span>'
+          : '<strong>0</strong>'
+      }
+    ]);
+
+  });
+
+  rows.push([
+    { html: '<strong>Total</strong>' },
+    { text: '' },
+    { text: totals[0] },
+    { text: totals[1] },
+    { text: totals[2] },
+    { text: totals[3] },
+    { text: totals[4] },
+    { html: '<strong>' + totalForYouToCheck + '</strong>' }
+  ]);
+
+  return rows;
+
+};
 
 
   //
@@ -688,6 +724,7 @@ module.exports = function (env) {
   //
   // DRAW ROWS FUNCTION
   //
+
   function _drawRows(inputRows, role, processor, processorTable) {
 
     const rows = [];
@@ -696,90 +733,84 @@ module.exports = function (env) {
 
       let link = patient.certificateType + '/case?patientID=' + patient.id;
 
-      if (patient.checking === true) {
+      if (processorTable) {
 
-        // Checking screens
+        if (patient.checking === true) {
 
-        switch (role) {
+          // Checking screens
+          switch (role) {
 
-          case 'backOfficeSupervisor':
+            case 'backOfficeSupervisor':
 
-            if (patient.checkType === 'supervisor') {
-              link = patient.certificateType + '/comparison--leave-feedback?patientID=' + patient.id;
-            } else {
-              link = patient.certificateType + '/comparison--has-feedback?patientID=' + patient.id;
-            }
-            break;
+              if (patient.checkType === 'supervisor') {
+                link = patient.certificateType + '/comparison--leave-feedback?patientID=' + patient.id;
+              } else {
+                link = patient.certificateType + '/comparison--has-feedback?patientID=' + patient.id;
+              }
+              break;
 
-          case 'qualityControl':
+            case 'qualityControl':
 
-            if (patient.checkType === 'quality') {
-              link = patient.certificateType + '/comparison--has-feedback?patientID=' + patient.id;
-            } else {
-              link = patient.certificateType + '/comparison--no-feedback?patientID=' + patient.id;
-            }
-            break;
+              if (patient.checkType === 'quality') {
+                link = patient.certificateType + '/comparison--has-feedback?patientID=' + patient.id;
+              } else {
+                link = patient.certificateType + '/comparison--no-feedback?patientID=' + patient.id;
+              }
+              break;
 
-          case 'backOffice':
+            case 'backOffice':
 
-            link = patient.certificateType + '/application--correction?patientID=' + patient.id;
-            break;
+              link = patient.certificateType + '/application--correction?patientID=' + patient.id;
+              break;
 
-          case 'callCentre':
+            case 'callCentre':
 
-            link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
-            break;
+              link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
+              break;
 
+          }
 
+        } else {
+
+          // Standard screens
+          switch (patient.status) {
+
+            case 'processing':
+
+              if (role === 'backOffice' || role === 'backOfficeSupervisor') {
+                link = 'process-application/matex?patientID=' + patient.id;
+              } else if (role === 'qualityControl') {
+                link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
+              } else {
+                link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
+              }
+
+              break;
+
+            case 'on-hold':
+
+              if (role === 'backOffice' || role === 'backOfficeSupervisor') {
+                link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
+              } else if (role === 'qualityControl') {
+                link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
+              } else {
+                link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
+              }
+
+              break;
+
+            case 'rejected':
+
+              if (role === 'qualityControl') {
+                link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
+              } else {
+                link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
+              }
+
+              break;
+          }
         }
-
-      } else {
-
-        // Standard screens
-        switch (patient.status) {
-
-          case 'processing':
-
-            if (role === 'backOffice' || role === 'backOfficeSupervisor') {
-              link = 'process-application/matex?patientID=' + patient.id;
-            } else if (role === 'qualityControl') {
-              link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
-            } else {
-              link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
-            }
-
-            break;
-
-          case 'on-hold':
-
-            if (role === 'backOffice' || role === 'backOfficeSupervisor') {
-              link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
-            } else if (role === 'qualityControl') {
-              link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
-            } else {
-              link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
-            }
-
-            break;
-
-          case 'rejected':
-
-            if (role === 'qualityControl') {
-              link = patient.certificateType + '/case--view--cannot-edit?patientID=' + patient.id;
-            } else {
-              link = patient.certificateType + '/case--view--can-edit?patientID=' + patient.id;
-            }
-
-            break;
-
-
-        }
-
       }
-
-
-
-
 
       const checkedBy = (patient.checkType === 'supervisor') ? 'Supervisor' : 'Quality checker';
 
@@ -826,7 +857,7 @@ module.exports = function (env) {
           { html: patient.address.postcode },
           { html: patient.dateOfBirth.display },
           { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
-          { html: (patient.checking === true) ? _getStatusTextOrTag(patient.status, true) + '  ' + _getStatusTextOrTag('checking', true) : _getStatusTextOrTag(patient.status, true) },
+          { html: _getStatusTextOrTag(patient.status, true) },
           { html: patient.applicationReference || 'Not available' },
           { html: _getReferenceHtml(patient.certificateReference) },
           { text: patient.startDate.display },
@@ -844,6 +875,7 @@ module.exports = function (env) {
     return rows;
 
   };
+
 
   //
   // GET CHECKING TABLE ROWS
@@ -1488,6 +1520,37 @@ module.exports = function (env) {
     return '/v1/' + nextPatient.certificateType +
       '/application--correction?patientID=' +
       nextPatient.id;
+  };
+
+  filters.getNextProcessorCheckingUrl = function (currentPatientId, processorCode) {
+
+    const patients = JSON.parse(filters.getPatientData());
+    const processor = processorCode || this.ctx.data.searchProcessor;
+
+    const checkingPatients = patients.filter(
+      p => p.checking === true && (!processor || p.processor === processor)
+    );
+
+    if (!checkingPatients.length) {
+      return '/v1/processor?searchProcessor=' + encodeURIComponent(processor || '');
+    }
+
+    const currentIndex = checkingPatients.findIndex(
+      p => String(p.id) === String(currentPatientId)
+    );
+
+    const nextPatient = (currentIndex >= 0)
+      ? checkingPatients[currentIndex + 1]
+      : checkingPatients[0];
+
+    if (!nextPatient) {
+      return '/v1/processor?searchProcessor=' + encodeURIComponent(processor || '');
+    }
+
+    return '/v1/' + nextPatient.certificateType +
+      '/comparison--leave-feedback?patientID=' +
+      nextPatient.id +
+      '&searchProcessor=' + encodeURIComponent(nextPatient.processor || processor || '');
   };
 
   //

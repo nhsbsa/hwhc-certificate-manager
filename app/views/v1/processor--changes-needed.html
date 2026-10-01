@@ -1,6 +1,7 @@
 {% extends 'layout-fullscreen.html' %}
 
 {% set filteredRows = '' | getPatientData | getTableRows( true ) %}
+{% set checkingRows = '' | getPatientData | getCheckingTableRows %}
 {% set pageName = '' | getSearchTitle %}
 {% set searchProcessor = data.searchProcessor or 'JASMI' %}
 {% set processor = data.processors | getProcessor(searchProcessor) %}
@@ -63,33 +64,43 @@
           {% if ( filteredRows.length > 0 ) %}
 
               <h2 class="nhsuk-heading-s">Applications currently being checked</h2>
-
-              {{ table({
-                panel: false,
-                caption: 'Certificates and applications',
-                captionClasses: 'nhsuk-u-visually-hidden',
-                firstCellIsHeader: false,
-                responsive: true,
-                tableClasses: 'patient-table',
-                head: true | getTableHeadRows( true ),
-                rows: filteredRows
-              }) }}
-
-        
-
-          {% endif %}
-
-          <br>
-
-                {% if ( filteredRows.length > 0 ) %}
-
-              <h2 class="nhsuk-heading-s">Applications that need to change</h2>
-        <div class="nhsuk-hint">After applications have been checked by a supervisor, changes required will appear here.</div>
-        
+              <div class="nhsuk-hint">These applications have either been reviewed by a supervisor or the processor has not processed enough yet.</div>
 
           
 
+
           {% endif %}
+<br>
+<hr>
+           
+
+              {% set captionHtml %}
+              Applications that need to change
+        
+              {% endset %}
+
+              
+
+            {{ table({
+                panel: false,
+                caption: captionHtml | safe,                    
+                firstCellIsHeader: false,
+                responsive: true,
+                tableClasses: 'patient-table',
+                head: [
+                        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' },
+                        { text: 'Address' },
+                        { text: 'Postcode' },
+                        { text: 'Date of birth' },
+                        { text: 'Type' },
+                        { text: 'Status' },
+                        { text: 'Application reference' },
+                        { text: 'Certificate reference'}
+                      ],
+                rows: checkingRows
+              }) }}
+
+          
 
 
             </div>
