@@ -480,10 +480,18 @@
                 <img class="expandable-image__image" src="{{ imgSrc }}" alt=""/>
             </div>
         </div>
-        <summary class="expandable-image__button nhsuk-button nhsuk-button--small">
-            <span class="closed">Expand image</span>
-            <span class="open">Shrink image</span>
-        </summary>
+      <summary class="expandable-image__button nhsuk-button nhsuk-button--small">
+    <span class="closed">Expand image</span>
+    <span class="open">Shrink image</span>
+</summary>
+
+<button
+  class="nhsuk-button nhsuk-button--secondary-solid nhsuk-button--small expandable-image__button--new-tab"
+  type="button"
+  onclick="window.open('{{ imgSrc }}', '_blank', 'noopener,noreferrer');"
+>
+  Open in a new tab
+</button>
 
     </details>
 

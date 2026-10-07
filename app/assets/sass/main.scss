@@ -189,7 +189,7 @@
   top: 1rem;
   left: 1rem;
   width: auto;
-  background-color: green;
+ 
 }
 
 .expandable-image .nhsuk-button:active {
@@ -208,6 +208,12 @@
 .expandable-image .open,
 .expandable-image[open] .closed {
   display: none;
+}
+
+.expandable-image .expandable-image__button--new-tab {
+  position: absolute;
+  top: 1rem;
+  left: 11.5rem;
 }
 
 body:has(.expandable-image[open]) {
