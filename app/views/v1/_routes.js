@@ -8,9 +8,14 @@ function processCurrentApplication(req) {
 
   const queue = req.session.data.paperMatexQueue;
 
+  if (!queue.length) {
+    return;
+  }
+
   req.session.data.processedToday += 1;
 
-  req.session.data.currentIndex = (req.session.data.currentIndex + 1) % queue.length;
+  req.session.data.currentIndex =
+    (req.session.data.currentIndex + 1) % queue.length;
 
   hydrateImageFields(req, queue[req.session.data.currentIndex]);
 }
@@ -136,7 +141,12 @@ function processMedexApplication(req) {
 
   const queue = req.session.data.paperMedexQueue;
 
-  req.session.data.medexIndex = (req.session.data.medexIndex + 1) % queue.length;
+  if (!queue.length) {
+    return;
+  }
+
+  req.session.data.medexIndex =
+    (req.session.data.medexIndex + 1) % queue.length;
 
   hydrateImageFields(req, queue[req.session.data.medexIndex]);
 }
@@ -241,6 +251,7 @@ router.get(/process-application\/matex/, function (req, res) {
   }
 
   res.render('v1/process-application/matex', {
+    data: req.session.data,
     processedToday: req.session.data.applicationStats.total
   });
 });
