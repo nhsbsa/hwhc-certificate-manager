@@ -3,18 +3,14 @@
 {% set pageName = 'Search for a certificate' %}
 
 {% block beforeContent %}
-  {% if data.role === 'backOffice' or data.role === 'backOfficeSupervisor' or data.role === 'qualityControl' %}
-    {{ backLink({
-      href: 'javascript:history.go(-1)',
-      html: '<span data-ak="B">Back</span>'
-    }) }}
-  {% endif %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
 {% endblock %}
 
 
 {% block content %}
-
-  {% if data.role === 'callCentre' %}
 
     <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
@@ -35,10 +31,6 @@
 
         </div>
       </div>
-
-  {% endif %}
-
-
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
@@ -208,63 +200,7 @@
 
                 <div class="nhsuk-grid-column-one-third">
 
-                  {% if data.role === 'callCentre' %}
-
-                    {{ select({
-                      label: {
-                        html: '<span data-ak="T">Certificate type</span>'
-                      },
-                      id: 'searchCertificateType',
-                      name: 'searchCertificateType',
-                      value: data.searchCertificateType,
-                      items: [
-                        {
-                          value: '',
-                          text: 'All certificate types'
-                        },
-                        {
-                          value: 'hrtppc',
-                          text: 'HRT PPC'
-                        },
-                        {
-                          value: 'matex',
-                          text: 'Maternity exemption'
-                        }
-                      ]
-                    }) }}
-
-                    <input type="hidden" name="searchStatus" value="" />
-
-                  {% elif data.role === 'backOffice' %}
-    
-                    {#{ select({
-                      label: {
-                        html: '<span data-ak="T">Certificate type</span>'
-                      },
-                      id: 'searchCertificateType',
-                      name: 'searchCertificateType',
-                      value: data.searchCertificateType,
-                      items: [
-                        {
-                          value: '',
-                          text: 'All certificate types'
-                        },
-                        {
-                          value: 'hrtppc',
-                          text: 'HRT PPC'
-                        },
-                        {
-                          value: 'matex',
-                          text: 'Maternity exemption'
-                        }
-                      ]
-                    }) }#}
-
-                    <input type="hidden" name="searchCertificateType" value="matex" />
-
-                  {% else %}
-
-                      {{ select({
+                  {{ select({
                       label: {
                         text: 'Application processor'
                       },
@@ -282,8 +218,6 @@
                     }) }}
 
                     <input type="hidden" name="searchCertificateType" value="matex" />
-
-                  {% endif %}
 
                 </div>
 

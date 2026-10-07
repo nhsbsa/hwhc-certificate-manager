@@ -614,7 +614,7 @@
           const randomDate = new Date(randomTime);
 
           const day = randomDate.getDate();
-          const month = randomDate.toLocaleString('en-GB', { month: 'long' });
+          const month = randomDate.toLocaleString('en-GB', { month: 'short' });
           const year = randomDate.getFullYear();
 
           return {
@@ -658,7 +658,7 @@
           end.setDate(end.getDate() - 1);
 
           const day = end.getDate();
-          const month = end.toLocaleString('en-GB', { month: 'long' });
+          const month = end.toLocaleString('en-GB', { month: 'short' });
           const year = end.getFullYear();
 
           return {
@@ -923,29 +923,36 @@
               obj.certificateReference = '';
             }
 
+            const hasCertificateReference = obj.certificateReference && String(obj.certificateReference).trim() !== '';
+
             obj.channel = _generateChannel(obj.certificateType, obj.status);
             if ((obj.certificateType === 'matex' || obj.certificateType === 'medex') && obj.channel === 'Paper') {
               obj.imageReference = _generateImageReference();
             }
 
-            if (obj.certificateType === 'matex') {
+            if (hasCertificateReference) {
+              if (obj.certificateType === 'matex') {
 
-              obj.startDate = _generateStartDate();
-              obj.dueDate = _generateStartDate();
-              obj.endDate = _generateEndDate(obj.startDate);
-              obj.childsDOB = _generateChildsDOB(obj.startDate);
+                obj.startDate = _generateStartDate();
+                obj.dueDate = _generateStartDate();
+                obj.endDate = _generateEndDate(obj.startDate);
+                obj.childsDOB = _generateChildsDOB(obj.startDate);
 
-            } else if (obj.certificateType === 'medex') {
+              } else if (obj.certificateType === 'medex') {
 
-              obj.startDate = _generateStartDate();
-              obj.medicalCondition = _generateMedicalCondition();
-              obj.endDate = _generateEndDate(obj.startDate, obj.medicalCondition);
+                obj.startDate = _generateStartDate();
+                obj.medicalCondition = _generateMedicalCondition();
+                obj.endDate = _generateEndDate(obj.startDate, obj.medicalCondition);
 
+              } else {
+
+                obj.startDate = _generateStartDate();
+                obj.endDate = _generateEndDate(obj.startDate);
+
+              }
             } else {
-
-              obj.startDate = _generateStartDate();
-              obj.endDate = _generateEndDate(obj.startDate);
-
+              obj.startDate = { display: '', day: '', month: '', year: '' };
+              obj.endDate = { display: '', day: '', month: '', year: '' };
             }
 
             //Certificate fulfilment

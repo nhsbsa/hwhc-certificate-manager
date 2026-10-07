@@ -4,70 +4,39 @@
 
 {% block content %}
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
 
 
-          <div class="nhsuk-card">
-            <div class="nhsuk-card__content">
+    <div class="nhsuk-card">
+      <div class="nhsuk-card__content">
 
 
-            <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
+        <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
 
-            {{ insetText({
-              id: 'to-check',
-              html: '<span class="inner">5 applications need to be checked</span>',
-              classes: 'nhsuk-inset-text--summary'
-            }) }}
-
-
-            <div class="nhsuk-button-group">
-
-               {{ button({
-                html: '<span data-ak="I">Search for a certificate</span>',
-                href: 'reset-search'
-              }) }}
-
-            </div>
-
-           
-            <h2 class="nhsuk-u-visually-hidden">Applications processors requiring checks</h2>
-
-            {% set processors = ['AICOL','DATHO','JASMI','PRPAT','ZAKHA'] %}
-
-            {% for processor in processors %}
-
-              {% set processorObj = data.processors[processor] %}
+        {{ insetText({
+        id: 'to-check',
+        html: '<span class="inner">639 applications need to be checked</span>',
+        classes: 'nhsuk-inset-text--summary'
+        }) }}
 
 
-             {# { html: '<span class="nhsuk-u-visually-hidden">Has the application been checked?</spa>' }, #}
+        <div class="nhsuk-button-group">
 
-              {{ table({
-                panel: false,
-                caption: processorObj.name + ' (' + processor + ')',
-                firstCellIsHeader: false,
-                responsive: true,
-                tableClasses: 'patient-table quality-check',
-                head: [
-                        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' },
-                        { text: 'Postcode' },
-                        { text: 'Certificate type' },
-                        { text: 'Status' },
-                         { text: 'Application reference' },
-                        { text: 'Certificate reference'}
-                      ],
-                rows:  '' | getPatientData | getQualityControlTableRows( processor, 1 )
-                
-              }) }}
+          {{ button({
+          html: '<span data-ak="I">Search for a certificate</span>',
+          href: 'reset-search'
+          }) }}
 
-            {% endfor %}
-            
-
-          </div>
         </div>
 
 
+
       </div>
+    </div>
+
+
   </div>
+</div>
 
 {% endblock %}

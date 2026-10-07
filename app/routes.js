@@ -1,6 +1,29 @@
 // External dependencies
 const express = require('express');
 const router = express.Router();
+const sessionDataDefaults = require('./data/session-data-defaults');
+
+function mergeDeep(target, source) {
+  const output = Array.isArray(target) ? [...target] : { ...(target || {}) };
+
+  if (!source || typeof source !== 'object') {
+    return output;
+  }
+
+  Object.keys(source).forEach(key => {
+    const targetValue = output[key];
+    const sourceValue = source[key];
+
+    if (sourceValue && typeof sourceValue === 'object' && !Array.isArray(sourceValue) &&
+        targetValue && typeof targetValue === 'object' && !Array.isArray(targetValue)) {
+      output[key] = mergeDeep(targetValue, sourceValue);
+    } else if (sourceValue !== undefined) {
+      output[key] = sourceValue;
+    }
+  });
+
+  return output;
+}
 
 //
 // JSON TEST
@@ -199,6 +222,8 @@ router.post(
 // DETECT CURRENT VERSION
 //
 router.use((req, res, next) => {
+
+  req.session.data = mergeDeep(sessionDataDefaults, req.session.data || {});
 
   console.log('-----------------------------------');
   console.log(req.method + ': ' + req.originalUrl);

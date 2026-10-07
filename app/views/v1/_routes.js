@@ -3,22 +3,63 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
+function processCurrentApplication(req) {
+  initPaperMatexQueue(req);
 
+  const queue = req.session.data.paperMatexQueue;
+
+  req.session.data.processedToday += 1;
+
+  req.session.data.currentIndex = (req.session.data.currentIndex + 1) % queue.length;
+
+  hydrateImageFields(req, queue[req.session.data.currentIndex]);
+}
+
+function ensureSessionDefaults(req) {
+  req.session.data = req.session.data || {};
+
+  if (!req.session.data.patientFixtures) {
+    req.session.data.patientFixtures = require('../../data/session-data-defaults').patientFixtures || [];
+  }
+
+  req.session.data.applicationStats = req.session.data.applicationStats || {
+    accepted: 0,
+    rejected: 0,
+    onHold: 0,
+    kfp: 0,
+    total: 0
+  };
+}
 
 function initPaperMatexQueue(req) {
-  if (req.session.data.paperMatexQueue) return;
+  ensureSessionDefaults(req);
 
+  const existingQueue = Array.isArray(req.session.data.paperMatexQueue)
+    ? req.session.data.paperMatexQueue
+    : [];
   const fixtures = req.session.data.patientFixtures || [];
-
-  const paperMatex = fixtures.filter(p =>
-    p.certificateType === 'matex' && p.channel === 'Paper'
-  );
+  const paperMatex = existingQueue.length
+    ? existingQueue
+    : fixtures.filter(p =>
+        p.certificateType === 'matex' && p.channel === 'Paper'
+      );
 
   req.session.data.paperMatexQueue = paperMatex;
-  req.session.data.currentIndex = 0;
-  req.session.data.processedToday = 0;
+  req.session.data.processedToday = req.session.data.processedToday ?? 0;
 
-  hydrateImageFields(req, paperMatex[0]);
+  if (paperMatex.length) {
+    const currentIndex = Number.isInteger(req.session.data.currentIndex)
+      ? req.session.data.currentIndex
+      : 0;
+
+    req.session.data.currentIndex = currentIndex >= 0
+      ? currentIndex % paperMatex.length
+      : 0;
+
+    if (!req.session.data.imageFirstName || !req.session.data.imageLastName) {
+      hydrateImageFields(req, paperMatex[req.session.data.currentIndex]);
+    }
+  }
 }
 
 function hydrateImageFields(req, application) {
@@ -47,31 +88,47 @@ function hydrateImageFields(req, application) {
   req.session.data.confidence = application.confidence || {};
 }
 
-function processCurrentApplication(req) {
-  initPaperMatexQueue(req);
 
-  const queue = req.session.data.paperMatexQueue;
-
-  req.session.data.processedToday += 1;
-
-  req.session.data.currentIndex = (req.session.data.currentIndex + 1) % queue.length;
-
-  hydrateImageFields(req, queue[req.session.data.currentIndex]);
-}
 
 const PROCESS_OUTCOMES = ['accepted', 'reject', 'further-information'];
 
+function getScenarioOutcome(req) {
+  if (req.session.data.scenarioOutcome) {
+    return req.session.data.scenarioOutcome;
+  }
+
+  const idx = req.session.data.scenarioIndex || 0;
+  return PROCESS_OUTCOMES[Math.floor(idx / 2) % PROCESS_OUTCOMES.length];
+}
+
 function initMedexQueue(req) {
-  if (req.session.data.paperMedexQueue) return;
+  ensureSessionDefaults(req);
 
+  const existingQueue = Array.isArray(req.session.data.paperMedexQueue)
+    ? req.session.data.paperMedexQueue
+    : [];
   const fixtures = req.session.data.patientFixtures || [];
-
-  const paperMedex = fixtures.filter(p =>
-    p.certificateType === 'medex' && p.channel === 'Paper'
-  );
+  const paperMedex = existingQueue.length
+    ? existingQueue
+    : fixtures.filter(p =>
+        p.certificateType === 'medex' && p.channel === 'Paper'
+      );
 
   req.session.data.paperMedexQueue = paperMedex;
-  req.session.data.medexIndex = 0;
+
+  if (paperMedex.length) {
+    const currentIndex = Number.isInteger(req.session.data.medexIndex)
+      ? req.session.data.medexIndex
+      : 0;
+
+    req.session.data.medexIndex = currentIndex >= 0
+      ? currentIndex % paperMedex.length
+      : 0;
+
+    if (!req.session.data.imageFirstName || !req.session.data.imageLastName) {
+      hydrateImageFields(req, paperMedex[req.session.data.medexIndex]);
+    }
+  }
 }
 
 function processMedexApplication(req) {
@@ -89,21 +146,21 @@ function processMedexApplication(req) {
 
 
 
-router.post(/index/, function (req, res) {
+// router.post(/index/, function (req, res) {
     
-    let destination = 'search';
+//     let destination = 'search';
 
-    if( req.originalUrl.indexOf('process-application') > -1 ){
-      // process-application/index
-      destination = 'other';
-    } else {
-      if( req.session.data.role === 'backOffice' ){
-          destination = 'dashboard';
-      }
-    }
+//     if( req.originalUrl.indexOf('process-application') > -1 ){
+//       // process-application/index
+//       destination = 'other';
+//     } else {
+//       if( req.session.data.role === 'backOffice' ){
+//           destination = 'dashboard';
+//       }
+//     }
 
-    res.redirect( destination );
-});
+//     res.redirect( destination );
+// });
 
 router.post(/access-keys/, function (req, res) {
 
@@ -163,19 +220,24 @@ router.get(/process-application\/matex/, function (req, res) {
 
   const matexScenarioMap = { accepted: 0, reject: 2, 'further-information': 4 };
   if (req.query.scenario && matexScenarioMap[req.query.scenario] !== undefined) {
-    req.session.data.scenarioIndex = matexScenarioMap[req.query.scenario];
-  } else if (req.session.data.scenarioIndex === undefined) {
+    req.session.data.scenarioOutcome = req.query.scenario;
+  } else if (req.session.data.scenarioOutcome === undefined && req.session.data.scenarioIndex === undefined) {
     req.session.data.scenarioIndex = 0;
+    req.session.data.scenarioOutcome = getScenarioOutcome(req);
   }
 
   const queue = req.session.data.paperMatexQueue;
-  const index = req.session.data.currentIndex || 0;
-  if (req.query.view) {
-    const previousIndex = ((index - 1) + queue.length) % queue.length;
-    req.session.data.currentIndex = previousIndex;
-    hydrateImageFields(req, queue[previousIndex]);
-  } else {
-    hydrateImageFields(req, queue[index]);
+  const index = Number.isInteger(req.session.data.currentIndex)
+    ? req.session.data.currentIndex
+    : 0;
+
+  if (queue.length) {
+    const hydratedIndex = req.query.view
+      ? ((index - 1) + queue.length) % queue.length
+      : index;
+
+    req.session.data.currentIndex = hydratedIndex;
+    hydrateImageFields(req, queue[hydratedIndex]);
   }
 
   res.render('v1/process-application/matex', {
@@ -194,7 +256,8 @@ if (req.body.formVersion === 'Not MEDEXMATEX') {
     const stats = req.session.data.applicationStats;
 
     const idx = req.session.data.scenarioIndex || 0;
-    const outcome = PROCESS_OUTCOMES[Math.floor(idx / 2) % 3];
+    const outcome = req.session.data.scenarioOutcome || getScenarioOutcome(req);
+    const isDirectScenario = Boolean(req.session.data.scenarioOutcome);
 
     stats.total += 1;
     if (outcome === 'accepted') stats.accepted += 1;
@@ -207,12 +270,14 @@ if (req.body.formVersion === 'Not MEDEXMATEX') {
     req.session.data.certNumber = `${rawCertMatex.slice(0,4)} ${rawCertMatex.slice(4,7)} ${rawCertMatex.slice(7)}`;
     req.session.data.certificateType = 'matex';
 
-if (outcome === 'accepted') {
-  processCurrentApplication(req);
-  req.session.data.scenarioIndex = (idx + 1) % 6;
-}
+    if (outcome === 'accepted' && !isDirectScenario) {
+      processCurrentApplication(req);
+      req.session.data.scenarioIndex = (idx + 1) % 6;
+    }
 
-return res.redirect('/v1/process-application/scenarios/' + outcome);
+    delete req.session.data.scenarioOutcome;
+
+    return res.redirect('/v1/process-application/scenarios/' + outcome);
   }
 
   if (req.body.applicationDecision === 'cannotProcess') {
@@ -231,19 +296,24 @@ router.get(/process-application\/medex/, function (req, res) {
 
   const medexScenarioMap = { accepted: 1, reject: 3, 'further-information': 5 };
   if (req.query.scenario && medexScenarioMap[req.query.scenario] !== undefined) {
-    req.session.data.scenarioIndex = medexScenarioMap[req.query.scenario];
-  } else if (req.session.data.scenarioIndex === undefined) {
+    req.session.data.scenarioOutcome = req.query.scenario;
+  } else if (req.session.data.scenarioOutcome === undefined && req.session.data.scenarioIndex === undefined) {
     req.session.data.scenarioIndex = 0;
+    req.session.data.scenarioOutcome = getScenarioOutcome(req);
   }
 
   const queue = req.session.data.paperMedexQueue;
-  const medexIdx = req.session.data.medexIndex || 0;
-  if (req.query.view) {
-    const previousIndex = ((medexIdx - 1) + queue.length) % queue.length;
-    req.session.data.medexIndex = previousIndex;
-    hydrateImageFields(req, queue[previousIndex]);
-  } else {
-    hydrateImageFields(req, queue[medexIdx]);
+  const medexIdx = Number.isInteger(req.session.data.medexIndex)
+    ? req.session.data.medexIndex
+    : 0;
+
+  if (queue.length) {
+    const hydratedIndex = req.query.view
+      ? ((medexIdx - 1) + queue.length) % queue.length
+      : medexIdx;
+
+    req.session.data.medexIndex = hydratedIndex;
+    hydrateImageFields(req, queue[hydratedIndex]);
   }
 
   res.render('v1/process-application/medex', {
@@ -263,7 +333,8 @@ router.post(/process-application\/medex/, function (req, res) {
     const stats = req.session.data.applicationStats;
 
     const idx = req.session.data.scenarioIndex || 0;
-    const outcome = PROCESS_OUTCOMES[Math.floor(idx / 2) % 3];
+    const outcome = req.session.data.scenarioOutcome || getScenarioOutcome(req);
+    const isDirectScenario = Boolean(req.session.data.scenarioOutcome);
 
     stats.total += 1;
     if (outcome === 'accepted') stats.accepted += 1;
@@ -276,12 +347,14 @@ router.post(/process-application\/medex/, function (req, res) {
     req.session.data.certNumber = `${rawCertMedex.slice(0,4)} ${rawCertMedex.slice(4,7)} ${rawCertMedex.slice(7)}`;
     req.session.data.certificateType = 'medex';
 
-if (outcome === 'accepted') {
-  processMedexApplication(req);
-  req.session.data.scenarioIndex = (idx + 1) % 6;
-}
+    if (outcome === 'accepted' && !isDirectScenario) {
+      processMedexApplication(req);
+      req.session.data.scenarioIndex = (idx + 1) % 6;
+    }
 
-return res.redirect('/v1/process-application/scenarios/' + outcome);
+    delete req.session.data.scenarioOutcome;
+
+    return res.redirect('/v1/process-application/scenarios/' + outcome);
   }
 
   if (req.body.applicationDecision === 'cannotProcess') {
@@ -342,6 +415,7 @@ router.post(/process-application\/scenarios\/confirm/, function (req, res) {
   }
 
   req.session.data.scenarioIndex = (idx + 1) % 6;
+  delete req.session.data.scenarioOutcome;
 
   const nextType = (req.session.data.scenarioIndex % 2 === 0)
     ? 'matex'
