@@ -46,8 +46,8 @@ function initPaperMatexQueue(req) {
   const paperMatex = existingQueue.length
     ? existingQueue
     : fixtures.filter(p =>
-        p.certificateType === 'matex' && p.channel === 'Paper'
-      );
+      p.certificateType === 'matex' && p.channel === 'Paper'
+    );
 
   req.session.data.paperMatexQueue = paperMatex;
   req.session.data.processedToday = req.session.data.processedToday ?? 0;
@@ -116,8 +116,8 @@ function initMedexQueue(req) {
   const paperMedex = existingQueue.length
     ? existingQueue
     : fixtures.filter(p =>
-        p.certificateType === 'medex' && p.channel === 'Paper'
-      );
+      p.certificateType === 'medex' && p.channel === 'Paper'
+    );
 
   req.session.data.paperMedexQueue = paperMedex;
 
@@ -152,75 +152,36 @@ function processMedexApplication(req) {
 }
 
 
-
-
-
-
-// router.post(/index/, function (req, res) {
-    
-//     let destination = 'search';
-
-//     if( req.originalUrl.indexOf('process-application') > -1 ){
-//       // process-application/index
-//       destination = 'other';
-//     } else {
-//       if( req.session.data.role === 'backOffice' ){
-//           destination = 'dashboard';
-//       }
-//     }
-
-//     res.redirect( destination );
-// });
-
 router.post(/access-keys/, function (req, res) {
 
   req.session.data.accessKeys = req.body.accessKeys;
 
-    let destination = 'search';
-    if( req.session.data.returnURL && req.session.data.returnURL.indexOf( 'access-keys' ) === -1 ) {
-      destination = decodeURIComponent(req.session.data.returnURL);
-    } else {
-      switch( req.session.data.role ){
-        case 'backOffice':
-          destination = 'dashboard';
-          break;
-        case 'backOfficeSupervisor':
-          destination = 'dashboard--supervisor';
-          break;
-        case 'qualityControl':
-          destination = 'dashboard--quality-control';
-          break;
-      }
+  let destination = 'search';
+  if (req.session.data.returnURL && req.session.data.returnURL.indexOf('access-keys') === -1) {
+    destination = decodeURIComponent(req.session.data.returnURL);
+  } else {
+    switch (req.session.data.role) {
+      case 'backOffice':
+        destination = 'dashboard';
+        break;
+      case 'backOfficeSupervisor':
+        destination = 'dashboard--supervisor';
+        break;
+      case 'qualityControl':
+        destination = 'dashboard--quality-control';
+        break;
     }
-    res.redirect( destination );
+  }
+  res.redirect(destination);
 });
 
 router.post(/search/, function (req, res) {
   //console.log( search );
-    const destination = 'search-results';
-    req.session.data[res.locals.version].currentPage = 0;
-    res.redirect( destination );
+  const destination = 'search-results';
+  req.session.data[res.locals.version].currentPage = 0;
+  res.redirect(destination);
 });
 
-// router.post(/process-application\/experimental--single/, function (req, res) {
-//     const destination = 'review-application';
-//     res.redirect( destination );
-// });
-
-// router.post(/process-application\/cannot-process-application--horizontal-labels-fil/, function (req, res) {
-
-//     initPaperMatexQueue(req);
-
-//     const stats = req.session.data.applicationStats;
-
-//     stats.onHold += 1;
-//     stats.total += 1;
-
-//     processCurrentApplication(req);
-
-//     return res.redirect('/v1/process-application/matex');
-
-// });
 
 //THE NEXT GROUP OF ROUTES CONTROL THE BEHAVIOUR OF CERTIFICATES IN THE PROCESS APPLICATION JOURNEY
 //START OF GROUP
@@ -259,9 +220,9 @@ router.get(/process-application\/matex/, function (req, res) {
 
 router.post(/process-application\/matex/, function (req, res) {
 
-if (req.body.formVersion === 'Not MEDEXMATEX') {
-  return res.redirect('/v1/process-application/scenarios/not-official-form');
-}
+  if (req.body.formVersion === 'Not MEDEXMATEX') {
+    return res.redirect('/v1/process-application/scenarios/not-official-form');
+  }
   if (req.body.applicationDecision === 'approve') {
 
     const stats = req.session.data.applicationStats;
@@ -278,7 +239,7 @@ if (req.body.formVersion === 'Not MEDEXMATEX') {
     req.session.data.approvedFirstName = req.session.data.imageFirstName;
     req.session.data.approvedLastName = req.session.data.imageLastName;
     const rawCertMatex = String(Math.floor(Math.random() * 9000000000) + 1000000000);
-    req.session.data.certNumber = `${rawCertMatex.slice(0,4)} ${rawCertMatex.slice(4,7)} ${rawCertMatex.slice(7)}`;
+    req.session.data.certNumber = `${rawCertMatex.slice(0, 4)} ${rawCertMatex.slice(4, 7)} ${rawCertMatex.slice(7)}`;
     req.session.data.certificateType = 'matex';
 
     if (outcome === 'accepted' && !isDirectScenario) {
@@ -336,8 +297,8 @@ router.get(/process-application\/medex/, function (req, res) {
 router.post(/process-application\/medex/, function (req, res) {
 
   if (req.body.formVersion === 'Not MEDEXMATEX') {
-  return res.redirect('/v1/process-application/scenarios/not-official-form');
-}
+    return res.redirect('/v1/process-application/scenarios/not-official-form');
+  }
 
   if (req.body.applicationDecision === 'approve') {
 
@@ -355,7 +316,7 @@ router.post(/process-application\/medex/, function (req, res) {
     req.session.data.approvedFirstName = req.session.data.imageFirstName;
     req.session.data.approvedLastName = req.session.data.imageLastName;
     const rawCertMedex = String(Math.floor(Math.random() * 9000000000) + 1000000000);
-    req.session.data.certNumber = `${rawCertMedex.slice(0,4)} ${rawCertMedex.slice(4,7)} ${rawCertMedex.slice(7)}`;
+    req.session.data.certNumber = `${rawCertMedex.slice(0, 4)} ${rawCertMedex.slice(4, 7)} ${rawCertMedex.slice(7)}`;
     req.session.data.certificateType = 'medex';
 
     if (outcome === 'accepted' && !isDirectScenario) {
@@ -487,39 +448,39 @@ router.get(/process-application\/scenarios\/not-official-form/, function (req, r
 
 router.get(/process-application\/cannot-process-application--horizontal-labels-fil/, function (req, res) {
 
-    initPaperMatexQueue(req);
+  initPaperMatexQueue(req);
 
-    const queue = req.session.data.paperMatexQueue;
-    const index = req.session.data.currentIndex;
+  const queue = req.session.data.paperMatexQueue;
+  const index = req.session.data.currentIndex;
 
-    if (req.query.furtherInformationRequest) {
-      req.session.data.furtherInformationRequest =
-        req.query.furtherInformationRequest;
-    }
-
-    res.render(
-      'v1/process-application/cannot-process-application--horizontal-labels-fil'
-    );
+  if (req.query.furtherInformationRequest) {
+    req.session.data.furtherInformationRequest =
+      req.query.furtherInformationRequest;
   }
+
+  res.render(
+    'v1/process-application/cannot-process-application--horizontal-labels-fil'
+  );
+}
 );
 
 router.get(/process-application\/cannot-process-application--horizontal-labels$/, function (req, res) {
 
-    initPaperMatexQueue(req);
+  initPaperMatexQueue(req);
 
-    const queue = req.session.data.paperMatexQueue;
-    const index = req.session.data.currentIndex;
+  const queue = req.session.data.paperMatexQueue;
+  const index = req.session.data.currentIndex;
 
 
-    res.render(
-      'v1/process-application/cannot-process-application--horizontal-labels'
-    );
-  }
+  res.render(
+    'v1/process-application/cannot-process-application--horizontal-labels'
+  );
+}
 );
 
 router.get(/process-application\/start-processing/, function (req, res) {
 
-// Reset decision state
+  // Reset decision state
   delete req.session.data.cannotProcessApplication;
   delete req.session.data.cannotProcessApplicationNotes;
   delete req.session.data.reasonForRejection;
@@ -529,7 +490,7 @@ router.get(/process-application\/start-processing/, function (req, res) {
   delete req.session.data.infoFromPatient;
 
 
-    // HARD RESET (only here)
+  // HARD RESET (only here)
   req.session.data.applicationStats = {
     accepted: 0,
     rejected: 0,
@@ -538,115 +499,115 @@ router.get(/process-application\/start-processing/, function (req, res) {
     total: 0
   };
 
-    delete req.session.data.paperMatexQueue;
-    delete req.session.data.currentIndex;
-    delete req.session.data.processedToday;
+  delete req.session.data.paperMatexQueue;
+  delete req.session.data.currentIndex;
+  delete req.session.data.processedToday;
 
-    // Contact / address inputs
-    delete req.session.data.sendRequestEmail;
-    delete req.session.data.fullName;
-    delete req.session.data.addressLine1;
-    delete req.session.data.addressLine2;
-    delete req.session.data.addressTown;
-    delete req.session.data.addressCounty;
-    delete req.session.data.addressPostcode;
+  // Contact / address inputs
+  delete req.session.data.sendRequestEmail;
+  delete req.session.data.fullName;
+  delete req.session.data.addressLine1;
+  delete req.session.data.addressLine2;
+  delete req.session.data.addressTown;
+  delete req.session.data.addressCounty;
+  delete req.session.data.addressPostcode;
 
-    // Image address overrides
-    delete req.session.data.imageFirstName;
-    delete req.session.data.imageLastName;
-    delete req.session.data.imageNHSNumber;
-    delete req.session.data.imageDateOfBirth;
-    delete req.session.data.imageBuildingNumberOrName;
-    delete req.session.data.imageAddressLine1;
-    delete req.session.data.imageAddressLine2;
-    delete req.session.data.imageTown;
-    delete req.session.data.imageCounty;
-    delete req.session.data.imagePostcode;
+  // Image address overrides
+  delete req.session.data.imageFirstName;
+  delete req.session.data.imageLastName;
+  delete req.session.data.imageNHSNumber;
+  delete req.session.data.imageDateOfBirth;
+  delete req.session.data.imageBuildingNumberOrName;
+  delete req.session.data.imageAddressLine1;
+  delete req.session.data.imageAddressLine2;
+  delete req.session.data.imageTown;
+  delete req.session.data.imageCounty;
+  delete req.session.data.imagePostcode;
 
-    // Further information (FIL) state
-    delete req.session.data.furtherInformation;
-    delete req.session.data.furtherInformationRequest;
-    delete req.session.data.furtherInformationNotes;
+  // Further information (FIL) state
+  delete req.session.data.furtherInformation;
+  delete req.session.data.furtherInformationRequest;
+  delete req.session.data.furtherInformationNotes;
 
-    // Lookup helpers
-    delete req.session.data.lookupAddress;
-    delete req.session.data.sendRequestHTML;
+  // Lookup helpers
+  delete req.session.data.lookupAddress;
+  delete req.session.data.sendRequestHTML;
 
-    // Decisions
-    delete req.session.data.cannotProcessApplication;
-    delete req.session.data.applicationDecision;
+  // Decisions
+  delete req.session.data.cannotProcessApplication;
+  delete req.session.data.applicationDecision;
 
-    // Re‑initialise cleanly
-    delete req.session.data.paperMedexQueue;
-    delete req.session.data.medexIndex;
-    req.session.data.scenarioIndex = 0;
+  // Re‑initialise cleanly
+  delete req.session.data.paperMedexQueue;
+  delete req.session.data.medexIndex;
+  req.session.data.scenarioIndex = 0;
 
-    initPaperMatexQueue(req);
+  initPaperMatexQueue(req);
 
-    res.redirect(
-      '/v1/process-application/matex'
-    );
-  }
+  res.redirect(
+    '/v1/process-application/matex'
+  );
+}
 );
 
 
-router.post(/process-application\/cannot-process-application/, function( req, res){
+router.post(/process-application\/cannot-process-application/, function (req, res) {
 
-    const cannotProcessApplication = req.session.data.cannotProcessApplication || 'sendALetter';
+  const cannotProcessApplication = req.session.data.cannotProcessApplication || 'sendALetter';
 
-    let destination = 'confirmation';
+  let destination = 'confirmation';
 
-    switch( cannotProcessApplication ){
-        case 'sendALetter':
-            destination = 'send-a-letter';
-            break;
-        case 'requestPaperKeyIn':
-            destination = 'confirmation?confirmationStatus=requestPaperKeyIn';
-            break;
-        case 'unableToProcess':
-            destination = 'confirmation?confirmationStatus=applicationRejected';
-            break;
-    }
-    
-    res.redirect( destination );
+  switch (cannotProcessApplication) {
+    case 'sendALetter':
+      destination = 'send-a-letter';
+      break;
+    case 'requestPaperKeyIn':
+      destination = 'confirmation?confirmationStatus=requestPaperKeyIn';
+      break;
+    case 'unableToProcess':
+      destination = 'confirmation?confirmationStatus=applicationRejected';
+      break;
+  }
+
+  res.redirect(destination);
 
 });
 
 
 router.post(/process-application\/postcode-results/, function (req, res) {
-    const destination = 'review-application';
-    res.redirect( destination );
+  const destination = 'review-application';
+  res.redirect(destination);
 });
 
 router.post(/process-application\/postcode/, function (req, res) {
-    const destination = 'postcode-results';
-    res.redirect( destination );
+  const destination = 'postcode-results';
+  res.redirect(destination);
 });
 
 router.post(/process-application\/manual-entry/, function (req, res) {
-    const destination = 'review-application';
-    res.redirect( destination );
+  const destination = 'review-application';
+  res.redirect(destination);
 });
 
 router.post(/process-application\/other/, function (req, res) {
-    const destination = 'postcode';
-    res.redirect( destination );
+  const destination = 'postcode';
+  res.redirect(destination);
 });
 
 router.post(/process-application\/send-a-letter/, function (req, res) {
-    const destination = 'confirmation?confirmationStatus=letterSent';
-    res.redirect( destination );
+  const destination = 'confirmation?confirmationStatus=letterSent';
+  res.redirect(destination);
 });
 
 router.post(/process-application\/matex/, function (req, res) {
-    const destination = 'review-application';
-    res.redirect( destination );
+  const destination = 'review-application';
+  res.redirect(destination);
 });
 
 
 router.post(/process-application/, function (req, res) {
-    const destination = 'process-application/other';
-    res.redirect( destination );
+  const destination = 'process-application/other';
+  res.redirect(destination);
 });
 
 //
@@ -656,32 +617,32 @@ router.post(/process-application/, function (req, res) {
 //
 router.get(/postcode-handler/, function (req, res) {
 
-  console.log( 'POSTCODE HANDLER' );
+  console.log('POSTCODE HANDLER');
 
   // Prep the variables
   let addressSearchPostcode = req.session.data.addressSearchPostcode.split(' ').join('').toUpperCase();
   const addressSearchBuildingNumberOrName = req.session.data.addressSearchBuildingNumberOrName || '';
   const apiKey = process.env.POSTCODEAPIKEY;
   const regex = RegExp('^([A-PR-UWYZa-pr-uwyz](([0-9](([0-9]|[A-HJKSTUW])?)?)|([A-HK-Ya-hk-y][0-9]([0-9]|[ABEHMNPRVWXY])?)) ?[0-9][ABD-HJLNP-UW-Zabd-hjlnp-uw-z]{2})$', 'i');
-  addressSearchPostcode = ( regex.test(addressSearchPostcode) ) ? addressSearchPostcode : '';
+  addressSearchPostcode = (regex.test(addressSearchPostcode)) ? addressSearchPostcode : '';
 
-  const updateResults = ( arr ) => {
+  const updateResults = (arr) => {
     req.session.data.addressSearchResults = arr;
   };
 
-  const toTitleCase = ( str ) => {
-    return str.replace( /\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); } );
+  const toTitleCase = (str) => {
+    return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
   }
 
-  const formatAddress = ( address ) => {
+  const formatAddress = (address) => {
 
     const formattedAddress = [];
     const addressParts = address.split(', ');
-    addressParts.forEach( ( part, i ) => {
-      if( i !== (addressParts.length - 1) ){
-        formattedAddress.push( toTitleCase( part ) );
+    addressParts.forEach((part, i) => {
+      if (i !== (addressParts.length - 1)) {
+        formattedAddress.push(toTitleCase(part));
       } else {
-        formattedAddress.push( part );
+        formattedAddress.push(part);
       }
     });
 
@@ -691,63 +652,63 @@ router.get(/postcode-handler/, function (req, res) {
 
   let baseURL = '';
 
-  if( addressSearchBuildingNumberOrName ){
+  if (addressSearchBuildingNumberOrName) {
     baseURL = 'https://api.os.uk/search/places/v1/find?query=' + encodeURI(addressSearchBuildingNumberOrName);
   }
 
-  if( addressSearchPostcode ){
+  if (addressSearchPostcode) {
     baseURL = 'https://api.os.uk/search/places/v1/postcode?postcode=' + encodeURI(addressSearchPostcode);
   }
 
 
   // Make the call
-  if( baseURL && apiKey ){
+  if (baseURL && apiKey) {
 
     let url = baseURL + '&key=' + apiKey;
 
-    axios.get( url ).then( response => {
+    axios.get(url).then(response => {
 
       let filteredResults = [];
 
-      if( Array.isArray( response.data.results ) ){
+      if (Array.isArray(response.data.results)) {
 
-        response.data.results.forEach(function(result){
+        response.data.results.forEach(function (result) {
 
           let resultPostcode = result.DPA.POSTCODE.split(' ').join('').toUpperCase();
 
-          let obj = { 
-            'text' : formatAddress( result.DPA.ADDRESS ),
-            'value' : formatAddress( result.DPA.ADDRESS )
+          let obj = {
+            'text': formatAddress(result.DPA.ADDRESS),
+            'value': formatAddress(result.DPA.ADDRESS)
           };
 
-          if( addressSearchPostcode ){
+          if (addressSearchPostcode) {
 
-            if( addressSearchPostcode.indexOf(resultPostcode) === 0 ){
+            if (addressSearchPostcode.indexOf(resultPostcode) === 0) {
 
               let bnon = addressSearchBuildingNumberOrName.trim().toUpperCase();
-              if( bnon ){
+              if (bnon) {
 
                 // WE HAVE A POSTCODE AND A BUILDING NAME/NUMBER, TRY TO NARROW THE RESULTS DOWN...
 
-                if( result.DPA.BUILDING_NAME ){
+                if (result.DPA.BUILDING_NAME) {
 
-                  if( result.DPA.SUB_BUILDING_NAME ){
+                  if (result.DPA.SUB_BUILDING_NAME) {
                     // We can check the SUB_BUILDING_NAME field as well...
-                    if( result.DPA.SUB_BUILDING_NAME.indexOf(bnon) > -1 || result.DPA.BUILDING_NAME.indexOf(bnon) > -1 ){
+                    if (result.DPA.SUB_BUILDING_NAME.indexOf(bnon) > -1 || result.DPA.BUILDING_NAME.indexOf(bnon) > -1) {
                       filteredResults.push(obj);
                     }
                   } else {
                     // We can only check the BUILDING_NAME field...
-                    if( result.DPA.BUILDING_NAME.indexOf(bnon) > -1 ){
+                    if (result.DPA.BUILDING_NAME.indexOf(bnon) > -1) {
                       filteredResults.push(obj);
                     }
                   }
-          
-                } else if( result.DPA.BUILDING_NUMBER ) {
-        
-                    if( result.DPA.BUILDING_NUMBER === String(bnon) ){
-                      filteredResults.push(obj);
-                    }
+
+                } else if (result.DPA.BUILDING_NUMBER) {
+
+                  if (result.DPA.BUILDING_NUMBER === String(bnon)) {
+                    filteredResults.push(obj);
+                  }
 
                 }
               } else {
@@ -755,7 +716,7 @@ router.get(/postcode-handler/, function (req, res) {
                 // WE HAVE A POSTCODE, BUT NO BUILDING NAME/NUMBER, ALLOW EVERYTHING...
                 filteredResults.push(obj);
               }
-            
+
             }
 
           } else {
@@ -763,25 +724,25 @@ router.get(/postcode-handler/, function (req, res) {
             // WE DON'T HAVE A POSTCODE, ONLY BUILDING NAME/NUMBER, ALLOW ANYTHING...
             filteredResults.push(obj);
 
-         }
+          }
 
         });
 
       }
 
-      updateResults( filteredResults );
+      updateResults(filteredResults);
       res.redirect('process-application--postcode-results');
 
 
-    }).catch( (error) => { console.log( error ); });
-  
+    }).catch((error) => { console.log(error); });
 
-} else {
 
-  updateResults([]);
-  res.redirect('process-application--postcode?showErrors=true');
+  } else {
 
-}
+    updateResults([]);
+    res.redirect('process-application--postcode?showErrors=true');
+
+  }
 
 });
 
@@ -833,8 +794,8 @@ router.post('/comparison--leave-feedback', function (req, res) {
 //
 // RESET SEARCH
 //
-router.get(/reset-search/,function( req, res ){
-  
+router.get(/reset-search/, function (req, res) {
+
   const destination = 'search';
 
   delete req.session.data.searchProcessor;
@@ -850,7 +811,7 @@ router.get(/reset-search/,function( req, res ){
 
   req.session.data[res.locals.version].currentPage = 0;
 
-  res.redirect( destination );
+  res.redirect(destination);
 
 });
 
@@ -859,281 +820,287 @@ router.get(/reset-search/,function( req, res ){
 // ADDRESS LOOKUP 
 router.get(/^\/[^\/]+\/address-lookup$/, function (req, res) {
 
-  if( req.session.data.noLookUp === 'true' ){
+  console.log('LOOKING UP ADDRESS');
+  console.log(req.session.data.lookupJourney);
+
+  if (req.session.data.noLookUp === 'true') {
 
     delete req.session.data.noLookUp;
 
     // If we tell the page not to load it...don't load it...
-
-    res.render( './app/views/v1/' + req.path.substring(1), {
+    res.render('./app/views/v1/' + req.path.substring(1), {
       data: req.session.data
     });
 
   } else {
 
-  function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
-  function normPostcode(s) { return (s || '').replace(/\s+/g, '').toUpperCase(); }
+    function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+    function normPostcode(s) { return (s || '').replace(/\s+/g, '').toUpperCase(); }
 
-const qs = require('querystring');
-const parsed = qs.parse(req.url.split('?')[1] || '');
+    const qs = require('querystring');
+    const parsed = qs.parse(req.url.split('?')[1] || '');
 
-// Persist addressTarget across requests
-if (parsed.addressTarget) {
-  req.session.addressTarget = parsed.addressTarget;
-}
+    // Persist addressTarget across requests
+    if (parsed.addressTarget) {
+      req.session.addressTarget = parsed.addressTarget;
+    }
 
-// If lookup is opened fresh (no user input), clear previous state
-const noParamsProvided =
-  !parsed.addressSearchPostcode &&
-  !parsed.addressSearchBuildingNumberOrName;
+    // If lookup is opened fresh (no user input), clear previous state
+    const noParamsProvided =
+      !parsed.addressSearchPostcode &&
+      !parsed.addressSearchBuildingNumberOrName;
 
-// Only clear when user is entering lookup from another page (not from result screen)
-if (noParamsProvided && !parsed.source && !parsed.returnTo) {
-  req.session.data.addressSearchPostcode = '';
-  req.session.data.addressSearchBuildingNumberOrName = '';
-  req.session.data.addressSearchResults = [];
-}
+    // Only clear when user is entering lookup from another page (not from result screen)
+    if (noParamsProvided && !parsed.source && !parsed.returnTo) {
+      req.session.data.addressSearchPostcode = '';
+      req.session.data.addressSearchBuildingNumberOrName = '';
+      req.session.data.addressSearchResults = [];
+    }
 
-// If user clicked "Search again", wipe previous search state
-const isSearchAgain =
-  !parsed.addressSearchPostcode &&
-  !parsed.addressSearchBuildingNumberOrName &&
-  !parsed.source &&   // optional, avoids accidental journey resets
-  !parsed.returnTo;
+    // If user clicked "Search again", wipe previous search state
+    const isSearchAgain =
+      !parsed.addressSearchPostcode &&
+      !parsed.addressSearchBuildingNumberOrName &&
+      !parsed.source &&   // optional, avoids accidental journey resets
+      !parsed.returnTo;
 
-if (isSearchAgain) {
-  req.session.data.addressSearchPostcode = '';
-  req.session.data.addressSearchBuildingNumberOrName = '';
-  req.session.data.addressSearchResults = [];
-}
+    if (isSearchAgain) {
+      req.session.data.addressSearchPostcode = '';
+      req.session.data.addressSearchBuildingNumberOrName = '';
+      req.session.data.addressSearchResults = [];
+    }
 
-// Normalise source to a journey folder and remember which source invoked lookup
-const sourceAlias = { matex: 'matex', hrtppc: 'hrtppc', newHRT: 'hrtppc', medex: 'medex' }; 
+    // Normalise source to a journey folder and remember which source invoked lookup
+    const sourceAlias = { matex: 'matex', hrtppc: 'hrtppc', newHRT: 'hrtppc', medex: 'medex' };
 
-// Remember raw source (which page invoked lookup)
-req.session.lookupSourceRaw = parsed.source || req.session.lookupSourceRaw || 'hrtppc';
+    console.log('STARTING WITH: ' + req.session.lookupSourceRaw );
 
-// Set the journey used for template folders
-const normalisedJourney = sourceAlias[req.session.lookupSourceRaw] || req.session.lookupJourney || 'hrtppc';
-req.session.lookupJourney = normalisedJourney;
+    // Remember raw source (which page invoked lookup)
+    req.session.lookupSourceRaw = parsed.source || req.session.data.source || req.session.lookupSourceRaw || 'hrtppc';
 
-req.session.data.lookupJourney = req.session.lookupJourney;
+    // Set the journey used for template folders
+    const normalisedJourney = sourceAlias[req.session.lookupSourceRaw] || req.session.lookupJourney || 'hrtppc';
+    req.session.lookupJourney = normalisedJourney;
 
-if (parsed.returnTo) {
-  req.session.returnTo = parsed.returnTo;
-}
+    req.session.data.lookupJourney = req.session.lookupJourney;
 
-req.session.data.addressSearchPostcode = parsed.addressSearchPostcode || '';
+    console.log( 'ENDING WITH: ' + req.session.lookupSourceRaw );
 
-req.session.data.addressSearchBuildingNumberOrName =
-  parsed.addressSearchBuildingNumberOrName || '';
-
-
-  // Prep the variables
-  let addressSearchPostcode =
-  (parsed.addressSearchPostcode || '').replace(/\s+/g, '').toUpperCase();
-
-  const addressSearchBuildingNumberOrName = req.session.data.addressSearchBuildingNumberOrName || '';
-  const apiKey = process.env.POSTCODEAPIKEY;
-  const regex = RegExp('^([A-PR-UWYZa-pr-uwyz](([0-9](([0-9]|[A-HJKSTUW])?)?)|([A-HK-Ya-hk-y][0-9]([0-9]|[ABEHMNPRVWXY])?)) ?[0-9][ABD-HJLNP-UW-Zabd-hjlnp-uw-z]{2})$', 'i');
-  addressSearchPostcode = ( regex.test(addressSearchPostcode) ) ? addressSearchPostcode : '';
-
-
-  let baseURL = '';
-  if (addressSearchPostcode) {
-  // Prefer postcode endpoint when available (scoped to that postcode)
-  baseURL = 'https://api.os.uk/search/places/v1/postcode?postcode=' + encodeURI(addressSearchPostcode);
-  } else if (addressSearchBuildingNumberOrName) {
-  // Only fall back to find?query=... when there is no postcode at all
-  baseURL = 'https://api.os.uk/search/places/v1/find?query=' + encodeURI(addressSearchBuildingNumberOrName);
-  }
-
-  if (!baseURL || !apiKey) {
-    req.session.data.addressSearchResults = [];
-    const journey = req.session.lookupJourney;
-    return res.render(`v1/${journey}/address-lookup`, {
-      returnTo: req.session.returnTo
-    });
-  }
-
-
-
-  const url = baseURL + '&key=' + apiKey;
-
-  axios.get(url).then(response => {
-
-    const results = [];
-  
-    function toTitleCase(str) {
-      if (!str) return '';
     
-      // Whitelist of acronyms to keep uppercase
-      const ACRONYMS = new Set([
-        'NHS','HMRC','DVLA','ICB','CCG','PCT','GP','UK','NHSBT',
-        'UHB','UHBW','UCLH','NCA','ONS','CQC','DBS','MOD','DWP','BBC'
-      ]);
-    
-      // Optional: keep roman numerals uppercase
-      const ROMAN = new Set(['I','II','III','IV','V','VI','VII','VIII','IX','X']);
-    
-      return str.replace(/\w\S*/g, (txt) => {
-        const clean = txt.replace(/[^A-Za-z]/g, '');     // strip punctuation for checks
-        const upper = clean.toUpperCase();
-    
-        // Keep acronyms and roman numerals fully uppercase
-        if (ACRONYMS.has(upper) || ROMAN.has(upper)) return upper;
-    
-        // Title-case hyphenated parts properly (e.g., "St. Asaph", "Pont-y-pwl")
-        return txt
-          .split('-')
-          .map(part => part
-            ? part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()
-            : part
-          )
-          .join('-');
+    req.session.returnTo = parsed.returnTo || req.session.data.returnTo;
+
+
+    req.session.data.addressSearchPostcode = parsed.addressSearchPostcode || '';
+
+    req.session.data.addressSearchBuildingNumberOrName =
+      parsed.addressSearchBuildingNumberOrName || '';
+
+
+    // Prep the variables
+    let addressSearchPostcode =
+      (parsed.addressSearchPostcode || '').replace(/\s+/g, '').toUpperCase();
+
+    const addressSearchBuildingNumberOrName = req.session.data.addressSearchBuildingNumberOrName || '';
+    const apiKey = process.env.POSTCODEAPIKEY;
+    const regex = RegExp('^([A-PR-UWYZa-pr-uwyz](([0-9](([0-9]|[A-HJKSTUW])?)?)|([A-HK-Ya-hk-y][0-9]([0-9]|[ABEHMNPRVWXY])?)) ?[0-9][ABD-HJLNP-UW-Zabd-hjlnp-uw-z]{2})$', 'i');
+    addressSearchPostcode = (regex.test(addressSearchPostcode)) ? addressSearchPostcode : '';
+
+
+    let baseURL = '';
+    if (addressSearchPostcode) {
+      // Prefer postcode endpoint when available (scoped to that postcode)
+      baseURL = 'https://api.os.uk/search/places/v1/postcode?postcode=' + encodeURI(addressSearchPostcode);
+    } else if (addressSearchBuildingNumberOrName) {
+      // Only fall back to find?query=... when there is no postcode at all
+      baseURL = 'https://api.os.uk/search/places/v1/find?query=' + encodeURI(addressSearchBuildingNumberOrName);
+    }
+
+    if (!baseURL || !apiKey) {
+      req.session.data.addressSearchResults = [];
+      const journey = req.session.lookupJourney;
+      return res.render(`v1/${journey}/address-lookup`, {
+        returnTo: req.session.returnTo
       });
     }
-  
 
-  const targetPostcode = normPostcode(req.session.data.addressSearchPostcode);
-  const bnonRaw = (req.session.data.addressSearchBuildingNumberOrName || '').trim();
-  const isNumericBnon = /^[0-9]+[A-Za-z]?$/.test(bnonRaw); // 4, 4A, etc.
-  const bnonUpper = bnonRaw.toUpperCase();
 
-  if (Array.isArray(response.data.results)) {
-  response.data.results.forEach(result => {
 
-  const dpa = result.DPA;
+    const url = baseURL + '&key=' + apiKey;
 
-  let raw = (dpa.ADDRESS || '').trim();
-  raw = raw.replace(/^(\d+)\s*,\s+/, "$1 ");
-  
-  // DISPLAY VALUE (title-case except postcode)
-  const rawParts = raw.split(',');
-  const postcode = rawParts.pop().trim().toUpperCase();
-  const before = toTitleCase(rawParts.join(', ').trim());
-  const display = [before, postcode].filter(Boolean).join(', ');
-  
-  const resPc = normPostcode(dpa.POSTCODE);
+    axios.get(url).then(response => {
 
-  // 1) Postcode filter (when we searched by postcode)
-  if (targetPostcode && resPc !== targetPostcode) return;
+      const results = [];
 
-  //
-  // 2) BUILDING / FLAT / TEXT FILTER (FINAL VERSION)
-  //
-  if (bnonRaw) {
+      function toTitleCase(str) {
+        if (!str) return '';
 
-    const bn     = (dpa.BUILDING_NUMBER || '').toUpperCase();      // 10, 10A, 6, etc.
-    const sub    = (dpa.SUB_BUILDING_NAME || '').toUpperCase();    // FLAT 6, APARTMENT 6-9
-    const bname  = (dpa.BUILDING_NAME || '').toUpperCase();        // ST. JAMES HOUSE 3-6
-    const org    = (dpa.ORGANISATION_NAME || '').toUpperCase();    // DALEY LETTINGS
-    const addr   = raw.toUpperCase();
+        // Whitelist of acronyms to keep uppercase
+        const ACRONYMS = new Set([
+          'NHS', 'HMRC', 'DVLA', 'ICB', 'CCG', 'PCT', 'GP', 'UK', 'NHSBT',
+          'UHB', 'UHBW', 'UCLH', 'NCA', 'ONS', 'CQC', 'DBS', 'MOD', 'DWP', 'BBC'
+        ]);
 
-    let keep = false;
+        // Optional: keep roman numerals uppercase
+        const ROMAN = new Set(['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']);
 
-  // ---------------------------
-  // A) NUMERIC INPUT (10, 10A, 6)
-  // ---------------------------
-  if (isNumericBnon) {
+        return str.replace(/\w\S*/g, (txt) => {
+          const clean = txt.replace(/[^A-Za-z]/g, '');     // strip punctuation for checks
+          const upper = clean.toUpperCase();
 
-    const match = bnonUpper.match(/^(\d+)([A-Z]?)$/);
-    const nStr  = match[1];        // numeric part
-    const n     = parseInt(nStr);  // integer
-    const suff  = match[2];        // letter suffix (A)
+          // Keep acronyms and roman numerals fully uppercase
+          if (ACRONYMS.has(upper) || ROMAN.has(upper)) return upper;
 
-    // Normalise building number and address for comparisons
-    const bnNS    = bn.replace(/\s+/g, '');       // e.g. "10A"
-    const addrNS  = addr.replace(/\s+/g, '');     // e.g. "10,PORTLAND..."
-
-    // (A1) EXACT SUFFIX MATCH (user enters "10A")
-    if (suff) {
-      keep = (bnNS === `${nStr}${suff}`);
-    }
-
-    // (A2) NUMBER MATCH (user enters "10" → match 10 AND 10A)
-    if (!keep && !suff) {
-      const r = new RegExp(`^${escapeRegex(nStr)}([A-Z])?$`); // 10 or 10A
-      keep =
-        r.test(bnNS) ||
-        addrNS.startsWith(`${nStr},`) ||
-        addrNS.startsWith(`${nStr}`);
-    }
-
-    // (A3) FLAT NUMBER MATCH (Flat 6, Flat 6-9)
-    if (!keep) {
-      const flatMatch = sub.match(/^(FLAT|APARTMENT)\s+(\d+)(?:\s*-\s*(\d+))?/);
-      if (flatMatch) {
-        const start = parseInt(flatMatch[2]);
-        const end   = flatMatch[3] ? parseInt(flatMatch[3]) : start;
-        if (n >= start && n <= end) keep = true;
+          // Title-case hyphenated parts properly (e.g., "St. Asaph", "Pont-y-pwl")
+          return txt
+            .split('-')
+            .map(part => part
+              ? part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()
+              : part
+            )
+            .join('-');
+        });
       }
-    }
 
-    // (A4) BUILDING NAME RANGE MATCH ("St. James House 3-6")
-    if (!keep) {
-      const range = bname.match(/(\d+)\s*[-–]\s*(\d+)\s*$/);
-      if (range) {
-        const lo = parseInt(range[1]);
-        const hi = parseInt(range[2]);
-        if (n >= lo && n <= hi) keep = true;
+
+      const targetPostcode = normPostcode(req.session.data.addressSearchPostcode);
+      const bnonRaw = (req.session.data.addressSearchBuildingNumberOrName || '').trim();
+      const isNumericBnon = /^[0-9]+[A-Za-z]?$/.test(bnonRaw); // 4, 4A, etc.
+      const bnonUpper = bnonRaw.toUpperCase();
+
+      if (Array.isArray(response.data.results)) {
+        response.data.results.forEach(result => {
+
+          const dpa = result.DPA;
+
+          let raw = (dpa.ADDRESS || '').trim();
+          raw = raw.replace(/^(\d+)\s*,\s+/, "$1 ");
+
+          // DISPLAY VALUE (title-case except postcode)
+          const rawParts = raw.split(',');
+          const postcode = rawParts.pop().trim().toUpperCase();
+          const before = toTitleCase(rawParts.join(', ').trim());
+          const display = [before, postcode].filter(Boolean).join(', ');
+
+          const resPc = normPostcode(dpa.POSTCODE);
+
+          // 1) Postcode filter (when we searched by postcode)
+          if (targetPostcode && resPc !== targetPostcode) return;
+
+          //
+          // 2) BUILDING / FLAT / TEXT FILTER (FINAL VERSION)
+          //
+          if (bnonRaw) {
+
+            const bn = (dpa.BUILDING_NUMBER || '').toUpperCase();      // 10, 10A, 6, etc.
+            const sub = (dpa.SUB_BUILDING_NAME || '').toUpperCase();    // FLAT 6, APARTMENT 6-9
+            const bname = (dpa.BUILDING_NAME || '').toUpperCase();        // ST. JAMES HOUSE 3-6
+            const org = (dpa.ORGANISATION_NAME || '').toUpperCase();    // DALEY LETTINGS
+            const addr = raw.toUpperCase();
+
+            let keep = false;
+
+            // ---------------------------
+            // A) NUMERIC INPUT (10, 10A, 6)
+            // ---------------------------
+            if (isNumericBnon) {
+
+              const match = bnonUpper.match(/^(\d+)([A-Z]?)$/);
+              const nStr = match[1];        // numeric part
+              const n = parseInt(nStr);  // integer
+              const suff = match[2];        // letter suffix (A)
+
+              // Normalise building number and address for comparisons
+              const bnNS = bn.replace(/\s+/g, '');       // e.g. "10A"
+              const addrNS = addr.replace(/\s+/g, '');     // e.g. "10,PORTLAND..."
+
+              // (A1) EXACT SUFFIX MATCH (user enters "10A")
+              if (suff) {
+                keep = (bnNS === `${nStr}${suff}`);
+              }
+
+              // (A2) NUMBER MATCH (user enters "10" → match 10 AND 10A)
+              if (!keep && !suff) {
+                const r = new RegExp(`^${escapeRegex(nStr)}([A-Z])?$`); // 10 or 10A
+                keep =
+                  r.test(bnNS) ||
+                  addrNS.startsWith(`${nStr},`) ||
+                  addrNS.startsWith(`${nStr}`);
+              }
+
+              // (A3) FLAT NUMBER MATCH (Flat 6, Flat 6-9)
+              if (!keep) {
+                const flatMatch = sub.match(/^(FLAT|APARTMENT)\s+(\d+)(?:\s*-\s*(\d+))?/);
+                if (flatMatch) {
+                  const start = parseInt(flatMatch[2]);
+                  const end = flatMatch[3] ? parseInt(flatMatch[3]) : start;
+                  if (n >= start && n <= end) keep = true;
+                }
+              }
+
+              // (A4) BUILDING NAME RANGE MATCH ("St. James House 3-6")
+              if (!keep) {
+                const range = bname.match(/(\d+)\s*[-–]\s*(\d+)\s*$/);
+                if (range) {
+                  const lo = parseInt(range[1]);
+                  const hi = parseInt(range[2]);
+                  if (n >= lo && n <= hi) keep = true;
+                }
+              }
+
+              if (!keep) return;
+            }
+
+            // ---------------------------
+            // B) TEXT INPUT (e.g. "daley")
+            // ---------------------------
+            else {
+              if (
+                org.includes(bnonUpper) ||
+                bname.includes(bnonUpper) ||
+                sub.includes(bnonUpper)
+              ) {
+                keep = true;
+              }
+
+              if (!keep) return;
+            }
+          }
+
+
+          results.push({
+            text: display,
+            value: raw
+          });
+        });
+
+
+
       }
-    }
-
-    if (!keep) return;
-  }
-
-  // ---------------------------
-  // B) TEXT INPUT (e.g. "daley")
-  // ---------------------------
-  else {
-    if (
-      org.includes(bnonUpper) ||
-      bname.includes(bnonUpper) ||
-      sub.includes(bnonUpper)
-    ) {
-      keep = true;
-    }
-
-    if (!keep) return;
-  }
-}
 
 
-results.push({
-  text: display,
-  value: raw
-});
-});
+      req.session.data.addressSearchResults = results;
 
+      const journey = req.session.lookupJourney || 'matex';
+      return res.redirect(`/v1/${journey}/address-lookup-result`);
 
+    }).catch(err => {
+      console.error(err);
+      const journey = req.session.lookupJourney || 'matex';
 
-}
+      return res.render(`v1/${journey}/address-lookup`, {
+        returnTo: req.session.returnTo
+      });
 
-  
-    req.session.data.addressSearchResults = results;
-  
-    const journey = req.session.lookupJourney || 'matex';
-    return res.redirect(`/v1/${journey}/address-lookup-result`);
-  
-  }).catch(err => {
-    console.error(err);
-    const journey = req.session.lookupJourney || 'matex';
-
-    return res.render(`v1/${journey}/address-lookup`, {
-      returnTo: req.session.returnTo
     });
-      
-  });
 
   }
-  
+
 });
 
 
 router.get(/address-lookup-result$/, function (req, res) {
-  
-  console.log('FIRST ADDRESS LOOKUP (GET)');
+
+  console.log('FIRST ADDRESS LOOKUP (GET) ' + req.session.lookupJourney );
 
   const journey = req.session.lookupJourney || 'matex';
 
@@ -1149,23 +1116,23 @@ router.post(/^\/[^\/]+\/address-lookup-result$/, function (req, res) {
 
   function toTitleCase(str) {
     if (!str) return '';
-  
+
     // Whitelist of acronyms to keep uppercase
     const ACRONYMS = new Set([
-      'NHS','HMRC','DVLA','ICB','CCG','PCT','GP','UK','NHSBT',
-      'UHB','UHBW','UCLH','NCA','ONS','CQC','DBS','MOD','DWP','BBC'
+      'NHS', 'HMRC', 'DVLA', 'ICB', 'CCG', 'PCT', 'GP', 'UK', 'NHSBT',
+      'UHB', 'UHBW', 'UCLH', 'NCA', 'ONS', 'CQC', 'DBS', 'MOD', 'DWP', 'BBC'
     ]);
-  
+
     // Optional: keep roman numerals uppercase
-    const ROMAN = new Set(['I','II','III','IV','V','VI','VII','VIII','IX','X']);
-  
+    const ROMAN = new Set(['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']);
+
     return str.replace(/\w\S*/g, (txt) => {
       const clean = txt.replace(/[^A-Za-z]/g, '');     // strip punctuation for checks
       const upper = clean.toUpperCase();
-  
+
       // Keep acronyms and roman numerals fully uppercase
       if (ACRONYMS.has(upper) || ROMAN.has(upper)) return upper;
-  
+
       // Title-case hyphenated parts properly (e.g., "St. Asaph", "Pont-y-pwl")
       return txt
         .split('-')
@@ -1176,108 +1143,108 @@ router.post(/^\/[^\/]+\/address-lookup-result$/, function (req, res) {
         .join('-');
     });
   }
-    
+
   const selectedAddress = req.body.addressSearchResult;
 
   console.log("RAW IN POST:", selectedAddress);
 
-// Split the selected address string
-const parts = selectedAddress.split(',').map(p => p.trim());
+  // Split the selected address string
+  const parts = selectedAddress.split(',').map(p => p.trim());
 
-// Optional county — only assign if it matches a known county
-const knownCounties = [
-  'Bedfordshire', 'Berkshire', 'Bristol', 'Buckinghamshire', 'Cambridgeshire', 
-  'Cheshire', 'City of London', 'Cornwall', 'County Durham', 'Cumbria', 'Derbyshire', 
-  'Devon', 'Dorset', 'East Riding of Yorkshire', 'East Sussex', 'Essex', 'Gloucestershire', 
-  'Greater London', 'Greater Manchester', 'Hampshire', 'Herefordshire', 'Hertfordshire', 
-  'Isle of Wight', 'Kent', 'Lancashire', 'Leicestershire', 'Oxfordshire', 'Rutland', 'Shropshire', 
-  'Somerset', 'South Yorkshire', 'Staffordshire', 'Suffolk', 'Surrey', 'Tyne and Wear', 
-  'Warwickshire', 'West Midlands', 'West Sussex', 'West Yorkshire', 'Wiltshire', 'Worcestershire'
-];
+  // Optional county — only assign if it matches a known county
+  const knownCounties = [
+    'Bedfordshire', 'Berkshire', 'Bristol', 'Buckinghamshire', 'Cambridgeshire',
+    'Cheshire', 'City of London', 'Cornwall', 'County Durham', 'Cumbria', 'Derbyshire',
+    'Devon', 'Dorset', 'East Riding of Yorkshire', 'East Sussex', 'Essex', 'Gloucestershire',
+    'Greater London', 'Greater Manchester', 'Hampshire', 'Herefordshire', 'Hertfordshire',
+    'Isle of Wight', 'Kent', 'Lancashire', 'Leicestershire', 'Oxfordshire', 'Rutland', 'Shropshire',
+    'Somerset', 'South Yorkshire', 'Staffordshire', 'Suffolk', 'Surrey', 'Tyne and Wear',
+    'Warwickshire', 'West Midlands', 'West Sussex', 'West Yorkshire', 'Wiltshire', 'Worcestershire'
+  ];
 
-// Build structured address
-const newAddress = {
-  addressLineOne: '',
-  addressLineTwo: '',
-  town: '',
-  county: '',
-  postcode: ''
-};
+  // Build structured address
+  const newAddress = {
+    addressLineOne: '',
+    addressLineTwo: '',
+    town: '',
+    county: '',
+    postcode: ''
+  };
 
-newAddress.postcode = parts.pop() || '';
-newAddress.town = parts.pop() || '';
+  newAddress.postcode = parts.pop() || '';
+  newAddress.town = parts.pop() || '';
 
-const lastPart = parts[parts.length - 1];
-if (knownCounties.includes(lastPart)) {
-  newAddress.county = parts.pop();
-}
+  const lastPart = parts[parts.length - 1];
+  if (knownCounties.includes(lastPart)) {
+    newAddress.county = parts.pop();
+  }
 
-// FLATS / APARTMENTS CASE
-// ------------------------------
-// FLATS / APARTMENTS CASE
-if (/^(flat|apartment)/i.test(parts[0]) && parts.length >= 2) {
+  // FLATS / APARTMENTS CASE
+  // ------------------------------
+  // FLATS / APARTMENTS CASE
+  if (/^(flat|apartment)/i.test(parts[0]) && parts.length >= 2) {
 
-  const flatAndBuilding = parts.shift();     // "APARTMENT 4 ST. JAMES HOUSE"
-  const rangeAndStreet  = parts.shift();     // "3-6 PORTLAND TERRACE"
+    const flatAndBuilding = parts.shift();     // "APARTMENT 4 ST. JAMES HOUSE"
+    const rangeAndStreet = parts.shift();     // "3-6 PORTLAND TERRACE"
 
-  const rangeMatch = rangeAndStreet.match(/^(\d+(-\d+)?)\s+(.+)$/);
+    const rangeMatch = rangeAndStreet.match(/^(\d+(-\d+)?)\s+(.+)$/);
 
-  if (rangeMatch) {
-    const range = rangeMatch[1];
-    const street = rangeMatch[3];
+    if (rangeMatch) {
+      const range = rangeMatch[1];
+      const street = rangeMatch[3];
 
-    newAddress.addressLineOne = toTitleCase(flatAndBuilding);
-    newAddress.addressLineTwo = toTitleCase(`${range} ${street}`);
+      newAddress.addressLineOne = toTitleCase(flatAndBuilding);
+      newAddress.addressLineTwo = toTitleCase(`${range} ${street}`);
+
+    } else {
+      newAddress.addressLineOne = toTitleCase(flatAndBuilding);
+      newAddress.addressLineTwo = toTitleCase(rangeAndStreet);
+    }
 
   } else {
-    newAddress.addressLineOne = toTitleCase(flatAndBuilding);
-    newAddress.addressLineTwo = toTitleCase(rangeAndStreet);
+    // STANDARD HOUSE
+    if (parts.length > 0) {
+      newAddress.addressLineOne = toTitleCase(parts.shift());
+      newAddress.addressLineTwo = toTitleCase(parts.join(', ') || '');
+    }
   }
 
-} else {
-  // STANDARD HOUSE
-  if (parts.length > 0) {
-    newAddress.addressLineOne = toTitleCase(parts.shift());
-    newAddress.addressLineTwo = toTitleCase(parts.join(', ') || '');
+  // Split building number only if line starts with a number (e.g. "10", "10A")
+  const numberMatch = newAddress.addressLineOne.match(/^(\d+[A-Za-z]?)(\s+.+)?$/);
+
+  if (numberMatch) {
+    // Numeric building number
+    newAddress.buildingNumber = numberMatch[1];
+    newAddress.streetName = (numberMatch[2] || '').trim();
+  } else {
+    // Building name only (no number)
+    newAddress.buildingNumber = '';
+    newAddress.streetName = newAddress.addressLineOne;
   }
-}
-
-// Split building number only if line starts with a number (e.g. "10", "10A")
-const numberMatch = newAddress.addressLineOne.match(/^(\d+[A-Za-z]?)(\s+.+)?$/);
-
-if (numberMatch) {
-  // Numeric building number
-  newAddress.buildingNumber = numberMatch[1];
-  newAddress.streetName = (numberMatch[2] || '').trim();
-} else {
-  // Building name only (no number)
-  newAddress.buildingNumber = '';
-  newAddress.streetName = newAddress.addressLineOne;
-}
 
 
-// Map which namespace to use based on source (page that opened lookup)
-const sourceToNamespace = {
-  matex: 'editMATEX',
-  hrtppc: 'editHRT',
-  newHRT: 'newHRT',
-  medex: 'editMEDEX'
-};
+  // Map which namespace to use based on source (page that opened lookup)
+  const sourceToNamespace = {
+    matex: 'editMATEX',
+    hrtppc: 'editHRT',
+    newHRT: 'newHRT',
+    medex: 'editMEDEX'
+  };
 
-const rawSource = req.session.lookupSourceRaw || 'hrtppc';
-const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJourney] || 'editMATEX';
+  const rawSource = req.session.lookupSourceRaw || 'hrtppc';
+  const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJourney] || 'editMATEX';
 
-  
+
   // Title-case line1 and line2 AFTER parsing
   newAddress.addressLineOne = toTitleCase(newAddress.addressLineOne);
   newAddress.addressLineTwo = toTitleCase(newAddress.addressLineTwo);
-  
+
   // But keep postcode UPPERCASE
   newAddress.postcode = newAddress.postcode.toUpperCase();
-  
+
   // Town should also be cleaned
   newAddress.town = toTitleCase(newAddress.town);
-  
+
   // County only if present
   if (newAddress.county)
     newAddress.county = toTitleCase(newAddress.county);
@@ -1302,7 +1269,7 @@ const ns = sourceToNamespace[rawSource] || sourceToNamespace[req.session.lookupJ
   if (req.session.addressTarget === 'hcp') {
     req.session.data.lookupHCPAddress = newAddress;
   }
-  
+
   if (req.session.addressTarget === 'patient') {
     req.session.data.lookupPatientAddress = newAddress;
   }
@@ -1326,7 +1293,7 @@ router.post(/edit-matex/, function (req, res) {
 
   //Email fulfilment selected but email address not entered
   if (fulfilment === 'email' && (!email || email.trim() === "")) {
-    errors.push ({
+    errors.push({
       text: "Enter the certificate holder's email address",
       href: "#email"
     });
@@ -1366,14 +1333,14 @@ router.post(/edit-matex/, function (req, res) {
         notes: notes ?? ''
       }
     };
-  
+
     // Optionally also set flattened keys if your template reads those
     data['editMATEX.certificateFulfilment'] = data.editMATEX.certificateFulfilment;
     data['editMATEX.email'] = data.editMATEX.email;
     data['editMATEX.addressLineOne'] = data.editMATEX.addressLineOne;
     data['editMATEX.postcode'] = data.editMATEX.postcode;
     data['editMATEX.notes'] = data.editMATEX.notes;
-  
+
     // Do NOT update req.session here; just render the error state
     return res.status(400).render('v1/matex/edit-or-reissue', { data });
   }
@@ -1381,7 +1348,7 @@ router.post(/edit-matex/, function (req, res) {
   //No errors? Continue as normal
   req.session.data.errors = null;
 
-  
+
   req.session.data.editMATEX = req.session.data.editMATEX || {};
 
   // Accept any common name pattern from the dateInput macro
@@ -1392,26 +1359,26 @@ router.post(/edit-matex/, function (req, res) {
     req.body['childDOB-day'],
     req.body?.childDOB?.day,
     req.body['childDOB.day'],
-    req.body['day']  
+    req.body['day']
   );
   const m = pick(
     req.body['childDOB-month'],
     req.body?.childDOB?.month,
     req.body['childDOB.month'],
-    req.body['month'] 
+    req.body['month']
   );
   const y = pick(
     req.body['childDOB-year'],
     req.body?.childDOB?.year,
     req.body['childDOB.year'],
-    req.body['year']            
+    req.body['year']
   );
 
   // If user submitted anything, these will be set; otherwise leave defaults as-is
   if (d && m && y) {
-    const day   = parseInt(d, 10);
+    const day = parseInt(d, 10);
     const month = parseInt(m, 10);
-    const year  = parseInt(y, 10);
+    const year = parseInt(y, 10);
 
     const dob = new Date(year, month - 1, day);
     if (!isNaN(dob.getTime())) {
@@ -1424,21 +1391,21 @@ router.post(/edit-matex/, function (req, res) {
       const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
       // ISO + Display for child DOB
-      req.session.data.editMATEX.childDOBISO      = dob.toISOString().slice(0,10);
+      req.session.data.editMATEX.childDOBISO = dob.toISOString().slice(0, 10);
       req.session.data.editMATEX.childDOBDisplay = fmt.format(dob);
 
       // ISO + Display for expiry
-      req.session.data.editMATEX.expiryISO        = expiry.toISOString().slice(0,10);
-      req.session.data.editMATEX.expiryDisplay    = fmt.format(expiry);
+      req.session.data.editMATEX.expiryISO = expiry.toISOString().slice(0, 10);
+      req.session.data.editMATEX.expiryDisplay = fmt.format(expiry);
 
       // Start date rule: start = child's due/birth date
-      req.session.data.editMATEX.startISO         = req.session.data.editMATEX.childDOBISO;
-      req.session.data.editMATEX.startDisplay     = req.session.data.editMATEX.childDOBDisplay;
+      req.session.data.editMATEX.startISO = req.session.data.editMATEX.childDOBISO;
+      req.session.data.editMATEX.startDisplay = req.session.data.editMATEX.childDOBDisplay;
 
       // Also prefill helpers so the edit page re-opens with the last inputs
-      req.session.data.childDOBDay   = String(day);
+      req.session.data.childDOBDay = String(day);
       req.session.data.childDOBMonth = String(month);
-      req.session.data.childDOBYear  = String(year);
+      req.session.data.childDOBYear = String(year);
     }
   }
 
@@ -1446,14 +1413,14 @@ router.post(/edit-matex/, function (req, res) {
   data.editMATEX = data.editMATEX || {};
 
   if ('editMATEX.firstName' in req.body) data.editMATEX.firstName = req.body['editMATEX.firstName'];
-  if ('editMATEX.lastName'  in req.body) data.editMATEX.lastName  = req.body['editMATEX.lastName'];
+  if ('editMATEX.lastName' in req.body) data.editMATEX.lastName = req.body['editMATEX.lastName'];
   if ('editMATEX.email' in req.body) data.editMATEX.email = req.body['editMATEX.email'];
   if ('editMATEX.certificateFulfilment' in req.body) data.editMATEX.certificateFulfilment = req.body['editMATEX.certificateFulfilment'];
   if ('editMATEX.addressLineOne' in req.body) data.editMATEX.addressLineOne = req.body['editMATEX.addressLineOne'];
   if ('editMATEX.addressLineTwo' in req.body) data.editMATEX.addressLineTwo = req.body['editMATEX.addressLineTwo'];
-  if ('editMATEX.town' in req.body)          data.editMATEX.town   = req.body['editMATEX.town'];
-  if ('editMATEX.county' in req.body)        data.editMATEX.county = req.body['editMATEX.county'];
-  if ('editMATEX.postcode' in req.body)      data.editMATEX.postcode = req.body['editMATEX.postcode'];
+  if ('editMATEX.town' in req.body) data.editMATEX.town = req.body['editMATEX.town'];
+  if ('editMATEX.county' in req.body) data.editMATEX.county = req.body['editMATEX.county'];
+  if ('editMATEX.postcode' in req.body) data.editMATEX.postcode = req.body['editMATEX.postcode'];
   if ('editMATEX.telephoneNumber' in req.body) data.editMATEX.telephoneNumber = req.body['editMATEX.telephoneNumber'];
 
   req.session.data = data;
@@ -1468,7 +1435,7 @@ router.post(/edit-matex/, function (req, res) {
 
 router.post(/edit-hrt/, function (req, res) {
   const data = req.session.data || {};
-  data.editHRT = data.editHRT || {}; 
+  data.editHRT = data.editHRT || {};
 
   if ('editHRT.firstName' in req.body)
     data.editHRT.firstName = req.body['editHRT.firstName'];
@@ -1504,7 +1471,7 @@ router.post(/edit-hrt/, function (req, res) {
 
   // if reissue button is clicked
   if (req.body.action === 'reissue') {
-    return res.redirect ('/v1/hrtppc/reissue-complete')
+    return res.redirect('/v1/hrtppc/reissue-complete')
   }
 
   // if save details is clicked
@@ -1525,7 +1492,7 @@ router.post(/edit-medex/, function (req, res) {
 
   //Email fulfilment selected but email address not entered
   if (fulfilment === 'email' && (!email || email.trim() === "")) {
-    errors.push ({
+    errors.push({
       text: "Enter the certificate holder's email address",
       href: "#email"
     });
@@ -1565,14 +1532,14 @@ router.post(/edit-medex/, function (req, res) {
         notes: notes ?? ''
       }
     };
-  
+
     // Optionally also set flattened keys if your template reads those
     data['editMEDEX.certificateFulfilment'] = data.editMEDEX.certificateFulfilment;
     data['editMEDEX.email'] = data.editMEDEX.email;
     data['editMEDEX.addressLineOne'] = data.editMEDEX.addressLineOne;
     data['editMEDEX.postcode'] = data.editMEDEX.postcode;
     data['editMEDEX.notes'] = data.editMEDEX.notes;
-  
+
     // Do NOT update req.session here; just render the error state
     return res.status(400).render('v1/medex/edit-or-reissue', { data });
   }
@@ -1580,21 +1547,21 @@ router.post(/edit-medex/, function (req, res) {
   //No errors? Continue as normal
   req.session.data.errors = null;
 
-  
+
   req.session.data.editMEDEX = req.session.data.editMEDEX || {};
 
   const data = req.session.data || {};
   data.editMEDEX = data.editMEDEX || {};
 
   if ('editMEDEX.firstName' in req.body) data.editMEDEX.firstName = req.body['editMEDEX.firstName'];
-  if ('editMEDEX.lastName'  in req.body) data.editMEDEX.lastName  = req.body['editMEDEX.lastName'];
+  if ('editMEDEX.lastName' in req.body) data.editMEDEX.lastName = req.body['editMEDEX.lastName'];
   if ('editMEDEX.email' in req.body) data.editMEDEX.email = req.body['editMEDEX.email'];
   if ('editMEDEX.certificateFulfilment' in req.body) data.editMEDEX.certificateFulfilment = req.body['editMEDEX.certificateFulfilment'];
   if ('editMEDEX.addressLineOne' in req.body) data.editMEDEX.addressLineOne = req.body['editMEDEX.addressLineOne'];
   if ('editMEDEX.addressLineTwo' in req.body) data.editMEDEX.addressLineTwo = req.body['editMEDEX.addressLineTwo'];
-  if ('editMEDEX.town' in req.body)          data.editMEDEX.town   = req.body['editMEDEX.town'];
-  if ('editMEDEX.county' in req.body)        data.editMEDEX.county = req.body['editMEDEX.county'];
-  if ('editMEDEX.postcode' in req.body)      data.editMEDEX.postcode = req.body['editMEDEX.postcode'];
+  if ('editMEDEX.town' in req.body) data.editMEDEX.town = req.body['editMEDEX.town'];
+  if ('editMEDEX.county' in req.body) data.editMEDEX.county = req.body['editMEDEX.county'];
+  if ('editMEDEX.postcode' in req.body) data.editMEDEX.postcode = req.body['editMEDEX.postcode'];
   if ('editMEDEX.telephoneNumber' in req.body) data.editMEDEX.telephoneNumber = req.body['editMEDEX.telephoneNumber'];
 
   req.session.data = data;
@@ -1609,7 +1576,7 @@ router.post(/edit-medex/, function (req, res) {
 
 router.get('/v1/hrtppc/edit-or-reissue', (req, res) => {
 
-  console.log( req );
+  console.log(req);
 
   res.render(
     'v1/hrtppc/edit-or-reissue',
@@ -1624,14 +1591,14 @@ router.get(/^\/v1\/(matex|medex)\/edit-or-reissue$/, function (req, res) {
 
   const iso = req.session.data?.editMATEX?.childDOBISO; // e.g. "2025-12-05"
   if (iso && /^\d{4}-\d{2}-\d{2}$/.test(iso)) {
-    req.session.data.childDOBYear  = iso.substring(0, 4);
+    req.session.data.childDOBYear = iso.substring(0, 4);
     req.session.data.childDOBMonth = iso.substring(5, 7);
-    req.session.data.childDOBDay   = iso.substring(8,10);
+    req.session.data.childDOBDay = iso.substring(8, 10);
   } else {
     // ensure defaults are present if nothing is saved yet
-    req.session.data.childDOBYear  = req.session.data.childDOBYear  || '2025';
+    req.session.data.childDOBYear = req.session.data.childDOBYear || '2025';
     req.session.data.childDOBMonth = req.session.data.childDOBMonth || '11';
-    req.session.data.childDOBDay   = req.session.data.childDOBDay   || '25';
+    req.session.data.childDOBDay = req.session.data.childDOBDay || '25';
   }
   return res.render(`v1/${req.params[0]}/edit-or-reissue`);
 });
@@ -1640,7 +1607,7 @@ router.get(/^\/v1\/(matex|medex)\/edit-or-reissue$/, function (req, res) {
 //
 // CASE EDIT SCREEN
 //
-router.get(/^\/v1\/(matex|medex)\/case--edit$/, function(req, res){
+router.get(/^\/v1\/(matex|medex)\/case--edit$/, function (req, res) {
 
   const lookupAddress = req.session.data.lookupAddress;
   delete req.session.data.lookupAddress;
@@ -1670,9 +1637,9 @@ router.get(/^\/v1\/(matex|medex)\/case--edit$/, function(req, res){
 //
 // COMPARISON EDIT SCREEN
 //
-router.post(/comparison--edit/, function( req, res ){
+router.post(/comparison--edit/, function (req, res) {
   const destination = 'comparison--correction';
-  return res.redirect( destination );
+  return res.redirect(destination);
 });
 
 router.get('/v1/matex/cannot-process-application--correction', function (req, res) {
@@ -1749,7 +1716,7 @@ router.get('/v1/change-complete', function (req, res) {
 // });
 
 
-router.get(/^\/(matex|medex)\/case--edit$/, function(req, res) {
+router.get(/^\/(matex|medex)\/case--edit$/, function (req, res) {
   const type = req.url.match(/^\/(matex|medex)\/case--edit$/)?.[1] || 'matex'
 
   res.render(`v1/${type}/case--edit`, {
@@ -1757,7 +1724,7 @@ router.get(/^\/(matex|medex)\/case--edit$/, function(req, res) {
   })
 })
 
-router.post(/^\/(matex|medex)\/case--edit$/, function(req, res) {
+router.post(/^\/(matex|medex)\/case--edit$/, function (req, res) {
   const type = req.url.match(/^\/(matex|medex)\/case--edit$/)?.[1] || 'matex'
 
   const dobDay =
