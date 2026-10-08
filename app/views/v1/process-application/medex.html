@@ -519,12 +519,20 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               {% endcall %}
 
               <div class="nhsuk-button-group address-button">
-                {{ button({
-                html: '<span data-ak="G">Change address fields using address lookup</span>',
-                classes: "nhsuk-button--secondary nhsuk-button--small",
-                href:
-                "/v1/matex/address-lookup?source=matex&addressTarget=patient&returnTo=%2Fv1%2Fprocess-application%2Fmatex%3FshowAllFields%3Dfalse%23postcode"
-                }) }}
+           {{ button({
+  html: '<span data-ak="G">Change address fields using address lookup</span>',
+  classes: "nhsuk-button--secondary nhsuk-button--small",
+  href:
+  "/v1/matex/address-lookup?source=matex" +
+  "&addressTarget=patient" +
+  "&addressSearchPostcode=" + (patientPostcode | urlencode) +
+  "&addressSearchBuildingNumberOrName=" + (patientBuildingNumber | urlencode) +
+  "&addressSearchAddressLine1=" + (patientAddressLine1 | urlencode) +
+  "&addressSearchAddressLine2=" + (patientAddressLine2 | urlencode) +
+  "&addressSearchTown=" + (patientTown | urlencode) +
+  "&addressSearchCounty=" + (patientCounty | urlencode) +
+  "&returnTo=%2Fv1%2Fprocess-application%2Fexperimental--horizontal-labels%3FshowAllFields%3Dfalse%23postcode"
+}) }}
               </div>
 
               <hr />

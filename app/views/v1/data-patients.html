@@ -75,10 +75,11 @@
     [
     { html: 'expired' | getStatusTextOrTag( true ) },
     { html: '<span class="nhsuk-u-font-size-14">Certificate has expired</span>' }
+    
     ],
-    [
+     [
     { html: 'deleted' | getStatusTextOrTag( true ) },
-    { html: '<span class="nhsuk-u-font-size-14">A request has been made to delete the certificate</span>' }
+    { html: '<span class="nhsuk-u-font-size-14">A request has been made to delete the certificate</span>' } 
     ]
     ]
     }) }}
@@ -814,7 +815,7 @@
           const patients = [];
 
           const certificateTypes = document.querySelector('#certificateTypes').innerHTML.split(',').map(type => type.trim());
-          const statusesMatex = ['processing', 'on-hold', 'rejected', 'active', 'deleted', 'expired'];
+          const statusesMatex = ['processing', 'on-hold', 'rejected', 'active', 'expired'];
           const statusesHRTPPC = ['active', 'deleted', 'expired'];
           const fulfilment = ['email', 'post'];
 
@@ -854,7 +855,7 @@
             const weightedTypes = [
               'matex', 'matex',
               'medex', 'medex', 'medex', 'medex',
-              'hrtppc',
+              'hrtppc', 'hrtppc',
             ];
 
             obj.certificateType =
@@ -870,8 +871,8 @@
 
             // Force some MEDEX records into checking
             if (obj.certificateType === 'medex' && Math.random() < 0.4) {
-              obj.status = ['accepted', 'on-hold', 'rejected'][
-                Math.floor(Math.random() * 3)
+              obj.status = ['accepted', 'on-hold', 'expired', 'rejected'][
+                Math.floor(Math.random() * 4)
               ];
               obj.checking = true;
               obj.checkType = 'quality';
