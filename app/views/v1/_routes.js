@@ -1116,6 +1116,8 @@ results.push({
 
 router.get(/address-lookup-result$/, function (req, res) {
   
+  console.log('FIRST ADDRESS LOOKUP (GET)');
+
   const journey = req.session.lookupJourney || 'matex';
 
   res.render(`v1/${journey}/address-lookup-result`, {
@@ -1125,6 +1127,8 @@ router.get(/address-lookup-result$/, function (req, res) {
 
 
 router.post(/^\/[^\/]+\/address-lookup-result$/, function (req, res) {
+
+  console.log('FIRST ADDRESS LOOKUP (POST)');
 
   function toTitleCase(str) {
     if (!str) return '';
