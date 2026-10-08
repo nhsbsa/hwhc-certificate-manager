@@ -859,6 +859,18 @@ router.get(/reset-search/,function( req, res ){
 // ADDRESS LOOKUP 
 router.get(/^\/[^\/]+\/address-lookup$/, function (req, res) {
 
+  if( req.session.data.noLookUp === 'true' ){
+
+    delete req.session.data.noLookUp;
+
+    // If we tell the page not to load it...don't load it...
+
+    res.render( './app/views/v1/' + req.path.substring(1), {
+      data: req.session.data
+    });
+
+  } else {
+
   function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
   function normPostcode(s) { return (s || '').replace(/\s+/g, '').toUpperCase(); }
 
@@ -1093,6 +1105,9 @@ results.push({
   value: raw
 });
 });
+
+
+
 }
 
   
@@ -1110,6 +1125,8 @@ results.push({
     });
       
   });
+
+  }
   
 });
 

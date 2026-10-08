@@ -524,6 +524,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
   classes: "nhsuk-button--secondary nhsuk-button--small",
   href:
   "/v1/matex/address-lookup?source=matex" +
+  "&noLookUp=true" +
   "&addressTarget=patient" +
   "&addressSearchPostcode=" + (patientPostcode | urlencode) +
   "&addressSearchBuildingNumberOrName=" + (patientBuildingNumber | urlencode) +
