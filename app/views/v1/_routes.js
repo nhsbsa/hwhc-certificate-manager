@@ -188,9 +188,8 @@ router.get(/process-application\/matex/, function (req, res) {
   const matexScenarioMap = { accepted: 0, reject: 2, 'further-information': 4 };
   if (req.query.scenario && matexScenarioMap[req.query.scenario] !== undefined) {
     req.session.data.scenarioOutcome = req.query.scenario;
-  } else if (req.session.data.scenarioOutcome === undefined && req.session.data.scenarioIndex === undefined) {
+  } else if (req.session.data.scenarioIndex === undefined) {
     req.session.data.scenarioIndex = 0;
-    req.session.data.scenarioOutcome = getScenarioOutcome(req);
   }
 
   const queue = req.session.data.paperMatexQueue;
@@ -265,9 +264,8 @@ router.get(/process-application\/medex/, function (req, res) {
   const medexScenarioMap = { accepted: 1, reject: 3, 'further-information': 5 };
   if (req.query.scenario && medexScenarioMap[req.query.scenario] !== undefined) {
     req.session.data.scenarioOutcome = req.query.scenario;
-  } else if (req.session.data.scenarioOutcome === undefined && req.session.data.scenarioIndex === undefined) {
+  } else if (req.session.data.scenarioIndex === undefined) {
     req.session.data.scenarioIndex = 0;
-    req.session.data.scenarioOutcome = getScenarioOutcome(req);
   }
 
   const queue = req.session.data.paperMedexQueue;
