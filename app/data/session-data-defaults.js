@@ -79,17 +79,37 @@ module.exports = {
           firstName: 50,     // Medium
           childDOB: 4       // Low (blank)
         }
-      },      {
+      },
+      {
+        firstName: 'Thomas',
+        lastName: 'Harrissonn',
+        certificateType: 'medex',
+        channel: 'Paper',
+        nhsNumber: '943 217 6058',
+        dateOfBirth: {
+          day: '14',
+          month: '3',
+          year: '1979'
+        },
+        address: {
+          buildingNumber: '7',
+          streetName: 'Millbank Road',
+          addressLine2: '',
+          postTown: 'Leeds',
+          county: 'West Yorkshire',
+          postcode: 'LS12 4TG'
+        },
+        confidence: {
+          lastName: 50,
+          firstName: 90
+        }
+      },
+      {
         firstName: 'Sorah',
         lastName: 'Jaaahnson',
         certificateType: 'matex',
         channel: 'Paper',
         nhsNumber: '1252 567 987',
-        dateOfBirth: {
-          day: '2',
-          month: '7',
-          year: '1995'
-        },
         address: {
           buildingNumber: '12',
           streetName: 'Crown Passage',
@@ -104,7 +124,33 @@ module.exports = {
           childDOB: 10       // Low (blank)
         }
       },
-    
+      {
+        firstName: 'Priscilla',
+        lastName: 'Morgann',
+        certificateType: 'medex',
+        channel: 'Paper',
+        nhsNumber: '281 490 7634',
+        dateOfBirth: {
+          day: '8',
+          month: '11',
+          year: '1988'
+        },
+        address: {
+          buildingNumber: '23',
+          streetName: 'Kensington Waay',
+          addressLine2: 'Flat 4',
+          postTown: 'Manchester',
+          county: '',
+          postcode: 'M14 5RP'
+        },
+        confidence: {
+          firstName: 50,
+          address: {
+            streetName: 50,
+            postcode: 90
+          }
+        }
+      },
       {
         firstName: 'Beatrice',
         lastName: 'Speiiincer',
@@ -136,107 +182,6 @@ module.exports = {
           }
         }
       },
-    
-      {
-        firstName: 'Megan',
-        lastName: 'Rees',
-        certificateType: 'matex',
-        channel: 'Paper',
-        nhsNumber: '318 844 5688',
-        emailAddress: 'megan.riieeees@example.com',
-        address: {
-          buildingNumber: '66',
-          streetName: 'Fieldhouse Lane',
-          addressLine2: 'Greywood',
-          postTown: 'Bolton',
-          county: 'Greater Manchester',
-          postcode: 'BL3 9HB'
-        },
-        confidence: {
-          dateOfBirth: 10, // Low (blank)
-          email: 50,       // Medium
-          nhsNumber: 50    // Medium
-        }
-      },
-    
-      {
-        firstName: 'Annabelle',
-        lastName: 'Watts',
-        certificateType: 'matex',
-        channel: 'Paper',
-        nhsNumber: '459 137 4821',
-        dateOfBirth: {
-          day: '11',
-          month: '4',
-          year: '1983'
-        },
-        address: {
-          buildingNumber: '52',
-          streetName: 'Warren Terrace',
-          addressLine2: 'Elmwick',
-          postTown: 'Scarborough',
-          county: 'North Yorkshire',
-          postcode: 'YO14 2JG'
-        },
-        confidence: {
-          lastName: 50,
-          nhsNumber: 50
-        }
-      },
-
-      {
-        firstName: 'Thomas',
-        lastName: 'Harrissonn',
-        certificateType: 'medex',
-        channel: 'Paper',
-        nhsNumber: '943 217 6058',
-        dateOfBirth: {
-          day: '14',
-          month: '3',
-          year: '1979'
-        },
-        address: {
-          buildingNumber: '7',
-          streetName: 'Millbank Road',
-          addressLine2: '',
-          postTown: 'Leeds',
-          county: 'West Yorkshire',
-          postcode: 'LS12 4TG'
-        },
-        confidence: {
-          lastName: 50,
-          firstName: 90
-        }
-      },
-
-      {
-        firstName: 'Priscilla',
-        lastName: 'Morgann',
-        certificateType: 'medex',
-        channel: 'Paper',
-        nhsNumber: '281 490 7634',
-        dateOfBirth: {
-          day: '8',
-          month: '11',
-          year: '1988'
-        },
-        address: {
-          buildingNumber: '23',
-          streetName: 'Kensington Waay',
-          addressLine2: 'Flat 4',
-          postTown: 'Manchester',
-          county: '',
-          postcode: 'M14 5RP'
-        },
-        confidence: {
-          firstName: 50,
-          address: {
-            streetName: 50,
-            postcode: 90
-          }
-        }
-      },
-
       {
         firstName: 'Rajesh',
         lastName: 'Guuppta',
@@ -258,6 +203,57 @@ module.exports = {
         },
         confidence: {
           lastName: 10,
+          nhsNumber: 50
+        }
+      },
+      {
+        firstName: 'Megan',
+        lastName: 'Rees',
+        certificateType: 'matex',
+        channel: 'Paper',
+        nhsNumber: '318 844 5688',
+        emailAddress: 'megan.riieeees@example.com',
+        dateOfBirth: {
+          day: '11',
+          month: '4',
+          year: '1983'
+        },
+        address: {
+          buildingNumber: '66',
+          streetName: 'Fieldhouse Lane',
+          addressLine2: 'Greywood',
+          postTown: 'Bolton',
+          county: 'Greater Manchester',
+          postcode: 'BL3 9HB'
+        },
+        confidence: {
+          dateOfBirth: 10, // Low (blank)
+          email: 50,       // Medium
+          nhsNumber: 50    // Medium
+        }
+      },
+
+      {
+        firstName: 'Annabelle',
+        lastName: 'Watts',
+        certificateType: 'matex',
+        channel: 'Paper',
+        nhsNumber: '459 137 4821',
+        dateOfBirth: {
+          day: '11',
+          month: '4',
+          year: '1983'
+        },
+        address: {
+          buildingNumber: '52',
+          streetName: 'Warren Terrace',
+          addressLine2: 'Elmwick',
+          postTown: 'Scarborough',
+          county: 'North Yorkshire',
+          postcode: 'YO14 2JG'
+        },
+        confidence: {
+          lastName: 50,
           nhsNumber: 50
         }
       }

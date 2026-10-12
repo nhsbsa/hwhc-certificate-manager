@@ -61,9 +61,7 @@ function initPaperMatexQueue(req) {
       ? currentIndex % paperMatex.length
       : 0;
 
-    if (!req.session.data.imageFirstName || !req.session.data.imageLastName) {
-      hydrateImageFields(req, paperMatex[req.session.data.currentIndex]);
-    }
+    hydrateImageFields(req, paperMatex[req.session.data.currentIndex]);
   }
 }
 
@@ -130,9 +128,7 @@ function initMedexQueue(req) {
       ? currentIndex % paperMedex.length
       : 0;
 
-    if (!req.session.data.imageFirstName || !req.session.data.imageLastName) {
-      hydrateImageFields(req, paperMedex[req.session.data.medexIndex]);
-    }
+    hydrateImageFields(req, paperMedex[req.session.data.medexIndex]);
   }
 }
 
@@ -289,6 +285,7 @@ router.get(/process-application\/medex/, function (req, res) {
   }
 
   res.render('v1/process-application/medex', {
+    data: req.session.data,
     processedToday: req.session.data.applicationStats.total
   });
 });
