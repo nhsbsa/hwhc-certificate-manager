@@ -51,12 +51,10 @@ html: '<span data-ak="B">Return to your dashboard</span>'
             <!-- REASON FOR REJECTION -->
 
             <form method="post" action="/v1/process-application/scenarios/reject" novalidate>
-
               {% if data.certificateType == 'matex' %}
               {{ checkboxes({
               idPrefix: "rejectReason",
               name: "rejectReason",
-              value: data.rejectReason or "Healthcare practitioner signature missing",
               fieldset: {
               legend: {
               text: "Why is this application being rejected?"
@@ -81,7 +79,8 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               },
               {
               value: "Patient is under 14",
-              text: "Patient is under 14"
+              text: "Patient is under 14",
+              checked: not data.rejectReason or data.rejectReason == "Patient is under 14"
               },
               {
               value: "Patient is over 60",
@@ -93,7 +92,6 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               {{ checkboxes({
               idPrefix: "rejectReason",
               name: "rejectReason",
-              value: data.rejectReason or "Healthcare practitioner signature missing",
               fieldset: {
               legend: {
               text: "Why is this application being rejected?"
@@ -119,7 +117,8 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               },
               {
               value: "Patient is over 60",
-              text: "Patient is over 60"
+              text: "Patient is over 60",
+              checked: true
               },
               {
               value: "No medical condition ticked",

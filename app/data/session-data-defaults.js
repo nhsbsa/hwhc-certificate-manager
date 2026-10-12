@@ -110,6 +110,11 @@ module.exports = {
         certificateType: 'matex',
         channel: 'Paper',
         nhsNumber: '1252 567 987',
+            dateOfBirth: {
+          day: '9',
+          month: '12',
+          year: '2013'
+        },
         address: {
           buildingNumber: '12',
           streetName: 'Crown Passage',
@@ -121,7 +126,7 @@ module.exports = {
         confidence: {
           lastName: 50,      // Medium
           firstName: 50,     // Medium
-          childDOB: 10       // Low (blank)
+           dateOfBirth: 50
         }
       },
       {
@@ -133,7 +138,7 @@ module.exports = {
         dateOfBirth: {
           day: '8',
           month: '11',
-          year: '1988'
+          year: '1964'
         },
         address: {
           buildingNumber: '23',
@@ -145,6 +150,7 @@ module.exports = {
         },
         confidence: {
           firstName: 50,
+           dateOfBirth: 50,
           address: {
             streetName: 50,
             postcode: 90
