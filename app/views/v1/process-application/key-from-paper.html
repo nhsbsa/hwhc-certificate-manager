@@ -51,28 +51,25 @@
 
 
      <h2 class="nhsuk-heading-m">Ask for original paper form</h2>
+        <form method="post" action="/v1/process-application/key-from-paper">
+          {{ textarea({
+          name: "kfpNotes",
+          id: "kfp-notes",
+          rows: "3",
+          label: {
+          text: "Summarise why you're asking for the original paper form"
+          }
+          }) }}
 
-        {{ textarea({
-        name: "kfpNotes",
-        id: "kfp-notes",
-        rows: "3",
-        label: {
-        text: "Summarise why you're asking for the original paper form"
-        }
-        }) }}
-
-        <div class="nhsuk-button-group">
-            {% if data.scenarioIndex % 2 == 0 %}
-              {{ button({ html: '<span data-ak="I">Next</span>', href: './matex' }) }}
-            {% else %}
-              {{ button({ html: '<span data-ak="I">Next</span>', href: './medex' }) }}
-            {% endif %}
-            {{ button({
-              html: '<span data-ak="K">Finish processing</span>',
-              href: '/v1/dashboard',
-              classes: 'nhsuk-button--secondary'
-            }) }}
-          </div>
+          <div class="nhsuk-button-group">
+              {{ button({ html: '<span data-ak="I">Next</span>' }) }}
+              {{ button({
+                html: '<span data-ak="K">Finish processing</span>',
+                href: '/v1/dashboard',
+                classes: 'nhsuk-button--secondary'
+              }) }}
+            </div>
+        </form>
 
       </div>
 

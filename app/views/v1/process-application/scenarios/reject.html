@@ -28,6 +28,26 @@ html: '<span data-ak="B">Return to your dashboard</span>'
   </div>
 </div>
 
+{% set patientLookup = data.lookupPatientAddress or {} %}
+
+{% if patientLookup.buildingNumber is defined %}
+{% set patientBuildingNumber = patientLookup.buildingNumber %}
+{% else %}
+{% set patientBuildingNumber = data.imageBuildingNumberOrName %}
+{% endif %}
+
+{% set patientAddressLine1 = patientLookup.streetName or data.imageAddressLine1 %}
+
+{% if patientLookup.addressLineTwo is defined %}
+{% set patientAddressLine2 = patientLookup.addressLineTwo %}
+{% else %}
+{% set patientAddressLine2 = data.imageAddressLine2 or '' %}
+{% endif %}
+
+{% set patientTown = patientLookup.town or data.imageTown %}
+{% set patientCounty = patientLookup.county or data.imageCounty or '' %}
+{% set patientPostcode = patientLookup.postcode or data.imagePostcode %}
+
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
     <div class="nhsuk-grid-row">
@@ -191,7 +211,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               html: '<span data-ak="G">Use address lookup to change the address</span>',
               classes: "nhsuk-button--secondary nhsuk-button--small",
               href:
-              "/v1/matex/address-lookup?addressTarget=patient&returnTo=%2Fv1%2Fprocess-application%2Fcannot-process-application--horizontal-labels-fil%3FfurtherInformationRequest%3DpatientPost%23conditional-furtherInformationRequest-patientPost"
+              "/v1/" + (data.certificateType or 'matex') + "/address-lookup?source=" + (data.certificateType or 'matex') + "&addressTarget=patient&returnTo=" + (currentURL | urlencode)
               }) }}
             </div>
             {% endset %}

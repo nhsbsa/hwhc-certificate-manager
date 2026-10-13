@@ -594,6 +594,30 @@ router.post(/process-application\/send-a-letter/, function (req, res) {
   res.redirect(destination);
 });
 
+router.post(/process-application\/key-from-paper/, function (req, res) {
+
+  const stats = req.session.data.applicationStats;
+  const idx = req.session.data.scenarioIndex || 0;
+
+  stats.kfp += 1;
+  stats.total += 1;
+
+  if (idx % 2 === 0) {
+    processCurrentApplication(req);
+  } else {
+    processMedexApplication(req);
+  }
+
+  req.session.data.scenarioIndex = (idx + 1) % 6;
+  delete req.session.data.scenarioOutcome;
+
+  const nextType = (req.session.data.scenarioIndex % 2 === 0)
+    ? 'matex'
+    : 'medex';
+
+  return res.redirect('/v1/process-application/' + nextType);
+});
+
 router.post(/process-application\/matex/, function (req, res) {
   const destination = 'review-application';
   res.redirect(destination);
@@ -818,27 +842,42 @@ router.get(/^\/[^\/]+\/address-lookup$/, function (req, res) {
   console.log('LOOKING UP ADDRESS');
   console.log(req.session.data.lookupJourney);
 
+  const qs = require('querystring');
+  const parsed = qs.parse(req.url.split('?')[1] || '');
+  const sourceAlias = { matex: 'matex', hrtppc: 'hrtppc', newHRT: 'hrtppc', medex: 'medex' };
+
+  req.session.returnTo = parsed.returnTo || req.session.data.returnTo || req.session.returnTo;
+
+  if (parsed.addressTarget) {
+    req.session.addressTarget = parsed.addressTarget;
+  }
+
+  req.session.lookupSourceRaw = parsed.source || req.session.data.source || req.session.lookupSourceRaw || 'hrtppc';
+  req.session.lookupJourney = parsed.lookupJourney || sourceAlias[req.session.lookupSourceRaw] || req.session.lookupJourney || 'hrtppc';
+  req.session.data.lookupJourney = req.session.lookupJourney;
+
+  if (parsed.addressSearchPostcode !== undefined) {
+    req.session.data.addressSearchPostcode = parsed.addressSearchPostcode;
+  }
+
+  if (parsed.addressSearchBuildingNumberOrName !== undefined) {
+    req.session.data.addressSearchBuildingNumberOrName = parsed.addressSearchBuildingNumberOrName;
+  }
+
   if (req.session.data.noLookUp === 'true') {
 
     delete req.session.data.noLookUp;
 
     // If we tell the page not to load it...don't load it...
     res.render('./app/views/v1/' + req.path.substring(1), {
-      data: req.session.data
+      data: req.session.data,
+      returnTo: req.session.returnTo
     });
 
   } else {
 
     function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
     function normPostcode(s) { return (s || '').replace(/\s+/g, '').toUpperCase(); }
-
-    const qs = require('querystring');
-    const parsed = qs.parse(req.url.split('?')[1] || '');
-
-    // Persist addressTarget across requests
-    if (parsed.addressTarget) {
-      req.session.addressTarget = parsed.addressTarget;
-    }
 
     // If lookup is opened fresh (no user input), clear previous state
     const noParamsProvided =
@@ -865,24 +904,9 @@ router.get(/^\/[^\/]+\/address-lookup$/, function (req, res) {
       req.session.data.addressSearchResults = [];
     }
 
-    // Normalise source to a journey folder and remember which source invoked lookup
-    const sourceAlias = { matex: 'matex', hrtppc: 'hrtppc', newHRT: 'hrtppc', medex: 'medex' };
-
     console.log('STARTING WITH: ' + req.session.lookupSourceRaw );
 
-    // Remember raw source (which page invoked lookup)
-    req.session.lookupSourceRaw = parsed.source || req.session.data.source || req.session.lookupSourceRaw || 'hrtppc';
-
-    // Set the journey used for template folders
-    const normalisedJourney = sourceAlias[req.session.lookupSourceRaw] || req.session.lookupJourney || 'hrtppc';
-    req.session.lookupJourney = normalisedJourney;
-
-    req.session.data.lookupJourney = req.session.lookupJourney;
-
     console.log( 'ENDING WITH: ' + req.session.lookupSourceRaw );
-
-    
-    req.session.returnTo = parsed.returnTo || req.session.data.returnTo;
 
 
     req.session.data.addressSearchPostcode = parsed.addressSearchPostcode || '';
