@@ -49,25 +49,25 @@ html: '<span data-ak="B">Back</span>'
 
               {% set versions = [
               
-              'MATEX',
+            
 
               
-              'MEDEX',
-              'Not an official '
+              'Yes',
+              'No '
               ] %}
 
               {{ select({
               label: {
-              text: 'Form version'
+              text: 'Is this an official form?'
               },
               id: 'formVersion',
               name: 'formVersion',
               value: 'MEDEX',
               items: [
-              { value: 'MATEX', text: 'MATEX' },
+     
           
-              { value: 'MEDEX', text: 'MEDEX' },
-              { value: 'Not an official form', text: 'Not an official form' }
+              { value: 'Yes', text: 'Yes' },
+              { value: 'Not an official form', text: 'No' }
               ]
               }) }}
 
