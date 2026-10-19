@@ -35,11 +35,6 @@
           {
             text: data.name or 'John Smith',
             icon: true
-          },
-         
-          { 
-            html: '<span data-ak="T">Access keys: ' ~ (data.accessKeys or "off") ~ '</span>',
-            href: '/'+version+'/access-keys?returnURL=' + ( currentURL | urlencode )
           }
         ]
     } %}

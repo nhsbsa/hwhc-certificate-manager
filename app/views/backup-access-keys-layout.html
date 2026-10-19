@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+
+{% set containerClasses = 'nhsuk-width-container-fluid' %}
+
+<!-- For the skip link -->
+{% block skipLink %}
+<a class="nhsuk-skip-link" href="#maincontent">Skip to main content</a>
+
+<style>
+  /* new skip link format*/
+.nhsuk-skip-link:focus {
+  display: block;
+  position: static;
+}
+</style>
+
+{% endblock %}
+
+{% block header %}
+{# TODO: Re-enable job title:
+   { text: jobTitle },
+   
+   TODO: Re-enable sign out:
+   {
+     html: '<span data-ak="W">Sign out</span>',
+     href: '#'
+   }
+#}
+
+
+  {% set jobTitle = data.role | getJobTitle %}
+
+  {% set account = {
+        items: [
+          {
+            text: data.name or 'John Smith',
+            icon: true
+          },
+         
+          { 
+            html: '<span data-ak="T">Access keys: ' ~ (data.accessKeys or "off") ~ '</span>',
+            href: '/'+version+'/access-keys?returnURL=' + ( currentURL | urlencode )
+          }
+        ]
+    } %}
+
+  
+
+  {{ header({
+    service: {
+      text: serviceName,
+      href: '/'
+    },
+    containerClasses: 'nhsuk-width-container-fluid',
+    account: account
+  }
+  )}}
+
+{% endblock %}
+
+{% block footer %}
+
+  {% if data.debug === 'true' %}
+    <!-- DEBUGGING INFORMATION -->
+    <div class="nhsuk-width-container">
+      <div class="nhsuk-grid-row">
+        {{ textarea({
+          name: 'debug',
+          id: 'debug',
+          label: {
+            text: 'Session data'
+          },
+          value: data | dump
+        }) }}
+      </div>
+    </div>
+  {% endif %}
+
+  {{ footer({
+    meta: {
+      items: [
+        {
+          href: '/',
+          text: 'Home'
+        },
+        {
+          href: '/prototype-admin/reset?returnPage=' + (currentPage | urlencode),
+          text: 'Reset data'
+        },
+        {
+          href: '#',
+          text: 'Accessibility statement'
+        },
+        {
+          href: '#',
+          text: 'Help us improve this service'
+        }
+      ]
+    },
+    containerClasses: 'nhsuk-width-container-fluid'
+  }) }}
+{% endblock %}

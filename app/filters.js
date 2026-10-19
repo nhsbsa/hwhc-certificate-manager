@@ -691,7 +691,6 @@ filters.getSupervisorDashboardRows = function (processors) {
         { text: 'Postcode' },
         { text: 'Date of birth' },
         { text: 'Type' },
-        { text: 'Status' },
         { text: 'Application reference' },
         { text: 'Certificate reference' },
         { text: 'Check type' }
@@ -822,7 +821,7 @@ filters.getSupervisorDashboardRows = function (processors) {
         const hadMore = patient.address.locality || patient.address.postTown || patient.address.county;
 
         addressHtml = hadMore
-          ? fullAddressLine1 + '...'
+          ? fullAddressLine1 
           : fullAddressLine1;
       }
 
@@ -843,7 +842,6 @@ filters.getSupervisorDashboardRows = function (processors) {
           { html: patient.address.postcode },
           { html: patient.dateOfBirth.display },
           { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
-          { html: (patient.checking === true) ? _getStatusTextOrTag(patient.status, true) + ' ' + _getStatusTextOrTag('checking', true) : _getStatusTextOrTag(patient.status, true) },
           { html: patient.applicationReference || 'Not available' },
           { html: _getReferenceHtml(patient.certificateReference) },
           { text: checkedBy }
@@ -916,7 +914,7 @@ filters.getSupervisorDashboardRows = function (processors) {
             const hadMore = patient.address.locality || patient.address.postTown || patient.address.county;
 
             addressHtml = hadMore
-              ? fullAddressLine1 + '...'
+              ? fullAddressLine1 
               : fullAddressLine1;
           }
 
@@ -940,12 +938,7 @@ filters.getSupervisorDashboardRows = function (processors) {
             { html: patient.address.postcode },
             { html: patient.dateOfBirth.display },
             { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
-            {
-              html:
-                _getStatusTextOrTag(patient.status, true) +
-                ' ' +
-                _getStatusTextOrTag('checking', true)
-            },
+            
             { html: patient.applicationReference || 'Not available' },
             { html: _getReferenceHtml(patient.certificateReference) }
           ]);

@@ -1735,8 +1735,24 @@ router.get('/v1/change-complete', function (req, res) {
 // });
 
 
+const getCaseEditType = (req) => {
+  const url = req.originalUrl || req.url || ''
+  const match = url.match(/\/(matex|medex)\/case--edit(?:\?|$)/)
+  return match?.[1] || 'matex'
+}
+
 router.get(/^\/(matex|medex)\/case--edit$/, function (req, res) {
-  const type = req.url.match(/^\/(matex|medex)\/case--edit$/)?.[1] || 'matex'
+  const type = getCaseEditType(req)
+
+  if (req.query.patientID) {
+    req.session.data.patientID = req.query.patientID
+  }
+
+  if (req.query.outcome) {
+    req.session.data.caseEditOutcome = req.query.outcome
+  } else {
+    delete req.session.data.caseEditOutcome
+  }
 
   res.render(`v1/${type}/case--edit`, {
     ...req.session.data
@@ -1744,7 +1760,23 @@ router.get(/^\/(matex|medex)\/case--edit$/, function (req, res) {
 })
 
 router.post(/^\/(matex|medex)\/case--edit$/, function (req, res) {
-  const type = req.url.match(/^\/(matex|medex)\/case--edit$/)?.[1] || 'matex'
+  const type = getCaseEditType(req)
+  const sharedOutcome = req.query.outcome || req.session.data.caseEditOutcome
+
+  if (sharedOutcome === 'reject') {
+    delete req.session.data.caseEditOutcome
+    return res.redirect(`/v1/${type}/case--edit/reject`)
+  }
+
+  if (sharedOutcome === 'further-information') {
+    delete req.session.data.caseEditOutcome
+    return res.redirect(`/v1/${type}/case--edit/further-information`)
+  }
+
+  if (sharedOutcome === 'approved') {
+    delete req.session.data.caseEditOutcome
+    return res.redirect(`/v1/${type}/case--edit/confirmation--approved`)
+  }
 
   const dobDay =
     req.body['imageDateOfBirth-day'] ||

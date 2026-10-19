@@ -118,6 +118,13 @@
               result - Select an address</a></li>
           <li><a class="nhsuk-link" href="/v1/matex/address-lookup-result?addressSearchPostcode=ZZ1%201ZZ">Address
               lookup result - No address found</a></li>
+ <li><a class="nhsuk-link" href="/v1/medex/case--edit?patientID=34&outcome=approved">Accepted outcome for an edited on-hold or rejected  application </a>
+          </li>
+           <li><a class="nhsuk-link" href="/v1/medex/case--edit?patientID=34&outcome=reject">Rejected outcome for an edited on-hold or rejected  application </a>
+          </li>
+                  <li><a class="nhsuk-link" href="/v1/medex/case--edit?patientID=34&outcome=further-information">Further information outcome for an edited on-hold or rejected  application </a>
+          </li>
+
 
         </ul>
       </div>
@@ -181,20 +188,14 @@
               application</a></li>
           <li><a class="nhsuk-link" href="/v1/matex/case?patientID=89">Certificate summary - Active - Paper
               application</a></li>
-          <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=58">Certificate summary - On hold</a>
-          </li>
-          <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=50">Certificate summary -
-              Rejected</a></li>
           <li><a class="nhsuk-link" href="/v1/matex/case?patientID=31">Certificate summary - Deleted/Expired</a></li>
-          <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=36">Certificate summary -
-              Processing</a></li>
-          <li><a class="nhsuk-link" href="/v1/matex/case--view--can-edit?patientID=85">Certificate summary -
-              Checking</a></li>
           <li><a class="nhsuk-link" href="/v1/matex/view-application-image">View image of scanned application form</a>
           </li>
           <li><a class="nhsuk-link" href="/v1/matex/add-note">Add note</a></li>
           <li><a class="nhsuk-link" href="/v1/matex/case--edit">Edit application (for on-hold or rejected cases)</a>
           </li>
+          
+
           <li><a class="nhsuk-link" href="/v1/matex/edit-or-reissue?patientID=6">Edit certificate details or reissue -
               Digital application</a></li>
           <li><a class="nhsuk-link" href="/v1/matex/edit-or-reissue?patientID=89">Edit certificate details or reissue -
@@ -308,18 +309,15 @@
               application</a></li>
           <li><a class="nhsuk-link" href="/v1/medex/case?patientID=93">Certificate summary - Active - Paper
               application</a></li>
-          <li><a class="nhsuk-link" href="/v1/medex/case--view--can-edit?patientID=34">Certificate summary - On hold</a>
-          </li>
-          <li><a class="nhsuk-link" href="/v1/medex/case--view--can-edit?patientID=43">Certificate summary -
-              Rejected</a></li>
+        
           <li><a class="nhsuk-link" href="/v1/medex/case?patientID=92">Certificate summary - Deleted/Expired</a></li>
-          <li><a class="nhsuk-link" href="/v1/medex/case--view--can-edit?patientID=15">Certificate summary -
-              Processing</a></li>
+          
           <li><a class="nhsuk-link" href="/v1/medex/view-application-image">View image of scanned application form</a>
           </li>
           <li><a class="nhsuk-link" href="/v1/medex/add-note">Add note</a></li>
           <li><a class="nhsuk-link" href="/v1/medex/case--edit">Edit application (for on-hold or rejected cases)</a>
           </li>
+      
           <li><a class="nhsuk-link" href="/v1/medex/edit-or-reissue?patientID=21">Edit certificate details or reissue -
               Digital application</a></li>
           <li><a class="nhsuk-link" href="/v1/medex/edit-or-reissue?patientID=93">Edit certificate details or reissue -
@@ -438,18 +436,19 @@
       </summary>
       <div class="nhsuk-details__text">
         <ul class="nhsuk-list nhsuk-list--bullet">
-          <li><a class="nhsuk-link" href="/v1/process-application/matex?scenario=accepted">Matex application
+          <li><a class="nhsuk-link" href="/v1/process-application/scenarios/accepted">Scanned application
               accepted</a></li>
-          <li><a class="nhsuk-link" href="/v1/process-application/matex?scenario=reject">Matex application rejected</a>
+          <li><a class="nhsuk-link" href="/v1/process-application/scenarios/reject">Scanned application rejected</a>
           </li>
-          <li><a class="nhsuk-link" href="/v1/process-application/matex?scenario=further-information">Matex application
+          <li><a class="nhsuk-link" href="/v1/process-application/scenarios/further-information">Scanned application
               further information</a></li>
-          <li><a class="nhsuk-link" href="/v1/process-application/medex?scenario=accepted">Medex application
+               <li><a class="nhsuk-link" href="/v1/process-application/manual/accepted">Manual application
               accepted</a></li>
-          <li><a class="nhsuk-link" href="/v1/process-application/medex?scenario=reject">Medex application rejected</a>
+          <li><a class="nhsuk-link" href="/v1/process-application/manual/reject">Manual application rejected</a>
           </li>
-          <li><a class="nhsuk-link" href="/v1/process-application/medex?scenario=further-information">Medex application
+          <li><a class="nhsuk-link" href="/v1/process-application/manual/further-information">Manual application
               further information</a></li>
+         
                   <li><a class="nhsuk-link" href="/v1/dashboard-no-checking-alt">Processor dashboard - No pending changes</a></li>
           <li><a class="nhsuk-link" href="/v1/dashboard-no-checking">Processor dashboard - no pending changes - tested alternative</a>
           </li>
