@@ -29,8 +29,7 @@ html: '<span data-ak="B">Back</span>'
 
     <h1 class="nhsuk-heading-m">{{ pageName }} {{ patient.certificateReference or '95 311 581 185' }}
       {{ (patient.certificateType or 'medex') | getCertificateTypeTextOrTag( true ) | safe }}
-      {{ statusForDisplay }}{% if patient.checking === true %} {{ 'checking' | getStatusTextOrTag( true ) | safe }}{%
-      endif %}
+      {{ statusForDisplay }}
     </h1>
 
   </div>
