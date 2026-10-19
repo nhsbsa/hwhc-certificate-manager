@@ -1,0 +1,31 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Page not found' %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <p>The page you are looking for cannot be found.</p>
+
+      <p>If you typed the address, check it is correct and try again.</p>
+
+      {{ button({
+        text: 'Return to the dashboard',
+        href: '/v1/dashboard'
+      }) }}
+
+    </div>
+  </div>
+
+{% endblock %}

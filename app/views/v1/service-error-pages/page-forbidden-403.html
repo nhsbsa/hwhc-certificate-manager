@@ -1,0 +1,31 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Page forbidden' %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <p>You do not have permission to open this page.</p>
+
+      <p>Go back to the dashboard or try another route in the service.</p>
+
+      {{ button({
+        text: 'Return to the dashboard',
+        href: '/v1/dashboard'
+      }) }}
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'There is a problem' %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <p>It looks like you have come from a bookmarked page which cannot be shown.</p>
+
+      <p>Go back to the previous page and try again.</p>
+
+      {{ button({
+        text: 'Go back to the previous page',
+        href: 'javascript:history.go(-1)'
+      }) }}
+
+    </div>
+  </div>
+
+{% endblock %}

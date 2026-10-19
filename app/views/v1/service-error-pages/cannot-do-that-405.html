@@ -1,0 +1,31 @@
+{% extends 'layout-fullscreen-normal-content.html' %}
+
+{% set pageName = 'Cannot do that' %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: 'javascript:history.go(-1)',
+    html: '<span data-ak="B">Back</span>'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <p>The service cannot process those details.</p>
+
+      <p>Go back and check the information before trying again.</p>
+
+      {{ button({
+        text: 'Go back and check the details',
+        href: 'javascript:history.go(-1)'
+      }) }}
+
+    </div>
+  </div>
+
+{% endblock %}
