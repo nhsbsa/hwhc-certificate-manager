@@ -21,6 +21,17 @@
               classes: 'nhsuk-inset-text--summary'
             }) }}
 
+                 <div class="nhsuk-heading-s">Applications you have processed today</div>
+              {% from './macros/stats.njk' import stats %}
+              {{ stats
+                ([
+                data.applicationStats.accepted or '0',
+                data.applicationStats.onHold or '0',
+                data.applicationStats.rejected or '0',
+                data.applicationStats.kfp or '0',
+                data.applicationStats.total or '0' 
+                ])
+              }}
 
             <div class="nhsuk-button-group">
 
@@ -42,8 +53,8 @@
               }) }}
 
             </div>
-
-
+<br>
+<hr>
 
 
             <!-- {{ table({
