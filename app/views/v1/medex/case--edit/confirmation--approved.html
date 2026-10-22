@@ -14,24 +14,116 @@
 {% set fullName = firstName ~ ' ' ~ lastName %}
 {% set certificateReference = patient.certificateReference or '8436 810 379' %}
 
+{% set addressValue1 = data.editMEDEX.addressLineOne
+  or (patient.address.buildingNumber + " " + patient.address.streetName) %}
+
+{% if data.editMEDEX.addressLineTwo is defined %}
+  {% set addressValue2 = data.editMEDEX.addressLineTwo %}
+{% else %}
+  {% set addressValue2 = patient.address.locality %}
+{% endif %}
+
+{% set townValue = data.editMEDEX.town 
+  or patient.address.postTown %}
+
+{% if data.editMEDEX.county is defined %}
+  {% set countyValue = data.editMEDEX.county %}
+{% else %}
+  {% set countyValue = patient.address.county %}
+{% endif %}
+
+{% set postcodeValue = data.editMEDEX.postcode 
+  or patient.address.postcode %}
+
+{% if request.method == 'POST' and data['editMEDEX.certificateFulfilment'] %}
+  {% set fulfilment = data['editMEDEX.certificateFulfilment'] %}
+{% else %}
+  {% set fulfilment = patient.certificateFulfilment %}
+{% endif %}
+
+{% if fulfilment === 'email' %}
+  {% set titleText %}
+  The certificate has been issued by email
+  {% endset %}
+
+  {% set sentAddressHtml %}
+    We have sent the medical exemption (MEDEX) certificate to:<br>
+    <strong>{{ patient.email or data['editMEDEX.email'] or 'jane.doe@example.com' }}</strong>.
+    <p>The certificate holder will get their digital certificate in the next few minutes. But it could take up to 24 hours for the email to arrive. And they might need to check their junk or spam folder.</p>
+  {% endset %}
+
+{% else %}
+  {% set titleText %}
+  The certificate will be issued by post
+  {% endset %}
+
+  {% set sentAddressHtml %}
+  We will send the medical exemption (MEDEX) certificate to:<br>
+  <strong>
+    {{ addressValue1 }} <br>
+    {% if addressValue2 and addressValue2 | trim %}
+    {{ addressValue2 }}<br>
+    {% endif %}
+    {{ townValue }}<br>
+    {% if countyValue and countyValue | trim %}
+    {{ countyValue }}<br>
+    {% endif %}
+    {{ postcodeValue }}
+  </strong>
+  <p>The certificate holder will get their paper certificate in the post in the next 10 working days.</p>
+  {% endset %}
+{% endif %}
+
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-two-thirds">
 
     {{ panel({
-      titleText: pageName,
-      html: '
-        <p>This application will be accepted and a certificate issued.</p>
-
-        <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Name:</p>
-        <h2 class="nhsuk-u-padding-top-0">' ~ fullName ~ '</h2>
-
-        <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">Certificate number:</p>
-        <h2 class="nhsuk-u-padding-top-0">' ~ certificateReference ~ '</h2>
-      '
+      titleText: 'Certificate issued',
+      text: titleText
     }) }}
 
+    <p>{{ sentAddressHtml | safe }}</p>
 
+    <div class="nhsuk-card nhsuk-card--grey">
+      <div class="nhsuk-card__content">
 
+        <h2 class="nhsuk-heading-m">Certificate details</h2>
+
+        {{ summaryList({
+          rows: [
+            {
+              key: { text: 'Type' },
+              value: { html: ( patient.certificateType or 'medex' ) | getCertificateTypeTextOrTag( true ) }
+            },
+            {
+              key: { text: "Name" },
+              value: { text: fullName }
+            },
+            {
+              key: { text: "Reference" },
+              value: { text: certificateReference }
+            },
+            {
+              key: { text: "Start date" },
+              value: {
+                html: (patient.startDate.display or data['editMEDEX.startDisplay'] or "25 November 2025")
+              }
+            },
+            {
+              key: { text: "Expiry date" },
+              value: {
+                html: (patient.endDate.display or data['editMEDEX.expiryDisplay'] or "24 November 2026")
+              }
+            },
+            {
+              classes: "nhsuk-summary-list__row--no-border",
+              key: { text: "Notes" },
+              value: { html: data['editMEDEX.notes'] or "" }
+            }
+          ]
+        }) }}
+      </div>
+    </div>
 
     <div class="nhsuk-button-group">
       {{ button({
@@ -42,7 +134,7 @@
       {{ button({
         html: '<span data-ak="V">View ' ~ fullName ~ '\'s certificate</span>',
         classes: "nhsuk-button--secondary",
-        href: "case?patientID=" ~ patient.id ~ "&certMode=yes"
+        href: "../case?patientID=" ~ patient.id ~ "&certMode=yes"
       }) }}
     </div>
 
