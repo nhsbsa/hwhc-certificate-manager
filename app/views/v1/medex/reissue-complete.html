@@ -16,7 +16,7 @@
 
   {% set fullName = ((patient.firstName ~ " " ~ patient.lastName) | trim) | default('Jane Smith', true) or (data['editMEDEX.firstName'] ~ " " ~ data['editMEDEX.lastName']) | trim %}
   
-  {% set buttonText = "<span data-ak='V'>View " ~ fullName ~ "'s certificate</span>" %}
+  {% set buttonText = "<span data-ak='V'>View " ~ fullName ~ "'s record</span>" %}
 
   {% set addressValue1 = data.editMEDEX.addressLineOne
     or (patient.address.buildingNumber + " " + patient.address.streetName) %}
@@ -51,7 +51,7 @@
   {% endset %}
 
   {% set sentAddressHtml %}
-    We have sent the medical exemption (MEDEX) certificate to:<br>
+    We have sent the medical exemption Medex certificate to:<br>
     <strong>{{ patient.email or data['editMEDEX.email'] or 'jane.doe@example.com' }}</strong>.
     <p>The certificate holder will get their digital certificate in the next few minutes. But it could take up to 24 hours for the email to arrive. And they might need to check their junk or spam folder.</p>
   {% endset %}
@@ -63,7 +63,7 @@
   {% endset %}
 
   {% set sentAddressHtml %}
-  We will send the medical exemption (MEDEX) certificate to:<br>
+  We will send the medical exemption Medex certificate to:<br>
   <strong>
     {{ addressValue1 }} <br>
     {% if addressValue2 and addressValue2 | trim %}

@@ -47,7 +47,7 @@
   {% endset %}
 
   {% set sentAddressHtml %}
-    We have sent the maternity exemption (MATEX) certificate to:<br>
+    We have sent the maternity exemption Matex certificate to:<br>
     <strong>{{ patient.email or data['editMATEX.email'] or 'jane.doe@example.com' }}</strong>.
     <p>The certificate holder will get their digital certificate in the next few minutes. But it could take up to 24 hours for the email to arrive. And they might need to check their junk or spam folder.</p>
   {% endset %}
@@ -58,7 +58,7 @@
   {% endset %}
 
   {% set sentAddressHtml %}
-  We will send the maternity exemption (MATEX) certificate to:<br>
+  We will send the maternity exemption Matex certificate to:<br>
   <strong>
     {{ addressValue1 }} <br>
     {% if addressValue2 and addressValue2 | trim %}
@@ -132,7 +132,7 @@
       }) }}
 
       {{ button({
-        html: '<span data-ak="V">View ' ~ fullName ~ '\'s certificate</span>',
+        html: '<span data-ak="V">View ' ~ fullName ~ '\'s record</span>',
         classes: "nhsuk-button--secondary",
         href: "../case?patientID=" ~ patient.id ~ "&certMode=yes"
       }) }}
