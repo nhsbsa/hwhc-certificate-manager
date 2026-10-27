@@ -92,17 +92,6 @@ html: '<span data-ak="B">Return to your dashboard</span>'
         {% endset %}
 
 
-        {% set hcpPostConditionalHTML %}
-
-        {{ input({
-        id: "full-name",
-        name: "fullName",
-        attributes: { 'data-focus-image' : 'healthcarePractitionerName' },
-        label: {
-        text: "Healthcare practitioner's name"
-        }
-        }) }}
-
         <hr>
 
         <h3 class="nhsuk-heading-xs">Healthcare practitioner's postal address</h3>
@@ -237,11 +226,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
           }
           },
           items: [
-          {
-          value: 'hcp',
-          text: 'Send to healthcare practitioner',
-          conditional: { html: hcpPostConditionalHTML }
-          },
+          
           {
           value: 'patientEmail',
           text: 'Send to patient by email',
