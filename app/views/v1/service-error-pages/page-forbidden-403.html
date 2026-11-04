@@ -3,29 +3,21 @@
 {% set pageName = 'Page forbidden' %}
 
 {% block beforeContent %}
-  {{ backLink({
-    href: 'javascript:history.go(-1)',
-    html: '<span data-ak="B">Back</span>'
-  }) }}
+{{ backLink({
+href: 'javascript:history.go(-1)',
+html: '<span data-ak="B">Back</span>'
+}) }}
 {% endblock %}
 
 {% block content %}
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
 
-      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+    <h1 class="nhsuk-heading-l">There is a problem</h1>
 
-      <p>You do not have permission to open this page.</p>
-
-      <p>Go back to the dashboard or try another route in the service.</p>
-
-      {{ button({
-        text: 'Return to the dashboard',
-        href: '/v1/dashboard'
-      }) }}
-
-    </div>
+    <p>To access this page, you need to <a href="/v1/search" class="nhsuk-link--no-visited-state">start again</a></p>
   </div>
+</div>
 
 {% endblock %}

@@ -14,16 +14,12 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+      <h1 class="nhsuk-heading-l">You need to start again</h1>
 
-      <p>Your session has timed out.</p>
+      <p>You have been inactive for 30 minutes so we closed your session to protect our customers’ information.</p>
 
-      <p>You will need to start again.</p>
+       <p>We have not saved your answers. You need to <a href="/v1/search" class="nhsuk-link--no-visited-state">start again</a></p>
 
-      {{ button({
-        text: 'Return to the dashboard',
-        href: '/v1/dashboard'
-      }) }}
 
     </div>
   </div>

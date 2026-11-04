@@ -1,6 +1,6 @@
 {% extends 'layout-fullscreen-normal-content.html' %}
 
-{% set pageName = 'Service unavailable' %}
+{% set pageName = 'The service is unavailable' %}
 
 {% block beforeContent %}
   {{ backLink({
@@ -20,10 +20,7 @@
 
       <p>Try again later.</p>
 
-      {{ button({
-        text: 'Return to the dashboard',
-        href: '/v1/dashboard'
-      }) }}
+       <p>When the service is available, you’ll need to <a href="/v1/search" class="nhsuk-link--no-visited-state">start again</a></p>
 
     </div>
   </div>

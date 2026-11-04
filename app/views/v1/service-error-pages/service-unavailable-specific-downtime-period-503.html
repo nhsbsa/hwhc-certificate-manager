@@ -1,7 +1,7 @@
 {% extends 'layout-fullscreen-normal-content.html' %}
 
-{% set pageName = 'Service unavailable' %}
-{% set downtimeEnd = data.downtimeEnd or 'later today' %}
+{% set pageName = 'The service is unavailable' %}
+{% set downtimeEnd = data.downtimeEnd or '1 December 2026 at 1:15pm' %}
 
 {% block beforeContent %}
   {{ backLink({
@@ -17,15 +17,11 @@
 
       <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
 
-      <p>The service will be available again {{ downtimeEnd }}.</p>
+      <p>You will be able to use the service on {{ downtimeEnd }}.</p>
 
-      <p>Come back after that time and try again.</p>
+      
 
-      {{ button({
-        text: 'Return to the dashboard',
-        href: '/v1/dashboard'
-      }) }}
-
+      <p>When the service is available, you’ll need to <a href="/v1/search" class="nhsuk-link--no-visited-state">start again</a></p>
     </div>
   </div>
 
