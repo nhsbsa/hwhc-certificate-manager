@@ -878,7 +878,122 @@ filters.getSupervisorDashboardRows = function (processors) {
 
 
   //
-  // GET CHECKING TABLE ROWS
+  // GET PROCESSING TABLE ROWS
+  //
+  filters.getProcessingTableRows = function (patientData) {
+
+    if (typeof patientData === 'string') {
+      patientData = JSON.parse(patientData);
+    }
+
+    const rowsPerPage = 5;
+    const currentPage = Number.isInteger(parseInt(this.ctx.data.currentPage))
+      ? parseInt(this.ctx.data.currentPage)
+      : 0;
+
+    const start = currentPage * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    const rows = [];
+    let processingIndex = 0;
+    let processingTotal = 0;
+
+    for (let i = 0; i < patientData.length; i++) {
+      const patient = patientData[i];
+
+      if (patient.status !== 'on-hold') {
+        continue;
+      }
+
+      processingTotal++;
+
+      if (processingIndex >= start && processingIndex < end) {
+        let addressHtml = '';
+
+        if (!((patient.certificateType === 'matex' || patient.certificateType === 'medex') && patient.channel === 'Digital')) {
+          const fullAddressLine1 = patient.address.buildingNumber + ' ' + patient.address.streetName;
+          const hadMore = patient.address.locality || patient.address.postTown || patient.address.county;
+
+          addressHtml = hadMore
+            ? fullAddressLine1
+            : fullAddressLine1;
+        }
+
+        rows.push([
+          {
+            html:
+              '<a class="nhsuk-link nhsuk-link--no-visited-state" href="process-application/matex?patientID=' + patient.id + '"><strong>' +
+              patient.firstName +
+              ' ' +
+              patient.lastName +
+              '</strong></a><br />' +
+              '<span class="nhsuk-body-s">' +
+              patient.nhsNumber +
+              '</span>'
+          },
+          { html: addressHtml },
+          { html: patient.address.postcode },
+          { html: patient.dateOfBirth.display },
+          { html: _getCertificateTypeTextOrTag(patient.certificateType, true) },
+          { html: patient.applicationReference || 'Not available' },
+          { html: _getReferenceHtml(patient.certificateReference) }
+        ]);
+      }
+
+      processingIndex++;
+    }
+
+    this.ctx.data.noOfProcessingRows = processingTotal;
+    return rows;
+  };
+
+
+  //
+  // PROCESSING PAGINATION LINKS
+  //
+  filters.getProcessingPaginationLinks = function (classes) {
+
+    const rowsPerPage = 5;
+    const currentPage = Number.isInteger(parseInt(this.ctx.data.currentPage))
+      ? parseInt(this.ctx.data.currentPage)
+      : 0;
+
+    const total = Number.isInteger(this.ctx.data.noOfProcessingRows)
+      ? this.ctx.data.noOfProcessingRows
+      : 0;
+
+    const totalPages = Math.ceil(total / rowsPerPage);
+    const obj = {};
+
+    if (totalPages > 1) {
+      const items = [];
+
+      if (currentPage > 0) {
+        obj.previous = { href: '?currentPage=' + (currentPage - 1) };
+      }
+
+      if (currentPage < totalPages - 1) {
+        obj.next = { href: '?currentPage=' + (currentPage + 1) };
+      }
+
+      for (let i = 0; i < totalPages; i++) {
+        items.push({
+          number: i + 1,
+          href: '?currentPage=' + i,
+          current: i === currentPage
+        });
+      }
+
+      obj.items = items;
+    }
+
+    if (classes) obj.classes = classes;
+
+    return obj;
+  };
+
+
+  //
   //
   filters.getCheckingTableRows = function (patientData) {
 

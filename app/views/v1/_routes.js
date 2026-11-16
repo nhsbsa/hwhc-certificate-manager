@@ -371,6 +371,12 @@ router.get(/process-application\/scenarios\/confirm/, function (req, res) {
   });
 });
 
+router.get(/process-application\/scenarios\/kfp-confirm/, function (req, res) {
+  res.render('v1/process-application/scenarios/kfp-confirm', {
+    processedToday: req.session.data.applicationStats.total
+  });
+});
+
 router.post(/process-application\/scenarios\/confirm/, function (req, res) {
 
   const idx = req.session.data.scenarioIndex || 0;
@@ -595,12 +601,18 @@ router.post(/process-application\/send-a-letter/, function (req, res) {
 });
 
 router.post(/process-application\/key-from-paper/, function (req, res) {
+  req.session.data.kfpNotes = req.body.kfpNotes || req.session.data.kfpNotes;
+  req.session.data.confirmationType = 'further-information';
 
-  const stats = req.session.data.applicationStats;
-  const idx = req.session.data.scenarioIndex || 0;
-
+  const stats = req.session.data.applicationStats || { kfp: 0, total: 0 };
   stats.kfp += 1;
   stats.total += 1;
+
+  return res.redirect('/v1/process-application/scenarios/kfp-confirm');
+});
+
+router.post(/process-application\/scenarios\/kfp-confirm/, function (req, res) {
+  const idx = req.session.data.scenarioIndex || 0;
 
   if (idx % 2 === 0) {
     processCurrentApplication(req);

@@ -1,26 +1,59 @@
-{% extends 'layout-fullscreen-normal-content.html' %}
+{% extends 'layout-fullscreen.html' %}
 
-{% set pageName = 'Address lookup' %}
+{% set pageName = 'Application 2025 11 18 18 12 16N3000049' %}
 
 {% block beforeContent %}
- {{ backLink({
-    href: 'address-lookup',
-    html: '<span data-ak="B">Back</span>'
-  }) }}
+{{ backLink({
+href: '../dashboard',
+html: '<span data-ak="B">Return to your dashboard</span>'
+}) }}
 {% endblock %}
 
 {% block content %}
 
 <div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+  <div class="nhsuk-grid-column-one-half">
+
+    <h1 class="nhsuk-heading-m">{{ pageName }}
+      {{ 'matex' | getCertificateTypeTextOrTag( true ) | safe }}
+      {{ 'processing' | getStatusTextOrTag( true ) | safe }}</h1>
+
+  </div>
+  <div class="nhsuk-grid-column-one-half">
+    {% set insetTextHtml %}
+    <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
+    {% endset %}
+
+    {{ insetText({
+    html: insetTextHtml,
+    classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
+    }) }}
   </div>
 </div>
 
+
 <div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-two-thirds">
-    <div class="nhsuk-card nhsuk-card--grey">
-      <div class="nhsuk-card__content">
+  <div class="nhsuk-grid-column-full">
+
+
+
+    <div class="nhsuk-grid-row">
+
+      <!-- ONE HALF -->
+      <div class="nhsuk-grid-column-one-half sticky-column">
+
+        {% from '../macros/image.njk' import image %}
+        {{ image() }}
+
+      </div>
+
+      <!-- ONE HALF -->
+      <div class="nhsuk-grid-column-one-half">
+
+        <div class="nhsuk-card nhsuk-card--grey">
+
+          <!-- HEADER LOCK-UP -->
+        <div class="nhsuk-card__content">
 
       
         {% if not data.addressSearchResults or data.addressSearchResults.length === 0 %}
@@ -68,7 +101,7 @@
                   type: "submit"
                 }) }}
 
-                <p class="nhsuk-body"><a href="{{ returnTo }}"><span data-ak="K">Enter address manually</span></a></p>
+                <a href="{{ returnTo }}"><span data-ak="K">Enter address manually</span></a>
 
           </form>
 
@@ -77,9 +110,20 @@
 
 
       </div>
+        </div>
+
+
+
+      </div>
+
     </div>
+
+
+
   </div>
 </div>
+
+
 
 
 <style>

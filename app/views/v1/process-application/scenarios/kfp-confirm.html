@@ -1,0 +1,87 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = data.applicationReference or 'Application 2025 11 18 18 12 16N3000049' %}
+
+{% block beforeContent %}
+{{ backLink({
+href: '../../dashboard',
+html: '<span data-ak="B">Return to your dashboard</span>'
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-one-half">
+        <h1 class="nhsuk-heading-m">{{ pageName }}
+            {{ data.certificateType | getCertificateTypeTextOrTag( true ) | safe }}
+            {% if data.confirmationType == 'reject' %}
+            {{ 'rejected' | getStatusTextOrTag( true ) | safe }}
+            {% else %}
+            {{ 'on-hold' | getStatusTextOrTag( true ) | safe }}
+            {% endif %}
+        </h1>
+    </div>
+    <div class="nhsuk-grid-column-one-half">
+        {% set insetTextHtml %}
+        <p>Applications processed today: <strong>{{ processedToday }}</strong></p>
+        {% endset %}
+        {{ insetText({
+        html: insetTextHtml,
+        classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-0 nhsuk-u-float-right'
+        }) }}
+    </div>
+</div>
+
+<div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+        <div class="nhsuk-grid-row">
+
+            <!-- ONE HALF - IMAGE -->
+            <div class="nhsuk-grid-column-one-half sticky-column">
+                {% from '../../macros/image.njk' import image %}
+                {{ image(data.certificateType) }}
+            </div>
+
+            <!-- ONE HALF - PANEL -->
+            <div class="nhsuk-grid-column-one-half">
+
+
+
+
+                <div class="nhsuk-panel nhsuk-panel--interruption">
+                    <h1 class="nhsuk-panel__title nhsuk-panel__title--l">
+                        Request for paper form sent
+                    </h1>
+                    <div class="nhsuk-panel__body">
+                        <p>This application will be put on hold until further information is received and processed.</p>
+
+                    </div>
+                    </div>
+
+
+
+
+                    <form method="post" action="/v1/process-application/scenarios/kfp-confirm">
+
+                        <div class="nhsuk-button-group">
+                            {{ button({
+                            html: '<span data-ak="I">Next</span>'
+                            }) }}
+
+                            {{ button({
+                            html: '<span data-ak="K">Finish processing</span>',
+                            href: '/v1/dashboard',
+                            classes: 'nhsuk-button--secondary'
+                            }) }}
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

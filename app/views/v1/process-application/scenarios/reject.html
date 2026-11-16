@@ -168,6 +168,23 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
             {% endset %}
 
+            {% set textConditionalHTML %}
+            <div class="nhsuk-hint nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2">
+              Text messages will not be sent from this system.
+            </div>
+            <p>
+            
+              {{ patient.phoneNumber or data.imagePhoneNumber or 'Not available' }}
+            </p>
+            {{ button({
+            html: '<span data-ak="G">Copy phone number</span>',
+            classes: 'nhsuk-button--secondary nhsuk-button--small',
+            attributes: {
+            type: 'button',
+            onclick: 'event.preventDefault(); return false;'
+            }
+            }) }}
+            {% endset %}
 
             {% set postHTML %}
             <!-- PATIENT ADDRESS -->
@@ -221,7 +238,8 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               items: [
                {
               value: 'text',
-              text: 'Text message'
+              text: 'Text message',
+              conditional: { html: textConditionalHTML }
               },
              
               {
@@ -241,7 +259,17 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
              
            
-
+ {{ textarea({
+              name: 'furtherInformationNotes',
+              id: 'furtherInformationNotes',
+              value: data.furtherInformationNotes,
+              label: {
+              text: 'Notes (optional)'
+              },
+              hint: {
+              text: "For internal use only. This will not be sent to the patient or healthcare practitioner."
+              }
+              }) }}
       
 
 

@@ -222,11 +222,15 @@ html: '<span data-ak="B">Return to your dashboard</span>'
           value: data.furtherInformationRequest,
           fieldset: {
           legend: {
-          text: 'Who will we ask for further information?'
+          text: 'How will we ask for further information?'
           }
           },
           items: [
-          
+              {
+              value: 'patientCall',
+              text: 'A call will be made to the patient'
+     
+              },
           {
           value: 'patientEmail',
           text: 'Send to patient by email',

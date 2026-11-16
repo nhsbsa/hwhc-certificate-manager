@@ -3,109 +3,146 @@
 {% set pageName = 'Paper application processing' %}
 
 {% set checkingRows = '' | getPatientData | getCheckingTableRows %}
+{% set processingRows = '' | getPatientData | getProcessingTableRows %}
 
 {% block content %}
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
 
 
-          <div class="nhsuk-card">
-            <div class="nhsuk-card__content">
+    <div class="nhsuk-card">
+      <div class="nhsuk-card__content">
 
 
-            <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
+        <h1 class="nhsuk-heading-m">{{ pageName }}</h1>
 
 
-            {% set insetTextHtml %}
-            <p>386 forms awaiting processing</p>
-            {% endset %}
+        {% set insetTextHtml %}
+        <p>386 forms awaiting processing</p>
+        {% endset %}
 
-            {{ insetText({
-              html: insetTextHtml,
-              classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-top-0'
-            }) }}
-
-
-            <div class="nhsuk-heading-s">Applications you have processed today</div>
-              {% from './macros/stats.njk' import stats %}
-              {{ stats
-                ([
-                data.applicationStats.accepted or '0',
-                data.applicationStats.onHold or '0',
-                data.applicationStats.rejected or '0',
-                data.applicationStats.kfp or '0',
-                data.applicationStats.total or '0' 
-                ])
-              }}
-              <div class="nhsuk-button-group">
-
-                {{ button({
-                  html: '<span data-ak="I">Process an application</span>',
-                  href: 'process-application/matex'
-                }) }}
-  
-                {{ button({
-                  html: '<span data-ak="K">Enter application manually</span>',
-                  href: 'process-application/new-application',
-                  classes: 'nhsuk-button--secondary'
-                }) }}
-  
-                 {{ button({
-                  html: '<span data-ak="M">Search for a certificate</span>',
-                  href: 'reset-search',
-                  classes: 'nhsuk-button--secondary'
-                }) }}
-  
-              </div>
-              
-              <hr>
-
-              {% set captionHtml %}
-              Applications you need to change
-              <div class="nhsuk-hint nhsuk-u-margin-top-2">
-                These applications have been checked by a supervisor. The checks show that you might need to make some changes.
-              </div>
-              {% endset %}
+        {{ insetText({
+        html: insetTextHtml,
+        classes: 'nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2 nhsuk-u-margin-top-0'
+        }) }}
 
 
-            {{ table({
-                panel: false,
-                caption: captionHtml | safe,                    
-                firstCellIsHeader: false,
-                responsive: true,
-                tableClasses: 'patient-table',
-                head: [
-                        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' },
-                        { text: 'Address' },
-                        { text: 'Postcode' },
-                        { text: 'Date of birth' },
-                        { text: 'Type' },
-                       
-                        { text: 'Application reference' },
-                        { text: 'Certificate reference'}
-                      ],
-                rows: checkingRows
-              }) }}
+        <div class="nhsuk-heading-s">Applications you have processed today</div>
+        {% from './macros/stats.njk' import stats %}
+        {{ stats
+        ([
+        data.applicationStats.accepted or '0',
+        data.applicationStats.onHold or '0',
+        data.applicationStats.rejected or '0',
+        data.applicationStats.kfp or '0',
+        data.applicationStats.total or '0'
+        ])
+        }}
+        <div class="nhsuk-button-group">
 
-              <div class="nhsuk-grid-row">
-                <div class="nhsuk-grid-column-one-half">
-                  {{ pagination('nhsuk-u-margin-0' | getCheckingPaginationLinks) }}
-                </div>
-              
-                <div class="nhsuk-grid-column-one-half nhsuk-u-text-align-right nhsuk-u-padding-top-1">
-                  <p class="nhsuk-body nhsuk-u-margin-0">
-                    <strong>{{ '' | getCheckingResultsSummary }}</strong>
-                  </p>                  
-                </div>
-              </div>
+          {{ button({
+          html: '<span data-ak="I">Process an application</span>',
+          href: 'process-application/matex'
+          }) }}
 
+          {{ button({
+          html: '<span data-ak="K">Enter application manually</span>',
+          href: 'process-application/new-application',
+          classes: 'nhsuk-button--secondary'
+          }) }}
 
-          </div>
+          {{ button({
+          html: '<span data-ak="M">Search for a certificate</span>',
+          href: 'reset-search',
+          classes: 'nhsuk-button--secondary'
+          }) }}
+
         </div>
 
+        <hr>
+
+        {% set captionHtml %}
+        Applications you need to change
+        <div class="nhsuk-hint nhsuk-u-margin-top-2">
+          These applications have been checked by a supervisor. The checks show that you might need to make some
+          changes.
+        </div>
+        {% endset %}
+
+
+        {{ table({
+        panel: false,
+        caption: captionHtml | safe,
+        firstCellIsHeader: false,
+        responsive: true,
+        tableClasses: 'patient-table',
+        head: [
+        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' },
+        { text: 'Address' },
+        { text: 'Postcode' },
+        { text: 'Date of birth' },
+        { text: 'Type' },
+
+        { text: 'Application reference' },
+        { text: 'Certificate reference'}
+        ],
+        rows: checkingRows
+        }) }}
+
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-one-half">
+            {{ pagination('nhsuk-u-margin-0' | getCheckingPaginationLinks) }}
+          </div>
+
+
+
+        </div>
+
+        <hr>
+
+        {% set captionHtml %}
+        On hold applications awaiting calls
+        <div class="nhsuk-hint nhsuk-u-margin-top-2">
+          These applications are on hold and ready for a processor to review in the application flow.
+        </div>
+        {% endset %}
+
+
+        {{ table({
+        panel: false,
+        caption: captionHtml | safe,
+        firstCellIsHeader: false,
+        responsive: true,
+        tableClasses: 'patient-table',
+        head: [
+        { html: 'Name<br /><span class="nhsuk-body-s">NHS number</span>' },
+        { text: 'Address' },
+        { text: 'Postcode' },
+        { text: 'Date of birth' },
+        { text: 'Type' },
+
+        { text: 'Application reference' },
+        { text: 'Certificate reference'}
+        ],
+        rows: processingRows
+        }) }}
+
+
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-one-half">
+            {{ pagination('nhsuk-u-margin-0' | getProcessingPaginationLinks) }}
+          </div>
+
+
+
+        </div>
 
       </div>
+    </div>
+
+
   </div>
+</div>
 
 {% endblock %}
