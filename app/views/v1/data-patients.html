@@ -29,6 +29,18 @@
     {
     key: { text: 'medex' | getCertificateTypeTextOrTag },
     value: { html: 'medex' | getCertificateTypeTextOrTag( true ) }
+    },
+    {
+    key: { text: 'ppc' | getCertificateTypeTextOrTag },
+    value: { html: 'ppc' | getCertificateTypeTextOrTag( true ) }
+    },
+    {
+    key: { text: 'lis-hc2' | getCertificateTypeTextOrTag },
+    value: { html: 'lis-hc2' | getCertificateTypeTextOrTag( true ) }
+    },
+    {
+    key: { text: 'lis-hc3' | getCertificateTypeTextOrTag },
+    value: { html: 'lis-hc3' | getCertificateTypeTextOrTag( true ) }
     }
     ]
     }) }}
@@ -50,9 +62,26 @@
     { html: '<span class="nhsuk-u-font-size-14">Application scanned and added to system</span>' }
     ],
     [
+    { html: 'checking' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">Application has been processed and is awaiting a quality control
+      check</span>' }
+    ],
+    [
+    { html: 'cancelled' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">The certificate has been cancelled</span>' }
+    ],
+    [
+    { html: 'expired' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">Certificate has expired</span>' }
+    ],
+    [
     { html: 'on-hold' | getStatusTextOrTag( true ) },
     { html: '<span class="nhsuk-u-font-size-14">Application is on hold while more information is requested from either
       the patient, the GP, or a paper key-in</span>' }
+    ],
+    [
+    { html: 'awaiting-payment' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">Application is awaiting payment</span>' }
     ],
     [
     { html: 'accepted' | getStatusTextOrTag( true ) },
@@ -60,26 +89,16 @@
       production</span>' }
     ],
     [
-    { html: 'rejected' | getStatusTextOrTag( true ) },
-    { html: '<span class="nhsuk-u-font-size-14">The application has been rejected</span>' }
-    ],
-    [
-    { html: 'checking' | getStatusTextOrTag( true ) },
-    { html: '<span class="nhsuk-u-font-size-14">Application has been processed and is awaiting a quality control
-      check</span>' }
-    ],
-    [
     { html: 'active' | getStatusTextOrTag( true ) },
     { html: '<span class="nhsuk-u-font-size-14">Certificate is active</span>' }
     ],
     [
-    { html: 'expired' | getStatusTextOrTag( true ) },
-    { html: '<span class="nhsuk-u-font-size-14">Certificate has expired</span>' }
-    
+    { html: 'rejected' | getStatusTextOrTag( true ) },
+    { html: '<span class="nhsuk-u-font-size-14">The application has been rejected</span>' }
     ],
      [
     { html: 'deleted' | getStatusTextOrTag( true ) },
-    { html: '<span class="nhsuk-u-font-size-14">A request has been made to delete the certificate</span>' } 
+    { html: '<span class="nhsuk-u-font-size-14">A request has been made to delete the certificate</span>' }
     ]
     ]
     }) }}
@@ -854,8 +873,10 @@
 
             const weightedTypes = [
               'matex', 'matex',
-              'medex', 'medex', 'medex', 'medex',
+              'medex', 'medex', 'medex', 'medex', 'medex',
               'hrtppc', 'hrtppc',
+              'lis-hc2', 'lis-hc2',
+              'lis-hc3', 'lis-hc3'
             ];
 
             obj.certificateType =

@@ -1,0 +1,166 @@
+{% extends 'layout-fullscreen.html' %}
+
+{% set pageName = 'Paper application processing' %}
+
+{% set checkingRows = '' | getPatientData | getCheckingTableRows %}
+{% set processingRows = '' | getPatientData | getProcessingTableRows %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+
+
+
+
+<table class="nhsuk-table">
+  <thead class="nhsuk-table__head">
+    <tr class="nhsuk-table__row">
+      <th class="nhsuk-table__header" scope="col">
+        Class name
+      </th>
+      <th class="nhsuk-table__header" scope="col">
+        Tag
+      </th>
+    </tr>
+  </thead>
+  <tbody class="nhsuk-table__body">
+    <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--white</code>
+      </td>
+      <td class="nhsuk-table__cell">
+        <strong class="nhsuk-tag nhsuk-tag--white">Processing</strong>
+      </td>
+    </tr>
+   <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--white dashed (custom)</code>
+      </td>
+      <td class="nhsuk-table__cell">
+       <strong class="nhsuk-tag nhsuk-tag--white dashed">Checking</strong>
+      </td>
+    </tr>
+
+
+       <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--expired-grey (custom)</code>
+      </td>
+      <td class="nhsuk-table__cell">
+<strong class="nhsuk-tag nhsuk-tag--expired-grey">Cancelled</strong>
+      </td>
+    </tr>
+
+       <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--expired-grey (custom)</code>
+      </td>
+      <td class="nhsuk-table__cell">
+<strong class="nhsuk-tag nhsuk-tag--expired-grey">Expired</strong>
+      </td>
+    </tr>
+
+     <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--grey</code>
+      </td>
+      <td class="nhsuk-table__cell">
+        <strong class="nhsuk-tag nhsuk-tag--grey">On hold</strong>
+      </td>
+    </tr>
+         <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--grey</code>
+      </td>
+      <td class="nhsuk-table__cell">
+        <strong class="nhsuk-tag nhsuk-tag--grey">Awaiting payment</strong>
+      </td>
+    </tr>
+    <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--green</code>
+      </td>
+      <td class="nhsuk-table__cell">
+        <strong class="nhsuk-tag nhsuk-tag--green">Accepted</strong>
+      </td>
+    </tr>
+
+        <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--green</code>
+      </td>
+      <td class="nhsuk-table__cell">
+        <strong class="nhsuk-tag nhsuk-tag--green">Active</strong>
+      </td>
+    </tr>
+
+        <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--red</code>
+      </td>
+      <td class="nhsuk-table__cell">
+        <strong class="nhsuk-tag nhsuk-tag--red">Rejected</strong>
+      </td>
+    </tr>
+    <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--blue</code>
+      </td>
+      <td class="nhsuk-table__cell">
+        <strong class="nhsuk-tag nhsuk-tag--blue">PPC</strong>
+      </td>
+    </tr>
+    <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--aqua-green</code>
+      </td>
+      <td class="nhsuk-table__cell">
+        <strong class="nhsuk-tag nhsuk-tag--aqua-green">MATEX</strong>
+      </td>
+    </tr>
+    <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--purple</code>
+      </td>
+      <td class="nhsuk-table__cell">
+        <strong class="nhsuk-tag nhsuk-tag--purple">MEDEX</strong>
+      </td>
+    </tr>
+    <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--pink</code>
+      </td>
+      <td class="nhsuk-table__cell">
+        <strong class="nhsuk-tag nhsuk-tag--pink">HRT PPC</strong>
+      </td>
+    </tr>
+
+    <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--orange</code>
+      </td>
+      <td class="nhsuk-table__cell">
+        <strong class="nhsuk-tag nhsuk-tag--orange">LIS HC2</strong>
+      </td>
+    </tr>
+  
+    <tr class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <code>nhsuk-tag--yellow</code>
+      </td>
+      <td class="nhsuk-table__cell">
+        <strong class="nhsuk-tag nhsuk-tag--yellow">LIS HC3</strong>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+  </div>
+</div>
+
+{% endblock %}

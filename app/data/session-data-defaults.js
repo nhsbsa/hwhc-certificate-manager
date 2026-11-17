@@ -46,7 +46,7 @@ module.exports = {
 
         rowsPerPage: 10,
         currentPage: 0,
-        certificateTypes: ['matex','hrtppc', 'medex'],
+        certificateTypes: ['matex','hrtppc', 'medex', 'ppc', 'lis-hc2', 'lis-hc3'],
         sortBy: 'lastName',
         sortDirection: 'descending',
         
