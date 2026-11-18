@@ -270,7 +270,7 @@ module.exports = function (env) {
         break;
 
       case 'accepted':
-        txt = (isTag) ? '<strong class="nhsuk-tag nhsuk-tag--green">Accepted</strong>' : 'Accepted';
+        txt = (isTag) ? '<strong class="nhsuk-tag nhsuk-tag--white">Accepted</strong>' : 'Accepted';
         break;
 
       case 'active':
@@ -278,7 +278,7 @@ module.exports = function (env) {
         break;
 
       case 'rejected':
-        txt = (isTag) ? '<strong class="nhsuk-tag nhsuk-tag--red">Rejected</strong>' : 'Rejected';
+        txt = (isTag) ? '<strong class="nhsuk-tag nhsuk-tag--expired-grey">Rejected</strong>' : 'Rejected';
         break;
 
       case 'deleted':
