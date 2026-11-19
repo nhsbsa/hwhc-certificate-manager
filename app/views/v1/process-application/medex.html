@@ -721,23 +721,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               ]
               }) }}
 
-              {{ radios({
-              idPrefix: 'imageHealthcarePractitionerDetails',
-              name: 'imageHealthcarePractitionerDetails',
-              value: data.imageHealthcarePractitionerDetails or 'yes',
-              attributes: { 'data-focus-image' : 'healthcarePractitionerDetails' },
-              classes: 'nhsuk-radios--inline',
-              fieldset: {
-              legend: {
-              text: 'Are the healthcare practitioner\'s details present?',
-              isPageHeading: false
-              }
-              },
-              items: [
-              { value: 'yes', text: 'Yes' },
-              { value: 'no', text: 'No' }
-              ]
-              }) }}
+       
 
 
 
@@ -777,7 +761,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
         text: 'Notes (optional)'
       },
       hint: {
-        text: 'For internal use only. This will not be sent to the patient or healthcare practitioner.'
+        text: 'For internal use only. This will not be sent to the patient.'
       }
     }) }}
 

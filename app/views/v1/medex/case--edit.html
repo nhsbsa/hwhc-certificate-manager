@@ -443,23 +443,7 @@ html: '<span data-ak="B">Back</span>'
               ]
               }) }}
 
-              {{ radios({
-              idPrefix: 'imageHealthcarePractitionerDetails',
-              name: 'imageHealthcarePractitionerDetails',
-              value: data.imageHealthcarePractitionerDetails or 'yes',
-              attributes: { 'data-focus-image' : 'healthcarePractitionerDetails' },
-              classes: 'nhsuk-radios--inline',
-              fieldset: {
-              legend: {
-              text: 'Are the healthcare practitioner\'s details present?',
-              isPageHeading: false
-              }
-              },
-              items: [
-              { value: 'yes', text: 'Yes' },
-              { value: 'no', text: 'No' }
-              ]
-              }) }}
+  
 
               {% endif %}
 
