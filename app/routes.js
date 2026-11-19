@@ -52,14 +52,14 @@ router.post(
     data.approvedFirstName = req.body.imageFirstName
     data.approvedLastName = req.body.imageLastName
 
-      const formVersion = req.body.formVersion
+    //   const formVersion = req.body.formVersion
 
-    // Not an official form
-    if (formVersion === 'Not an official form') {
-      return res.redirect(
-        '/v1/process-application/manual/not-official-form'
-      )
-    }
+    // // Not an official form
+    // if (formVersion === 'Not an official form') {
+    //   return res.redirect(
+    //     '/v1/process-application/manual/not-official-form'
+    //   )
+    // }
 
     const postcode = req.body.imagePostcode
     const patientSignature = req.body.imagePatientSignature
@@ -112,14 +112,14 @@ router.post(
     data.approvedFirstName = req.body.imageFirstName
     data.approvedLastName = req.body.imageLastName
 
-      const formVersion = req.body.formVersion
+    //   const formVersion = req.body.formVersion
 
-    // Not an official form
-    if (formVersion === 'Not an official form') {
-      return res.redirect(
-        '/v1/process-application/manual/not-official-form'
-      )
-    }
+    // // Not an official form
+    // if (formVersion === 'Not an official form') {
+    //   return res.redirect(
+    //     '/v1/process-application/manual/not-official-form'
+    //   )
+    // }
 
     const postcode = req.body.imagePostcode
     const patientSignature = req.body.imagePatientSignature
@@ -173,14 +173,14 @@ router.post(
     data.approvedFirstName = req.body.imageFirstName
     data.approvedLastName = req.body.imageLastName
 
-      const formVersion = req.body.formVersion
+    //   const formVersion = req.body.formVersion
 
-    // Not an official form
-    if (formVersion === 'Not an official form') {
-      return res.redirect(
-        '/v1/process-application/manual/not-official-form'
-      )
-    }
+    // // Not an official form
+    // if (formVersion === 'Not an official form') {
+    //   return res.redirect(
+    //     '/v1/process-application/manual/not-official-form'
+    //   )
+    // }
 
     const postcode = req.body.imagePostcode
     const patientSignature = req.body.imagePatientSignature
