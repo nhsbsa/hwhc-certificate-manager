@@ -95,9 +95,9 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               text: "Child has already reached their first birthday"
               },
               {
-              value: "Patient is under 14",
-              text: "Patient is under 14",
-              checked: not data.rejectReason or data.rejectReason == "Patient is under 14"
+              value: "Patient is under 16",
+              text: "Patient is under 16",
+              checked: not data.rejectReason or data.rejectReason == "Patient is under 16"
               },
               {
               value: "Patient is over 60",
@@ -126,8 +126,8 @@ html: '<span data-ak="B">Return to your dashboard</span>'
               },
 
               {
-              value: "Patient is under 14",
-              text: "Patient is under 14"
+              value: "Patient is under 16",
+              text: "Patient is under 16"
               },
               {
               value: "Patient is over 60",
@@ -170,7 +170,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
             {% set textConditionalHTML %}
             <div class="nhsuk-hint nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2">
-              Text messages will not be sent from this system.
+             You need to send the text message to the patient. It will not be sent from this system.
             </div>
             <p>
             
@@ -274,7 +274,7 @@ html: '<span data-ak="B">Return to your dashboard</span>'
 
 
               <div class="nhsuk-button-group">
-                {{ button({ html: '<span data-ak="I">Send rejection</span>', attributes: { type: 'submit' } }) }}
+                {{ button({ html: '<span data-ak="I">Next</span>', attributes: { type: 'submit' } }) }}
                 {{ button({
                 html: '<span data-ak="K">Edit application</span>',
                 href: 'javascript:history.go(-1)',

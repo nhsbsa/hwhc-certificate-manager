@@ -63,11 +63,11 @@
 
           <div class="nhsuk-button-group">
               {{ button({ html: '<span data-ak="I">Next</span>' }) }}
-              {{ button({
-                html: '<span data-ak="K">Finish processing</span>',
-                href: '/v1/dashboard',
+            {{ button({
+                html: '<span data-ak="K">Return to application</span>',
+                href: 'javascript:history.go(-1)',
                 classes: 'nhsuk-button--secondary'
-              }) }}
+                }) }}
             </div>
         </form>
 
